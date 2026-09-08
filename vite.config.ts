@@ -4,4 +4,20 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/three')) {
+            return 'three-vendor'
+          }
+          if (id.includes('node_modules/framer-motion')) {
+            return 'motion-vendor'
+          }
+        },
+      },
+    },
+  },
 })
+
