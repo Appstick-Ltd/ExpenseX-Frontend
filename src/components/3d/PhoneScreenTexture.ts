@@ -196,12 +196,12 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
   // Large Safe to Spend Value
   ctx.fillStyle = '#FFFFFF';
   ctx.font = '900 86px sans-serif';
-  ctx.fillText('৳18,500', 115, card2Y + 162);
+  ctx.fillText('$18,500', 115, card2Y + 162);
 
   // Remaining badge
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
   ctx.font = '600 28px sans-serif';
-  ctx.fillText('৳10,000 remaining this week', 115, card2Y + 215);
+  ctx.fillText('$10,000 remaining this week', 115, card2Y + 215);
 
   // Progress bar
   drawRoundedRect(115, card2Y + 235, 794, 18, 9, 'rgba(255,255,255,0.12)');
@@ -225,10 +225,10 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
 
   // 8. Transactions List
   const transactions = [
-    { name: 'Chillox Burgers', cat: 'Food & Dining • Yesterday', amt: '-৳450', color: '#FF5A36', icon: '🍔' },
-    { name: 'Uber Ride', cat: 'Transportation • Yesterday', amt: '-৳320', color: '#FF5A36', icon: '🚗' },
-    { name: 'Salary Deposit', cat: 'Income • Sep 01', amt: '+৳35,000', color: '#10B981', icon: '💼' },
-    { name: 'Unimart Groceries', cat: 'Groceries • Aug 30', amt: '-৳2,850', color: '#FF5A36', icon: '🛒' },
+    { name: 'Chillox Burgers', cat: 'Food & Dining • Yesterday', amt: '-$450', color: '#FF5A36', icon: '🍔' },
+    { name: 'Uber Ride', cat: 'Transportation • Yesterday', amt: '-$320', color: '#FF5A36', icon: '🚗' },
+    { name: 'Salary Deposit', cat: 'Income • Sep 01', amt: '+$35,000', color: '#10B981', icon: '💼' },
+    { name: 'Unimart Groceries', cat: 'Groceries • Aug 30', amt: '-$2,850', color: '#FF5A36', icon: '🛒' },
   ];
 
   let currentTxY = 1000;

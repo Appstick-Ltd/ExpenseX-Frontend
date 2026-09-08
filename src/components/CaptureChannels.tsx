@@ -1,5 +1,6 @@
 import { Camera, MessageSquare, Mail, MessageCircle, Sparkles, Check } from 'lucide-react';
 import { Card3DTilt } from './Card3DTilt';
+import receiptOcrImg from '../assets/receipt_ai_ocr.jpg';
 
 export const CaptureChannels: React.FC = () => {
   return (
@@ -19,13 +20,13 @@ export const CaptureChannels: React.FC = () => {
             <span>CAPTURE FROM ANYWHERE</span>
           </div>
 
-          <h2 className="section-headline">
-            Not just voice. <br />
-            <span className="text-gradient-purple">Every financial signal, in one place.</span>
+          <h2 className="section-title">
+            ExpenseX captures expenses <br />
+            <span className="text-gradient">before you can forget them.</span>
           </h2>
 
-          <p className="section-description" style={{ margin: '0 auto' }}>
-            ExpenseX AI connects seamlessly across physical paper, bank SMS notifications, and digital receipts so zero transactions fall through the cracks.
+          <p className="section-subtitle" style={{ margin: '0 auto' }}>
+            Most people stop tracking because manual entry is friction. ExpenseX removes the friction entirely by capturing from the channels you already live in.
           </p>
         </div>
 
@@ -34,7 +35,7 @@ export const CaptureChannels: React.FC = () => {
           className="capture-cards-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
             gap: '24px',
           }}
         >
@@ -80,10 +81,12 @@ export const CaptureChannels: React.FC = () => {
                   overflow: 'hidden',
                   border: '1px solid rgba(139, 92, 246, 0.35)',
                   boxShadow: '0 10px 25px rgba(0, 0, 0, 0.6)',
+                  background: 'linear-gradient(135deg, #181c36 0%, #0d1024 100%)',
+                  minHeight: '170px',
                 }}
               >
                 <img
-                  src="/assets/image/receipt_ai_ocr.jpg"
+                  src={receiptOcrImg}
                   alt="ExpenseX AI OCR Receipt Scan"
                   style={{
                     width: '100%',
@@ -126,7 +129,7 @@ export const CaptureChannels: React.FC = () => {
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                   }}
                 >
-                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Chillox • ৳450</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Sweetgreen • $45</span>
                   <span style={{ color: '#34D399', fontWeight: 700 }}>99.4% OCR match</span>
                 </div>
               </div>
@@ -185,7 +188,7 @@ export const CaptureChannels: React.FC = () => {
                   TRANSACTION ALERT
                 </div>
                 <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.4, marginBottom: '8px' }}>
-                  ৳2,450 paid to Agora Superstore.
+                  $245 paid to Target Superstore.
                 </div>
                 <div
                   style={{
@@ -198,7 +201,7 @@ export const CaptureChannels: React.FC = () => {
                   }}
                 >
                   <span style={{ color: 'var(--text-muted)' }}>AI Detected</span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Shopping • ৳2,450</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Shopping • $245</span>
                 </div>
               </div>
             </div>
@@ -240,7 +243,7 @@ export const CaptureChannels: React.FC = () => {
 
               <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Email Detection</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Securely parses order confirmations from Uber, Daraz, Pathao, Foodpanda, and airlines.
+                Securely parses order confirmations from Uber, Amazon, DoorDash, and airlines.
               </p>
 
               {/* Email Mock */}
@@ -256,7 +259,7 @@ export const CaptureChannels: React.FC = () => {
                   PAYMENT CONFIRMATION
                 </div>
                 <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.4, marginBottom: '8px' }}>
-                  Your order payment of ৳5,200 was successful.
+                  Your order payment of $520 was successful.
                 </div>
                 <div
                   style={{
@@ -269,7 +272,7 @@ export const CaptureChannels: React.FC = () => {
                   }}
                 >
                   <span style={{ color: 'var(--text-muted)' }}>ExpenseX AI</span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Daraz • ৳5,200</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Amazon • $520</span>
                 </div>
               </div>
             </div>
@@ -338,7 +341,7 @@ export const CaptureChannels: React.FC = () => {
                   }}
                 >
                   <div style={{ fontSize: '11px', color: '#E2E8F0', lineHeight: 1.3 }}>
-                    Paid ৳850 for fuel at Padma Oil ⛽
+                    Paid $85 for fuel at Shell Station ⛽
                   </div>
                   <div style={{ fontSize: '9px', color: '#86EFAC', textAlign: 'right', marginTop: '2px' }}>
                     2:45 PM • ✓✓
@@ -360,7 +363,7 @@ export const CaptureChannels: React.FC = () => {
                     ✓ Logged: Fuel & Transport
                   </div>
                   <div style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>
-                    ৳850 recorded. Budget remaining: ৳3,450
+                    $85 recorded. Budget remaining: $345
                   </div>
                 </div>
               </div>

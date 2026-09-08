@@ -482,7 +482,7 @@ export function createIPhone17ProMax3D(): {
 
   group.add(orbitGroup);
 
-  // 9. Floating 3D Coin (৳ Taka Currency Coin on Left)
+  // 9. Floating 3D Coin ($ Taka Currency Coin on Left)
   const coinGroup = new THREE.Group();
   const coinGeo = new THREE.CylinderGeometry(0.52, 0.52, 0.08, 48);
   coinGeo.rotateX(Math.PI / 2);
@@ -530,21 +530,21 @@ export function createIPhone17ProMax3D(): {
       cCtx.fill();
     }
 
-    // Huge, brilliant glowing golden/white ৳ Symbol
+    // Huge, brilliant glowing golden/white $ Symbol
     cCtx.shadowColor = '#FFD700';
     cCtx.shadowBlur = 26;
     cCtx.fillStyle = '#FFFFFF';
     cCtx.font = '900 240px -apple-system, system-ui, sans-serif';
     cCtx.textAlign = 'center';
     cCtx.textBaseline = 'middle';
-    cCtx.fillText('৳', 256, 256);
+    cCtx.fillText('$', 256, 256);
 
-    // Subtitle label: BDT COIN
+    // Subtitle label: USD COIN
     cCtx.shadowColor = '#FFAA33';
     cCtx.shadowBlur = 10;
     cCtx.fillStyle = '#FFAA33';
     cCtx.font = '800 28px -apple-system, system-ui, sans-serif';
-    cCtx.fillText('BDT', 256, 380);
+    cCtx.fillText('USD', 256, 380);
   }
   const coinTex = new THREE.CanvasTexture(coinCanvas);
   coinTex.colorSpace = THREE.SRGBColorSpace;

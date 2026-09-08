@@ -221,7 +221,7 @@ export const Hero: React.FC = () => {
                 }}
               />
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>
-                Safe to Spend: ৳18,500
+                Safe to Spend: $18,500
               </span>
             </div>
 

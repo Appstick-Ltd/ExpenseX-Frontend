@@ -402,7 +402,7 @@ export const AIEngine: React.FC = () => {
                   }}
                 >
                   <span style={{ color: 'var(--text-muted)' }}>📄 Receipt Camera</span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>৳2,450 • Agora Superstore</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>$2,450 • Agora Superstore</span>
                 </div>
 
                 <div
@@ -417,7 +417,7 @@ export const AIEngine: React.FC = () => {
                   }}
                 >
                   <span style={{ color: 'var(--text-muted)' }}>💬 Bank SMS Alert</span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>৳2,450 • Agora POS</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>$2,450 • Agora POS</span>
                 </div>
 
                 <div
@@ -432,7 +432,7 @@ export const AIEngine: React.FC = () => {
                   }}
                 >
                   <span style={{ color: 'var(--text-muted)' }}>✉️ Email Digital Receipt</span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>৳2,450 • Agora Gulshan</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>$2,450 • Agora Gulshan</span>
                 </div>
               </div>
 

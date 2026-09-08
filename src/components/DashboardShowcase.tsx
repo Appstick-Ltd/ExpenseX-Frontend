@@ -282,7 +282,7 @@ export const DashboardShowcase: React.FC = () => {
                   "{PHONE_MOCKUP_DATA.aiInsight}"
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  Weekend dining reduced by ৳1,200. You've met 92% of your monthly budget milestones.
+                  Weekend dining reduced by $1,200. You've met 92% of your monthly budget milestones.
                 </div>
               </div>
 

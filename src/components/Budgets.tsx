@@ -34,7 +34,7 @@ export const Budgets: React.FC = () => {
           </div>
 
           <h2 className="section-headline">
-            Give every taka <br />
+            Give every dollar <br />
             <span className="text-gradient-purple">a direction.</span>
           </h2>
 
@@ -89,10 +89,10 @@ export const Budgets: React.FC = () => {
 
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: '17px', fontWeight: 800, color: '#FFFFFF' }}>
-                    ৳{b.spent.toLocaleString()}
+                    ${b.spent.toLocaleString()}
                   </div>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                    of ৳{b.limit.toLocaleString()}
+                    of ${b.limit.toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -130,7 +130,7 @@ export const Budgets: React.FC = () => {
                 }}
               >
                 <span>{b.percentage}% utilized</span>
-                <span>৳{(b.limit - b.spent).toLocaleString()} remaining</span>
+                <span>${(b.limit - b.spent).toLocaleString()} remaining</span>
               </div>
             </Card3DTilt>
           ))}

@@ -34,18 +34,18 @@ export const HERO_DATA = {
 
 export const PHONE_MOCKUP_DATA = {
   greeting: 'Good morning',
-  userName: 'Tanvir',
+  userName: 'Alex',
   healthScore: 78,
   healthMax: 100,
-  safeToSpend: '৳18,500',
-  totalBalance: '৳63,500',
-  income: '৳45,000',
-  expenses: '৳26,500',
+  safeToSpend: '$18,500',
+  totalBalance: '$63,500',
+  income: '$45,000',
+  expenses: '$26,500',
   aiInsight: "You're spending 8% less than your weekly target.",
   recentTransactions: [
-    { merchant: 'Chillox', category: 'Food & Dining', amount: '-৳450', date: 'Yesterday', icon: 'utensils' },
-    { merchant: 'Uber', category: 'Transportation', amount: '-৳320', date: 'Yesterday', icon: 'car' },
-    { merchant: 'Salary Deposit', category: 'Income', amount: '+৳35,000', date: 'Sep 01', icon: 'arrow-down-left' },
+    { merchant: 'Sweetgreen', category: 'Food & Dining', amount: '-$45', date: 'Yesterday', icon: 'utensils' },
+    { merchant: 'Uber', category: 'Transportation', amount: '-$32', date: 'Yesterday', icon: 'car' },
+    { merchant: 'Salary Deposit', category: 'Income', amount: '+$3,500', date: 'Sep 01', icon: 'arrow-down-left' },
   ],
 };
 
@@ -95,8 +95,8 @@ export const CAPTURE_CHANNELS = [
     badge: 'AI Vision OCR',
     subtitle: 'Point camera at any paper or digital invoice',
     sample: {
-      merchant: 'Unimart Gulshan',
-      amount: '৳3,840',
+      merchant: 'Whole Foods Market',
+      amount: '$384',
       date: 'Today, 2:15 PM',
       category: 'Groceries',
       confidence: '99.4%',
@@ -106,12 +106,12 @@ export const CAPTURE_CHANNELS = [
     id: 'sms',
     title: 'SMS Detection',
     badge: 'Bank Alert Parser',
-    subtitle: 'Automatically detects incoming bank/MFS debit texts',
+    subtitle: 'Automatically detects incoming bank debit texts',
     sample: {
-      rawText: 'Alert: ৳2,450 debited for POS purchase at Agora Superstore. Avl Bal: ৳32,100',
-      detectedMerchant: 'Agora',
+      rawText: 'Alert: $245 debited for POS purchase at Target Superstore. Avl Bal: $3,210',
+      detectedMerchant: 'Target',
       category: 'Shopping',
-      amount: '৳2,450',
+      amount: '$245',
     },
   },
   {
@@ -120,11 +120,11 @@ export const CAPTURE_CHANNELS = [
     badge: 'Digital Invoices',
     subtitle: 'Syncs digital receipts from food delivery, rides, and e-commerce',
     sample: {
-      subject: 'Payment Confirmation: Daraz Order #84910',
-      status: 'Order payment of ৳5,200 successful',
-      detectedMerchant: 'Daraz',
+      subject: 'Payment Confirmation: Amazon Order #84910',
+      status: 'Order payment of $520 successful',
+      detectedMerchant: 'Amazon',
       category: 'Shopping',
-      amount: '৳5,200',
+      amount: '$520',
     },
   },
   {
@@ -133,10 +133,10 @@ export const CAPTURE_CHANNELS = [
     badge: 'Chatbot Sync',
     subtitle: 'Forward paper bills, voice notes, or text casual expenses in WhatsApp',
     sample: {
-      userMessage: 'Paid ৳850 for fuel at Padma Oil ⛽',
-      botResponse: '✓ Logged: ৳850 under Fuel & Transport',
+      userMessage: 'Paid $85 for fuel at Shell Station ⛽',
+      botResponse: '✓ Logged: $85 under Fuel & Transport',
       category: 'Fuel & Transport',
-      amount: '৳850',
+      amount: '$85',
     },
   },
 ];
@@ -151,21 +151,21 @@ export const AI_PIPELINE_STAGES = [
 ];
 
 export const RAW_MERCHANT_EXAMPLES = [
-  { raw: 'AMZN Mktp US*892019', clean: 'Amazon', category: 'Shopping', amount: '৳5,200' },
-  { raw: 'CHX*DHAKA REST 02', clean: 'Chillox Burgers', category: 'Food & Dining', amount: '৳450' },
-  { raw: 'UBR* PENDING TRIP BKASH', clean: 'Uber Ride', category: 'Transportation', amount: '৳320' },
+  { raw: 'AMZN Mktp US*892019', clean: 'Amazon', category: 'Shopping', amount: '$520' },
+  { raw: 'SWTG*SOHO NYC 02', clean: 'Sweetgreen Salad', category: 'Food & Dining', amount: '$45' },
+  { raw: 'UBR* PENDING TRIP CARD', clean: 'Uber Ride', category: 'Transportation', amount: '$32' },
 ];
 
 export const SAFE_TO_SPEND_DATA = {
-  amount: '৳18,500',
+  amount: '$18,500',
   headline: "Balance isn't\nthe whole story.",
   description: 'Traditional apps show your current bank balance. ExpenseX AI calculates your true Safe to Spend margin by factoring upcoming bills, scheduled rent, savings goals, and everyday recurring expenses.',
   breakdown: [
-    { label: 'Bank Balance', value: '৳63,500', type: 'positive' },
-    { label: 'Upcoming Rent & Bills', value: '-৳22,000', type: 'negative' },
-    { label: 'Savings Goal Allocation', value: '-৳15,000', type: 'negative' },
-    { label: 'Committed Budgets', value: '-৳8,000', type: 'negative' },
-    { label: 'True Safe to Spend', value: '৳18,500', type: 'highlight' },
+    { label: 'Bank Balance', value: '$63,500', type: 'positive' },
+    { label: 'Upcoming Rent & Bills', value: '-$22,000', type: 'negative' },
+    { label: 'Savings Goal Allocation', value: '-$15,000', type: 'negative' },
+    { label: 'Committed Budgets', value: '-$8,000', type: 'negative' },
+    { label: 'True Safe to Spend', value: '$18,500', type: 'highlight' },
   ],
 };
 
@@ -173,22 +173,22 @@ export const AI_INSIGHTS_DATA = [
   {
     title: 'Food & Dining Surge',
     stat: '↑ 18% vs Last Month',
-    why: 'Weekend dining at Chillox and Madchef exceeded average limits by ৳2,300.',
-    action: 'Suggestion: Keep weekend dining under ৳2,000 to maintain your vacation savings target.',
+    why: 'Weekend dining at Sweetgreen and Nobu exceeded average limits by $230.',
+    action: 'Suggestion: Keep weekend dining under $200 to maintain your vacation savings target.',
     severity: 'warning',
   },
   {
     title: 'Subscription Optimization',
-    stat: '৳2,200 / month detected',
+    stat: '$220 / month detected',
     why: 'You have 3 entertainment streaming subscriptions active, but only accessed 1 during August.',
-    action: 'Suggestion: Pause unused services to save ৳1,400 monthly.',
+    action: 'Suggestion: Pause unused services to save $140 monthly.',
     severity: 'positive',
   },
   {
     title: 'Weekly Pacing',
     stat: '8% Below Target',
     why: 'Great discipline on transportation and daily grocery spend this week.',
-    action: 'You are on track to unlock your ৳10,000 bonus savings milestone.',
+    action: 'You are on track to unlock your $1,000 bonus savings milestone.',
     severity: 'highlight',
   },
 ];
@@ -196,48 +196,48 @@ export const AI_INSIGHTS_DATA = [
 export const ASK_EXPENSEX_SAMPLES = [
   {
     question: 'How much did I spend on food this month?',
-    answer: 'You spent ৳8,420 on food this month — 12% more than last month. ৳5,120 was spent on dining out during weekends, while groceries accounted for ৳3,300.',
+    answer: 'You spent $842 on food this month — 12% more than last month. $512 was spent on dining out during weekends, while groceries accounted for $330.',
   },
   {
     question: 'Where did most of my money go?',
-    answer: 'Your top 3 spending categories this month are: Housing & Utilities (৳22,000 / 46%), Food & Dining (৳8,420 / 18%), and Shopping (৳6,100 / 13%).',
+    answer: 'Your top 3 spending categories this month are: Housing & Utilities ($2,200 / 46%), Food & Dining ($842 / 18%), and Shopping ($610 / 13%).',
   },
   {
     question: 'Why did my spending increase?',
-    answer: 'Your spending rose by ৳4,800 mainly due to two unplanned electronics purchases on Daraz (৳3,200) and three additional restaurant outings with friends (৳1,600).',
+    answer: 'Your spending rose by $480 mainly due to two unplanned electronics purchases on Amazon ($320) and three additional restaurant outings with friends ($160).',
   },
   {
-    question: 'How can I save ৳10,000 next month?',
-    answer: 'Based on your transaction habits, you can comfortably save ৳10,000 by capping weekend dining at ৳1,500/week (saves ৳4,000), switching to off-peak Uber rides (saves ৳1,800), and pausing 2 subscriptions (saves ৳2,200).',
+    question: 'How can I save $1,000 next month?',
+    answer: 'Based on your transaction habits, you can comfortably save $1,000 by capping weekend dining at $150/week (saves $400), switching to off-peak Uber rides (saves $180), and pausing 2 subscriptions (saves $220).',
   },
   {
-    question: 'Can I afford a ৳90,000 phone?',
-    answer: 'If purchased with 6-month EMI at ৳15,000/month, your Safe to Spend margin will drop from ৳18,500 to ৳3,500. It is recommended to wait until November when your fixed deposit matures.',
+    question: 'Can I afford a $900 phone?',
+    answer: 'If purchased with 6-month installment at $150/month, your Safe to Spend margin will drop from $1,850 to $350. It is recommended to wait until November when your bonus arrives.',
   },
 ];
 
 export const BUDGETS_DATA = [
-  { category: 'Food & Dining', spent: 3200, limit: 5000, percentage: 64, icon: 'utensils' },
-  { category: 'Transportation', spent: 1400, limit: 3000, percentage: 46, icon: 'car' },
-  { category: 'Shopping', spent: 2400, limit: 5000, percentage: 48, icon: 'shopping-bag' },
-  { category: 'Bills & Utilities', spent: 4200, limit: 6000, percentage: 70, icon: 'zap' },
+  { category: 'Food & Dining', spent: 320, limit: 500, percentage: 64, icon: 'utensils' },
+  { category: 'Transportation', spent: 140, limit: 300, percentage: 46, icon: 'car' },
+  { category: 'Shopping', spent: 240, limit: 500, percentage: 48, icon: 'shopping-bag' },
+  { category: 'Bills & Utilities', spent: 420, limit: 600, percentage: 70, icon: 'zap' },
 ];
 
 export const SAVINGS_GOALS_DATA = [
   {
     title: 'Dream Vacation',
-    target: '৳50,000',
-    saved: '৳18,000',
+    target: '$5,000',
+    saved: '$1,800',
     percentage: 36,
-    monthlyTarget: '৳5,333',
+    monthlyTarget: '$533',
     deadline: 'December 2026',
   },
   {
     title: 'Emergency Reserve',
-    target: '৳120,000',
-    saved: '৳85,000',
+    target: '$12,000',
+    saved: '$8,500',
     percentage: 71,
-    monthlyTarget: '৳10,000',
+    monthlyTarget: '$1,000',
     deadline: 'Ongoing',
   },
 ];

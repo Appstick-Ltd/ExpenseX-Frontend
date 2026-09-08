@@ -407,429 +407,429 @@ export const QuickTour: React.FC = () => {
                       overflow: 'hidden',
                     }}
                   >
-                {/* STEP 1: CAPTURE VISUAL */}
-                {activeTab === 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    {/* Voice prompt representation */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '16px',
-                        padding: '16px 20px',
-                        borderRadius: '16px',
-                        background: 'rgba(109, 61, 245, 0.1)',
-                        border: '1px solid rgba(139, 92, 246, 0.3)',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '46px',
-                          height: '46px',
-                          borderRadius: '50%',
-                          background: 'linear-gradient(135deg, #8B5CF6, #6D3DF5)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          boxShadow: '0 0 20px rgba(109, 61, 245, 0.6)',
-                        }}
-                      >
-                        <Mic size={22} color="#FFFFFF" />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>
-                            USER VOICE INPUT • RECORDING
-                          </div>
-                          {/* Animated Soundwave Visualizer */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '24px' }}>
-                            {[0.2, 0.5, 0.8, 0.3, 0.9, 0.4, 0.7, 0.2, 0.6, 1.0, 0.4, 0.3].map((delay, i) => (
-                              <div
-                                key={i}
-                                className="soundwave-bar"
-                                style={{ animationDelay: `${delay}s` }}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <div style={{ fontSize: '15px', fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>
-                          "I spent 450 taka at Chillox for dinner yesterday."
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Animated Conversion Arrow */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        color: 'var(--purple-light)',
-                        fontSize: '12px',
-                        fontWeight: 700,
-                        letterSpacing: '0.1em',
-                      }}
-                    >
-                      <Sparkles size={16} />
-                      <span>NATURAL LANGUAGE EXTRACTION</span>
-                    </div>
-
-                    {/* Clean structured output */}
-                    <div
-                      style={{
-                        padding: '24px',
-                        borderRadius: '16px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(2, 1fr)',
-                        gap: '16px',
-                      }}
-                    >
-                      <div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>AMOUNT</div>
-                        <div style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF' }}>৳450</div>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>MERCHANT</div>
-                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>Chillox Burgers</div>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>CATEGORY</div>
+                    {/* STEP 1: CAPTURE VISUAL */}
+                    {activeTab === 0 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {/* Voice prompt representation */}
                         <div
                           style={{
-                            fontSize: '13px',
-                            fontWeight: 600,
-                            color: '#A78BFA',
-                            display: 'inline-flex',
+                            display: 'flex',
                             alignItems: 'center',
-                            gap: '4px',
+                            gap: '16px',
+                            padding: '16px 20px',
+                            borderRadius: '16px',
+                            background: 'rgba(109, 61, 245, 0.1)',
+                            border: '1px solid rgba(139, 92, 246, 0.3)',
                           }}
                         >
-                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#A78BFA' }} />
-                          Food & Dining
+                          <div
+                            style={{
+                              width: '46px',
+                              height: '46px',
+                              borderRadius: '50%',
+                              background: 'linear-gradient(135deg, #8B5CF6, #6D3DF5)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              boxShadow: '0 0 20px rgba(109, 61, 245, 0.6)',
+                            }}
+                          >
+                            <Mic size={22} color="#FFFFFF" />
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>
+                                USER VOICE INPUT • RECORDING
+                              </div>
+                              {/* Animated Soundwave Visualizer */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '24px' }}>
+                                {[0.2, 0.5, 0.8, 0.3, 0.9, 0.4, 0.7, 0.2, 0.6, 1.0, 0.4, 0.3].map((delay, i) => (
+                                  <div
+                                    key={i}
+                                    className="soundwave-bar"
+                                    style={{ animationDelay: `${delay}s` }}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <div style={{ fontSize: '15px', fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>
+                              "I spent $45 at Sweetgreen for dinner yesterday."
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>DATE</div>
-                        <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                          Yesterday (Auto-resolved)
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
-                {/* STEP 2: ORGANIZE VISUAL */}
-                {activeTab === 1 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    {/* Raw string */}
-                    <div
-                      style={{
-                        padding: '16px 20px',
-                        borderRadius: '14px',
-                        background: 'rgba(239, 68, 68, 0.08)',
-                        border: '1px solid rgba(239, 68, 68, 0.25)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        <span style={{ fontSize: '11px', color: '#F87171', fontWeight: 700 }}>RAW BANK STRING:</span>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '15px', color: '#FFFFFF' }}>
-                          AMZN Mktp US*892019 DBL
-                        </div>
-                      </div>
-                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>৳5,200</span>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                      <div
-                        style={{
-                          height: '2px',
-                          flex: 1,
-                          background: 'linear-gradient(90deg, transparent, rgba(109, 61, 245, 0.5), transparent)',
-                        }}
-                      />
-                      <span style={{ fontSize: '12px', color: 'var(--purple-light)', fontWeight: 700 }}>
-                        AI RESOLUTION ENGINE
-                      </span>
-                      <div
-                        style={{
-                          height: '2px',
-                          flex: 1,
-                          background: 'linear-gradient(90deg, transparent, rgba(109, 61, 245, 0.5), transparent)',
-                        }}
-                      />
-                    </div>
-
-                    {/* Cleaned record */}
-                    <div
-                      style={{
-                        padding: '20px',
-                        borderRadius: '14px',
-                        background: 'rgba(52, 211, 153, 0.08)',
-                        border: '1px solid rgba(52, 211, 153, 0.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        {/* Animated Conversion Arrow */}
                         <div
                           style={{
-                            width: '42px',
-                            height: '42px',
-                            borderRadius: '10px',
-                            background: '#1F2937',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: '#FF9900',
-                            fontWeight: 800,
-                            fontSize: '18px',
+                            gap: '8px',
+                            color: 'var(--purple-light)',
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            letterSpacing: '0.1em',
                           }}
                         >
-                          a
+                          <Sparkles size={16} />
+                          <span>NATURAL LANGUAGE EXTRACTION</span>
                         </div>
-                        <div>
-                          <div style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF' }}>Amazon</div>
-                          <div style={{ fontSize: '12px', color: '#34D399' }}>Verified Merchant • Shopping</div>
+
+                        {/* Clean structured output */}
+                        <div
+                          style={{
+                            padding: '24px',
+                            borderRadius: '16px',
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            gap: '16px',
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>AMOUNT</div>
+                            <div style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF' }}>$45</div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>MERCHANT</div>
+                            <div style={{ fontSize: '20px', fontWeight: 700, color: '#FFFFFF' }}>Sweetgreen</div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>CATEGORY</div>
+                            <div
+                              style={{
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                color: '#A78BFA',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                              }}
+                            >
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#A78BFA' }} />
+                              Food & Dining
+                            </div>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>DATE</div>
+                            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                              Yesterday (Auto-resolved)
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF' }}>৳5,200</div>
-                    </div>
+                    )}
 
-                    {/* Pipeline checklist */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginTop: '4px' }}>
-                      {['AI Categorization', 'Merchant Recognition', 'Duplicate Detection', 'Confirmation Queue'].map(
-                        (feat) => (
+                    {/* STEP 2: ORGANIZE VISUAL */}
+                    {activeTab === 1 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {/* Raw string */}
+                        <div
+                          style={{
+                            padding: '16px 20px',
+                            borderRadius: '14px',
+                            background: 'rgba(239, 68, 68, 0.08)',
+                            border: '1px solid rgba(239, 68, 68, 0.25)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <div>
+                            <span style={{ fontSize: '11px', color: '#F87171', fontWeight: 700 }}>RAW BANK STRING:</span>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '15px', color: '#FFFFFF' }}>
+                              AMZN Mktp US*892019 DBL
+                            </div>
+                          </div>
+                          <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>$5,200</span>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                           <div
-                            key={feat}
+                            style={{
+                              height: '2px',
+                              flex: 1,
+                              background: 'linear-gradient(90deg, transparent, rgba(109, 61, 245, 0.5), transparent)',
+                            }}
+                          />
+                          <span style={{ fontSize: '12px', color: 'var(--purple-light)', fontWeight: 700 }}>
+                            AI RESOLUTION ENGINE
+                          </span>
+                          <div
+                            style={{
+                              height: '2px',
+                              flex: 1,
+                              background: 'linear-gradient(90deg, transparent, rgba(109, 61, 245, 0.5), transparent)',
+                            }}
+                          />
+                        </div>
+
+                        {/* Cleaned record */}
+                        <div
+                          style={{
+                            padding: '20px',
+                            borderRadius: '14px',
+                            background: 'rgba(52, 211, 153, 0.08)',
+                            border: '1px solid rgba(52, 211, 153, 0.3)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                            <div
+                              style={{
+                                width: '42px',
+                                height: '42px',
+                                borderRadius: '10px',
+                                background: '#1F2937',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#FF9900',
+                                fontWeight: 800,
+                                fontSize: '18px',
+                              }}
+                            >
+                              a
+                            </div>
+                            <div>
+                              <div style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF' }}>Amazon</div>
+                              <div style={{ fontSize: '12px', color: '#34D399' }}>Verified Merchant • Shopping</div>
+                            </div>
+                          </div>
+                          <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF' }}>$5,200</div>
+                        </div>
+
+                        {/* Pipeline checklist */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginTop: '4px' }}>
+                          {['AI Categorization', 'Merchant Recognition', 'Duplicate Detection', 'Confirmation Queue'].map(
+                            (feat) => (
+                              <div
+                                key={feat}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  fontSize: '12px',
+                                  color: 'var(--text-secondary)',
+                                }}
+                              >
+                                <CheckCircle2 size={14} color="#8B5CF6" />
+                                <span>{feat}</span>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* STEP 3: UNDERSTAND VISUAL */}
+                    {activeTab === 2 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
+                          <div
+                            style={{
+                              padding: '18px',
+                              borderRadius: '14px',
+                              background: 'rgba(109, 61, 245, 0.1)',
+                              border: '1px solid rgba(139, 92, 246, 0.25)',
+                            }}
+                          >
+                            <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>
+                              FINANCIAL HEALTH
+                            </div>
+                            <div style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', marginTop: '4px' }}>
+                              78 <span style={{ fontSize: '16px', color: 'var(--text-muted)' }}>/ 100</span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#34D399', fontWeight: 600, marginTop: '2px' }}>
+                              ↑ 4 pts this month
+                            </div>
+                          </div>
+
+                          <div
+                            style={{
+                              padding: '18px',
+                              borderRadius: '14px',
+                              background: 'rgba(255, 90, 54, 0.08)',
+                              border: '1px solid rgba(255, 90, 54, 0.25)',
+                            }}
+                          >
+                            <div style={{ fontSize: '11px', color: '#FF9A7B', fontWeight: 700 }}>SAFE TO SPEND</div>
+                            <div style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', marginTop: '4px' }}>
+                              $18,500
+                            </div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                              After bills & targets
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* AI Insight Card */}
+                        <div
+                          style={{
+                            padding: '18px',
+                            borderRadius: '14px',
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                          }}
+                        >
+                          <div
                             style={{
                               display: 'flex',
                               alignItems: 'center',
                               gap: '6px',
                               fontSize: '12px',
-                              color: 'var(--text-secondary)',
+                              fontWeight: 700,
+                              color: '#A78BFA',
+                              marginBottom: '6px',
                             }}
                           >
-                            <CheckCircle2 size={14} color="#8B5CF6" />
-                            <span>{feat}</span>
+                            <Zap size={14} />
+                            <span>AI SPENDING RADAR</span>
                           </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 3: UNDERSTAND VISUAL */}
-                {activeTab === 2 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
-                      <div
-                        style={{
-                          padding: '18px',
-                          borderRadius: '14px',
-                          background: 'rgba(109, 61, 245, 0.1)',
-                          border: '1px solid rgba(139, 92, 246, 0.25)',
-                        }}
-                      >
-                        <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>
-                          FINANCIAL HEALTH
-                        </div>
-                        <div style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', marginTop: '4px' }}>
-                          78 <span style={{ fontSize: '16px', color: 'var(--text-muted)' }}>/ 100</span>
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#34D399', fontWeight: 600, marginTop: '2px' }}>
-                          ↑ 4 pts this month
+                          <div style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>
+                            "Your food spending increased 18% this month."
+                          </div>
+                          <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                            Driven by 4 weekend dinners. Transportation & utilities remained 6% below forecast.
+                          </div>
                         </div>
                       </div>
+                    )}
 
-                      <div
-                        style={{
-                          padding: '18px',
-                          borderRadius: '14px',
-                          background: 'rgba(255, 90, 54, 0.08)',
-                          border: '1px solid rgba(255, 90, 54, 0.25)',
-                        }}
-                      >
-                        <div style={{ fontSize: '11px', color: '#FF9A7B', fontWeight: 700 }}>SAFE TO SPEND</div>
-                        <div style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', marginTop: '4px' }}>
-                          ৳18,500
+                    {/* STEP 4: PREDICT VISUAL */}
+                    {activeTab === 3 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            paddingBottom: '8px',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                          }}
+                        >
+                          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)' }}>
+                            UPCOMING PAYMENTS
+                          </span>
+                          <span className="badge-coming-soon">COMING SOON</span>
                         </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                          After bills & targets
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* AI Insight Card */}
-                    <div
-                      style={{
-                        padding: '18px',
-                        borderRadius: '14px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          color: '#A78BFA',
-                          marginBottom: '6px',
-                        }}
-                      >
-                        <Zap size={14} />
-                        <span>AI SPENDING RADAR</span>
+                        {[
+                          { name: 'Netflix Premium', date: 'Sep 12', amount: '$1,200', cat: 'Subscription' },
+                          { name: 'Dot Internet 50Mbps', date: 'Sep 15', amount: '$1,000', cat: 'Utilities' },
+                          { name: 'Apartment Rent', date: 'Sep 20', amount: '$15,000', cat: 'Housing' },
+                        ].map((bill) => (
+                          <div
+                            key={bill.name}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '14px 16px',
+                              borderRadius: '12px',
+                              background: 'rgba(255, 255, 255, 0.03)',
+                              border: '1px solid rgba(255, 255, 255, 0.06)',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                              <Calendar size={18} color="var(--purple-light)" />
+                              <div>
+                                <div style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF' }}>{bill.name}</div>
+                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                                  Due {bill.date} • {bill.cat}
+                                </div>
+                              </div>
+                            </div>
+                            <div style={{ fontSize: '16px', fontWeight: 800, color: '#F87171' }}>{bill.amount}</div>
+                          </div>
+                        ))}
                       </div>
-                      <div style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>
-                        "Your food spending increased 18% this month."
-                      </div>
-                      <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                        Driven by 4 weekend dinners. Transportation & utilities remained 6% below forecast.
-                      </div>
-                    </div>
-                  </div>
-                )}
+                    )}
 
-                {/* STEP 4: PREDICT VISUAL */}
-                {activeTab === 3 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingBottom: '8px',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                      }}
-                    >
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)' }}>
-                        UPCOMING PAYMENTS
-                      </span>
-                      <span className="badge-coming-soon">COMING SOON</span>
-                    </div>
-
-                    {[
-                      { name: 'Netflix Premium', date: 'Sep 12', amount: '৳1,200', cat: 'Subscription' },
-                      { name: 'Dot Internet 50Mbps', date: 'Sep 15', amount: '৳1,000', cat: 'Utilities' },
-                      { name: 'Apartment Rent', date: 'Sep 20', amount: '৳15,000', cat: 'Housing' },
-                    ].map((bill) => (
-                      <div
-                        key={bill.name}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '14px 16px',
-                          borderRadius: '12px',
-                          background: 'rgba(255, 255, 255, 0.03)',
-                          border: '1px solid rgba(255, 255, 255, 0.06)',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <Calendar size={18} color="var(--purple-light)" />
-                          <div>
-                            <div style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF' }}>{bill.name}</div>
-                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                              Due {bill.date} • {bill.cat}
+                    {/* STEP 5: IMPROVE VISUAL */}
+                    {activeTab === 4 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                          <div
+                            style={{
+                              padding: '14px',
+                              borderRadius: '12px',
+                              background: 'rgba(52, 211, 153, 0.1)',
+                              border: '1px solid rgba(52, 211, 153, 0.25)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <div style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>SPENDING</div>
+                            <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
+                              ↓ 12%
                             </div>
                           </div>
+
+                          <div
+                            style={{
+                              padding: '14px',
+                              borderRadius: '12px',
+                              background: 'rgba(139, 92, 246, 0.1)',
+                              border: '1px solid rgba(139, 92, 246, 0.25)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>SAVINGS</div>
+                            <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
+                              ↑ 18%
+                            </div>
+                          </div>
+
+                          <div
+                            style={{
+                              padding: '14px',
+                              borderRadius: '12px',
+                              background: 'rgba(255, 90, 54, 0.1)',
+                              border: '1px solid rgba(255, 90, 54, 0.25)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <div style={{ fontSize: '11px', color: '#FF9A7B', fontWeight: 700 }}>BUDGET</div>
+                            <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>92%</div>
+                          </div>
                         </div>
-                        <div style={{ fontSize: '16px', fontWeight: 800, color: '#F87171' }}>{bill.amount}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
 
-                {/* STEP 5: IMPROVE VISUAL */}
-                {activeTab === 4 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                      <div
-                        style={{
-                          padding: '14px',
-                          borderRadius: '12px',
-                          background: 'rgba(52, 211, 153, 0.1)',
-                          border: '1px solid rgba(52, 211, 153, 0.25)',
-                          textAlign: 'center',
-                        }}
-                      >
-                        <div style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>SPENDING</div>
-                        <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
-                          ↓ 12%
+                        <div
+                          style={{
+                            padding: '18px',
+                            borderRadius: '14px',
+                            background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.15), rgba(8, 11, 21, 0.8))',
+                            border: '1px solid rgba(139, 92, 246, 0.35)',
+                          }}
+                        >
+                          <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700, marginBottom: '6px' }}>
+                            AI RECOMMENDATION
+                          </div>
+                          <div style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>
+                            "Try reducing weekend dining by $500."
+                          </div>
+                          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                            This adjustment alone will cover your entire quarterly internet subscription.
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            textAlign: 'center',
+                            fontSize: '15px',
+                            fontWeight: 700,
+                            letterSpacing: '-0.02em',
+                            color: 'var(--purple-light)',
+                            paddingTop: '8px',
+                          }}
+                        >
+                          Track less. Know more.
                         </div>
                       </div>
-
-                      <div
-                        style={{
-                          padding: '14px',
-                          borderRadius: '12px',
-                          background: 'rgba(139, 92, 246, 0.1)',
-                          border: '1px solid rgba(139, 92, 246, 0.25)',
-                          textAlign: 'center',
-                        }}
-                      >
-                        <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>SAVINGS</div>
-                        <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
-                          ↑ 18%
-                        </div>
-                      </div>
-
-                      <div
-                        style={{
-                          padding: '14px',
-                          borderRadius: '12px',
-                          background: 'rgba(255, 90, 54, 0.1)',
-                          border: '1px solid rgba(255, 90, 54, 0.25)',
-                          textAlign: 'center',
-                        }}
-                      >
-                        <div style={{ fontSize: '11px', color: '#FF9A7B', fontWeight: 700 }}>BUDGET</div>
-                        <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>92%</div>
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        padding: '18px',
-                        borderRadius: '14px',
-                        background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.15), rgba(8, 11, 21, 0.8))',
-                        border: '1px solid rgba(139, 92, 246, 0.35)',
-                      }}
-                    >
-                      <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700, marginBottom: '6px' }}>
-                        AI RECOMMENDATION
-                      </div>
-                      <div style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>
-                        "Try reducing weekend dining by ৳500."
-                      </div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                        This adjustment alone will cover your entire quarterly internet subscription.
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        textAlign: 'center',
-                        fontSize: '15px',
-                        fontWeight: 700,
-                        letterSpacing: '-0.02em',
-                        color: 'var(--purple-light)',
-                        paddingTop: '8px',
-                      }}
-                    >
-                      Track less. Know more.
-                    </div>
-                  </div>
-                )}
+                    )}
                   </div>
                 </motion.div>
               </AnimatePresence>

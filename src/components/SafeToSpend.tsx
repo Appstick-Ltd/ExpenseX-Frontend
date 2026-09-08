@@ -168,7 +168,7 @@ export const SafeToSpend: React.FC = () => {
                     Simulate Bank Balance
                   </span>
                   <span style={{ fontSize: '15px', fontWeight: 800, color: '#34D399' }}>
-                    ৳{balance.toLocaleString('en-US')}
+                    ${balance.toLocaleString('en-US')}
                   </span>
                 </div>
                 <input
@@ -202,7 +202,7 @@ export const SafeToSpend: React.FC = () => {
                 >
                   <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Bank Balance</span>
                   <span style={{ fontSize: '14px', fontWeight: 700, color: '#34D399' }}>
-                    ৳{balance.toLocaleString('en-US')}
+                    ${balance.toLocaleString('en-US')}
                   </span>
                 </div>
 
@@ -220,7 +220,7 @@ export const SafeToSpend: React.FC = () => {
                 >
                   <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Upcoming Rent & Bills</span>
                   <span style={{ fontSize: '14px', fontWeight: 700, color: '#F87171' }}>
-                    -৳{scenario.rentBills.toLocaleString('en-US')}
+                    -${scenario.rentBills.toLocaleString('en-US')}
                   </span>
                 </div>
 
@@ -238,7 +238,7 @@ export const SafeToSpend: React.FC = () => {
                 >
                   <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Savings Goal Allocation</span>
                   <span style={{ fontSize: '14px', fontWeight: 700, color: '#F87171' }}>
-                    -৳{scenario.savingsGoal.toLocaleString('en-US')}
+                    -${scenario.savingsGoal.toLocaleString('en-US')}
                   </span>
                 </div>
 
@@ -256,7 +256,7 @@ export const SafeToSpend: React.FC = () => {
                 >
                   <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Committed Budgets</span>
                   <span style={{ fontSize: '14px', fontWeight: 700, color: '#F87171' }}>
-                    -৳{scenario.committedBudgets.toLocaleString('en-US')}
+                    -${scenario.committedBudgets.toLocaleString('en-US')}
                   </span>
                 </div>
 
@@ -278,7 +278,7 @@ export const SafeToSpend: React.FC = () => {
                     <span style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>True Safe to Spend</span>
                   </div>
                   <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--purple-light)' }}>
-                    ৳{safeToSpend.toLocaleString('en-US')}
+                    ${safeToSpend.toLocaleString('en-US')}
                   </span>
                 </div>
               </div>
@@ -370,7 +370,7 @@ export const SafeToSpend: React.FC = () => {
                       transition: 'all 0.3s ease',
                     }}
                   >
-                    ৳{safeToSpend.toLocaleString('en-US')}
+                    ${safeToSpend.toLocaleString('en-US')}
                   </div>
 
                   <div
