@@ -484,7 +484,7 @@ export function createIPhone17ProMax3D(): {
 
   // 9. Floating 3D Coin (৳ Taka Currency Coin on Left)
   const coinGroup = new THREE.Group();
-  const coinGeo = new THREE.CylinderGeometry(0.48, 0.48, 0.08, 48);
+  const coinGeo = new THREE.CylinderGeometry(0.52, 0.52, 0.08, 48);
   coinGeo.rotateX(Math.PI / 2);
 
   const coinCanvas = document.createElement('canvas');
@@ -492,126 +492,269 @@ export function createIPhone17ProMax3D(): {
   coinCanvas.height = 512;
   const cCtx = coinCanvas.getContext('2d');
   if (cCtx) {
-    cCtx.fillStyle = '#161226';
+    // Rich radial metallic dark obsidian gradient
+    const grad = cCtx.createRadialGradient(256, 256, 30, 256, 256, 256);
+    grad.addColorStop(0, '#321F64');
+    grad.addColorStop(0.6, '#1A1238');
+    grad.addColorStop(1, '#0C091A');
+    cCtx.fillStyle = grad;
     cCtx.fillRect(0, 0, 512, 512);
 
-    cCtx.strokeStyle = '#A78BFA';
+    // Glowing golden outer border
+    cCtx.shadowColor = '#FFAA33';
+    cCtx.shadowBlur = 18;
+    cCtx.strokeStyle = '#FFAA33';
     cCtx.lineWidth = 16;
     cCtx.beginPath();
-    cCtx.arc(256, 256, 224, 0, Math.PI * 2);
+    cCtx.arc(256, 256, 228, 0, Math.PI * 2);
     cCtx.stroke();
 
-    cCtx.strokeStyle = 'rgba(255, 122, 54, 0.65)';
+    // Inner electric purple border
+    cCtx.shadowColor = '#A78BFA';
+    cCtx.shadowBlur = 12;
+    cCtx.strokeStyle = '#A78BFA';
     cCtx.lineWidth = 6;
     cCtx.beginPath();
-    cCtx.arc(256, 256, 196, 0, Math.PI * 2);
+    cCtx.arc(256, 256, 202, 0, Math.PI * 2);
     cCtx.stroke();
 
+    // Decorative currency dots around ring
+    cCtx.shadowBlur = 0;
+    cCtx.fillStyle = '#FFAA33';
+    for (let i = 0; i < 16; i++) {
+      const angle = (i / 16) * Math.PI * 2;
+      const x = 256 + Math.cos(angle) * 184;
+      const y = 256 + Math.sin(angle) * 184;
+      cCtx.beginPath();
+      cCtx.arc(x, y, 5, 0, Math.PI * 2);
+      cCtx.fill();
+    }
+
+    // Huge, brilliant glowing golden/white ৳ Symbol
+    cCtx.shadowColor = '#FFD700';
+    cCtx.shadowBlur = 26;
     cCtx.fillStyle = '#FFFFFF';
-    cCtx.font = 'bold 220px -apple-system, system-ui, sans-serif';
+    cCtx.font = '900 240px -apple-system, system-ui, sans-serif';
     cCtx.textAlign = 'center';
     cCtx.textBaseline = 'middle';
-    cCtx.fillText('৳', 256, 266);
+    cCtx.fillText('৳', 256, 256);
+
+    // Subtitle label: BDT COIN
+    cCtx.shadowColor = '#FFAA33';
+    cCtx.shadowBlur = 10;
+    cCtx.fillStyle = '#FFAA33';
+    cCtx.font = '800 28px -apple-system, system-ui, sans-serif';
+    cCtx.fillText('BDT', 256, 380);
   }
   const coinTex = new THREE.CanvasTexture(coinCanvas);
   coinTex.colorSpace = THREE.SRGBColorSpace;
 
   const coinMat = new THREE.MeshStandardMaterial({
-    color: 0x423870,
-    metalness: 0.95,
-    roughness: 0.2,
+    color: 0xffffff,
     map: coinTex,
+    emissive: 0xffffff,
+    emissiveMap: coinTex,
+    emissiveIntensity: 0.9,
+    metalness: 0.25,
+    roughness: 0.2,
   });
   const coinMesh = new THREE.Mesh(coinGeo, coinMat);
   coinGroup.add(coinMesh);
 
-  const coinRimGeo = new THREE.TorusGeometry(0.49, 0.02, 16, 48);
-  const coinRimMat = new THREE.MeshBasicMaterial({ color: 0xa78bfa });
+  // Outer glowing golden rim
+  const coinRimGeo = new THREE.TorusGeometry(0.53, 0.024, 16, 48);
+  const coinRimMat = new THREE.MeshBasicMaterial({ color: 0xffaa33 });
   coinGroup.add(new THREE.Mesh(coinRimGeo, coinRimMat));
 
-  coinGroup.position.set(-2.5, 0.6, 0.6);
+  coinGroup.position.set(-2.55, 0.5, 0.7);
   group.add(coinGroup);
 
   // 10. Floating 3D Bar Chart Badge (Top-Left)
   const chartGroup = new THREE.Group();
-  const chartPlateGeo = new THREE.BoxGeometry(0.9, 0.9, 0.07);
-  const chartPlateMat = new THREE.MeshStandardMaterial({
-    color: 0x181432,
-    metalness: 0.8,
-    roughness: 0.25,
-  });
-  chartGroup.add(new THREE.Mesh(chartPlateGeo, chartPlateMat));
+  const chartPlateGeo = new THREE.BoxGeometry(0.96, 0.96, 0.08);
 
-  const chartRimGeo = new THREE.BoxGeometry(0.94, 0.94, 0.015);
-  const chartRimMat = new THREE.MeshBasicMaterial({ color: 0x6d3df5 });
+  const chartCanvas = document.createElement('canvas');
+  chartCanvas.width = 512;
+  chartCanvas.height = 512;
+  const chCtx = chartCanvas.getContext('2d');
+  if (chCtx) {
+    // Glass card gradient
+    const bgGrad = chCtx.createLinearGradient(0, 0, 512, 512);
+    bgGrad.addColorStop(0, '#221842');
+    bgGrad.addColorStop(0.6, '#140F2A');
+    bgGrad.addColorStop(1, '#0A0716');
+    chCtx.fillStyle = bgGrad;
+    chCtx.fillRect(0, 0, 512, 512);
+
+    // Glowing border
+    chCtx.strokeStyle = '#8B5CF6';
+    chCtx.lineWidth = 12;
+    chCtx.strokeRect(16, 16, 480, 480);
+
+    // Header badge: "+28% SAVINGS"
+    chCtx.fillStyle = 'rgba(16, 185, 129, 0.25)';
+    chCtx.strokeStyle = '#34D399';
+    chCtx.lineWidth = 4;
+    chCtx.beginPath();
+    chCtx.roundRect(40, 44, 185, 56, 28);
+    chCtx.fill();
+    chCtx.stroke();
+
+    chCtx.fillStyle = '#34D399';
+    chCtx.font = 'bold 30px -apple-system, system-ui, sans-serif';
+    chCtx.fillText('▲ +28%', 62, 83);
+
+    chCtx.fillStyle = '#C4B5FD';
+    chCtx.font = '700 24px -apple-system, system-ui, sans-serif';
+    chCtx.fillText('SAVINGS', 246, 83);
+
+    // Baseline grid
+    chCtx.strokeStyle = 'rgba(167, 139, 250, 0.4)';
+    chCtx.lineWidth = 4;
+    chCtx.beginPath();
+    chCtx.moveTo(40, 420);
+    chCtx.lineTo(472, 420);
+    chCtx.stroke();
+
+    // 4 Glowing Vertical Bars
+    const bars = [
+      { x: 65, w: 65, h: 140, color1: '#6D3DF5', color2: '#A78BFA' },
+      { x: 170, w: 65, h: 220, color1: '#06B6D4', color2: '#38BDF8' },
+      { x: 275, w: 65, h: 170, color1: '#FF5A36', color2: '#FFAA33' },
+      { x: 380, w: 65, h: 290, color1: '#10B981', color2: '#34D399' },
+    ];
+
+    bars.forEach((b) => {
+      const bGrad = chCtx.createLinearGradient(0, 420, 0, 420 - b.h);
+      bGrad.addColorStop(0, b.color1);
+      bGrad.addColorStop(1, b.color2);
+      chCtx.fillStyle = bGrad;
+      chCtx.shadowColor = b.color2;
+      chCtx.shadowBlur = 18;
+      chCtx.beginPath();
+      chCtx.roundRect(b.x, 420 - b.h, b.w, b.h, [12, 12, 0, 0]);
+      chCtx.fill();
+    });
+    chCtx.shadowBlur = 0;
+  }
+
+  const chartTex = new THREE.CanvasTexture(chartCanvas);
+  chartTex.colorSpace = THREE.SRGBColorSpace;
+
+  const chartMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    map: chartTex,
+    emissive: 0xffffff,
+    emissiveMap: chartTex,
+    emissiveIntensity: 0.9,
+    metalness: 0.25,
+    roughness: 0.2,
+  });
+  chartGroup.add(new THREE.Mesh(chartPlateGeo, chartMat));
+
+  const chartRimGeo = new THREE.BoxGeometry(0.99, 0.99, 0.02);
+  const chartRimMat = new THREE.MeshBasicMaterial({ color: 0xa78bfa });
   chartGroup.add(new THREE.Mesh(chartRimGeo, chartRimMat));
 
-  // 3 Rising metallic bars
-  const barHeights = [0.32, 0.52, 0.72];
-  const barColors = [0x6d3df5, 0x8b5cf6, 0xff5a36];
-  barHeights.forEach((bh, bIdx) => {
-    const bGeo = new THREE.BoxGeometry(0.16, bh, 0.08);
-    const bMat = new THREE.MeshStandardMaterial({
-      color: barColors[bIdx],
-      metalness: 0.95,
-      roughness: 0.18,
-    });
-    const bMesh = new THREE.Mesh(bGeo, bMat);
-    bMesh.position.set(-0.22 + bIdx * 0.22, -0.36 + bh / 2, 0.05);
-    chartGroup.add(bMesh);
-  });
-
-  chartGroup.position.set(-2.2, 2.7, -0.2);
-  chartGroup.rotation.y = 0.25;
-  chartGroup.rotation.x = 0.12;
+  chartGroup.position.set(-2.25, 2.65, 0.5);
+  chartGroup.rotation.y = 0.18;
+  chartGroup.rotation.x = 0.08;
   group.add(chartGroup);
 
   // 11. Floating 3D AI Neural Chip (Bottom-Right)
   const aiChipGroup = new THREE.Group();
-  const chipPlateGeo = new THREE.BoxGeometry(0.92, 0.92, 0.09);
+  const chipPlateGeo = new THREE.BoxGeometry(0.96, 0.96, 0.08);
 
   const chipCanvas = document.createElement('canvas');
   chipCanvas.width = 512;
   chipCanvas.height = 512;
   const chipCtx = chipCanvas.getContext('2d');
   if (chipCtx) {
-    chipCtx.fillStyle = '#0a0d1c';
+    // Deep obsidian processor core background
+    const bgGrad = chipCtx.createRadialGradient(256, 256, 50, 256, 256, 256);
+    bgGrad.addColorStop(0, '#1E163C');
+    bgGrad.addColorStop(0.7, '#100C24');
+    bgGrad.addColorStop(1, '#060410');
+    chipCtx.fillStyle = bgGrad;
     chipCtx.fillRect(0, 0, 512, 512);
 
-    chipCtx.strokeStyle = '#6D3DF5';
-    chipCtx.lineWidth = 12;
-    chipCtx.strokeRect(36, 36, 440, 440);
+    // Glowing circuit board lines
+    chipCtx.strokeStyle = '#A78BFA';
+    chipCtx.lineWidth = 10;
+    chipCtx.strokeRect(28, 28, 456, 456);
 
-    chipCtx.fillStyle = '#FF5A36';
-    chipCtx.fillRect(26, 26, 28, 28);
-    chipCtx.fillRect(458, 26, 28, 28);
-    chipCtx.fillRect(26, 458, 28, 28);
-    chipCtx.fillRect(458, 458, 28, 28);
+    // Corner circuit pads
+    chipCtx.fillStyle = '#FFAA33';
+    chipCtx.shadowColor = '#FFAA33';
+    chipCtx.shadowBlur = 14;
+    chipCtx.fillRect(18, 18, 36, 36);
+    chipCtx.fillRect(458, 18, 36, 36);
+    chipCtx.fillRect(18, 458, 36, 36);
+    chipCtx.fillRect(458, 458, 36, 36);
 
+    // Circuit traces
+    chipCtx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+    chipCtx.lineWidth = 4;
+    chipCtx.shadowBlur = 0;
+    chipCtx.beginPath();
+    chipCtx.moveTo(28, 180); chipCtx.lineTo(130, 180); chipCtx.lineTo(160, 210);
+    chipCtx.moveTo(484, 180); chipCtx.lineTo(382, 180); chipCtx.lineTo(352, 210);
+    chipCtx.moveTo(28, 330); chipCtx.lineTo(130, 330); chipCtx.lineTo(160, 300);
+    chipCtx.moveTo(484, 330); chipCtx.lineTo(382, 330); chipCtx.lineTo(352, 300);
+    chipCtx.stroke();
+
+    // Center Neural Frame
+    chipCtx.shadowColor = '#8B5CF6';
+    chipCtx.shadowBlur = 20;
+    chipCtx.strokeStyle = '#8B5CF6';
+    chipCtx.lineWidth = 6;
+    chipCtx.strokeRect(120, 120, 272, 272);
+
+    // Status dot
+    chipCtx.shadowColor = '#34D399';
+    chipCtx.shadowBlur = 14;
+    chipCtx.fillStyle = '#34D399';
+    chipCtx.beginPath();
+    chipCtx.arc(150, 150, 9, 0, Math.PI * 2);
+    chipCtx.fill();
+
+    // Bold, glowing gradient "AI" letters
+    chipCtx.shadowColor = '#38BDF8';
+    chipCtx.shadowBlur = 26;
     chipCtx.fillStyle = '#FFFFFF';
-    chipCtx.font = '900 200px -apple-system, system-ui, sans-serif';
+    chipCtx.font = '900 170px -apple-system, system-ui, sans-serif';
     chipCtx.textAlign = 'center';
     chipCtx.textBaseline = 'middle';
-    chipCtx.fillText('AI', 256, 262);
+    chipCtx.fillText('AI', 256, 245);
+
+    // Subtitle
+    chipCtx.shadowColor = '#A78BFA';
+    chipCtx.shadowBlur = 10;
+    chipCtx.fillStyle = '#C4B5FD';
+    chipCtx.font = '800 24px -apple-system, system-ui, sans-serif';
+    chipCtx.fillText('NEURAL CORE', 256, 342);
   }
   const chipTex = new THREE.CanvasTexture(chipCanvas);
   chipTex.colorSpace = THREE.SRGBColorSpace;
 
   const chipMat = new THREE.MeshStandardMaterial({
-    color: 0x1f2238,
-    metalness: 0.92,
-    roughness: 0.2,
+    color: 0xffffff,
     map: chipTex,
+    emissive: 0xffffff,
+    emissiveMap: chipTex,
+    emissiveIntensity: 0.9,
+    metalness: 0.25,
+    roughness: 0.2,
   });
   aiChipGroup.add(new THREE.Mesh(chipPlateGeo, chipMat));
 
-  const chipRimGeo = new THREE.BoxGeometry(0.96, 0.96, 0.02);
-  const chipRimMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6 });
+  const chipRimGeo = new THREE.BoxGeometry(0.99, 0.99, 0.02);
+  const chipRimMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
   aiChipGroup.add(new THREE.Mesh(chipRimGeo, chipRimMat));
 
-  aiChipGroup.position.set(2.4, -1.8, 0.7);
-  aiChipGroup.rotation.y = -0.35;
-  aiChipGroup.rotation.x = -0.12;
+  aiChipGroup.position.set(2.4, -1.75, 0.75);
+  aiChipGroup.rotation.y = -0.22;
+  aiChipGroup.rotation.x = -0.06;
   group.add(aiChipGroup);
 
   return {
@@ -624,16 +767,17 @@ export function createIPhone17ProMax3D(): {
       pt.applyEuler(new THREE.Euler(0, 0, -0.22));
       orbMesh.position.copy(pt);
 
-      // 2. Floating bobbing and gentle rotation for 3D elements
-      coinGroup.position.y = 0.6 + Math.sin(time * 1.8) * 0.12;
-      coinGroup.rotation.y = time * 0.8;
-      coinGroup.rotation.z = Math.sin(time * 1.2) * 0.12;
+      // 2. Floating bobbing and gentle oscillation for 3D elements (always facing forward!)
+      coinGroup.position.y = 0.5 + Math.sin(time * 1.8) * 0.12;
+      coinGroup.rotation.y = Math.sin(time * 1.2) * 0.35; // Gentle oscillation - NEVER flips edge-on!
+      coinGroup.rotation.z = Math.sin(time * 1.0) * 0.1;
 
-      chartGroup.position.y = 2.7 + Math.sin(time * 1.5 + 1.0) * 0.1;
-      chartGroup.rotation.z = Math.sin(time * 0.9) * 0.08;
+      chartGroup.position.y = 2.65 + Math.sin(time * 1.5 + 1.0) * 0.1;
+      chartGroup.rotation.y = 0.18 + Math.sin(time * 0.9) * 0.08;
+      chartGroup.rotation.z = Math.sin(time * 0.9) * 0.05;
 
-      aiChipGroup.position.y = -1.8 + Math.sin(time * 1.6 + 2.0) * 0.1;
-      aiChipGroup.rotation.y = -0.35 + Math.sin(time * 1.1) * 0.1;
+      aiChipGroup.position.y = -1.75 + Math.sin(time * 1.6 + 2.0) * 0.1;
+      aiChipGroup.rotation.y = -0.22 + Math.sin(time * 1.1) * 0.08;
     },
   };
 }
