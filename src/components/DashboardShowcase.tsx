@@ -227,8 +227,8 @@ export const DashboardShowcase: React.FC = () => {
                           width: '32px',
                           height: '32px',
                           borderRadius: '8px',
-                          background: tx.amount.startsWith('+') ? 'rgba(52, 211, 153, 0.15)' : 'rgba(109, 61, 245, 0.2)',
-                          color: tx.amount.startsWith('+') ? '#34D399' : 'var(--purple-light)',
+                          background: tx.amount.startsWith('+') ? 'rgba(52, 211, 153, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                          color: tx.amount.startsWith('+') ? '#34D399' : '#F87171',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -243,7 +243,7 @@ export const DashboardShowcase: React.FC = () => {
                         <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{tx.category}</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: '15px', fontWeight: 700, color: tx.amount.startsWith('+') ? '#34D399' : '#FFFFFF' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: tx.amount.startsWith('+') ? '#34D399' : '#EF4444' }}>
                       {tx.amount}
                     </div>
                   </div>

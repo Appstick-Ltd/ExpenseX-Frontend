@@ -486,6 +486,7 @@ export function createIPhone17ProMax3D(): {
   const coinGroup = new THREE.Group();
   const coinGeo = new THREE.CylinderGeometry(0.52, 0.52, 0.08, 48);
   coinGeo.rotateX(Math.PI / 2);
+  coinGeo.rotateZ(-Math.PI / 2);
 
   const coinCanvas = document.createElement('canvas');
   coinCanvas.width = 512;
