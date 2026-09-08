@@ -254,59 +254,7 @@ export const HeroPhone3D: React.FC = () => {
         justifyContent: 'center',
       }}
     >
-      {/* Playful Image 1 Style Floating Annotation: "AI Insights. Better Choices. ⤹" */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '28px',
-          right: '-6px',
-          zIndex: 4,
-          textAlign: 'center',
-          pointerEvents: 'none',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'Caveat, "Dancing Script", cursive, -apple-system, sans-serif',
-            fontSize: '20px',
-            color: '#E2E8F0',
-            lineHeight: 1.2,
-            textShadow: '0 2px 10px rgba(0,0,0,0.8), 0 0 20px rgba(139, 92, 246, 0.6)',
-            letterSpacing: '0.02em',
-            transform: 'rotate(6deg)',
-          }}
-        >
-          AI Insights.<br />Better Choices.
-        </div>
-        <svg width="36" height="26" viewBox="0 0 40 30" fill="none" style={{ margin: '2px auto 0 auto', opacity: 0.85 }}>
-          <path d="M 28 4 C 18 12, 10 18, 12 26 M 12 26 L 8 20 M 12 26 L 18 22" stroke="#A78BFA" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
 
-      {/* Playful Image 1 Style Floating Annotation: "Smarter Spending. Happier You." */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '80px',
-          left: '-16px',
-          zIndex: 4,
-          textAlign: 'center',
-          pointerEvents: 'none',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'Caveat, "Dancing Script", cursive, -apple-system, sans-serif',
-            fontSize: '19px',
-            color: '#E2E8F0',
-            lineHeight: 1.2,
-            textShadow: '0 2px 10px rgba(0,0,0,0.8), 0 0 20px rgba(255, 90, 54, 0.6)',
-            transform: 'rotate(-8deg)',
-          }}
-        >
-          Smarter Spending.<br />Happier You.
-        </div>
-      </div>
       {/* Three.js Canvas Container */}
       <div
         ref={containerRef}
