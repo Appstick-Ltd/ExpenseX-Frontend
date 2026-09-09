@@ -209,17 +209,19 @@ export function createIPhone17ProMax3D(): {
   group.add(backMesh);
 
   // Subtle Logo on back plate
-  const logoGeo = new THREE.CircleGeometry(0.24, 32);
-  const logoMat = new THREE.MeshStandardMaterial({
-    color: 0x8b5cf6,
-    metalness: 0.9,
-    roughness: 0.2,
-    emissive: 0x3b1d7d,
-    emissiveIntensity: 0.6,
+  const logoTex = new THREE.TextureLoader().load('/logo.png');
+  logoTex.colorSpace = THREE.SRGBColorSpace;
+  const logoGeo = new THREE.PlaneGeometry(0.72, 0.55);
+  const logoMat = new THREE.MeshBasicMaterial({
+    map: logoTex,
+    transparent: true,
+    opacity: 0.9,
+    depthWrite: false,
   });
   const logoMesh = new THREE.Mesh(logoGeo, logoMat);
   logoMesh.rotation.y = Math.PI;
-  logoMesh.position.set(0, 0, -(D / 2 + 0.055));
+  logoMesh.scale.x = -1; // Un-mirror texture when viewed from the back
+  logoMesh.position.set(0, 0.15, -(D / 2 + 0.055));
   group.add(logoMesh);
 
   // 4. Rear Camera Plateau (3D Island on back)

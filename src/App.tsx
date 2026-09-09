@@ -56,11 +56,11 @@ export const App: React.FC = () => {
         {/* 10. Autonomous Savings Goals */}
         <SavingsGoals />
 
-        {/* 11. Privacy, Permissions & Data Autonomy */}
-        <Privacy />
-
-        {/* 12. Strategic Roadmap */}
+        {/* 11. Strategic Roadmap */}
         <Roadmap />
+
+        {/* 12. Privacy, Permissions & Data Autonomy */}
+        <Privacy />
 
         {/* 13. Cinematic Final Call to Action */}
         <FinalCTA />

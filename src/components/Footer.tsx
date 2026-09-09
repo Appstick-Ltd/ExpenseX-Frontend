@@ -4,8 +4,8 @@ import { Logo } from './Logo';
 export const Footer: React.FC = () => {
   const footerLinks = [
     { label: 'Product', href: '#home' },
-    { label: 'Features', href: '#features' },
     { label: 'How It Works', href: '#tour' },
+    { label: 'Features', href: '#features' },
     { label: 'AI Engine', href: '#ai-engine' },
     { label: 'Safe to Spend', href: '#safe-to-spend' },
     { label: 'Roadmap', href: '#roadmap' },
