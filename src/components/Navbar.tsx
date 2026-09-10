@@ -4,6 +4,7 @@ import { Logo } from './Logo';
 import { NAV_ITEMS } from '../utils/constants';
 import { Menu, X, Volume2, VolumeX, ArrowRight } from 'lucide-react';
 import { isSoundEnabled, setSoundMuted, playMicroClick } from '../utils/audio';
+import { openEarlyAccessModal } from '../utils/modalEvents';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -375,19 +376,24 @@ export const Navbar: React.FC = () => {
                   {soundActive ? 'FX ON' : 'FX OFF'}
                 </span>
               </button>
-
-              <a
-                href="#download"
-                onClick={(e) => handleNavClick(e, '#download')}
+              {/* Desktop CTA: Trigger Early Access VIP Dialog */}
+              <button
+                type="button"
+                onClick={() => {
+                  playMicroClick();
+                  openEarlyAccessModal('both');
+                }}
                 className="btn-primary desktop-cta"
                 style={{
                   padding: '9px 18px',
                   fontSize: '13px',
                   borderRadius: '9999px',
+                  border: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 <span>Get Started</span>
-              </a>
+              </button>
 
               {/* Mobile Hamburger Toggle */}
               <button
@@ -484,17 +490,18 @@ export const Navbar: React.FC = () => {
               </a>
             );
           })}
-          <a
-            href="#download"
+          <button
+            type="button"
             className="btn-primary"
-            onClick={(e) => {
-              handleNavClick(e, '#download');
+            onClick={() => {
+              playMicroClick();
               setMobileMenuOpen(false);
+              openEarlyAccessModal('both');
             }}
-            style={{ width: '100%', marginTop: '6px' }}
+            style={{ width: '100%', marginTop: '6px', border: 'none', cursor: 'pointer' }}
           >
             <span>Get Started</span>
-          </a>
+          </button>
         </div>
       )}
 

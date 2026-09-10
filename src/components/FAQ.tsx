@@ -53,17 +53,28 @@ export const FAQ: React.FC = () => {
     <section id="faq" className="section-wrapper faq-section">
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 48px auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: '880px', margin: '0 auto 48px auto' }}>
           <div className="section-eyebrow">
             <Sparkles size={12} style={{ color: '#A78BFA' }} />
             <span>KNOWLEDGE BASE &amp; FREQUENTLY ASKED QUESTIONS</span>
           </div>
 
-          <h2 className="section-headline">
-            Everything you need to know about <span className="text-gradient-purple">ExpenseX AI.</span>
+          <h2
+            className="section-headline faq-headline"
+            style={{
+              margin: '0 auto 16px auto',
+              lineHeight: 1.22,
+            }}
+          >
+            <span className="faq-line-1">Everything you need to know</span>
+            <br />
+            <span className="faq-line-2">
+              about{' '}
+              <span className="text-gradient-purple">ExpenseX AI.</span>
+            </span>
           </h2>
 
-          <p className="section-description" style={{ margin: '0 auto' }}>
+          <p className="section-description" style={{ margin: '0 auto', maxWidth: '640px' }}>
             Learn how autonomous expense tracking, multi-channel capture, and AI financial intelligence empower you to track less and know more.
           </p>
         </div>
@@ -175,17 +186,33 @@ export const FAQ: React.FC = () => {
           from { opacity: 0; transform: translateY(-4px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        .faq-headline {
+          font-size: clamp(24px, 4.4vw, 48px) !important;
+          max-width: 880px;
+          margin: 0 auto;
+        }
+        .faq-line-1 {
+          display: inline-block;
+          white-space: nowrap;
+        }
+        .faq-line-2 {
+          display: inline-block;
+          white-space: nowrap;
+        }
         .faq-item-card:hover {
           border-color: rgba(139, 92, 246, 0.35) !important;
           background: rgba(109, 61, 245, 0.05) !important;
         }
         @media (max-width: 640px) {
+          .faq-headline {
+            font-size: clamp(20px, 5.5vw, 26px) !important;
+          }
           .faq-question-row {
             padding: 16px 16px !important;
             gap: 12px !important;
           }
           .faq-question-text {
-            fontSize: 14.5px !important;
+            font-size: 14.5px !important;
           }
           .faq-answer-body {
             padding: 0 16px 16px 16px !important;

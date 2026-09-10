@@ -73,18 +73,27 @@ export const Roadmap: React.FC = () => {
 
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 50px auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: '880px', margin: '0 auto 50px auto' }}>
           <div className="section-eyebrow">
             <span className="section-eyebrow-dot" />
             <span>PRODUCT ROADMAP & HIGHWAY</span>
           </div>
 
-          <h2 className="section-headline">
-            The future of personal finance, <br />
-            <span className="text-gradient-purple">mapped as a clear journey.</span>
+          <h2
+            className="section-headline roadmap-headline"
+            style={{
+              margin: '0 auto 16px auto',
+              lineHeight: 1.22,
+            }}
+          >
+            <span className="roadmap-line-1">The future of personal finance,</span>
+            <br />
+            <span className="roadmap-line-2">
+              <span className="text-gradient-purple">mapped as a clear journey.</span>
+            </span>
           </h2>
 
-          <p className="section-description" style={{ margin: '0 auto' }}>
+          <p className="section-description" style={{ margin: '0 auto', maxWidth: '640px' }}>
             We're building more than an expense tracker. Follow our highway toward fully autonomous financial intelligence.
           </p>
         </div>
@@ -438,6 +447,19 @@ export const Roadmap: React.FC = () => {
         .road-car-pulse {
           animation: roadDrive 4.5s infinite ease-in-out;
         }
+        .roadmap-headline {
+          font-size: clamp(24px, 4.4vw, 48px) !important;
+          max-width: 880px;
+          margin: 0 auto;
+        }
+        .roadmap-line-1 {
+          display: inline-block;
+          white-space: nowrap;
+        }
+        .roadmap-line-2 {
+          display: inline-block;
+          white-space: nowrap;
+        }
         @media (max-width: 992px) {
           .roadmap-grid {
             grid-template-columns: 1fr !important;
@@ -448,6 +470,9 @@ export const Roadmap: React.FC = () => {
           }
         }
         @media (max-width: 640px) {
+          .roadmap-headline {
+            font-size: clamp(19px, 5.2vw, 25px) !important;
+          }
           .roadmap-card {
             padding: 22px 16px !important;
             border-radius: 18px !important;

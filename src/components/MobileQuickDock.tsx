@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Compass, Sparkles, ArrowUp, Zap } from 'lucide-react';
 import { playMicroClick } from '../utils/audio';
 import { triggerHaptic } from '../utils/haptics';
+import { openEarlyAccessModal } from '../utils/modalEvents';
 
 export const MobileQuickDock: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -59,14 +60,19 @@ export const MobileQuickDock: React.FC = () => {
             <span>AI Core</span>
           </a>
 
-          <a
-            href="#cta"
-            onClick={handleNavClick}
+          <button
+            type="button"
+            onClick={() => {
+              playMicroClick();
+              triggerHaptic('medium');
+              openEarlyAccessModal('both');
+            }}
             className="dock-cta-btn"
+            style={{ border: 'none', cursor: 'pointer' }}
           >
             <Zap size={14} fill="#FFFFFF" />
             <span>Get App</span>
-          </a>
+          </button>
 
           <button
             onClick={scrollToTop}

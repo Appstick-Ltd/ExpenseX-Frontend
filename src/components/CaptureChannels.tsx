@@ -14,18 +14,27 @@ export const CaptureChannels: React.FC = () => {
     >
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 60px auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: '880px', margin: '0 auto 60px auto' }}>
           <div className="section-eyebrow">
             <span className="section-eyebrow-dot" />
             <span>CAPTURE FROM ANYWHERE</span>
           </div>
 
-          <h2 className="section-title">
-            ExpenseX captures expenses <br />
-            <span className="text-gradient">before you can forget them.</span>
+          <h2
+            className="section-headline capture-headline"
+            style={{
+              margin: '0 auto 16px auto',
+              lineHeight: 1.22,
+            }}
+          >
+            <span className="capture-line-1">ExpenseX captures expenses</span>
+            <br />
+            <span className="capture-line-2">
+              <span className="text-gradient-purple">before you can forget them.</span>
+            </span>
           </h2>
 
-          <p className="section-subtitle" style={{ margin: '0 auto' }}>
+          <p className="section-description" style={{ margin: '0 auto', maxWidth: '640px' }}>
             Most people stop tracking because manual entry is friction. ExpenseX removes the friction entirely by capturing from the channels you already live in.
           </p>
         </div>
@@ -378,12 +387,28 @@ export const CaptureChannels: React.FC = () => {
       </div>
 
       <style>{`
+        .capture-headline {
+          font-size: clamp(24px, 4.4vw, 48px) !important;
+          max-width: 880px;
+          margin: 0 auto;
+        }
+        .capture-line-1 {
+          display: inline-block;
+          white-space: nowrap;
+        }
+        .capture-line-2 {
+          display: inline-block;
+          white-space: nowrap;
+        }
         @media (max-width: 1024px) {
           .capture-cards-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
         @media (max-width: 640px) {
+          .capture-headline {
+            font-size: clamp(19px, 5.5vw, 26px) !important;
+          }
           .capture-cards-grid {
             grid-template-columns: 1fr !important;
             gap: 16px !important;

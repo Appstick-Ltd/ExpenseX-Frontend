@@ -3,18 +3,13 @@ import { Logo } from './Logo';
 import logoImg from '../assets/logo.png';
 import appleLogoImg from '../assets/apple-logo.png';
 import googlePlaySvg from '../assets/Google_Play_2022_icon.svg';
-import { playSuccessChime } from '../utils/audio';
+import { playMicroClick } from '../utils/audio';
+import { openEarlyAccessModal, type PlatformType } from '../utils/modalEvents';
 
 export const FinalCTA: React.FC = () => {
-  const handleDownload = async () => {
-    playSuccessChime();
-    const confetti = (await import('canvas-confetti')).default;
-    confetti({
-      particleCount: 120,
-      spread: 80,
-      origin: { y: 0.75 },
-      colors: ['#6D3DF5', '#8B5CF6', '#FF5A36', '#34D399', '#FFAA33', '#FFFFFF'],
-    });
+  const handleOpenEarlyAccess = (platform: PlatformType) => {
+    playMicroClick();
+    openEarlyAccessModal(platform);
   };
 
   return (
@@ -98,7 +93,7 @@ export const FinalCTA: React.FC = () => {
                   textTransform: 'uppercase',
                 }}
               >
-                YOUR BETTER TOMORROW STARTS TODAY
+                EARLY BIRD ACCESS • LIMITED SPOTS
               </span>
             </div>
 
@@ -113,7 +108,7 @@ export const FinalCTA: React.FC = () => {
                 marginBottom: '16px',
               }}
             >
-              Download ExpenseX AI
+              Get ExpenseX AI on iOS &amp; Android
             </h2>
 
             {/* Subtitle */}
@@ -123,10 +118,10 @@ export const FinalCTA: React.FC = () => {
                 color: 'var(--text-secondary)',
                 lineHeight: 1.6,
                 marginBottom: '32px',
-                maxWidth: '460px',
+                maxWidth: '480px',
               }}
             >
-              Take control of your money. It's free, simple and powerful.
+              Reserve your exclusive Early Bird VIP pass. Be the first to get Beta builds on the Apple App Store and Google Play Store with priority access.
             </p>
 
             {/* Official App Store & Google Play Store Badge Buttons */}
@@ -141,7 +136,7 @@ export const FinalCTA: React.FC = () => {
             >
               {/* Apple App Store Badge */}
               <button
-                onClick={handleDownload}
+                onClick={() => handleOpenEarlyAccess('ios')}
                 className="store-badge-btn"
                 style={{
                   display: 'inline-flex',
@@ -188,7 +183,7 @@ export const FinalCTA: React.FC = () => {
 
               {/* Google Play Store Badge */}
               <button
-                onClick={handleDownload}
+                onClick={() => handleOpenEarlyAccess('android')}
                 className="store-badge-btn"
                 style={{
                   display: 'inline-flex',

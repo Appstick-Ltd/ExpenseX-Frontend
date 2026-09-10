@@ -16,6 +16,7 @@ import { SavingsGoals } from './components/SavingsGoals';
 import { Privacy } from './components/Privacy';
 import { Roadmap } from './components/Roadmap';
 import { FAQ } from './components/FAQ';
+import { EarlyAccessModal } from './components/EarlyAccessModal';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 
@@ -33,6 +34,9 @@ export const App: React.FC = () => {
 
       {/* Mobile-Exclusive Floating Quick Action Dock */}
       <MobileQuickDock />
+
+      {/* Early Bird Access Modal Dialogue */}
+      <EarlyAccessModal />
 
       <main style={{ flex: 1 }}>
         {/* 1. Uncluttered Hero with 3D Phone & Studio Light */}
