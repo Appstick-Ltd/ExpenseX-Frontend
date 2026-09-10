@@ -29,4 +29,4 @@ User-agent: facebookexternalhit
 Allow: /
 
 # Sitemap location
-Sitemap: https://expensex.ai/sitemap.xml
+Sitemap: https://expensexai.com/sitemap.xml
