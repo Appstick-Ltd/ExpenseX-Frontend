@@ -367,7 +367,10 @@ export const EarlyAccessModal: React.FC = () => {
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+                    }}
                     placeholder="e.g. Alex Morgan"
                     className={`form-input ${errors.name ? 'error' : ''}`}
                   />
@@ -382,7 +385,11 @@ export const EarlyAccessModal: React.FC = () => {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+                      if (apiError) setApiError(null);
+                    }}
                     placeholder="alex@example.com"
                     className={`form-input ${errors.email ? 'error' : ''}`}
                   />
