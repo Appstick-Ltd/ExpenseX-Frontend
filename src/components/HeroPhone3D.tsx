@@ -22,8 +22,12 @@ export const HeroPhone3D: React.FC = () => {
     baseRotY: -0.28,
     baseRotX: 0.08,
     isPointerDown: false,
+    pointerType: 'mouse',
+    startX: 0,
+    startY: 0,
     prevPointerX: 0,
     prevPointerY: 0,
+    isDraggingHorizontally: false,
     velX: 0,
     velY: 0,
     mouseNormX: 0,
@@ -64,6 +68,7 @@ export const HeroPhone3D: React.FC = () => {
     canvas.style.height = '100%';
     canvas.style.display = 'block';
     canvas.style.cursor = 'grab';
+    canvas.style.touchAction = 'pan-y';
     container.innerHTML = '';
     container.appendChild(canvas);
 
@@ -144,21 +149,28 @@ export const HeroPhone3D: React.FC = () => {
       if (!s.isPointerDown) {
         // Subtle parallax tilt when not dragging
         s.targetRotY = s.baseRotY + nx * 0.28;
-        s.targetRotX = s.baseRotX - ny * 0.22;
+        s.targetRotX = Math.max(-0.25, Math.min(0.35, s.baseRotX - ny * 0.22));
       }
     };
 
     const handlePointerDown = (e: PointerEvent) => {
       const s = stateRef.current;
       s.isPointerDown = true;
+      s.pointerType = e.pointerType;
+      s.startX = e.clientX;
+      s.startY = e.clientY;
       s.prevPointerX = e.clientX;
       s.prevPointerY = e.clientY;
+      s.isDraggingHorizontally = false;
       s.velX = 0;
       s.velY = 0;
-      canvas.style.cursor = 'grabbing';
-      setIsDragging(true);
-      playMicroClick();
-      triggerHaptic('light');
+
+      if (e.pointerType !== 'touch') {
+        canvas.style.cursor = 'grabbing';
+        setIsDragging(true);
+        playMicroClick();
+        triggerHaptic('light');
+      }
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -167,14 +179,40 @@ export const HeroPhone3D: React.FC = () => {
 
       const deltaX = e.clientX - s.prevPointerX;
       const deltaY = e.clientY - s.prevPointerY;
+      const totalDx = Math.abs(e.clientX - s.startX);
+      const totalDy = Math.abs(e.clientY - s.startY);
+
+      // Mobile Touch Gesture Protection: Never trap vertical webpage scrolling!
+      if (s.pointerType === 'touch' && !s.isDraggingHorizontally) {
+        if (totalDy > 8 && totalDy >= totalDx) {
+          // Vertical swipe = user wants to scroll the webpage!
+          s.isPointerDown = false;
+          setIsDragging(false);
+          return;
+        }
+        if (totalDx > 14 && totalDx > totalDy) {
+          s.isDraggingHorizontally = true;
+          setIsDragging(true);
+          playMicroClick();
+          triggerHaptic('light');
+        } else {
+          return;
+        }
+      }
+
       s.prevPointerX = e.clientX;
       s.prevPointerY = e.clientY;
 
-      s.velX = deltaX * 0.008;
-      s.velY = deltaY * 0.008;
+      s.velX = deltaX * (s.pointerType === 'touch' ? 0.007 : 0.008);
+      // Zero out vertical drag on touch so phone never flips or somersaults
+      s.velY = s.pointerType === 'touch' ? 0 : deltaY * 0.006;
 
       s.targetRotY += s.velX;
       s.targetRotX += s.velY;
+
+      // MATHEMATICAL CLAMPING: Phone will NEVER flip upside down or invert!
+      s.targetRotX = Math.max(-0.25, Math.min(0.35, s.targetRotX));
+
       s.baseRotY = s.targetRotY;
       s.baseRotX = s.targetRotX;
       setHasRotated(true);
@@ -183,9 +221,12 @@ export const HeroPhone3D: React.FC = () => {
     const handlePointerUp = () => {
       const s = stateRef.current;
       s.isPointerDown = false;
+      s.isDraggingHorizontally = false;
       canvas.style.cursor = 'grab';
       setIsDragging(false);
-      triggerHaptic('selection');
+      if (s.pointerType === 'touch') {
+        triggerHaptic('selection');
+      }
     };
 
     // Mobile Device Gyroscope Tilt Integration
@@ -196,7 +237,7 @@ export const HeroPhone3D: React.FC = () => {
       const clampedGamma = Math.max(-35, Math.min(35, e.gamma));
       const clampedBeta = Math.max(-25, Math.min(25, e.beta - 45));
       s.targetRotY = s.baseRotY + (clampedGamma / 35) * 0.32;
-      s.targetRotX = s.baseRotX + (clampedBeta / 25) * 0.22;
+      s.targetRotX = Math.max(-0.25, Math.min(0.35, s.baseRotX + (clampedBeta / 25) * 0.22));
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -229,14 +270,25 @@ export const HeroPhone3D: React.FC = () => {
       if (!s.isPointerDown) {
         s.targetRotY += s.velX;
         s.targetRotX += s.velY;
-        s.velX *= 0.92;
-        s.velY *= 0.92;
+        s.velX *= 0.90;
+        s.velY *= 0.90;
+
+        // Auto-realign spring back to frontal beauty pose on mobile
+        if (window.innerWidth < 768) {
+          s.targetRotY += (-0.28 - s.targetRotY) * 0.025;
+          s.targetRotX += (0.08 - s.targetRotX) * 0.04;
+        }
       }
+
+      // Strict clamping on targetRotX at all times
+      s.targetRotX = Math.max(-0.25, Math.min(0.35, s.targetRotX));
 
       // Smooth interpolation (Lerp) towards target rotation
       s.rotX += (s.targetRotX - s.rotX) * 0.08;
       s.rotY += (s.targetRotY - s.rotY) * 0.08;
       s.rotZ += (s.targetRotZ - s.rotZ) * 0.08;
+
+      s.rotX = Math.max(-0.25, Math.min(0.35, s.rotX));
 
       phoneGroup.rotation.x = s.rotX;
       phoneGroup.rotation.y = s.rotY;
@@ -281,8 +333,7 @@ export const HeroPhone3D: React.FC = () => {
         justifyContent: 'center',
       }}
     >
-
-      {/* Three.js Canvas Container */}
+      {/* Three.js Canvas Container with touchAction pan-y to allow natural vertical page scrolling */}
       <div
         ref={containerRef}
         style={{
@@ -290,7 +341,7 @@ export const HeroPhone3D: React.FC = () => {
           height: '100%',
           position: 'relative',
           zIndex: 2,
-          touchAction: 'none',
+          touchAction: 'pan-y',
         }}
       />
 
@@ -350,7 +401,7 @@ export const HeroPhone3D: React.FC = () => {
           }}
         >
           <span>✨</span>
-          <span>{isDragging ? 'Rotating 3D iPhone...' : 'Interactive 3D • Drag to Spin 360°'}</span>
+          <span>{isDragging ? 'Rotating 3D iPhone...' : 'Interactive 3D • Swipe to Inspect'}</span>
         </div>
 
         {hasRotated && (
