@@ -132,7 +132,7 @@ export const Navbar: React.FC = () => {
     const targetId = href.replace('#', '');
     const el = document.getElementById(targetId);
     if (el) {
-      const navOffset = 76;
+      const navOffset = window.innerWidth <= 768 ? 36 : 24;
       const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({
         top: Math.max(0, elementTop - navOffset),
