@@ -62,37 +62,94 @@ export const AIEngine: React.FC = () => {
 
         {/* Pipeline Architecture Box */}
         <div
-          className="glass-card"
+          className="glass-card ai-pipeline-card"
           style={{
             padding: '36px',
             marginBottom: '36px',
             borderRadius: '24px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* Autonomous Pipeline Architecture Header */}
+          <div className="pipeline-header" style={{ marginBottom: '24px' }}>
+            <div
+              className="pipeline-meta-bar"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '12px',
+              }}
+            >
               <div
                 style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '10px',
-                  background: 'rgba(109, 61, 245, 0.2)',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  gap: '8px',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
                   color: 'var(--purple-light)',
+                  textTransform: 'uppercase',
                 }}
               >
-                <Cpu size={18} />
+                <div
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '8px',
+                    background: 'rgba(109, 61, 245, 0.2)',
+                    border: '1px solid rgba(139, 92, 246, 0.35)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--purple-light)',
+                    flexShrink: 0,
+                  }}
+                >
+                  <Cpu size={15} />
+                </div>
+                <span>CORE AI ENGINE</span>
               </div>
-              <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 700 }}>Autonomous Pipeline Architecture</h3>
-                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Average latency: ~140ms end-to-end</span>
+
+              <div className="badge-live">
+                <span>ACTIVE SYSTEM</span>
               </div>
             </div>
 
-            <div className="badge-live">
-              <span>ACTIVE SYSTEM</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <h3
+                style={{
+                  fontSize: 'clamp(18px, 3.2vw, 22px)',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  margin: 0,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.25,
+                }}
+              >
+                Autonomous Pipeline Architecture
+              </h3>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '12px',
+                  color: 'var(--text-muted)',
+                }}
+              >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: '#34D399',
+                    boxShadow: '0 0 8px #34D399',
+                    flexShrink: 0,
+                  }}
+                />
+                <span>Average latency: ~140ms end-to-end</span>
+              </div>
             </div>
           </div>
 
@@ -226,7 +283,7 @@ export const AIEngine: React.FC = () => {
           }}
         >
           {/* Section 30: AI Merchant Recognition & Consolidation */}
-          <Card3DTilt className="glass-card" style={{ padding: '36px', borderRadius: '24px' }}>
+          <Card3DTilt className="glass-card ai-feature-card" style={{ padding: '36px', borderRadius: '24px' }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -356,7 +413,7 @@ export const AIEngine: React.FC = () => {
           </Card3DTilt>
 
           {/* Section 31: Cross-Channel Duplicate Detection */}
-          <Card3DTilt className="glass-card" style={{ padding: '36px', borderRadius: '24px' }}>
+          <Card3DTilt className="glass-card ai-feature-card" style={{ padding: '36px', borderRadius: '24px' }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -481,9 +538,46 @@ export const AIEngine: React.FC = () => {
             grid-template-columns: 1fr !important;
           }
         }
+        @media (max-width: 900px) {
+          .neural-core-showcase {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+        }
         @media (max-width: 640px) {
+          .ai-pipeline-card, .neural-core-showcase, .ai-feature-card {
+            padding: 20px 16px !important;
+            border-radius: 18px !important;
+            margin-bottom: 24px !important;
+          }
+          .pipeline-header {
+            margin-bottom: 18px !important;
+          }
+          .pipeline-header-inner {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+          }
+          .pipeline-header-inner h3 {
+            font-size: 16px !important;
+            line-height: 1.3 !important;
+          }
+          .pipeline-badge {
+            margin-left: 50px !important;
+          }
           .pipeline-grid {
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
+          }
+        }
+        @media (max-width: 420px) {
+          .pipeline-badge {
+            margin-left: 0 !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .pipeline-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

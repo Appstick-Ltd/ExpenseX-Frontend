@@ -46,7 +46,7 @@ export const SavingsGoals: React.FC = () => {
           {SAVINGS_GOALS_DATA.map((goal) => (
             <Card3DTilt
               key={goal.title}
-              className="glass-card"
+              className="glass-card goal-card"
               style={{
                 padding: '32px',
                 borderRadius: '20px',
@@ -129,6 +129,11 @@ export const SavingsGoals: React.FC = () => {
         @media (max-width: 768px) {
           .goals-grid {
             grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .goal-card {
+            padding: 20px 16px !important;
+            border-radius: 18px !important;
           }
         }
       `}</style>

@@ -238,7 +238,7 @@ export const Roadmap: React.FC = () => {
             return (
               <Card3DTilt
                 key={p.phase}
-                className="glass-card"
+                className="glass-card roadmap-card"
                 style={{
                   padding: '32px 28px',
                   borderRadius: '24px',
@@ -441,9 +441,16 @@ export const Roadmap: React.FC = () => {
         @media (max-width: 992px) {
           .roadmap-grid {
             grid-template-columns: 1fr !important;
+            gap: 20px !important;
           }
           .roadmap-highway-strip {
             display: none !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .roadmap-card {
+            padding: 22px 16px !important;
+            border-radius: 18px !important;
           }
         }
       `}</style>

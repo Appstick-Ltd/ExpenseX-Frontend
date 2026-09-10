@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TOUR_STEPS } from '../utils/constants';
-import { Mic, Sparkles, ArrowRight, ArrowLeft, CheckCircle2, Calendar, Zap } from 'lucide-react';
+import { Mic, Sparkles, ArrowRight, ArrowLeft, CheckCircle2, Calendar, Zap, Activity, ShieldCheck } from 'lucide-react';
 import { playMicroClick } from '../utils/audio';
 
 export const QuickTour: React.FC = () => {
@@ -98,9 +98,9 @@ export const QuickTour: React.FC = () => {
         </div>
 
         {/* Floating Capsule Navigation Tabs */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '40px', width: '100%' }}>
           <div
-            className="tour-tabs-container"
+            className="tour-tabs-container no-scrollbar"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -115,6 +115,7 @@ export const QuickTour: React.FC = () => {
               position: 'relative',
               maxWidth: '100%',
               overflowX: 'auto',
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             {TOUR_STEPS.map((step, idx) => {
@@ -125,8 +126,8 @@ export const QuickTour: React.FC = () => {
                   onClick={() => handleTabChange(idx)}
                   style={{
                     position: 'relative',
-                    padding: '10px 20px',
-                    fontSize: '14px',
+                    padding: '10px 18px',
+                    fontSize: '13.5px',
                     fontWeight: 600,
                     color: isActive ? '#FFFFFF' : 'var(--text-muted)',
                     borderRadius: '12px',
@@ -137,6 +138,7 @@ export const QuickTour: React.FC = () => {
                     cursor: 'pointer',
                     transition: 'color 0.2s ease',
                     whiteSpace: 'nowrap',
+                    flexShrink: 0,
                     background: 'transparent',
                     border: 'none',
                     outline: 'none',
@@ -167,7 +169,7 @@ export const QuickTour: React.FC = () => {
 
         {/* Animated Tour Content Stage */}
         <div
-          className="glass-card"
+          className="glass-card tour-main-card"
           style={{
             minHeight: '520px',
             padding: '48px',
@@ -190,6 +192,7 @@ export const QuickTour: React.FC = () => {
           >
             {/* Left Column: Fixed layout with animated text and STATIONARY buttons */}
             <div
+              className="tour-left-col"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -199,7 +202,10 @@ export const QuickTour: React.FC = () => {
               }}
             >
               {/* Animated Text Content Only (Headline & Description) */}
-              <div style={{ position: 'relative', minHeight: '260px', overflow: 'hidden' }}>
+              <div
+                className="tour-text-stage"
+                style={{ position: 'relative', minHeight: '260px', overflow: 'hidden' }}
+              >
                 <AnimatePresence mode="popLayout" custom={direction} initial={false}>
                   <motion.div
                     key={activeTab}
@@ -249,8 +255,9 @@ export const QuickTour: React.FC = () => {
                 </AnimatePresence>
               </div>
 
-              {/* FIXED & STATIONARY CONTROLS (Never jumps, never slides out!) */}
+              {/* FIXED & STATIONARY CONTROLS */}
               <div
+                className="tour-action-controls"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -264,7 +271,7 @@ export const QuickTour: React.FC = () => {
                 <button
                   onClick={handlePrev}
                   disabled={activeTab === 0}
-                  className="btn-secondary"
+                  className="btn-secondary tour-prev-btn"
                   style={{
                     width: '88px',
                     height: '44px',
@@ -286,10 +293,10 @@ export const QuickTour: React.FC = () => {
                   <span>Prev</span>
                 </button>
 
-                {/* Next Button: STRICT FIXED width (218px), strictly stationary container! */}
+                {/* Next Button */}
                 <button
                   onClick={handleNext}
-                  className="btn-primary"
+                  className="btn-primary tour-next-btn"
                   style={{
                     width: '218px',
                     height: '44px',
@@ -336,8 +343,9 @@ export const QuickTour: React.FC = () => {
                   <ArrowRight size={16} style={{ flexShrink: 0, marginLeft: '6px' }} />
                 </button>
 
-                {/* Step Progress Dots: 5 stationary slots at fixed coordinates, zero shifting! */}
+                {/* Step Progress Dots */}
                 <div
+                  className="tour-step-dots"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -385,7 +393,7 @@ export const QuickTour: React.FC = () => {
             </div>
 
             {/* Right Column: Interactive Mockup Visual (Directional Slide) */}
-            <div style={{ position: 'relative', minHeight: '380px', overflow: 'hidden' }}>
+            <div className="tour-right-col" style={{ position: 'relative', minHeight: '380px', overflow: 'hidden' }}>
               <AnimatePresence mode="popLayout" custom={direction} initial={false}>
                 <motion.div
                   key={activeTab}
@@ -397,6 +405,7 @@ export const QuickTour: React.FC = () => {
                   style={{ width: '100%' }}
                 >
                   <div
+                    className="tour-mockup-frame"
                     style={{
                       background: 'rgba(5, 7, 13, 0.85)',
                       borderRadius: '20px',
@@ -627,40 +636,86 @@ export const QuickTour: React.FC = () => {
 
                     {/* STEP 3: UNDERSTAND VISUAL */}
                     {activeTab === 2 && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                        <div className="tour-step3-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                           <div
+                            className="tour-step3-card"
                             style={{
-                              padding: '18px',
+                              padding: '16px 14px',
                               borderRadius: '14px',
-                              background: 'rgba(109, 61, 245, 0.1)',
-                              border: '1px solid rgba(139, 92, 246, 0.25)',
+                              background: 'rgba(109, 61, 245, 0.12)',
+                              border: '1px solid rgba(139, 92, 246, 0.3)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
                             }}
                           >
-                            <div style={{ fontSize: '11px', color: 'var(--purple-light)', fontWeight: 700 }}>
-                              FINANCIAL HEALTH
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '10.5px', color: 'var(--purple-light)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                                <Activity size={12} />
+                                <span>FINANCIAL HEALTH</span>
+                              </div>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'baseline',
+                                  gap: '3px',
+                                  marginTop: '6px',
+                                  whiteSpace: 'nowrap',
+                                }}
+                              >
+                                <span style={{ fontSize: 'clamp(22px, 4vw, 28px)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1 }}>
+                                  78
+                                </span>
+                                <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                                  /100
+                                </span>
+                              </div>
+                              {/* Mini sleek progress bar */}
+                              <div style={{ width: '100%', height: '4px', borderRadius: '9999px', background: 'rgba(255,255,255,0.08)', margin: '8px 0 6px 0', overflow: 'hidden' }}>
+                                <div style={{ width: '78%', height: '100%', borderRadius: '9999px', background: 'linear-gradient(90deg, #8B5CF6, #34D399)' }} />
+                              </div>
                             </div>
-                            <div style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', marginTop: '4px' }}>
-                              78 <span style={{ fontSize: '16px', color: 'var(--text-muted)' }}>/ 100</span>
-                            </div>
-                            <div style={{ fontSize: '12px', color: '#34D399', fontWeight: 600, marginTop: '2px' }}>
-                              ↑ 4 pts this month
+                            <div style={{ fontSize: '11px', color: '#34D399', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                              <span>↑ 4 pts this month</span>
                             </div>
                           </div>
 
                           <div
+                            className="tour-step3-card"
                             style={{
-                              padding: '18px',
+                              padding: '16px 14px',
                               borderRadius: '14px',
-                              background: 'rgba(255, 90, 54, 0.08)',
-                              border: '1px solid rgba(255, 90, 54, 0.25)',
+                              background: 'rgba(255, 90, 54, 0.1)',
+                              border: '1px solid rgba(255, 90, 54, 0.28)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
                             }}
                           >
-                            <div style={{ fontSize: '11px', color: '#FF9A7B', fontWeight: 700 }}>SAFE TO SPEND</div>
-                            <div style={{ fontSize: '32px', fontWeight: 800, color: '#FFFFFF', marginTop: '4px' }}>
-                              $18,500
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '10.5px', color: '#FF9A7B', fontWeight: 700, letterSpacing: '0.04em' }}>
+                                <ShieldCheck size={12} />
+                                <span>SAFE TO SPEND</span>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: 'clamp(20px, 3.8vw, 26px)',
+                                  fontWeight: 800,
+                                  color: '#FFFFFF',
+                                  marginTop: '6px',
+                                  whiteSpace: 'nowrap',
+                                  lineHeight: 1,
+                                }}
+                              >
+                                $18,500
+                              </div>
+                              {/* Mini sleek progress bar */}
+                              <div style={{ width: '100%', height: '4px', borderRadius: '9999px', background: 'rgba(255,255,255,0.08)', margin: '8px 0 6px 0', overflow: 'hidden' }}>
+                                <div style={{ width: '68%', height: '100%', borderRadius: '9999px', background: 'linear-gradient(90deg, #FF5A36, #FF9A7B)' }} />
+                              </div>
                             </div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                               After bills & targets
                             </div>
                           </div>
@@ -669,30 +724,53 @@ export const QuickTour: React.FC = () => {
                         {/* AI Insight Card */}
                         <div
                           style={{
-                            padding: '18px',
+                            padding: '16px 18px',
                             borderRadius: '14px',
-                            background: 'rgba(255, 255, 255, 0.03)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            background: 'rgba(109, 61, 245, 0.08)',
+                            border: '1px solid rgba(139, 92, 246, 0.22)',
                           }}
                         >
                           <div
                             style={{
                               display: 'flex',
                               alignItems: 'center',
-                              gap: '6px',
-                              fontSize: '12px',
-                              fontWeight: 700,
-                              color: '#A78BFA',
-                              marginBottom: '6px',
+                              justifyContent: 'space-between',
+                              marginBottom: '8px',
                             }}
                           >
-                            <Zap size={14} />
-                            <span>AI SPENDING RADAR</span>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                color: '#C4B5FD',
+                                background: 'rgba(139, 92, 246, 0.2)',
+                                padding: '3px 10px',
+                                borderRadius: '9999px',
+                              }}
+                            >
+                              <Zap size={12} fill="#A78BFA" />
+                              <span>AI SPENDING RADAR</span>
+                            </div>
+                            <span
+                              style={{
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                color: '#F87171',
+                                background: 'rgba(239, 68, 68, 0.15)',
+                                padding: '2px 8px',
+                                borderRadius: '9999px',
+                              }}
+                            >
+                              +18% Spike
+                            </span>
                           </div>
-                          <div style={{ fontSize: '15px', color: '#FFFFFF', fontWeight: 600 }}>
+                          <div style={{ fontSize: '14.5px', color: '#FFFFFF', fontWeight: 600, lineHeight: 1.4 }}>
                             "Your food spending increased 18% this month."
                           </div>
-                          <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                          <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '5px', lineHeight: 1.45 }}>
                             Driven by 4 weekend dinners. Transportation & utilities remained 6% below forecast.
                           </div>
                         </div>
@@ -840,9 +918,63 @@ export const QuickTour: React.FC = () => {
 
       <style>{`
         @media (max-width: 900px) {
+          .tour-main-card {
+            min-height: auto !important;
+            padding: 32px 20px 24px 20px !important;
+          }
           .tour-card-grid {
             grid-template-columns: 1fr !important;
-            gap: 32px !important;
+            gap: 20px !important;
+            min-height: auto !important;
+          }
+          .tour-left-col {
+            min-height: auto !important;
+            height: auto !important;
+            gap: 16px !important;
+          }
+          .tour-text-stage {
+            min-height: auto !important;
+          }
+          .tour-right-col {
+            min-height: auto !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .tour-main-card {
+            padding: 20px 14px 16px 14px !important;
+            border-radius: 18px !important;
+            min-height: auto !important;
+          }
+          .tour-mockup-frame {
+            padding: 16px 12px !important;
+            border-radius: 16px !important;
+            margin-bottom: 0 !important;
+          }
+          .tour-action-controls {
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            width: 100% !important;
+          }
+          .tour-prev-btn {
+            flex: 0 0 auto !important;
+            width: 76px !important;
+          }
+          .tour-next-btn {
+            flex: 1 !important;
+            width: auto !important;
+            min-width: 150px !important;
+          }
+          .tour-step-dots {
+            width: 100% !important;
+            justify-content: center !important;
+            margin-left: 0 !important;
+            margin-top: 6px !important;
+          }
+          .tour-step3-grid {
+            gap: 8px !important;
+          }
+          .tour-step3-card {
+            padding: 14px 10px !important;
           }
         }
       `}</style>

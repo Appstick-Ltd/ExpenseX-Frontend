@@ -409,6 +409,21 @@ export const Navbar: React.FC = () => {
         </div>
       </header>
 
+      {/* Mobile Drawer Backdrop Overlay */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            zIndex: 98,
+          }}
+        />
+      )}
+
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div
@@ -417,16 +432,18 @@ export const Navbar: React.FC = () => {
             top: '76px',
             left: '16px',
             right: '16px',
+            maxHeight: 'calc(100vh - 100px)',
+            overflowY: 'auto',
             background: 'rgba(8, 11, 21, 0.96)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
             border: '1px solid rgba(255, 255, 255, 0.12)',
             borderRadius: '20px',
-            padding: '24px',
+            padding: '20px',
             zIndex: 99,
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '10px',
             boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(109, 61, 245, 0.2)',
           }}
         >
@@ -473,7 +490,7 @@ export const Navbar: React.FC = () => {
               handleNavClick(e, '#download');
               setMobileMenuOpen(false);
             }}
-            style={{ width: '100%', marginTop: '8px' }}
+            style={{ width: '100%', marginTop: '6px' }}
           >
             <span>Get Started</span>
           </a>
@@ -487,6 +504,11 @@ export const Navbar: React.FC = () => {
           }
           .mobile-hamburger {
             display: flex !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .sound-toggle-label {
+            display: none !important;
           }
         }
       `}</style>

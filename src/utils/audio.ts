@@ -1,4 +1,5 @@
 // Subtle Procedural Web Audio Sound Engine (Zero external assets needed)
+import { triggerHaptic } from './haptics';
 
 let audioCtx: AudioContext | null = null;
 let isAudioMuted = true; // Default muted for respectful UX
@@ -19,6 +20,7 @@ export const getAudioContext = (): AudioContext | null => {
 
 export const setSoundMuted = (muted: boolean) => {
   isAudioMuted = muted;
+  triggerHaptic('medium');
   if (!muted) {
     getAudioContext();
   }
@@ -30,6 +32,9 @@ export const isSoundEnabled = () => !isAudioMuted;
  * Tactile micro-click for buttons and tabs
  */
 export const playMicroClick = () => {
+  // Always trigger haptic vibration on mobile taps for responsive tactile feel
+  triggerHaptic('light');
+
   if (isAudioMuted) return;
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -90,6 +95,7 @@ export const playGlassyHover = () => {
  * Ascending chime on action complete
  */
 export const playSuccessChime = () => {
+  triggerHaptic('success');
   if (isAudioMuted) return;
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -124,6 +130,7 @@ export const playSuccessChime = () => {
  * Futuristic sweep for OCR / AI processing
  */
 export const playAIPulse = () => {
+  triggerHaptic('medium');
   if (isAudioMuted) return;
   const ctx = getAudioContext();
   if (!ctx) return;

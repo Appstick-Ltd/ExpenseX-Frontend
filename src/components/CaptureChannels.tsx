@@ -41,7 +41,7 @@ export const CaptureChannels: React.FC = () => {
         >
           {/* Card 1: Receipt Scan */}
           <Card3DTilt
-            className="glass-card"
+            className="glass-card capture-card"
             style={{
               padding: '28px',
               display: 'flex',
@@ -143,7 +143,7 @@ export const CaptureChannels: React.FC = () => {
 
           {/* Card 2: SMS Detection */}
           <Card3DTilt
-            className="glass-card"
+            className="glass-card capture-card"
             style={{
               padding: '28px',
               display: 'flex',
@@ -170,12 +170,12 @@ export const CaptureChannels: React.FC = () => {
                 <MessageSquare size={22} />
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>SMS Detection</h3>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>SMS Auto-Read</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Understands bank & mobile financial service alerts (bKash, Nagad, City, SCB) on receipt.
+                Bank & debit SMS alerts parsed in background on device. Zero data ever leaves your device unencrypted.
               </p>
 
-              {/* SMS Alert Mock */}
+              {/* SMS Bubble Mockup */}
               <div
                 style={{
                   background: 'rgba(15, 23, 42, 0.7)',
@@ -184,11 +184,11 @@ export const CaptureChannels: React.FC = () => {
                   border: '1px solid rgba(255, 255, 255, 0.08)',
                 }}
               >
-                <div style={{ fontSize: '10px', color: '#34D399', fontWeight: 700, marginBottom: '4px' }}>
-                  TRANSACTION ALERT
+                <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginBottom: '4px' }}>
+                  BANK ALERTS • 14:32
                 </div>
                 <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.4, marginBottom: '8px' }}>
-                  $245 paid to Target Superstore.
+                  Debited $85.00 via VISA *4421 at SHELL OIL. Avail Bal: $4,210.
                 </div>
                 <div
                   style={{
@@ -200,21 +200,21 @@ export const CaptureChannels: React.FC = () => {
                     fontSize: '11px',
                   }}
                 >
-                  <span style={{ color: 'var(--text-muted)' }}>AI Detected</span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Shopping • $245</span>
+                  <span style={{ color: '#34D399', fontWeight: 600 }}>✓ Auto-categorized</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Fuel & Gas</span>
                 </div>
               </div>
             </div>
 
             <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#34D399', fontWeight: 600 }}>
               <Check size={14} />
-              <span>Real-time background sync</span>
+              <span>100% on-device parsing</span>
             </div>
           </Card3DTilt>
 
           {/* Card 3: Email Detection */}
           <Card3DTilt
-            className="glass-card"
+            className="glass-card capture-card"
             style={{
               padding: '28px',
               display: 'flex',
@@ -285,7 +285,7 @@ export const CaptureChannels: React.FC = () => {
 
           {/* Card 4: WhatsApp AI Bot */}
           <Card3DTilt
-            className="glass-card"
+            className="glass-card capture-card"
             style={{
               padding: '28px',
               display: 'flex',
@@ -320,10 +320,10 @@ export const CaptureChannels: React.FC = () => {
               {/* WhatsApp Chat Simulation Mock */}
               <div
                 style={{
-                  background: 'rgba(15, 23, 42, 0.75)',
+                  background: 'rgba(5, 7, 13, 0.85)',
                   borderRadius: '12px',
                   padding: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(37, 211, 102, 0.25)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
@@ -333,7 +333,7 @@ export const CaptureChannels: React.FC = () => {
                 <div
                   style={{
                     alignSelf: 'flex-end',
-                    background: 'rgba(18, 140, 126, 0.35)',
+                    background: 'rgba(37, 211, 102, 0.2)',
                     border: '1px solid rgba(37, 211, 102, 0.35)',
                     borderRadius: '10px 10px 2px 10px',
                     padding: '6px 10px',
@@ -386,6 +386,11 @@ export const CaptureChannels: React.FC = () => {
         @media (max-width: 640px) {
           .capture-cards-grid {
             grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .capture-card {
+            padding: 20px 16px !important;
+            border-radius: 16px !important;
           }
         }
       `}</style>

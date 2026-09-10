@@ -43,7 +43,7 @@ export const AIInsights: React.FC = () => {
           {AI_INSIGHTS_DATA.map((insight) => (
             <Card3DTilt
               key={insight.title}
-              className="glass-card"
+              className="glass-card insight-card"
               style={{
                 padding: '32px',
                 display: 'flex',
@@ -154,6 +154,15 @@ export const AIInsights: React.FC = () => {
         @media (max-width: 992px) {
           .insights-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .insights-grid {
+            gap: 16px !important;
+          }
+          .insight-card {
+            padding: 20px 16px !important;
+            border-radius: 18px !important;
           }
         }
       `}</style>

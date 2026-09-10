@@ -74,7 +74,7 @@ export const SafeToSpend: React.FC = () => {
     >
       <div className="container">
         <Card3DTilt
-          className="glass-card"
+          className="glass-card safe-to-spend-card"
           maxTilt={5}
           style={{
             padding: '60px 48px',
@@ -296,16 +296,24 @@ export const SafeToSpend: React.FC = () => {
             >
               {/* Radial SVG Ring */}
               <div
+                className="safe-gauge-container"
                 style={{
                   position: 'relative',
-                  width: '320px',
-                  height: '320px',
+                  width: '100%',
+                  maxWidth: '300px',
+                  aspectRatio: '1/1',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  margin: '0 auto',
                 }}
               >
-                <svg width="320" height="320" viewBox="0 0 320 320" style={{ transform: 'rotate(-90deg)' }}>
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 320 320"
+                  style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}
+                >
                   {/* Background Track */}
                   <circle
                     cx="160"
@@ -348,6 +356,7 @@ export const SafeToSpend: React.FC = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    padding: '0 16px',
                   }}
                 >
                   <span
@@ -363,7 +372,7 @@ export const SafeToSpend: React.FC = () => {
                   </span>
                   <div
                     style={{
-                      fontSize: '44px',
+                      fontSize: 'clamp(28px, 7vw, 44px)',
                       fontWeight: 900,
                       letterSpacing: '-0.04em',
                       color: '#FFFFFF',
@@ -414,6 +423,13 @@ export const SafeToSpend: React.FC = () => {
         @media (max-width: 900px) {
           .safe-to-spend-grid {
             grid-template-columns: 1fr !important;
+            gap: 36px !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .safe-to-spend-card {
+            padding: 24px 16px !important;
+            border-radius: 18px !important;
           }
         }
       `}</style>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { createIPhone17ProMax3D } from './3d/ThreePhoneModel';
 import { playMicroClick } from '../utils/audio';
+import { triggerHaptic } from '../utils/haptics';
 import { RotateCw } from 'lucide-react';
 
 export const HeroPhone3D: React.FC = () => {
@@ -31,6 +32,7 @@ export const HeroPhone3D: React.FC = () => {
 
   const resetRotation = useCallback(() => {
     playMicroClick();
+    triggerHaptic('medium');
     const s = stateRef.current;
     s.targetRotX = 0.08;
     s.targetRotY = -0.28;
@@ -65,6 +67,20 @@ export const HeroPhone3D: React.FC = () => {
     container.innerHTML = '';
     container.appendChild(canvas);
 
+    // 2. Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    const aspect = width / height;
+    const camera = new THREE.PerspectiveCamera(38, aspect, 0.1, 100);
+
+    // Dynamic camera distance so the 3D phone (height 7.65) never gets cut off on any screen size
+    const computeCamZ = (asp: number) => {
+      if (asp < 0.65) return 14.8;
+      if (asp < 0.85) return 14.2;
+      if (asp < 1.0) return 13.5;
+      return 13.0;
+    };
+    camera.position.set(0, 0, computeCamZ(aspect));
+
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
@@ -76,33 +92,25 @@ export const HeroPhone3D: React.FC = () => {
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.25;
+      renderer.toneMappingExposure = 1.35;
       setHasWebGL(true);
     } catch {
       setHasWebGL(false);
       return;
     }
 
-    // 2. Scene & Camera Setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0, 13.0);
-
     // 3. Cinematic Studio Lighting
     const ambientLight = new THREE.AmbientLight(0x181432, 3.5);
     scene.add(ambientLight);
 
-    // Key Light: Vivid Violet/Purple
     const purpleLight = new THREE.DirectionalLight(0x9d6eff, 6.0);
     purpleLight.position.set(-6, 7, 7);
     scene.add(purpleLight);
 
-    // Rim Light: Neon Coral/Orange for cinematic metallic contour
     const coralLight = new THREE.DirectionalLight(0xff5a36, 5.0);
     coralLight.position.set(6, -5, -4);
     scene.add(coralLight);
 
-    // Specular Highlight Light
     const topSpecular = new THREE.DirectionalLight(0xffffff, 3.0);
     topSpecular.position.set(0, 8, 4);
     scene.add(topSpecular);
@@ -150,6 +158,7 @@ export const HeroPhone3D: React.FC = () => {
       canvas.style.cursor = 'grabbing';
       setIsDragging(true);
       playMicroClick();
+      triggerHaptic('light');
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -176,9 +185,22 @@ export const HeroPhone3D: React.FC = () => {
       s.isPointerDown = false;
       canvas.style.cursor = 'grab';
       setIsDragging(false);
+      triggerHaptic('selection');
+    };
+
+    // Mobile Device Gyroscope Tilt Integration
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      const s = stateRef.current;
+      if (s.isPointerDown) return;
+      if (e.gamma === null || e.beta === null) return;
+      const clampedGamma = Math.max(-35, Math.min(35, e.gamma));
+      const clampedBeta = Math.max(-25, Math.min(25, e.beta - 45));
+      s.targetRotY = s.baseRotY + (clampedGamma / 35) * 0.32;
+      s.targetRotX = s.baseRotX + (clampedBeta / 25) * 0.22;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('deviceorientation', handleOrientation);
     canvas.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
@@ -188,7 +210,9 @@ export const HeroPhone3D: React.FC = () => {
       if (!container) return;
       const newW = container.clientWidth || 460;
       const newH = container.clientHeight || 580;
-      camera.aspect = newW / newH;
+      const newAspect = newW / newH;
+      camera.aspect = newAspect;
+      camera.position.set(0, 0, computeCamZ(newAspect));
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
     };
@@ -231,6 +255,7 @@ export const HeroPhone3D: React.FC = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('deviceorientation', handleOrientation);
       canvas.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
@@ -242,11 +267,13 @@ export const HeroPhone3D: React.FC = () => {
 
   return (
     <div
+      className="hero-3d-phone-container"
       style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '560px',
-        height: '640px',
+        maxWidth: '520px',
+        height: '100%',
+        minHeight: '460px',
         margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',

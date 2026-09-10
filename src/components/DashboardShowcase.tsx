@@ -34,7 +34,7 @@ export const DashboardShowcase: React.FC = () => {
 
         {/* High-Fidelity Large Dashboard Mockup Frame with 3D Tilt */}
         <Card3DTilt
-          className="glass-card"
+          className="glass-card dashboard-card"
           maxTilt={3}
           style={{
             padding: '36px',
@@ -46,6 +46,7 @@ export const DashboardShowcase: React.FC = () => {
         >
           {/* Top Bar of Mockup */}
           <div
+            className="dashboard-top-bar"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -101,7 +102,7 @@ export const DashboardShowcase: React.FC = () => {
               <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--purple-light)' }}>
                 SAFE TO SPEND TODAY
               </div>
-              <div style={{ fontSize: '36px', fontWeight: 900, color: '#FFFFFF', margin: '8px 0' }}>
+              <div style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 900, color: '#FFFFFF', margin: '8px 0' }}>
                 {PHONE_MOCKUP_DATA.safeToSpend}
               </div>
               <div style={{ fontSize: '12px', color: '#34D399', fontWeight: 600 }}>
@@ -298,6 +299,19 @@ export const DashboardShowcase: React.FC = () => {
         @media (max-width: 900px) {
           .dashboard-metrics-grid, .dashboard-split-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .dashboard-card {
+            padding: 20px 16px !important;
+            border-radius: 18px !important;
+          }
+          .dashboard-top-bar {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+            margin-bottom: 20px !important;
+            padding-bottom: 16px !important;
           }
         }
       `}</style>

@@ -40,7 +40,7 @@ export const AskExpenseX: React.FC = () => {
 
         {/* Minimal Futuristic Chat Container with 3D Tilt */}
         <Card3DTilt
-          className="glass-card"
+          className="glass-card ask-card"
           maxTilt={6}
           style={{
             maxWidth: '860px',
@@ -99,6 +99,7 @@ export const AskExpenseX: React.FC = () => {
 
           {/* Chat Messages Feed */}
           <div
+            className="ask-chat-feed"
             style={{
               background: 'rgba(5, 7, 13, 0.7)',
               borderRadius: '16px',
@@ -204,10 +205,20 @@ export const AskExpenseX: React.FC = () => {
               background: 'rgba(255, 255, 255, 0.03)',
               border: '1px solid rgba(255, 255, 255, 0.08)',
               color: 'var(--text-muted)',
-              fontSize: '14px',
+              fontSize: '13.5px',
+              gap: '12px',
             }}
           >
-            <span>Ask a question about your expenses, budgets, or savings goals...</span>
+            <span
+              style={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                flex: 1,
+              }}
+            >
+              Ask a question about your expenses, budgets, or savings goals...
+            </span>
             <div
               style={{
                 width: '32px',
@@ -218,6 +229,7 @@ export const AskExpenseX: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#FFFFFF',
+                flexShrink: 0,
               }}
             >
               <Send size={14} />
@@ -225,6 +237,18 @@ export const AskExpenseX: React.FC = () => {
           </div>
         </Card3DTilt>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .ask-card {
+            padding: 20px 16px !important;
+            border-radius: 18px !important;
+          }
+          .ask-chat-feed {
+            padding: 16px 12px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

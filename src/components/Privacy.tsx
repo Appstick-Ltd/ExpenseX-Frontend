@@ -45,7 +45,7 @@ export const Privacy: React.FC = () => {
           {PRIVACY_POINTS.map((pt, idx) => (
             <Card3DTilt
               key={pt.title}
-              className="glass-card"
+              className="glass-card privacy-card"
               style={{
                 padding: '32px',
                 borderRadius: '20px',
@@ -82,6 +82,11 @@ export const Privacy: React.FC = () => {
         @media (max-width: 768px) {
           .privacy-grid {
             grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .privacy-card {
+            padding: 20px 16px !important;
+            border-radius: 18px !important;
           }
         }
       `}</style>

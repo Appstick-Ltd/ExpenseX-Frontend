@@ -2,6 +2,8 @@ import React from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CursorGlow } from './components/CursorGlow';
+import { ScrollProgressBar } from './components/ScrollProgressBar';
+import { MobileQuickDock } from './components/MobileQuickDock';
 import { QuickTour } from './components/QuickTour';
 import { CaptureChannels } from './components/CaptureChannels';
 import { AIEngine } from './components/AIEngine';
@@ -19,11 +21,17 @@ import { Footer } from './components/Footer';
 export const App: React.FC = () => {
   return (
     <div className="app-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Top Neon Scroll Progress Indicator */}
+      <ScrollProgressBar />
+
       {/* Interactive Cursor Spotlight Glow */}
       <CursorGlow />
 
       {/* Floating Glass Navbar */}
       <Navbar />
+
+      {/* Mobile-Exclusive Floating Quick Action Dock */}
+      <MobileQuickDock />
 
       <main style={{ flex: 1 }}>
         {/* 1. Uncluttered Hero with 3D Phone & Studio Light */}

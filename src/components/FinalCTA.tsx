@@ -131,6 +131,7 @@ export const FinalCTA: React.FC = () => {
 
             {/* Official App Store & Google Play Store Badge Buttons */}
             <div
+              className="final-cta-store-buttons"
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -141,6 +142,7 @@ export const FinalCTA: React.FC = () => {
               {/* Apple App Store Badge */}
               <button
                 onClick={handleDownload}
+                className="store-badge-btn"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -187,6 +189,7 @@ export const FinalCTA: React.FC = () => {
               {/* Google Play Store Badge */}
               <button
                 onClick={handleDownload}
+                className="store-badge-btn"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -243,6 +246,7 @@ export const FinalCTA: React.FC = () => {
           >
             {/* 3D Glossy App Tile with ambient glow & lens flare */}
             <div
+              className="final-cta-app-tile"
               style={{
                 position: 'relative',
                 width: '180px',
@@ -318,6 +322,7 @@ export const FinalCTA: React.FC = () => {
 
             {/* Playful Handwritten Script with Arrow (Image 2 style) */}
             <div
+              className="final-cta-script"
               style={{
                 position: 'absolute',
                 top: '-20px',
@@ -357,7 +362,7 @@ export const FinalCTA: React.FC = () => {
         @media (max-width: 900px) {
           .download-banner-card {
             grid-template-columns: 1fr !important;
-            padding: 40px 28px !important;
+            padding: 40px 24px !important;
             gap: 36px !important;
             text-align: center;
           }
@@ -365,6 +370,44 @@ export const FinalCTA: React.FC = () => {
             display: flex;
             flex-direction: column;
             align-items: center;
+          }
+          .final-cta-store-buttons {
+            justify-content: center !important;
+          }
+          .final-cta-script {
+            right: 0px !important;
+            top: -24px !important;
+          }
+        }
+        @media (max-width: 540px) {
+          .download-banner-card {
+            padding: 28px 16px !important;
+            border-radius: 20px !important;
+          }
+          .final-cta-store-buttons {
+            flex-direction: column !important;
+            width: 100% !important;
+          }
+          .store-badge-btn {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          .final-cta-script {
+            position: static !important;
+            margin-bottom: 14px !important;
+            transform: none !important;
+          }
+          .final-cta-script > div {
+            transform: none !important;
+            font-size: 18px !important;
+          }
+          .final-cta-script svg {
+            display: none !important;
+          }
+          .final-cta-app-tile {
+            width: 140px !important;
+            height: 140px !important;
+            border-radius: 32px !important;
           }
         }
       `}</style>

@@ -24,6 +24,7 @@ export const Footer: React.FC = () => {
     >
       <div className="container">
         <div
+          className="footer-main-row"
           style={{
             display: 'flex',
             flexWrap: 'wrap',
@@ -43,6 +44,7 @@ export const Footer: React.FC = () => {
 
           {/* Links */}
           <div
+            className="footer-links"
             style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -57,6 +59,7 @@ export const Footer: React.FC = () => {
                   fontSize: '14px',
                   color: 'var(--text-secondary)',
                   transition: 'color 0.2s ease',
+                  padding: '4px 0',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
@@ -69,6 +72,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright */}
         <div
+          className="footer-bottom-row"
           style={{
             paddingTop: '24px',
             borderTop: '1px solid rgba(255, 255, 255, 0.05)',
@@ -85,6 +89,24 @@ export const Footer: React.FC = () => {
           <div>Your Intelligent Personal Finance Companion.</div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .footer-main-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 24px !important;
+          }
+          .footer-links {
+            gap: 14px 20px !important;
+          }
+          .footer-bottom-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 };

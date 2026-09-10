@@ -11,13 +11,14 @@ export const Hero: React.FC = () => {
   return (
     <section
       id="home"
+      className="hero-section"
       style={{
         position: 'relative',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        paddingTop: '120px',
+        paddingTop: 'clamp(84px, 12vh, 120px)',
         paddingBottom: '0',
         overflow: 'hidden',
       }}
@@ -55,20 +56,21 @@ export const Hero: React.FC = () => {
           }}
         >
           {/* Left Column: Focused Copy & Value Proposition */}
-          <div style={{ maxWidth: '620px', zIndex: 2 }}>
+          <div className="hero-content" style={{ maxWidth: '620px', zIndex: 2 }}>
             {/* Top Pill / Badge */}
-            <div className="hero-eyebrow">
-              <span className="hero-eyebrow-dot" />
+            <div className="section-eyebrow hero-eyebrow-pill">
+              <span className="section-eyebrow-dot" />
               <span>{HERO_DATA.eyebrow}</span>
             </div>
 
             {/* Impact Headline */}
             <h1
+              className="hero-headline"
               style={{
-                fontSize: 'clamp(44px, 5.2vw, 76px)',
+                fontSize: 'clamp(32px, 5.2vw, 76px)',
                 fontWeight: 800,
                 letterSpacing: '-0.04em',
-                lineHeight: 1.04,
+                lineHeight: 1.05,
                 marginBottom: '20px',
               }}
             >
@@ -81,70 +83,31 @@ export const Hero: React.FC = () => {
             {/* Typewriter Subtitle */}
             <TypewriterText />
 
-            {/* Call to Actions (Removed Download App, focused on Interactive Tour & Features) */}
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                gap: '16px',
-                marginBottom: '24px',
-              }}
-            >
+            {/* Call to Actions */}
+            <div className="hero-cta-group">
               <a
                 href="#tour"
                 onClick={playMicroClick}
-                className="btn-primary"
-                style={{
-                  padding: '14px 28px',
-                  fontSize: '15px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
+                className="btn-primary hero-btn-primary"
               >
-                <span>Take a Quick Tour</span>
-                <ChevronRight size={16} />
+                <span>Take a Tour</span>
+                <ChevronRight size={15} />
               </a>
 
               <a
                 href="#features"
                 onClick={playMicroClick}
-                className="btn-secondary"
-                style={{
-                  padding: '14px 26px',
-                  fontSize: '15px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
+                className="btn-secondary hero-btn-secondary"
               >
-                <span>Explore AI Features</span>
-                <ArrowRight size={15} />
+                <span>AI Features</span>
+                <ArrowRight size={14} />
               </a>
             </div>
 
-            {/* Zero Manual Friction Badge */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '13px',
-                color: 'var(--text-muted)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: '#34D399',
-                  boxShadow: '0 0 8px #34D399',
-                }}
-              />
-              <span>Zero manual typing • 100% automated personal finance</span>
+            {/* Zero Manual Friction Reassurance Line */}
+            <div className="hero-friction-line">
+              <span className="friction-pulse-dot" />
+              <span>Zero manual typing • 100% automated finance</span>
             </div>
           </div>
 
@@ -355,19 +318,182 @@ export const Hero: React.FC = () => {
       </div>
 
       <style>{`
+        .hero-eyebrow-pill {
+          margin-bottom: 20px;
+        }
+        .hero-btn-primary {
+          background: linear-gradient(135deg, #6D3DF5 0%, #8B5CF6 50%, #7C3AED 100%) !important;
+          box-shadow: 0 8px 24px -4px rgba(109, 61, 245, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+          border-radius: 9999px !important;
+          font-weight: 700 !important;
+          color: #FFFFFF !important;
+          transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        .hero-btn-primary:active {
+          transform: scale(0.96) !important;
+        }
+        .hero-btn-secondary {
+          background: rgba(255, 255, 255, 0.05) !important;
+          backdrop-filter: blur(14px) !important;
+          -webkit-backdrop-filter: blur(14px) !important;
+          border: 1px solid rgba(255, 255, 255, 0.16) !important;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+          border-radius: 9999px !important;
+          font-weight: 600 !important;
+          color: #FFFFFF !important;
+          transition: transform 0.2s ease, background 0.2s ease !important;
+        }
+        .hero-btn-secondary:active {
+          transform: scale(0.96) !important;
+          background: rgba(255, 255, 255, 0.1) !important;
+        }
+        .hero-friction-line {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 12.5px;
+          font-weight: 500;
+          color: #94A3B8;
+          letter-spacing: 0.01em;
+        }
+        .friction-pulse-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #10B981;
+          box-shadow: 0 0 8px #10B981;
+          flex-shrink: 0;
+        }
         @media (max-width: 992px) {
           .hero-grid {
             grid-template-columns: 1fr !important;
             text-align: center !important;
+            gap: 16px !important;
+            min-height: auto !important;
           }
           .hero-content {
             display: flex;
             flex-direction: column;
             align-items: center;
           }
+          .hero-eyebrow-pill {
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .hero-cta-group {
+            justify-content: center !important;
+          }
           .hero-phone-stage {
-            height: 480px !important;
+            width: 100% !important;
+            height: 520px !important;
+            min-height: 480px !important;
+            margin: 12px 0 !important;
             order: 2;
+          }
+          .hero-metrics-strip {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+            padding: 16px 20px !important;
+            margin-top: 24px !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .hero-floating-card {
+            left: 0px !important;
+            bottom: 10px !important;
+            transform: scale(0.85) rotate(-3deg) !important;
+          }
+          .hero-floating-badge {
+            right: 10px !important;
+            top: 20px !important;
+            transform: scale(0.85) !important;
+          }
+        }
+        @media (max-width: 540px) {
+          .hero-section {
+            padding-top: 76px !important;
+          }
+          .hero-headline {
+            font-size: 38px !important;
+            line-height: 1.05 !important;
+            margin-bottom: 8px !important;
+          }
+          .hero-eyebrow-pill {
+            font-size: 9.5px !important;
+            padding: 4px 12px !important;
+            letter-spacing: 0.12em !important;
+            margin-bottom: 10px !important;
+            background: rgba(109, 61, 245, 0.1) !important;
+            border: 1px solid rgba(139, 92, 246, 0.28) !important;
+          }
+          .hero-cta-group {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            max-width: 330px !important;
+            gap: 10px !important;
+            margin: 0 auto 12px auto !important;
+          }
+          .hero-cta-group a {
+            flex: 1 !important;
+            width: auto !important;
+            height: 42px !important;
+            padding: 0 12px !important;
+            font-size: 13.5px !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            white-space: nowrap !important;
+          }
+          .hero-friction-line {
+            font-size: 11.5px !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+            margin: 0 auto !important;
+            justify-content: center !important;
+          }
+          .hero-phone-stage {
+            width: 100% !important;
+            height: 470px !important;
+            min-height: 440px !important;
+            margin: 6px 0 !important;
+          }
+          .hero-floating-card {
+            display: none !important;
+          }
+          .hero-floating-badge {
+            display: none !important;
+          }
+          .hero-metrics-strip {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+            padding: 12px 14px !important;
+            margin-top: 14px !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .hero-headline {
+            font-size: 33px !important;
+          }
+          .hero-cta-group {
+            max-width: 300px !important;
+            gap: 8px !important;
+          }
+          .hero-cta-group a {
+            font-size: 12.5px !important;
+            padding: 0 8px !important;
+            height: 40px !important;
+          }
+          .hero-phone-stage {
+            height: 440px !important;
+            min-height: 420px !important;
+          }
+          .hero-metrics-strip {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
           }
         }
       `}</style>

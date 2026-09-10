@@ -57,7 +57,7 @@ export const Budgets: React.FC = () => {
           {BUDGETS_DATA.map((b) => (
             <Card3DTilt
               key={b.category}
-              className="glass-card"
+              className="glass-card budget-card"
               style={{
                 padding: '24px',
                 borderRadius: '18px',
@@ -141,6 +141,11 @@ export const Budgets: React.FC = () => {
         @media (max-width: 768px) {
           .budgets-grid {
             grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .budget-card {
+            padding: 18px 14px !important;
+            border-radius: 16px !important;
           }
         }
       `}</style>
