@@ -110,7 +110,15 @@ export const FinalCTA: React.FC = () => {
                 marginBottom: '16px',
               }}
             >
-              Get ExpenseX AI on iOS &amp; Android
+              Get Expense<span
+                style={{
+                  background: 'linear-gradient(135deg, #A78BFA 0%, #FF7A59 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'inline-block',
+                  filter: 'drop-shadow(0 0 16px rgba(167, 139, 250, 0.45))',
+                }}
+              >X</span> AI on iOS &amp; Android
             </h2>
 
             {/* Subtitle */}
