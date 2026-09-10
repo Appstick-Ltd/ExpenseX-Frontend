@@ -74,6 +74,9 @@ export const Hero: React.FC = () => {
                 marginBottom: '20px',
               }}
             >
+              <span style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
+                ExpenseX AI — #1 Smart AI Expense Tracker &amp; Personal Finance Companion
+              </span>
               <span style={{ color: '#FFFFFF', display: 'block' }}>{HERO_DATA.headlinePart1}</span>
               <span className="text-gradient-purple" style={{ display: 'block' }}>
                 {HERO_DATA.headlinePart2}
@@ -321,18 +324,39 @@ export const Hero: React.FC = () => {
         .hero-eyebrow-pill {
           margin-bottom: 20px;
         }
+        .hero-cta-group {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 24px;
+        }
         .hero-btn-primary {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          padding: 13px 26px !important;
+          font-size: 15px !important;
           background: linear-gradient(135deg, #6D3DF5 0%, #8B5CF6 50%, #7C3AED 100%) !important;
           box-shadow: 0 8px 24px -4px rgba(109, 61, 245, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
           border-radius: 9999px !important;
           font-weight: 700 !important;
           color: #FFFFFF !important;
           transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+          text-decoration: none !important;
+        }
+        .hero-btn-primary:hover {
+          box-shadow: 0 12px 28px -4px rgba(109, 61, 245, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+          transform: translateY(-1px) !important;
         }
         .hero-btn-primary:active {
           transform: scale(0.96) !important;
         }
         .hero-btn-secondary {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          padding: 13px 24px !important;
+          font-size: 15px !important;
           background: rgba(255, 255, 255, 0.05) !important;
           backdrop-filter: blur(14px) !important;
           -webkit-backdrop-filter: blur(14px) !important;
@@ -341,7 +365,13 @@ export const Hero: React.FC = () => {
           border-radius: 9999px !important;
           font-weight: 600 !important;
           color: #FFFFFF !important;
-          transition: transform 0.2s ease, background 0.2s ease !important;
+          transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease !important;
+          text-decoration: none !important;
+        }
+        .hero-btn-secondary:hover {
+          background: rgba(255, 255, 255, 0.08) !important;
+          border-color: rgba(255, 255, 255, 0.28) !important;
+          transform: translateY(-1px) !important;
         }
         .hero-btn-secondary:active {
           transform: scale(0.96) !important;

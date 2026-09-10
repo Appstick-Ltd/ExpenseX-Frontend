@@ -15,6 +15,7 @@ import { Budgets } from './components/Budgets';
 import { SavingsGoals } from './components/SavingsGoals';
 import { Privacy } from './components/Privacy';
 import { Roadmap } from './components/Roadmap';
+import { FAQ } from './components/FAQ';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 
@@ -70,7 +71,10 @@ export const App: React.FC = () => {
         {/* 12. Privacy, Permissions & Data Autonomy */}
         <Privacy />
 
-        {/* 13. Cinematic Final Call to Action */}
+        {/* 13. High-Authority SEO Knowledge Base & FAQs */}
+        <FAQ />
+
+        {/* 14. Cinematic Final Call to Action */}
         <FinalCTA />
       </main>
 

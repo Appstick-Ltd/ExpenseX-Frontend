@@ -1,0 +1,25 @@
+{
+  "name": "ExpenseX AI - Smart Expense Tracker & Money Manager",
+  "short_name": "ExpenseX AI",
+  "description": "Autonomous AI expense tracker and personal finance companion. Track receipts, SMS, voice and transactions automatically.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05070D",
+  "theme_color": "#6D3DF5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity", "utilities"]
+}

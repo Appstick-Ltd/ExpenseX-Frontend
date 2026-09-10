@@ -45,7 +45,7 @@ export const AIInsights: React.FC = () => {
               key={insight.title}
               className="glass-card insight-card"
               style={{
-                padding: '32px',
+                padding: '26px 24px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -58,16 +58,33 @@ export const AIInsights: React.FC = () => {
             >
               <div>
                 {/* Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '10px',
+                    marginBottom: '16px',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      color: 'var(--text-muted)',
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
                     {insight.title}
                   </span>
                   <span
                     style={{
-                      fontSize: '12px',
+                      fontSize: '11.5px',
                       fontWeight: 700,
                       padding: '4px 10px',
                       borderRadius: '9999px',
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                       background:
                         insight.severity === 'warning'
                           ? 'rgba(255, 90, 54, 0.15)'

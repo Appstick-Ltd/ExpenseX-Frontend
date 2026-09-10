@@ -10,6 +10,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'AI Engine', href: '#ai-engine' },
   { label: 'Intelligence', href: '#safe-to-spend' },
   { label: 'Roadmap', href: '#roadmap' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Privacy', href: '#privacy' },
 ];
 
@@ -179,7 +180,7 @@ export const AI_INSIGHTS_DATA = [
   },
   {
     title: 'Subscription Optimization',
-    stat: '$220 / month detected',
+    stat: '$220/mo Unused',
     why: 'You have 3 entertainment streaming subscriptions active, but only accessed 1 during August.',
     action: 'Suggestion: Pause unused services to save $140 monthly.',
     severity: 'positive',
