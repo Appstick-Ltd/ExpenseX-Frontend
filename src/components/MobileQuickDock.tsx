@@ -8,17 +8,27 @@ export const MobileQuickDock: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+    let currentlyVisible = false;
+
+    const checkScroll = () => {
+      const shouldBeVisible = window.scrollY > 320;
+      if (shouldBeVisible !== currentlyVisible) {
+        currentlyVisible = shouldBeVisible;
+        setIsVisible(shouldBeVisible);
+      }
+      ticking = false;
+    };
+
     const handleScroll = () => {
-      // Show after user scrolls past hero section (320px)
-      if (window.scrollY > 320) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      if (!ticking) {
+        window.requestAnimationFrame(checkScroll);
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    checkScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -27,11 +37,27 @@ export const MobileQuickDock: React.FC = () => {
     playMicroClick();
     triggerHaptic('medium');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
   };
 
-  const handleNavClick = () => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
     playMicroClick();
     triggerHaptic('selection');
+    const targetId = href.replace('#', '');
+    const el = document.getElementById(targetId);
+    if (el) {
+      const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: Math.max(0, elementTop - 32),
+        behavior: 'smooth',
+      });
+    }
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
   };
 
   if (!isVisible) return null;
@@ -42,21 +68,21 @@ export const MobileQuickDock: React.FC = () => {
         <div className="dock-container">
           <a
             href="#tour"
-            onClick={handleNavClick}
+            onClick={(e) => handleNavClick(e, '#tour')}
             className="dock-item"
             title="Quick Tour"
           >
-            <Compass size={16} />
+            <Compass size={17} />
             <span>Tour</span>
           </a>
 
           <a
             href="#features"
-            onClick={handleNavClick}
+            onClick={(e) => handleNavClick(e, '#features')}
             className="dock-item"
             title="AI Features"
           >
-            <Sparkles size={16} />
+            <Sparkles size={17} />
             <span>AI Core</span>
           </a>
 
@@ -70,7 +96,7 @@ export const MobileQuickDock: React.FC = () => {
             className="dock-cta-btn"
             style={{ border: 'none', cursor: 'pointer' }}
           >
-            <Zap size={14} fill="#FFFFFF" />
+            <Zap size={15} fill="#FFFFFF" />
             <span>Get App</span>
           </button>
 
@@ -80,7 +106,7 @@ export const MobileQuickDock: React.FC = () => {
             title="Back to Top"
             aria-label="Scroll to top"
           >
-            <ArrowUp size={16} />
+            <ArrowUp size={17} />
           </button>
         </div>
       </div>
@@ -88,13 +114,13 @@ export const MobileQuickDock: React.FC = () => {
       <style>{`
         .mobile-quick-dock {
           position: fixed;
-          bottom: 16px;
+          bottom: 20px;
           left: 0;
           right: 0;
           z-index: 998;
           display: flex;
           justify-content: center;
-          padding: 0 16px;
+          padding: 0 14px;
           pointer-events: none;
           animation: dockSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
@@ -112,29 +138,44 @@ export const MobileQuickDock: React.FC = () => {
 
         .dock-container {
           pointer-events: auto;
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 6px;
-          padding: 6px 10px;
+          padding: 6px 8px 6px 12px;
           border-radius: 9999px;
-          background: rgba(14, 18, 38, 0.88);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(139, 92, 246, 0.4);
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 24px rgba(109, 61, 245, 0.3);
+          background: rgba(14, 18, 38, 0.96);
+          border: 1px solid rgba(139, 92, 246, 0.45);
+          box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85), 0 0 28px rgba(109, 61, 245, 0.3);
+          white-space: nowrap !important;
+          flex-shrink: 0;
+          max-width: fit-content;
+          margin: 0 auto;
         }
 
         .dock-item {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 5px;
-          padding: 7px 12px;
+          gap: 6px;
+          padding: 8px 12px;
           border-radius: 9999px;
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 600;
           color: var(--text-secondary);
           text-decoration: none;
           transition: all 0.2s ease;
+          white-space: nowrap !important;
+          flex-shrink: 0;
+          line-height: 1;
+        }
+
+        .dock-item svg,
+        .dock-cta-btn svg,
+        .dock-top-btn svg {
+          flex-shrink: 0;
+        }
+
+        .dock-item span {
+          white-space: nowrap !important;
         }
 
         .dock-item:active {
@@ -144,18 +185,25 @@ export const MobileQuickDock: React.FC = () => {
         }
 
         .dock-cta-btn {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 6px;
-          padding: 7px 16px;
+          padding: 8px 16px;
           border-radius: 9999px;
-          font-size: 12.5px;
+          font-size: 13px;
           font-weight: 700;
           color: #FFFFFF;
           text-decoration: none;
           background: linear-gradient(135deg, #6D3DF5 0%, #8B5CF6 50%, #FF5A36 100%);
-          box-shadow: 0 4px 14px rgba(109, 61, 245, 0.5);
+          box-shadow: 0 4px 16px rgba(109, 61, 245, 0.55);
           transition: transform 0.2s ease;
+          white-space: nowrap !important;
+          flex-shrink: 0;
+          line-height: 1;
+        }
+
+        .dock-cta-btn span {
+          white-space: nowrap !important;
         }
 
         .dock-cta-btn:active {
@@ -164,23 +212,50 @@ export const MobileQuickDock: React.FC = () => {
         }
 
         .dock-top-btn {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 0.08);
           color: var(--text-muted);
           cursor: pointer;
           transition: all 0.2s ease;
+          flex-shrink: 0;
         }
 
         .dock-top-btn:active {
           transform: scale(0.92);
           background: rgba(139, 92, 246, 0.3);
           color: #FFFFFF;
+        }
+
+        /* Ultra-compact screens like 320px - 340px */
+        @media (max-width: 345px) {
+          .mobile-quick-dock {
+            padding: 0 6px;
+            bottom: 14px;
+          }
+          .dock-container {
+            padding: 5px 6px 5px 8px;
+            gap: 4px;
+          }
+          .dock-item {
+            padding: 6px 8px;
+            font-size: 11.5px;
+            gap: 4px;
+          }
+          .dock-cta-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            gap: 4px;
+          }
+          .dock-top-btn {
+            width: 32px;
+            height: 32px;
+          }
         }
 
         /* Hide on desktop/large screens so it is an exclusive mobile/tablet experience */

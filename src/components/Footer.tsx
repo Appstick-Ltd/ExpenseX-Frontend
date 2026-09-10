@@ -27,9 +27,21 @@ export const Footer: React.FC = () => {
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
+    if (href.startsWith('#') || href === '/') {
       e.preventDefault();
       playMicroClick();
+
+      if (href === '#home' || href === '/') {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        return;
+      }
+
       const id = href.replace('#', '');
       const el = document.getElementById(id);
       if (el) {
@@ -39,7 +51,9 @@ export const Footer: React.FC = () => {
           top: Math.max(0, elementTop - navOffset),
           behavior: 'smooth',
         });
-        window.history.pushState(null, '', href);
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
       }
     }
   };

@@ -8,6 +8,9 @@ export const ParticleField: React.FC = () => {
     const container = containerRef.current;
     if (!container) return;
 
+    // On mobile screens, skip particle WebGL to give 100% GPU bandwidth to 60fps scrolling
+    if (window.innerWidth < 768) return;
+
     // Check WebGL availability
     const testCanvas = document.createElement('canvas');
     const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl');
@@ -111,9 +114,19 @@ export const ParticleField: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     let clock = new THREE.Clock();
+    let isVisible = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.02 }
+    );
+    observer.observe(container);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isVisible) return;
       const elapsed = clock.getElapsedTime();
 
       // Subtle natural drift
@@ -143,6 +156,7 @@ export const ParticleField: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();

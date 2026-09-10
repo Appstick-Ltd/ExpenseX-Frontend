@@ -18,6 +18,16 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({
   glare = true,
   onClick,
 }) => {
+  const isTouchOrMobile = typeof window !== 'undefined' && (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
+
+  if (isTouchOrMobile) {
+    return (
+      <div className={`card-3d-tilt ${className}`} onClick={onClick} style={style}>
+        {children}
+      </div>
+    );
+  }
+
   const cardRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState<string>('');
   const [glarePos, setGlarePos] = useState<{ x: number; y: number; opacity: number }>({

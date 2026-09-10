@@ -1,19 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const ScrollProgressBar: React.FC = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateProgress = () => {
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalScroll > 0) {
-        const currentProgress = (window.scrollY / totalScroll) * 100;
-        setScrollProgress(Math.min(100, Math.max(0, currentProgress)));
+      if (totalScroll > 0 && barRef.current) {
+        const progress = Math.min(1, Math.max(0, window.scrollY / totalScroll));
+        barRef.current.style.transform = `scaleX(${progress})`;
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    updateProgress();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -28,16 +38,18 @@ export const ScrollProgressBar: React.FC = () => {
         height: '2.5px',
         zIndex: 9999,
         pointerEvents: 'none',
-        background: 'transparent',
       }}
     >
       <div
+        ref={barRef}
         style={{
-          width: `${scrollProgress}%`,
+          width: '100%',
           height: '100%',
+          transformOrigin: 'left center',
+          transform: 'scaleX(0)',
           background: 'linear-gradient(90deg, #6D3DF5 0%, #A78BFA 60%, #FF5A36 100%)',
           boxShadow: '0 0 12px rgba(167, 139, 250, 0.8), 0 0 4px #FF5A36',
-          transition: 'width 0.1s ease-out',
+          willChange: 'transform',
         }}
       />
     </div>

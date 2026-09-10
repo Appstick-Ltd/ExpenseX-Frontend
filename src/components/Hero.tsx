@@ -8,6 +8,24 @@ import { Card3DTilt } from './Card3DTilt';
 import { playMicroClick } from '../utils/audio';
 
 export const Hero: React.FC = () => {
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    playMicroClick();
+    const targetId = href.replace('#', '');
+    const el = document.getElementById(targetId);
+    if (el) {
+      const navOffset = window.innerWidth <= 768 ? 32 : 24;
+      const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: Math.max(0, elementTop - navOffset),
+        behavior: 'smooth',
+      });
+    }
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  };
+
   return (
     <section
       id="home"
@@ -28,11 +46,13 @@ export const Hero: React.FC = () => {
 
       {/* Cinematic Ambient Atmosphere Light */}
       <div
+        className="bg-ambient-blur"
         style={{
           position: 'absolute',
           top: '15%',
           left: '50%',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translate(-50%, -50%) translateZ(0)',
+          willChange: 'transform',
           width: '900px',
           height: '500px',
           borderRadius: '50%',
@@ -90,7 +110,7 @@ export const Hero: React.FC = () => {
             <div className="hero-cta-group">
               <a
                 href="#tour"
-                onClick={playMicroClick}
+                onClick={(e) => handleScrollTo(e, '#tour')}
                 className="btn-primary hero-btn-primary"
               >
                 <span>Take a Tour</span>
@@ -99,7 +119,7 @@ export const Hero: React.FC = () => {
 
               <a
                 href="#features"
-                onClick={playMicroClick}
+                onClick={(e) => handleScrollTo(e, '#features')}
                 className="btn-secondary hero-btn-secondary"
               >
                 <span>AI Features</span>
@@ -322,7 +342,21 @@ export const Hero: React.FC = () => {
 
       <style>{`
         .hero-eyebrow-pill {
-          margin-bottom: 20px;
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 5px 14px;
+          border-radius: 9999px;
+          background: rgba(109, 61, 245, 0.12);
+          border: 1px solid rgba(139, 92, 246, 0.35);
+          box-shadow: 0 0 16px rgba(109, 61, 245, 0.2);
+          color: #C084FC;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          white-space: nowrap;
+          margin-bottom: 16px;
         }
         .hero-cta-group {
           display: flex;

@@ -29,79 +29,89 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     setSoundActive(isSoundEnabled());
 
-    // Check initial hash on page load
-    const initialHash = window.location.hash;
-    if (initialHash && NAV_ITEMS.some((item) => item.href === initialHash)) {
-      updateActiveSection(initialHash);
+    // Clean any hash from URL on page load so URL stays as pure root domain
+    if (window.location.hash) {
+      const initialHash = window.location.hash;
+      if (NAV_ITEMS.some((item) => item.href === initialHash)) {
+        updateActiveSection(initialHash);
+      }
+      history.replaceState(null, '', window.location.pathname + window.location.search);
     }
 
+    let ticking = false;
+    let isScrolledLocal = false;
+    let activeSectionLocal = '#home';
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 25);
+      const scrollY = window.scrollY;
+
+      // 1. Scrolled state toggle (only update React state if changed)
+      const shouldBeScrolled = scrollY > 25;
+      if (shouldBeScrolled !== isScrolledLocal) {
+        isScrolledLocal = shouldBeScrolled;
+        setIsScrolled(shouldBeScrolled);
+      }
 
       if (isManualScrollRef.current) return;
 
-      const scrollY = window.scrollY;
+      // Desktop-only active nav indicator — completely skip DOM checks and state updates on mobile
+      if (window.innerWidth < 768) return;
+
       const windowHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
 
       // Top of page check
       if (scrollY < 120) {
-        updateActiveSection('#home');
+        if (activeSectionLocal !== '#home') {
+          activeSectionLocal = '#home';
+          updateActiveSection('#home');
+        }
         return;
       }
 
       // Bottom of page check
       if (scrollY + windowHeight >= docHeight - 80) {
-        updateActiveSection('#privacy');
+        if (activeSectionLocal !== '#privacy') {
+          activeSectionLocal = '#privacy';
+          updateActiveSection('#privacy');
+        }
         return;
       }
 
-      const checkPosition = scrollY + 220;
+      const checkPosition = scrollY + 180;
+      let matchedSection = '#home';
 
-      // Sort sections by actual DOM top position so intermediate scroll regions map cleanly
-      const sectionPositions = NAV_ITEMS.map((item) => {
-        const id = item.href.replace('#', '');
+      // Fast offsetTop inspection without triggering forced layout/reflow
+      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
+        const id = NAV_ITEMS[i].href.replace('#', '');
         const el = document.getElementById(id);
-        if (!el) return null;
-        const rect = el.getBoundingClientRect();
-        const top = rect.top + scrollY;
-        return {
-          href: item.href,
-          top,
-          bottom: top + el.offsetHeight,
-        };
-      })
-        .filter((s): s is { href: string; top: number; bottom: number } => s !== null)
-        .sort((a, b) => a.top - b.top);
-
-      if (sectionPositions.length === 0) return;
-
-      let current = sectionPositions[0].href;
-
-      for (let i = 0; i < sectionPositions.length; i++) {
-        const section = sectionPositions[i];
-        const nextSection = sectionPositions[i + 1];
-
-        if (nextSection) {
-          if (checkPosition >= section.top && checkPosition < nextSection.top) {
-            current = section.href;
-            break;
-          }
-        } else {
-          if (checkPosition >= section.top) {
-            current = section.href;
-          }
+        if (el && checkPosition >= el.offsetTop) {
+          matchedSection = NAV_ITEMS[i].href;
+          break;
         }
       }
 
-      updateActiveSection(current);
+      if (matchedSection !== activeSectionLocal) {
+        activeSectionLocal = matchedSection;
+        updateActiveSection(matchedSection);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, []);
@@ -129,6 +139,18 @@ export const Navbar: React.FC = () => {
       isManualScrollRef.current = false;
     }, 850);
 
+    // Special handling for Home / Top: smooth scroll to 0 and remove hash
+    if (href === '#home' || href === '/') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      return;
+    }
+
     const targetId = href.replace('#', '');
     const el = document.getElementById(targetId);
     if (el) {
@@ -138,6 +160,9 @@ export const Navbar: React.FC = () => {
         top: Math.max(0, elementTop - navOffset),
         behavior: 'smooth',
       });
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     }
   };
 
@@ -167,6 +192,7 @@ export const Navbar: React.FC = () => {
       >
         <div className="container">
           <nav
+            className="main-navbar-nav"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -186,8 +212,8 @@ export const Navbar: React.FC = () => {
           >
             {/* Logo */}
             <a
-              href="#home"
-              onClick={(e) => handleNavClick(e, '#home')}
+              href="/"
+              onClick={(e) => handleNavClick(e, '/')}
               style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
             >
               <Logo size="md" />

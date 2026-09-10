@@ -21,11 +21,13 @@ export const AIEngine: React.FC = () => {
     >
       {/* Background glow lines */}
       <div
+        className="bg-ambient-blur"
         style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translate(-50%, -50%) translateZ(0)',
+          willChange: 'transform',
           width: '900px',
           height: '400px',
           background: 'radial-gradient(ellipse, rgba(109, 61, 245, 0.12) 0%, rgba(255, 90, 54, 0.04) 50%, transparent 80%)',

@@ -88,14 +88,15 @@ export const HeroPhone3D: React.FC = () => {
 
     let renderer: THREE.WebGLRenderer;
     try {
+      const isMobile = window.innerWidth < 768;
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        antialias: !isMobile,
         powerPreference: 'high-performance',
       });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.35;
       setHasWebGL(true);
@@ -135,7 +136,10 @@ export const HeroPhone3D: React.FC = () => {
     phoneGroup.rotation.z = stateRef.current.rotZ;
 
     // 5. Mouse Parallax & Drag Listeners
+    let isPhoneVisible = true;
+
     const handleMouseMove = (e: MouseEvent) => {
+      if (!isPhoneVisible) return;
       const s = stateRef.current;
       const nx = (e.clientX / window.innerWidth) * 2 - 1;
       const ny = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -229,8 +233,9 @@ export const HeroPhone3D: React.FC = () => {
       }
     };
 
-    // Mobile Device Gyroscope Tilt Integration
+    // Mobile Device Gyroscope Tilt Integration (only when visible & not touch dragging)
     const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (!isPhoneVisible) return;
       const s = stateRef.current;
       if (s.isPointerDown) return;
       if (e.gamma === null || e.beta === null) return;
@@ -241,7 +246,7 @@ export const HeroPhone3D: React.FC = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('deviceorientation', handleOrientation);
+    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
     canvas.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
@@ -259,10 +264,21 @@ export const HeroPhone3D: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    // 7. Animation Loop
+    // 7. Animation Loop with IntersectionObserver pause for mobile performance
     let clock = new THREE.Clock();
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isPhoneVisible = entry.isIntersecting;
+      },
+      { threshold: 0.02 }
+    );
+    observer.observe(container);
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isPhoneVisible) return; // Pause WebGL rendering when scrolled away
+
       const elapsedTime = clock.getElapsedTime();
       const s = stateRef.current;
 
@@ -306,6 +322,7 @@ export const HeroPhone3D: React.FC = () => {
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('deviceorientation', handleOrientation);
       canvas.removeEventListener('pointerdown', handlePointerDown);

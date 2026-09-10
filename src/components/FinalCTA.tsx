@@ -25,11 +25,13 @@ export const FinalCTA: React.FC = () => {
     >
       {/* Background ambient lighting */}
       <div
+        className="bg-ambient-blur"
         style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translate(-50%, -50%) translateZ(0)',
+          willChange: 'transform',
           width: '900px',
           height: '400px',
           borderRadius: '50%',

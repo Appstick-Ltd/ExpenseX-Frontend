@@ -5,9 +5,22 @@ export const CursorGlow: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Disable on touch devices (phones and tablets) to save mobile GPU/CPU
+    if (window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches)) {
+      return;
+    }
+
+    let ticking = false;
+
     const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setPosition({ x: e.clientX, y: e.clientY });
+          if (!isVisible) setIsVisible(true);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     const handleMouseLeave = () => {

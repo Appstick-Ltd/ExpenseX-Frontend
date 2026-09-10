@@ -33,14 +33,15 @@ export const NeuralCore3D: React.FC = () => {
 
     let renderer: THREE.WebGLRenderer;
     try {
+      const isMobile = window.innerWidth < 768;
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        antialias: !isMobile,
         powerPreference: 'high-performance',
       });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.2 : 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       setHasWebGL(true);
     } catch {
@@ -210,11 +211,22 @@ export const NeuralCore3D: React.FC = () => {
     window.addEventListener('mousemove', onPointerMove);
     window.addEventListener('mouseup', onPointerUp);
 
-    // 5. Animation Loop
+    // 5. Animation Loop with IntersectionObserver pause for mobile performance
     let clock = new THREE.Clock();
+    let isCoreVisible = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isCoreVisible = entry.isIntersecting;
+      },
+      { threshold: 0.02 }
+    );
+    observer.observe(container);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isCoreVisible) return; // Pause WebGL loop when scrolled away
+
       const elapsed = clock.getElapsedTime();
 
       if (!isPointerDown) {
@@ -259,6 +271,7 @@ export const NeuralCore3D: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       canvas.removeEventListener('mousedown', onPointerDown);
       window.removeEventListener('mousemove', onPointerMove);
       window.removeEventListener('mouseup', onPointerUp);

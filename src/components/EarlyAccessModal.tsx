@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Check, CheckCircle2, User, Mail, MapPin, Smartphone } from 'lucide-react';
+import { X, Sparkles, Check, CheckCircle2, User, Mail, MapPin, Smartphone, Tag, AlertCircle, Loader2 } from 'lucide-react';
 import { subscribeToEarlyAccessModal } from '../utils/modalEvents';
 import { playMicroClick, playSuccessChime } from '../utils/audio';
 import { triggerHaptic } from '../utils/haptics';
+import { submitBetaUser } from '../services/api';
+import appleLogoImg from '../assets/apple-logo.png';
+import googlePlaySvg from '../assets/Google_Play_2022_icon.svg';
 
 const FEATURES_LIST = [
   { id: 'receipt', label: 'Receipt OCR Scan', icon: '🧾' },
@@ -18,12 +21,15 @@ export const EarlyAccessModal: React.FC = () => {
   const [platform, setPlatform] = useState<'ios' | 'android' | 'both'>('ios');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [location, setLocation] = useState('');
+  const [address, setAddress] = useState('');
+  const [referralCode, setReferralCode] = useState('');
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
     'receipt',
     'sms',
     'safe_spend',
   ]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [ticketId, setTicketId] = useState('');
   const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
@@ -34,6 +40,7 @@ export const EarlyAccessModal: React.FC = () => {
       else if (detail.platform === 'android') setPlatform('android');
       else setPlatform('both');
       setIsSubmitted(false);
+      setApiError(null);
       setIsOpen(true);
       document.body.style.overflow = 'hidden';
     });
@@ -52,6 +59,7 @@ export const EarlyAccessModal: React.FC = () => {
   const closeModal = () => {
     playMicroClick();
     setIsOpen(false);
+    setApiError(null);
     document.body.style.overflow = '';
   };
 
@@ -65,11 +73,22 @@ export const EarlyAccessModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setApiError(null);
     const newErrors: { name?: string; email?: string } = {};
 
-    if (!name.trim()) newErrors.name = 'Please enter your name';
-    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please enter a valid email address';
+    // 1. Mandatory Name Validation
+    if (!name.trim()) {
+      newErrors.name = 'Please enter your full name';
+    } else if (name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
+    }
+
+    // 2. Mandatory Valid Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      newErrors.email = 'Please enter your email address';
+    } else if (!emailRegex.test(email.trim())) {
+      newErrors.email = 'Please enter a valid email address (e.g. name@domain.com)';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -79,47 +98,82 @@ export const EarlyAccessModal: React.FC = () => {
     }
 
     setErrors({});
-    playSuccessChime();
-    triggerHaptic('heavy');
+    setIsSubmitting(true);
 
-    const generatedTicket = `EXP-${Math.floor(1000 + Math.random() * 9000)}`;
-    setTicketId(generatedTicket);
-
-    // Save to localStorage
-    const newEntry = {
-      ticketId: generatedTicket,
-      name,
-      email,
-      location,
-      platform,
-      features: selectedFeatures,
-      submittedAt: new Date().toISOString(),
-    };
+    // Map selected feature keys to human-readable labels for the backend
+    const likeFeatures = selectedFeatures.map((id) => {
+      const match = FEATURES_LIST.find((f) => f.id === id);
+      return match ? match.label : id;
+    });
 
     try {
-      const existing = JSON.parse(
-        localStorage.getItem('expensex_early_bird_users') || '[]'
-      );
-      existing.push(newEntry);
-      localStorage.setItem('expensex_early_bird_users', JSON.stringify(existing));
-    } catch {
-      // Ignore storage errors
-    }
-
-    // Fire luxury confetti celebration
-    try {
-      const confetti = (await import('canvas-confetti')).default;
-      confetti({
-        particleCount: 110,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#6D3DF5', '#8B5CF6', '#34D399', '#FFAA33', '#FFFFFF'],
+      // Call backend API: POST /users/bata-user
+      const response = await submitBetaUser({
+        name: name.trim(),
+        email: email.trim(),
+        referral_code: referralCode.trim() || undefined,
+        target_platform: platform,
+        address: address.trim() || undefined,
+        like_features: likeFeatures.length > 0 ? likeFeatures : ['Expense tracking', 'Budgeting'],
       });
-    } catch {
-      // Fallback
-    }
 
-    setIsSubmitted(true);
+      // Successful registration
+      playSuccessChime();
+      triggerHaptic('heavy');
+
+      const generatedTicket =
+        response?.ticketId ||
+        response?.ticket_id ||
+        response?.data?.ticketId ||
+        response?.data?.ticket_id ||
+        `EXP-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      setTicketId(generatedTicket);
+
+      // Store in local backup
+      try {
+        const newEntry = {
+          ticketId: generatedTicket,
+          name: name.trim(),
+          email: email.trim(),
+          address: address.trim(),
+          referral_code: referralCode.trim(),
+          platform,
+          features: likeFeatures,
+          submittedAt: new Date().toISOString(),
+        };
+        const existing = JSON.parse(
+          localStorage.getItem('expensex_early_bird_users') || '[]'
+        );
+        existing.push(newEntry);
+        localStorage.setItem('expensex_early_bird_users', JSON.stringify(existing));
+      } catch {
+        // Ignore local storage quota errors
+      }
+
+      // Fire luxury celebration confetti
+      try {
+        const confetti = (await import('canvas-confetti')).default;
+        confetti({
+          particleCount: 110,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#6D3DF5', '#8B5CF6', '#34D399', '#FFAA33', '#FFFFFF'],
+        });
+      } catch {
+        // Fallback
+      }
+
+      setIsSubmitted(true);
+    } catch (err: any) {
+      triggerHaptic('heavy');
+      const message =
+        err?.message ||
+        'Something went wrong while connecting to the server. Please verify your connection.';
+      setApiError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -165,36 +219,56 @@ export const EarlyAccessModal: React.FC = () => {
                   <Smartphone size={14} />
                   <span>Choose Your Target Platform</span>
                 </label>
-                <div className="platform-toggle-group">
+                <div className="platform-cards-grid">
+                  {/* Apple iOS */}
                   <button
                     type="button"
-                    className={`platform-chip ${platform === 'ios' ? 'active' : ''}`}
+                    className={`platform-select-card ${platform === 'ios' ? 'active' : ''}`}
                     onClick={() => {
                       playMicroClick();
+                      triggerHaptic('light');
                       setPlatform('ios');
                     }}
                   >
-                    <span> Apple iOS (App Store)</span>
+                    <div className="platform-card-icon-wrap apple">
+                      <img src={appleLogoImg} alt="Apple iOS" className="platform-card-logo" />
+                    </div>
+                    <span className="platform-name">Apple iOS</span>
+                    {platform === 'ios' && <Check size={13} className="platform-check-icon" />}
                   </button>
+
+                  {/* Android */}
                   <button
                     type="button"
-                    className={`platform-chip ${platform === 'android' ? 'active' : ''}`}
+                    className={`platform-select-card ${platform === 'android' ? 'active' : ''}`}
                     onClick={() => {
                       playMicroClick();
+                      triggerHaptic('light');
                       setPlatform('android');
                     }}
                   >
-                    <span>▶ Android (Google Play)</span>
+                    <div className="platform-card-icon-wrap play">
+                      <img src={googlePlaySvg} alt="Google Play" className="platform-card-logo" />
+                    </div>
+                    <span className="platform-name">Android</span>
+                    {platform === 'android' && <Check size={13} className="platform-check-icon" />}
                   </button>
+
+                  {/* Both Platforms */}
                   <button
                     type="button"
-                    className={`platform-chip ${platform === 'both' ? 'active' : ''}`}
+                    className={`platform-select-card ${platform === 'both' ? 'active' : ''}`}
                     onClick={() => {
                       playMicroClick();
+                      triggerHaptic('light');
                       setPlatform('both');
                     }}
                   >
-                    <span>Both Platforms</span>
+                    <div className="platform-card-icon-wrap both">
+                      <Sparkles size={15} />
+                    </div>
+                    <span className="platform-name">Both</span>
+                    {platform === 'both' && <Check size={13} className="platform-check-icon" />}
                   </button>
                 </div>
               </div>
@@ -232,19 +306,37 @@ export const EarlyAccessModal: React.FC = () => {
                 </div>
               </div>
 
-              {/* Location */}
-              <div className="form-group">
-                <label className="form-label">
-                  <MapPin size={14} />
-                  <span>City / Country (Optional)</span>
-                </label>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="e.g. Dhaka, Bangladesh or California, USA"
-                  className="form-input"
-                />
+              {/* Address & Referral Code Row */}
+              <div className="form-row">
+                <div className="form-group flex-1">
+                  <label className="form-label">
+                    <MapPin size={14} />
+                    <span>Address / Location (Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="e.g. 123 Main St, New York, USA"
+                    className="form-input"
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div className="form-group flex-1">
+                  <label className="form-label">
+                    <Tag size={14} />
+                    <span>Referral Code (Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={referralCode}
+                    onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                    placeholder="e.g. BU123456"
+                    className="form-input"
+                    disabled={isSubmitting}
+                  />
+                </div>
               </div>
 
               {/* Multi-Select Feature Interests */}
@@ -262,6 +354,7 @@ export const EarlyAccessModal: React.FC = () => {
                         key={feat.id}
                         onClick={() => toggleFeature(feat.id)}
                         className={`feature-chip ${isSelected ? 'selected' : ''}`}
+                        disabled={isSubmitting}
                       >
                         <span className="feature-icon">{feat.icon}</span>
                         <span className="feature-label">{feat.label}</span>
@@ -272,9 +365,31 @@ export const EarlyAccessModal: React.FC = () => {
                 </div>
               </div>
 
+              {/* API Error Notification */}
+              {apiError && (
+                <div className="modal-api-error" role="alert">
+                  <AlertCircle size={18} className="error-icon" />
+                  <div className="error-text-content">
+                    <span className="error-title">Submission Failed</span>
+                    <span className="error-desc">{apiError}</span>
+                  </div>
+                </div>
+              )}
+
               {/* Submit CTA */}
-              <button type="submit" className="modal-submit-btn">
-                <span>⚡ Reserve My Early Bird Spot</span>
+              <button
+                type="submit"
+                className={`modal-submit-btn ${isSubmitting ? 'submitting' : ''}`}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={18} className="spin-loader" />
+                    <span>Reserving VIP Spot...</span>
+                  </>
+                ) : (
+                  <span>⚡ Reserve My Early Bird Spot</span>
+                )}
               </button>
 
               <p className="privacy-note">
@@ -481,34 +596,81 @@ export const EarlyAccessModal: React.FC = () => {
           margin-top: 2px;
         }
 
-        .platform-toggle-group {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
+        .platform-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
         }
 
-        .platform-chip {
-          flex: 1;
-          min-width: 130px;
-          padding: 8px 12px;
-          border-radius: 10px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #94A3B8;
-          font-size: 12.5px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
+        .platform-select-card {
           display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          height: 48px;
+          padding: 0 14px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          white-space: nowrap !important;
+          position: relative;
+        }
+
+        .platform-select-card:hover {
+          background: rgba(255, 255, 255, 0.06);
+          border-color: rgba(139, 92, 246, 0.35);
+          transform: translateY(-1px);
+        }
+
+        .platform-select-card:active {
+          transform: scale(0.97);
+        }
+
+        .platform-select-card.active {
+          background: rgba(109, 61, 245, 0.18);
+          border: 1.5px solid #8B5CF6;
+          box-shadow: 0 4px 20px rgba(109, 61, 245, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .platform-card-icon-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .platform-card-logo {
+          width: 18px;
+          height: 18px;
+          object-fit: contain;
+          display: block;
+        }
+
+        .platform-card-icon-wrap.apple .platform-card-logo {
+          filter: brightness(0) invert(1);
+        }
+
+        .platform-card-icon-wrap.both {
+          color: #C084FC;
+          display: flex;
           align-items: center;
           justify-content: center;
         }
 
-        .platform-chip.active {
-          background: rgba(109, 61, 245, 0.25);
-          border-color: #A78BFA;
+        .platform-name {
+          font-size: 13px;
+          font-weight: 700;
           color: #FFFFFF;
-          box-shadow: 0 0 16px rgba(109, 61, 245, 0.35);
+          letter-spacing: -0.01em;
+          white-space: nowrap !important;
+        }
+
+        .platform-check-icon {
+          color: #34D399;
+          margin-left: 2px;
+          flex-shrink: 0;
         }
 
         .features-chip-grid {
@@ -544,6 +706,62 @@ export const EarlyAccessModal: React.FC = () => {
           margin-left: auto;
         }
 
+        .modal-api-error {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          padding: 12px 14px;
+          border-radius: 12px;
+          background: rgba(239, 68, 68, 0.12);
+          border: 1px solid rgba(239, 68, 68, 0.35);
+          color: #FECACA;
+          font-size: 13px;
+          line-height: 1.4;
+          animation: shakeIn 0.3s ease-in-out forwards;
+        }
+
+        @keyframes shakeIn {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-4px); }
+          50% { transform: translateX(4px); }
+          75% { transform: translateX(-2px); }
+          100% { transform: translateX(0); }
+        }
+
+        .modal-api-error .error-icon {
+          color: #EF4444;
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+
+        .modal-api-error .error-text-content {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .modal-api-error .error-title {
+          font-size: 12px;
+          font-weight: 700;
+          color: #F87171;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+        }
+
+        .modal-api-error .error-desc {
+          font-size: 12.5px;
+          color: #FCA5A5;
+        }
+
+        .spin-loader {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
         .modal-submit-btn {
           height: 48px;
           border-radius: 14px;
@@ -557,18 +775,25 @@ export const EarlyAccessModal: React.FC = () => {
           display: flex;
           align-items: center;
           justify-content: center;
+          gap: 8px;
           transition: all 0.2s ease;
           margin-top: 6px;
         }
 
-        .modal-submit-btn:hover {
+        .modal-submit-btn:hover:not(:disabled) {
           transform: translateY(-1px);
           filter: brightness(1.1);
           box-shadow: 0 12px 30px rgba(109, 61, 245, 0.65);
         }
 
-        .modal-submit-btn:active {
+        .modal-submit-btn:active:not(:disabled) {
           transform: scale(0.98);
+        }
+
+        .modal-submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+          filter: grayscale(0.2);
         }
 
         .privacy-note {
@@ -684,8 +909,23 @@ export const EarlyAccessModal: React.FC = () => {
           .features-chip-grid {
             grid-template-columns: 1fr;
           }
-          .platform-chip {
-            min-width: 100%;
+          .platform-cards-grid {
+            gap: 6px;
+          }
+          .platform-select-card {
+            height: 44px;
+            padding: 0 6px;
+            gap: 5px;
+          }
+          .platform-card-logo {
+            width: 15px;
+            height: 15px;
+          }
+          .platform-name {
+            font-size: 11px;
+          }
+          .platform-check-icon {
+            display: none;
           }
         }
       `}</style>
