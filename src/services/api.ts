@@ -32,20 +32,32 @@ export async function submitBetaUser(payload: BetaUserPayload): Promise<BetaUser
   const endpoint = `${API_BASE_URL}/users/bata-user`;
 
   try {
+    const bodyData: Record<string, any> = {
+      name: payload.name.trim(),
+      email: payload.email.trim().toLowerCase(),
+      target_platform: payload.target_platform,
+      like_features: payload.like_features,
+    };
+
+    // Only include referral_code if provided
+    const cleanReferral = payload.referral_code?.trim();
+    if (cleanReferral) {
+      bodyData.referral_code = cleanReferral;
+    }
+
+    // Only include address if provided
+    const cleanAddress = payload.address?.trim();
+    if (cleanAddress) {
+      bodyData.address = cleanAddress;
+    }
+
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'accept': '*/*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: payload.name.trim(),
-        email: payload.email.trim().toLowerCase(),
-        referral_code: payload.referral_code?.trim() || '',
-        target_platform: payload.target_platform,
-        address: payload.address?.trim() || '',
-        like_features: payload.like_features,
-      }),
+      body: JSON.stringify(bodyData),
     });
 
     // Attempt to parse JSON response

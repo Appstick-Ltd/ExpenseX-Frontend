@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Check, CheckCircle2, User, Mail, MapPin, Smartphone, Tag, AlertCircle, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Sparkles, Check, CheckCircle2, User, Mail, MapPin, Smartphone, AlertCircle, Loader2, Copy, Share2, CheckCheck } from 'lucide-react';
 import { subscribeToEarlyAccessModal } from '../utils/modalEvents';
 import { playMicroClick, playSuccessChime } from '../utils/audio';
 import { triggerHaptic } from '../utils/haptics';
 import { submitBetaUser } from '../services/api';
+import { getStoredReferralCode } from '../utils/referral';
 import appleLogoImg from '../assets/apple-logo.png';
 import googlePlaySvg from '../assets/Google_Play_2022_icon.svg';
 
@@ -23,6 +24,7 @@ export const EarlyAccessModal: React.FC = () => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  // Note: referralCode is read from storage, not from a form input
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
     'receipt',
     'sms',
@@ -31,22 +33,78 @@ export const EarlyAccessModal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [ticketId, setTicketId] = useState('');
+  const [submittedInfo, setSubmittedInfo] = useState<{
+    name: string;
+    email: string;
+    platform: 'ios' | 'android' | 'both';
+    featureCount: number;
+  } | null>(null);
+  const [referralLink, setReferralLink] = useState('');
+  const [isCopied, setIsCopied] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
 
+  const closeModalRef = useRef<() => void>(() => { });
+
+  const resetFormFields = () => {
+    setName('');
+    setEmail('');
+    setAddress('');
+    setSelectedFeatures(['receipt', 'sms', 'safe_spend']);
+    setErrors({});
+    setApiError(null);
+  };
+
+  const closeModal = () => {
+    playMicroClick();
+    setIsOpen(false);
+    setApiError(null);
+    document.body.style.overflow = '';
+    // If modal was submitted, cleanly reset submission state for next time
+    if (isSubmitted) {
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setSubmittedInfo(null);
+        setIsCopied(false);
+        setReferralLink('');
+        resetFormFields();
+      }, 250);
+    }
+  };
+
+  closeModalRef.current = closeModal;
+
   useEffect(() => {
+    // Check if referral code is in storage or URL
+    const saved = getStoredReferralCode();
+    if (saved) setReferralCode(saved);
+
     const unsubscribe = subscribeToEarlyAccessModal((detail) => {
       if (detail.platform === 'ios') setPlatform('ios');
       else if (detail.platform === 'android') setPlatform('android');
       else setPlatform('both');
-      setIsSubmitted(false);
+
+      // Reset fields if previously submitted so user gets a fresh clean form
+      setIsSubmitted((prev) => {
+        if (prev) {
+          resetFormFields();
+          setSubmittedInfo(null);
+          setReferralLink('');
+          setIsCopied(false);
+        }
+        return false;
+      });
       setApiError(null);
+
+      // Re-check stored referral code on modal open
+      const currentRef = getStoredReferralCode();
+      if (currentRef) setReferralCode(currentRef);
+
       setIsOpen(true);
       document.body.style.overflow = 'hidden';
     });
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') closeModalRef.current();
     };
     window.addEventListener('keydown', handleKeyDown);
 
@@ -55,13 +113,6 @@ export const EarlyAccessModal: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
-  const closeModal = () => {
-    playMicroClick();
-    setIsOpen(false);
-    setApiError(null);
-    document.body.style.overflow = '';
-  };
 
   const toggleFeature = (id: string) => {
     playMicroClick();
@@ -107,11 +158,13 @@ export const EarlyAccessModal: React.FC = () => {
     });
 
     try {
+      const capturedReferral = getStoredReferralCode() || undefined;
+
       // Call backend API: POST /users/bata-user
       const response = await submitBetaUser({
         name: name.trim(),
         email: email.trim(),
-        referral_code: referralCode.trim() || undefined,
+        referral_code: capturedReferral,
         target_platform: platform,
         address: address.trim() || undefined,
         like_features: likeFeatures.length > 0 ? likeFeatures : ['Expense tracking', 'Budgeting'],
@@ -121,23 +174,20 @@ export const EarlyAccessModal: React.FC = () => {
       playSuccessChime();
       triggerHaptic('heavy');
 
-      const generatedTicket =
-        response?.ticketId ||
-        response?.ticket_id ||
-        response?.data?.ticketId ||
-        response?.data?.ticket_id ||
-        `EXP-${Math.floor(1000 + Math.random() * 9000)}`;
-
-      setTicketId(generatedTicket);
+      // Capture referral share link from API response
+      const shareLink =
+        response?.data?.link ||
+        response?.link ||
+        '';
+      if (shareLink) setReferralLink(shareLink);
 
       // Store in local backup
       try {
         const newEntry = {
-          ticketId: generatedTicket,
           name: name.trim(),
           email: email.trim(),
           address: address.trim(),
-          referral_code: referralCode.trim(),
+          referral_code: capturedReferral || '',
           platform,
           features: likeFeatures,
           submittedAt: new Date().toISOString(),
@@ -164,13 +214,34 @@ export const EarlyAccessModal: React.FC = () => {
         // Fallback
       }
 
+      setSubmittedInfo({
+        name: name.trim(),
+        email: email.trim(),
+        platform,
+        featureCount: likeFeatures.length,
+      });
+      resetFormFields();
       setIsSubmitted(true);
     } catch (err: any) {
       triggerHaptic('heavy');
-      const message =
-        err?.message ||
-        'Something went wrong while connecting to the server. Please verify your connection.';
-      setApiError(message);
+      const rawMessage: string = err?.message || '';
+
+      const isNetworkError =
+        rawMessage.toLowerCase().includes('unable to reach') ||
+        rawMessage.toLowerCase().includes('connection refused') ||
+        rawMessage.toLowerCase().includes('failed to fetch') ||
+        rawMessage.toLowerCase().includes('network');
+
+      if (isNetworkError) {
+        setApiError('Unable to reach server. Please check your internet connection and try again.');
+      } else {
+        const targetEmail = email.trim();
+        setApiError(
+          targetEmail
+            ? `Each email address can only be used once. If you have already registered with (${targetEmail}), your early access spot is already secured!`
+            : 'Each email address can only be used once for registration. If you already signed up, your spot is confirmed.'
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -209,6 +280,19 @@ export const EarlyAccessModal: React.FC = () => {
               <p className="modal-description">
                 Join our exclusive priority waitlist to get early beta builds on the Apple App Store &amp; Google Play Store before official launch.
               </p>
+
+              {/* VIP Referral Invite Badge */}
+              {referralCode && (
+                <div className="vip-invite-banner">
+                  <div className="vip-invite-left">
+                    <span className="vip-invite-pulse" />
+                    <span className="vip-invite-text">
+                      VIP Invite Code: <strong>{referralCode}</strong>
+                    </span>
+                  </div>
+                  <span className="vip-invite-tag">✓ Priority Access</span>
+                </div>
+              )}
             </div>
 
             {/* Form */}
@@ -306,37 +390,20 @@ export const EarlyAccessModal: React.FC = () => {
                 </div>
               </div>
 
-              {/* Address & Referral Code Row */}
-              <div className="form-row">
-                <div className="form-group flex-1">
-                  <label className="form-label">
-                    <MapPin size={14} />
-                    <span>Address / Location (Optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="e.g. 123 Main St, New York, USA"
-                    className="form-input"
-                    disabled={isSubmitting}
-                  />
-                </div>
-
-                <div className="form-group flex-1">
-                  <label className="form-label">
-                    <Tag size={14} />
-                    <span>Referral Code (Optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={referralCode}
-                    onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                    placeholder="e.g. BU123456"
-                    className="form-input"
-                    disabled={isSubmitting}
-                  />
-                </div>
+              {/* Address Field (Optional) */}
+              <div className="form-group">
+                <label className="form-label">
+                  <MapPin size={14} />
+                  <span>Address / Location (Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="e.g. 123 Main St, New York, USA"
+                  className="form-input"
+                  disabled={isSubmitting}
+                />
               </div>
 
               {/* Multi-Select Feature Interests */}
@@ -370,7 +437,7 @@ export const EarlyAccessModal: React.FC = () => {
                 <div className="modal-api-error" role="alert">
                   <AlertCircle size={18} className="error-icon" />
                   <div className="error-text-content">
-                    <span className="error-title">Submission Failed</span>
+                    <span className="error-title">Notice: 1 Registration Per Email</span>
                     <span className="error-desc">{apiError}</span>
                   </div>
                 </div>
@@ -410,18 +477,100 @@ export const EarlyAccessModal: React.FC = () => {
 
             <h3 className="success-title">You're on the Priority List!</h3>
             <p className="success-subtitle">
-              Welcome aboard, <strong>{name}</strong>! Your ticket number is:
+              Welcome aboard, <strong>{submittedInfo?.name || name}</strong>! Your spot is confirmed.
             </p>
-
-            <div className="ticket-box">
-              <span className="ticket-label">TICKET ID</span>
-              <span className="ticket-code">{ticketId}</span>
-              <span className="ticket-sub">Platform: {platform.toUpperCase()}</span>
-            </div>
 
             <p className="success-message">
-              We've logged your preferences for <strong>{selectedFeatures.length} core features</strong>. As soon as the App Store &amp; Play Store early builds drop, you will receive an invitation link at <strong>{email}</strong>.
+              🎉 When early builds drop, you'll get an invite at <strong>{submittedInfo?.email || email}</strong> — covering your {submittedInfo?.featureCount ?? selectedFeatures.length} selected features on <strong>{(submittedInfo?.platform || platform) === 'both' ? 'iOS & Android' : (submittedInfo?.platform || platform) === 'ios' ? 'Apple iOS' : 'Android'}</strong>.
             </p>
+
+            {/* Referral Share Section */}
+            {referralLink && (
+              <div className="referral-share-section">
+                <p className="referral-share-label">🎁 Share your invite link &amp; earn rewards</p>
+                <div className="referral-link-row">
+                  <div className="referral-link-display">
+                    <span className="referral-link-text">{referralLink}</span>
+                  </div>
+                  <button
+                    className={`referral-copy-btn ${isCopied ? 'copied' : ''}`}
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(referralLink);
+                        setIsCopied(true);
+                        setTimeout(() => setIsCopied(false), 2500);
+                      } catch {
+                        // Fallback for older browsers
+                        const el = document.createElement('textarea');
+                        el.value = referralLink;
+                        document.body.appendChild(el);
+                        el.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(el);
+                        setIsCopied(true);
+                        setTimeout(() => setIsCopied(false), 2500);
+                      }
+                    }}
+                    title="Copy link"
+                  >
+                    {isCopied ? <CheckCheck size={16} /> : <Copy size={16} />}
+                    <span>{isCopied ? 'Copied!' : 'Copy'}</span>
+                  </button>
+                </div>
+
+                <button
+                  className="referral-share-btn"
+                  onClick={async () => {
+                    const shareData = {
+                      title: 'Join me on ExpenseX AI!',
+                      text: `I just got VIP early access to ExpenseX AI — the AI-powered expense tracker. Join me before launch! 🚀`,
+                      url: referralLink,
+                    };
+                    if (navigator.share && navigator.canShare?.(shareData)) {
+                      try {
+                        await navigator.share(shareData);
+                      } catch {
+                        // User cancelled or error — ignore
+                      }
+                    } else {
+                      // Fallback: open share options panel
+                      const menu = document.getElementById('expensex-share-menu');
+                      if (menu) {
+                        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+                      }
+                    }
+                  }}
+                >
+                  <Share2 size={16} />
+                  <span>Share Invite Link</span>
+                </button>
+
+                {/* Fallback share menu for browsers without Web Share API */}
+                <div id="expensex-share-menu" className="share-menu-dropdown" style={{ display: 'none' }}>
+                  {[
+                    { label: '💬 WhatsApp', url: `https://wa.me/?text=${encodeURIComponent('I just got VIP early access to ExpenseX AI 🚀 Join me before launch!')}%20${encodeURIComponent(referralLink)}` },
+                    { label: '✈️ Telegram', url: `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent('I just got VIP early access to ExpenseX AI 🚀')}` },
+                    { label: '🐦 Twitter / X', url: `https://twitter.com/intent/tweet?text=${encodeURIComponent('I just got VIP early access to ExpenseX AI 🚀')}&url=${encodeURIComponent(referralLink)}` },
+                    { label: '📘 Facebook', url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}` },
+                    { label: '📧 Email', url: `mailto:?subject=${encodeURIComponent('Join ExpenseX AI Early Access!')}&body=${encodeURIComponent('I just got VIP early access to ExpenseX AI 🚀 Join me before launch! ' + referralLink)}` },
+                  ].map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="share-menu-item"
+                      onClick={() => {
+                        const menu = document.getElementById('expensex-share-menu');
+                        if (menu) menu.style.display = 'none';
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <button onClick={closeModal} className="modal-submit-btn success-btn">
               <span>Back to ExpenseX AI</span>
@@ -435,14 +584,14 @@ export const EarlyAccessModal: React.FC = () => {
           position: fixed;
           inset: 0;
           z-index: 1050;
-          background: rgba(3, 6, 15, 0.82);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
+          background: rgba(3, 6, 15, 0.85);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 16px;
-          animation: overlayFadeIn 0.25s ease-out forwards;
+          animation: overlayFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes overlayFadeIn {
@@ -462,17 +611,19 @@ export const EarlyAccessModal: React.FC = () => {
           border-radius: 28px;
           padding: 36px 32px;
           color: #FFFFFF;
-          animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: modalFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           scrollbar-width: thin;
           scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+          will-change: opacity, transform;
+          transform: translateZ(0);
         }
 
-        @keyframes modalScaleUp {
-          from {
+        @keyframes modalFadeIn {
+          0% {
             opacity: 0;
-            transform: scale(0.93) translateY(14px);
+            transform: scale(0.96) translateY(8px);
           }
-          to {
+          100% {
             opacity: 1;
             transform: scale(1) translateY(0);
           }
@@ -534,6 +685,86 @@ export const EarlyAccessModal: React.FC = () => {
           color: #94A3B8;
           line-height: 1.5;
           margin: 0;
+        }
+
+        /* VIP Referral Invite Badge */
+        .vip-invite-banner {
+          display: inline-flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-top: 14px;
+          padding: 8px 16px;
+          border-radius: 9999px;
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(109, 61, 245, 0.16) 100%);
+          border: 1px solid rgba(52, 211, 153, 0.4);
+          box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12), 0 0 25px rgba(109, 61, 245, 0.15);
+          width: 100%;
+          max-width: 440px;
+          margin-left: auto;
+          margin-right: auto;
+          box-sizing: border-box;
+        }
+
+        .vip-invite-left {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          min-width: 0;
+        }
+
+        .vip-invite-pulse {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #34D399;
+          box-shadow: 0 0 10px #34D399, 0 0 18px rgba(52, 211, 153, 0.6);
+          flex-shrink: 0;
+          animation: pulseDot 1.8s infinite ease-in-out;
+        }
+
+        @keyframes pulseDot {
+          0%, 100% {
+            opacity: 0.6;
+            transform: scale(0.9);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.18);
+          }
+        }
+
+        .vip-invite-text {
+          font-size: 12.5px;
+          color: #E2E8F0;
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .vip-invite-text strong {
+          color: #FFFFFF;
+          font-family: var(--font-mono, monospace);
+          letter-spacing: 0.05em;
+          background: rgba(109, 61, 245, 0.4);
+          padding: 2px 8px;
+          border-radius: 6px;
+          border: 1px solid rgba(167, 139, 250, 0.35);
+          margin-left: 4px;
+        }
+
+        .vip-invite-tag {
+          font-size: 11px;
+          font-weight: 700;
+          color: #34D399;
+          letter-spacing: 0.04em;
+          white-space: nowrap;
+          flex-shrink: 0;
+          background: rgba(52, 211, 153, 0.12);
+          padding: 3px 8px;
+          border-radius: 6px;
+          border: 1px solid rgba(52, 211, 153, 0.25);
         }
 
         .modal-form {
@@ -897,33 +1128,228 @@ export const EarlyAccessModal: React.FC = () => {
           max-width: 280px;
         }
 
-        @media (max-width: 540px) {
-          .early-access-modal {
-            padding: 24px 18px;
-            border-radius: 22px;
+        /* === Referral Share Section === */
+        .referral-share-section {
+          width: 100%;
+          max-width: 480px;
+          margin: 0 auto 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .referral-share-label {
+          font-size: 13px;
+          font-weight: 600;
+          color: #C084FC;
+          margin: 0;
+          text-align: center;
+          letter-spacing: 0.01em;
+        }
+
+        .referral-link-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          border-radius: 12px;
+          padding: 6px 6px 6px 14px;
+          overflow: hidden;
+        }
+
+        .referral-link-display {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .referral-link-text {
+          font-size: 12.5px;
+          color: #A5B4FC;
+          font-family: var(--font-mono, monospace);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: block;
+        }
+
+        .referral-copy-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 7px 12px;
+          border-radius: 8px;
+          background: rgba(109, 61, 245, 0.25);
+          border: 1px solid rgba(139, 92, 246, 0.4);
+          color: #C4B5FD;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+
+        .referral-copy-btn:hover {
+          background: rgba(109, 61, 245, 0.45);
+          color: #FFFFFF;
+          transform: scale(1.03);
+        }
+
+        .referral-copy-btn.copied {
+          background: rgba(52, 211, 153, 0.2);
+          border-color: rgba(52, 211, 153, 0.5);
+          color: #34D399;
+        }
+
+        .referral-share-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          height: 46px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, rgba(109, 61, 245, 0.3) 0%, rgba(52, 211, 153, 0.18) 100%);
+          border: 1px solid rgba(139, 92, 246, 0.5);
+          color: #E2E8F0;
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+          letter-spacing: 0.01em;
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .referral-share-btn:hover {
+          background: linear-gradient(135deg, rgba(109, 61, 245, 0.5) 0%, rgba(52, 211, 153, 0.28) 100%);
+          border-color: rgba(167, 139, 250, 0.7);
+          color: #FFFFFF;
+          transform: translateY(-1px);
+          box-shadow: 0 8px 24px rgba(109, 61, 245, 0.4);
+        }
+
+        .referral-share-btn:active {
+          transform: scale(0.97);
+        }
+
+        /* Share Dropdown (fallback for non-mobile) */
+        .share-menu-dropdown {
+          flex-direction: column;
+          gap: 6px;
+          background: rgba(17, 21, 44, 0.98);
+          border: 1px solid rgba(139, 92, 246, 0.4);
+          border-radius: 14px;
+          padding: 8px;
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 24px rgba(109, 61, 245, 0.25);
+          animation: fadeInUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .share-menu-item {
+          display: flex;
+          align-items: center;
+          padding: 10px 14px;
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid transparent;
+          color: #E2E8F0;
+          font-size: 13.5px;
+          font-weight: 500;
+          text-decoration: none;
+          cursor: pointer;
+          transition: all 0.18s ease;
+        }
+
+        .share-menu-item:hover {
+          background: rgba(109, 61, 245, 0.2);
+          border-color: rgba(139, 92, 246, 0.35);
+          color: #FFFFFF;
+          transform: translateX(3px);
+        }
+
+        @media (max-width: 640px) {
+          .early-access-overlay {
+            padding: 16px !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: rgba(3, 6, 15, 0.88) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            animation: overlayFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
           }
+
+          .early-access-modal {
+            max-width: 440px !important;
+            width: 100% !important;
+            max-height: 90vh !important;
+            border-radius: 24px !important;
+            border: 1px solid rgba(139, 92, 246, 0.45) !important;
+            padding: 26px 18px 24px 18px !important;
+            animation: modalFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(109, 61, 245, 0.3) !important;
+            will-change: opacity, transform;
+            transform: translateZ(0);
+          }
+
+          .modal-close-btn {
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+          }
+
+          .modal-header {
+            margin-bottom: 18px;
+          }
+
+          .vip-invite-banner {
+            padding: 6px 12px;
+            gap: 8px;
+            margin-top: 10px;
+          }
+
+          .vip-invite-text {
+            font-size: 11.5px;
+          }
+
+          .vip-invite-tag {
+            font-size: 10px;
+            padding: 2px 6px;
+          }
+
           .form-row {
             flex-direction: column;
             gap: 14px;
           }
+
           .features-chip-grid {
             grid-template-columns: 1fr;
           }
+
           .platform-cards-grid {
             gap: 6px;
           }
+
           .platform-select-card {
-            height: 44px;
-            padding: 0 6px;
-            gap: 5px;
+            height: 46px;
+            padding: 0 8px;
+            gap: 6px;
           }
+
           .platform-card-logo {
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
           }
+
           .platform-name {
-            font-size: 11px;
+            font-size: 12px;
           }
+
           .platform-check-icon {
             display: none;
           }

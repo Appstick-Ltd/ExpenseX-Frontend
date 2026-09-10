@@ -69,11 +69,12 @@ export const Navbar: React.FC = () => {
         return;
       }
 
-      // Bottom of page check
+      // Bottom of page check (activates last item, which is FAQ)
+      const lastNavItem = NAV_ITEMS[NAV_ITEMS.length - 1]?.href || '#faq';
       if (scrollY + windowHeight >= docHeight - 80) {
-        if (activeSectionLocal !== '#privacy') {
-          activeSectionLocal = '#privacy';
-          updateActiveSection('#privacy');
+        if (activeSectionLocal !== lastNavItem) {
+          activeSectionLocal = lastNavItem;
+          updateActiveSection(lastNavItem);
         }
         return;
       }

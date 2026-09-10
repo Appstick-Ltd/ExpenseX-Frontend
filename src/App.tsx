@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { captureReferralCodeFromUrl } from './utils/referral';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CursorGlow } from './components/CursorGlow';
@@ -21,6 +22,11 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
+  useEffect(() => {
+    // Automatically capture referral code if present in URL
+    captureReferralCodeFromUrl();
+  }, []);
+
   return (
     <div className="app-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {/* Top Neon Scroll Progress Indicator */}

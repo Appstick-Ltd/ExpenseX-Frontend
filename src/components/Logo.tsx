@@ -64,7 +64,7 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, classN
               lineHeight: 1,
             }}
           >
-            Expense<span style={{ color: '#A78BFA' }}>X</span>
+            ExpenseX
           </span>
           <span
             style={{
