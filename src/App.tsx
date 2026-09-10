@@ -25,6 +25,16 @@ export const App: React.FC = () => {
   useEffect(() => {
     // Automatically capture referral code if present in URL
     captureReferralCodeFromUrl();
+
+    // Clean any hash from address bar so URL remains pure
+    const cleanHash = () => {
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    };
+    cleanHash();
+    window.addEventListener('hashchange', cleanHash);
+    return () => window.removeEventListener('hashchange', cleanHash);
   }, []);
 
   return (

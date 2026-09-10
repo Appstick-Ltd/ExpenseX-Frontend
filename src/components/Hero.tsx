@@ -289,6 +289,7 @@ export const Hero: React.FC = () => {
         {/* Animated Scroll Indicator */}
         <a
           href="#tour"
+          onClick={(e) => handleScrollTo(e, '#tour')}
           style={{
             display: 'inline-flex',
             flexDirection: 'column',

@@ -366,9 +366,21 @@ export const Footer: React.FC = () => {
             © 2026 ExpenseX AI. All rights reserved.
           </div>
           <div className="footer-bottom-legal">
-            <a href="#privacy" className="footer-legal-link">Privacy Policy</a>
+            <a
+              href="#privacy"
+              className="footer-legal-link"
+              onClick={(e) => handleNavClick(e, '#privacy')}
+            >
+              Privacy Policy
+            </a>
             <span className="footer-legal-dot">•</span>
-            <a href="#terms" className="footer-legal-link">Terms of Service</a>
+            <a
+              href="#privacy"
+              className="footer-legal-link"
+              onClick={(e) => handleNavClick(e, '#privacy')}
+            >
+              Terms of Service
+            </a>
           </div>
           <div className="footer-powered-by">
             Powered by <strong style={{ color: '#FFFFFF', fontWeight: 600 }}>Appstick Ltd</strong>
