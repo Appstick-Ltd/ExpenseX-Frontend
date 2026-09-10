@@ -153,6 +153,7 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header
+        className="app-header"
         style={{
           position: 'fixed',
           top: 0,
@@ -504,6 +505,11 @@ export const Navbar: React.FC = () => {
           }
           .mobile-hamburger {
             display: flex !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .app-header {
+            padding: 10px 0 !important;
           }
         }
         @media (max-width: 480px) {

@@ -441,7 +441,7 @@ export const Hero: React.FC = () => {
         }
         @media (max-width: 540px) {
           .hero-section {
-            padding-top: 76px !important;
+            padding-top: 104px !important;
           }
           .hero-headline {
             font-size: 38px !important;
