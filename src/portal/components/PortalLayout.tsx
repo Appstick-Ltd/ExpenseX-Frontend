@@ -8,6 +8,7 @@ import { UsersTab } from './tabs/UsersTab';
 import { CategoriesTab } from './tabs/CategoriesTab';
 import { SubscriptionsTab } from './tabs/SubscriptionsTab';
 import { SettingsTab } from './tabs/SettingsTab';
+import { triggerHaptic } from '../../utils/haptics';
 import {
   LayoutDashboard,
   UserCheck,
@@ -19,12 +20,17 @@ import {
   ChevronRight,
   Sparkles,
   Activity,
+  Menu,
+  X,
+  ExternalLink,
+  ShieldCheck,
   type LucideIcon,
 } from 'lucide-react';
 
 interface NavItemDef {
   id: 'overview' | 'beta-users' | 'users' | 'categories' | 'subscriptions' | 'settings';
   label: string;
+  shortLabel?: string;
   icon: LucideIcon;
   badge?: string;
 }
@@ -33,19 +39,37 @@ export const PortalLayout: React.FC = () => {
   const { user, logout } = usePortalAuth();
   const [activeTab, setActiveTab] = useState<NavItemDef['id']>('overview');
   const [collapsed, setCollapsed] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const navItems: NavItemDef[] = [
-    { id: 'overview', label: 'Overview & Telemetry', icon: LayoutDashboard },
-    { id: 'beta-users', label: 'Beta Early-Bird Users', icon: Sparkles, badge: 'Live' },
-    { id: 'users', label: 'System Users', icon: UserCheck },
-    { id: 'categories', label: 'Categories Dictionary', icon: Layers },
-    { id: 'subscriptions', label: 'Subscription Tiers', icon: CreditCard },
-    { id: 'settings', label: 'System Settings', icon: Settings },
+    { id: 'overview', label: 'Overview & Telemetry', shortLabel: 'Overview', icon: LayoutDashboard },
+    { id: 'beta-users', label: 'Beta Early-Bird Users', shortLabel: 'Early-Bird', icon: Sparkles, badge: 'Live' },
+    { id: 'users', label: 'System Users', shortLabel: 'Users', icon: UserCheck },
+    { id: 'categories', label: 'Categories Dictionary', shortLabel: 'Categories', icon: Layers },
+    { id: 'subscriptions', label: 'Subscription Tiers', shortLabel: 'Plans', icon: CreditCard },
+    { id: 'settings', label: 'System Settings', shortLabel: 'Settings', icon: Settings },
   ];
+
+  const handleTabSelect = (tabId: NavItemDef['id']) => {
+    triggerHaptic('selection');
+    setActiveTab(tabId);
+    setIsDrawerOpen(false);
+  };
+
+  const toggleDrawer = () => {
+    triggerHaptic('light');
+    setIsDrawerOpen((prev) => !prev);
+  };
+
+  const currentTabDef = navItems.find((n) => n.id === activeTab) || navItems[0];
+  const TabIcon = currentTabDef.icon;
+  const userInitial = (user?.name || user?.email || 'A')[0].toUpperCase();
+
+  const isMoreActive = activeTab === 'categories' || activeTab === 'settings' || isDrawerOpen;
 
   return (
     <div className="mc-shell">
-      {/* SIDEBAR */}
+      {/* DESKTOP SIDEBAR */}
       <aside className={`mc-sidebar ${collapsed ? 'collapsed' : ''}`}>
         {/* Sidebar Header */}
         <div className="mc-sidebar-header">
@@ -104,7 +128,7 @@ export const PortalLayout: React.FC = () => {
               <button
                 key={item.id}
                 className={`mc-nav-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setActiveTab(item.id as any)}
+                onClick={() => handleTabSelect(item.id)}
                 title={item.label}
               >
                 <Icon size={18} style={{ flexShrink: 0 }} />
@@ -142,7 +166,7 @@ export const PortalLayout: React.FC = () => {
                     flexShrink: 0,
                   }}
                 >
-                  {(user?.name || user?.email || 'A')[0].toUpperCase()}
+                  {userInitial}
                 </div>
                 <div style={{ overflow: 'hidden' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -155,7 +179,10 @@ export const PortalLayout: React.FC = () => {
               </div>
 
               <button
-                onClick={logout}
+                onClick={() => {
+                  triggerHaptic('warning');
+                  logout();
+                }}
                 title="Sign out"
                 style={{
                   background: 'none',
@@ -173,7 +200,10 @@ export const PortalLayout: React.FC = () => {
           ) : (
             <div style={{ textAlign: 'center' }}>
               <button
-                onClick={logout}
+                onClick={() => {
+                  triggerHaptic('warning');
+                  logout();
+                }}
                 title="Sign out"
                 style={{
                   background: 'none',
@@ -190,9 +220,119 @@ export const PortalLayout: React.FC = () => {
         </div>
       </aside>
 
+      {/* SLIDE-OVER MOBILE DRAWER */}
+      <div
+        className={`mc-drawer-overlay ${isDrawerOpen ? 'open' : ''}`}
+        onClick={() => setIsDrawerOpen(false)}
+      >
+        <div
+          className="mc-mobile-drawer"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Drawer Header */}
+          <div className="mc-drawer-header">
+            <button
+              className="mc-drawer-close-btn"
+              onClick={() => setIsDrawerOpen(false)}
+              aria-label="Close drawer"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="mc-drawer-profile">
+              <div className="mc-drawer-avatar">
+                {userInitial}
+              </div>
+              <div className="mc-drawer-profile-info">
+                <div className="mc-drawer-name">{user?.name || 'Superadmin'}</div>
+                <div className="mc-drawer-email">{user?.email || 'admin@expensex.ai'}</div>
+                <div className="mc-drawer-status-pill">
+                  <ShieldCheck size={11} />
+                  <span>Superadmin</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Drawer Navigation List */}
+          <nav className="mc-drawer-nav">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  className={`mc-drawer-nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => handleTabSelect(item.id)}
+                >
+                  <Icon size={18} style={{ flexShrink: 0 }} />
+                  <span>{item.label}</span>
+                  {item.badge && <span className="mc-drawer-nav-badge">{item.badge}</span>}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Drawer Footer */}
+          <div className="mc-drawer-footer">
+            <button
+              className="mc-drawer-landing-link"
+              onClick={() => {
+                window.location.href = '/';
+              }}
+            >
+              <span>Consumer Landing Page</span>
+              <ExternalLink size={14} />
+            </button>
+
+            <button
+              className="mc-drawer-logout-btn"
+              onClick={() => {
+                triggerHaptic('warning');
+                logout();
+              }}
+            >
+              <LogOut size={15} />
+              <span>Sign Out Session</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* MAIN BODY AREA */}
       <div className="mc-main-wrap">
-        {/* TOPBAR */}
+        {/* MOBILE TOPBAR (< 768px) */}
+        <header className="mc-mobile-topbar">
+          <div className="mc-mobile-topbar-left">
+            <button
+              className="mc-mobile-menu-btn"
+              onClick={toggleDrawer}
+              aria-label="Open menu"
+            >
+              <Menu size={20} />
+            </button>
+
+            <div className="mc-mobile-topbar-title">
+              <img src={logoImg} alt="ExpenseX" width={22} height={18} style={{ objectFit: 'contain' }} />
+              <div className="mc-mobile-tab-pill">
+                <TabIcon size={13} color="var(--mc-brand-purple)" />
+                <span>{currentTabDef.shortLabel || currentTabDef.label}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mc-mobile-topbar-right">
+            <button
+              className="mc-mobile-avatar-btn"
+              onClick={toggleDrawer}
+              aria-label="User profile"
+            >
+              {userInitial}
+            </button>
+          </div>
+        </header>
+
+        {/* DESKTOP TOPBAR (> 768px) */}
         <header className="mc-topbar">
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span
@@ -233,14 +373,77 @@ export const PortalLayout: React.FC = () => {
 
         {/* CONTENT */}
         <main className="mc-content-body">
-          {activeTab === 'overview' && <OverviewTab onNavigateTab={(tab) => setActiveTab(tab as any)} />}
+          {activeTab === 'overview' && <OverviewTab onNavigateTab={(tab) => handleTabSelect(tab as any)} />}
           {activeTab === 'beta-users' && <BetaUsersTab />}
           {activeTab === 'users' && <UsersTab />}
           {activeTab === 'categories' && <CategoriesTab />}
           {activeTab === 'subscriptions' && <SubscriptionsTab />}
           {activeTab === 'settings' && <SettingsTab />}
         </main>
+
+        {/* NATIVE MOBILE BOTTOM NAVIGATION (< 768px) */}
+        <nav className="mc-bottom-nav">
+          <button
+            className={`mc-bottom-nav-item ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => handleTabSelect('overview')}
+            aria-label="Overview tab"
+          >
+            <div className="mc-bottom-nav-icon-wrap">
+              <LayoutDashboard size={19} />
+            </div>
+            <span className="mc-bottom-nav-label">Overview</span>
+          </button>
+
+          <button
+            className={`mc-bottom-nav-item ${activeTab === 'beta-users' ? 'active' : ''}`}
+            onClick={() => handleTabSelect('beta-users')}
+            aria-label="Beta Early-Bird Users tab"
+          >
+            <div className="mc-bottom-nav-icon-wrap">
+              <Sparkles size={19} />
+              <span className="mc-bottom-badge-dot" />
+            </div>
+            <span className="mc-bottom-nav-label">Early-Bird</span>
+          </button>
+
+          <button
+            className={`mc-bottom-nav-item ${activeTab === 'users' ? 'active' : ''}`}
+            onClick={() => handleTabSelect('users')}
+            aria-label="Users tab"
+          >
+            <div className="mc-bottom-nav-icon-wrap">
+              <UserCheck size={19} />
+            </div>
+            <span className="mc-bottom-nav-label">Users</span>
+          </button>
+
+          <button
+            className={`mc-bottom-nav-item ${activeTab === 'subscriptions' ? 'active' : ''}`}
+            onClick={() => handleTabSelect('subscriptions')}
+            aria-label="Subscription plans tab"
+          >
+            <div className="mc-bottom-nav-icon-wrap">
+              <CreditCard size={19} />
+            </div>
+            <span className="mc-bottom-nav-label">Plans</span>
+          </button>
+
+          <button
+            className={`mc-bottom-nav-item ${isMoreActive ? 'active' : ''}`}
+            onClick={toggleDrawer}
+            aria-label="More options"
+          >
+            <div className="mc-bottom-nav-icon-wrap">
+              <Menu size={19} />
+              {(activeTab === 'categories' || activeTab === 'settings') && (
+                <span className="mc-bottom-badge-dot" style={{ background: 'var(--mc-brand-purple)' }} />
+              )}
+            </div>
+            <span className="mc-bottom-nav-label">More</span>
+          </button>
+        </nav>
       </div>
     </div>
   );
 };
+

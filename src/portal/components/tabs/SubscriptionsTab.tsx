@@ -398,11 +398,12 @@ export const SubscriptionsTab: React.FC = () => {
           <span style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>Recent payment transactions</span>
         </div>
 
-        <div className="mc-table-wrap">
+        {/* Desktop View */}
+        <div className="mc-table-wrap mc-desktop-only">
           <table className="mc-table">
             <thead>
               <tr>
-                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
+                <th style={{ width: 40, textAlign: 'center' }}>#</th>
                 <th>Subscription ID</th>
                 <th>Plan Reference</th>
                 <th>Status</th>
@@ -447,6 +448,48 @@ export const SubscriptionsTab: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Native Card View (< 768px) */}
+        <div className="mc-mobile-only">
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              Loading history...
+            </div>
+          ) : history.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              No recorded transactions yet.
+            </div>
+          ) : (
+            <div className="mc-mobile-card-list">
+              {history.map((h, i) => (
+                <div key={h._id || i} className="mc-mobile-card">
+                  <div className="mc-mobile-card-header">
+                    <div className="mc-mobile-card-title">
+                      #{i + 1} {h.subscriptionPlan || h.planId || 'Standard Plan'}
+                    </div>
+                    <span className="mc-badge mc-badge-active" style={{ fontSize: 10 }}>Active</span>
+                  </div>
+
+                  <div className="mc-mobile-card-body">
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Subscription ID:</span>
+                      <code style={{ fontSize: 11, background: '#F1F5F9', padding: '1px 5px', borderRadius: 4 }}>
+                        {h._id || '—'}
+                      </code>
+                    </div>
+
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Date:</span>
+                      <span className="mc-mobile-card-value">
+                        {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : '—'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

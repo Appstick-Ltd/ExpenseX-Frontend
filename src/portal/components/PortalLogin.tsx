@@ -229,10 +229,12 @@ export const PortalLogin: React.FC<PortalLoginProps> = ({ onSuccess }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 6,
               fontSize: 11,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--mc-text-muted)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--mc-text-muted)', flexWrap: 'wrap' }}>
               <span
                 style={{
                   width: 7,

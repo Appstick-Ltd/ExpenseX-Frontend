@@ -83,7 +83,7 @@ export const SettingsTab: React.FC = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 24 }}>
         {/* Currencies Card */}
         <div style={{ background: '#FFFFFF', border: '1px solid var(--mc-border)', borderRadius: 12, padding: 20, boxShadow: 'var(--mc-shadow-sm)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>

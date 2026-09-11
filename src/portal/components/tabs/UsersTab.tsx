@@ -215,8 +215,8 @@ export const UsersTab: React.FC = () => {
           boxShadow: 'var(--mc-shadow-sm)',
         }}
       >
-        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 8, flex: 1, minWidth: 260 }}>
-          <div className="mc-input-wrapper" style={{ maxWidth: 360 }}>
+        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 8, flex: 1, minWidth: 200, flexWrap: 'wrap' }}>
+          <div className="mc-input-wrapper" style={{ flex: 1, minWidth: 180 }}>
             <Search size={16} className="mc-input-icon-left" />
             <input
               type="search"
@@ -252,29 +252,32 @@ export const UsersTab: React.FC = () => {
               setPage(1);
             }}
             style={{
-              height: 34,
-              padding: '0 10px',
-              borderRadius: 6,
+              height: 40,
+              padding: '0 12px',
+              borderRadius: 8,
               border: '1px solid var(--mc-border)',
-              fontSize: 12,
+              fontSize: 13,
+              background: '#FFFFFF',
+              color: 'var(--mc-text-main)',
               outline: 'none',
+              cursor: 'pointer',
             }}
           >
             <option value="">All Roles</option>
-            <option value="superadmin">Superadmin</option>
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
+            <option value="admin">Superadmin</option>
+            <option value="user">Standard User</option>
           </select>
         </div>
       </div>
 
       {/* Users Table */}
       <div className="mc-card-table">
-        <div className="mc-table-wrap">
+        {/* Desktop View */}
+        <div className="mc-table-wrap mc-desktop-only">
           <table className="mc-table">
             <thead>
               <tr>
-                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
+                <th style={{ width: 40, textAlign: 'center' }}>#</th>
                 <th>User</th>
                 <th>Role</th>
                 <th>Phone Number</th>
@@ -359,6 +362,79 @@ export const UsersTab: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Native Card View (< 768px) */}
+        <div className="mc-mobile-only">
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              Loading users...
+            </div>
+          ) : users.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              No system users returned.
+            </div>
+          ) : (
+            <div className="mc-mobile-card-list">
+              {users.map((u, index) => (
+                <div key={u._id} className="mc-mobile-card">
+                  <div className="mc-mobile-card-header">
+                    <div style={{ minWidth: 0 }}>
+                      <div className="mc-mobile-card-title">
+                        #{((page - 1) * limit + index + 1)} {u.name || 'Unnamed'}
+                      </div>
+                      <div className="mc-mobile-card-sub">{u.email}</div>
+                    </div>
+                    <span
+                      className="mc-badge"
+                      style={{
+                        background: u.role?.toLowerCase().includes('admin') ? '#FEF3C7' : '#F1F5F9',
+                        color: u.role?.toLowerCase().includes('admin') ? '#B45309' : '#475569',
+                        border: u.role?.toLowerCase().includes('admin') ? '1px solid #FDE68A' : '1px solid #E2E8F0',
+                        fontSize: 10,
+                      }}
+                    >
+                      {u.role?.toLowerCase().includes('admin') ? <Shield size={11} /> : <User size={11} />}
+                      {u.role || 'user'}
+                    </span>
+                  </div>
+
+                  <div className="mc-mobile-card-body">
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Phone:</span>
+                      <span className="mc-mobile-card-value">{u.phoneNumber || '—'}</span>
+                    </div>
+
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Created:</span>
+                      <span className="mc-mobile-card-value">
+                        {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mc-mobile-card-actions">
+                    <button
+                      className="mc-mobile-card-btn"
+                      onClick={() => handleOpenEdit(u)}
+                      style={{ color: 'var(--mc-brand-purple)' }}
+                    >
+                      <Edit size={13} />
+                      <span>Edit User</span>
+                    </button>
+
+                    <button
+                      className="mc-mobile-card-btn danger"
+                      onClick={() => setUserToDelete(u)}
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="mc-pagination">

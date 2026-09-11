@@ -194,11 +194,12 @@ export const CategoriesTab: React.FC = () => {
 
       {/* Categories Grid */}
       <div className="mc-card-table">
-        <div className="mc-table-wrap">
+        {/* Desktop Table View */}
+        <div className="mc-table-wrap mc-desktop-only">
           <table className="mc-table">
             <thead>
               <tr>
-                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
+                <th style={{ width: 40, textAlign: 'center' }}>#</th>
                 <th>Category Name</th>
                 <th>Bangla Label</th>
                 <th>Description</th>
@@ -301,6 +302,86 @@ export const CategoriesTab: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Native Card View (< 768px) */}
+        <div className="mc-mobile-only">
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              Loading categories...
+            </div>
+          ) : categories.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              No categories configured yet.
+            </div>
+          ) : (
+            <div className="mc-mobile-card-list">
+              {categories.map((c, index) => {
+                const enName = typeof c.name === 'object' ? c.name?.en : c.name;
+                const bnName = typeof c.name === 'object' ? c.name?.bn : '';
+                const desc = typeof c.description === 'object' ? c.description?.en : c.description;
+
+                return (
+                  <div key={c._id} className="mc-mobile-card">
+                    <div className="mc-mobile-card-header">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                        {c.image ? (
+                          <img
+                            src={c.image}
+                            alt=""
+                            style={{ width: 36, height: 36, borderRadius: 8, objectFit: 'contain', background: '#F8FAFC', border: '1px solid var(--mc-border)', padding: 2 }}
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div style={{ width: 36, height: 36, borderRadius: 8, background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--mc-text-subtle)' }}>
+                            <Layers size={18} />
+                          </div>
+                        )}
+                        <div style={{ minWidth: 0 }}>
+                          <div className="mc-mobile-card-title">
+                            #{index + 1} {enName || 'Unnamed'}
+                          </div>
+                          {bnName && <div className="mc-mobile-card-sub">বাংলা: {bnName}</div>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {desc && (
+                      <div className="mc-mobile-card-body">
+                        <p style={{ margin: 0, color: 'var(--mc-text-muted)', fontSize: 12, lineHeight: 1.4 }}>
+                          {desc}
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="mc-mobile-card-actions">
+                      <button
+                        className="mc-mobile-card-btn"
+                        onClick={() => handleOpenEdit(c)}
+                        style={{ color: 'var(--mc-brand-purple)' }}
+                      >
+                        <Edit size={13} />
+                        <span>Edit</span>
+                      </button>
+
+                      <button
+                        className="mc-mobile-card-btn danger"
+                        onClick={() => {
+                          setCategoryToDelete(c);
+                          setDeleteError(null);
+                        }}
+                      >
+                        <Trash2 size={13} />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 

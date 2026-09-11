@@ -18,6 +18,15 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({
   glare = true,
   onClick,
 }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [transform, setTransform] = useState<string>('');
+  const [glarePos, setGlarePos] = useState<{ x: number; y: number; opacity: number }>({
+    x: 50,
+    y: 50,
+    opacity: 0,
+  });
+  const [isHovered, setIsHovered] = useState(false);
+
   const isTouchOrMobile = typeof window !== 'undefined' && (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
 
   if (isTouchOrMobile) {
@@ -27,15 +36,6 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({
       </div>
     );
   }
-
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState<string>('');
-  const [glarePos, setGlarePos] = useState<{ x: number; y: number; opacity: number }>({
-    x: 50,
-    y: 50,
-    opacity: 0,
-  });
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;

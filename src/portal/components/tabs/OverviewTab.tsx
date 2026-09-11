@@ -217,7 +217,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
           </button>
         </div>
 
-        <div className="mc-table-wrap">
+        {/* Desktop Table View */}
+        <div className="mc-table-wrap mc-desktop-only">
           <table className="mc-table">
             <thead>
               <tr>
@@ -278,6 +279,63 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Native Card View (< 768px) */}
+        <div className="mc-mobile-only">
+          {recentBetaUsers.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '24px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              {loading ? 'Fetching records...' : 'No early-bird users recorded yet.'}
+            </div>
+          ) : (
+            <div className="mc-mobile-card-list">
+              {recentBetaUsers.map((item) => (
+                <div key={item._id || item.email} className="mc-mobile-card">
+                  <div className="mc-mobile-card-header">
+                    <div>
+                      <div className="mc-mobile-card-title">{item.name}</div>
+                      <div className="mc-mobile-card-sub">{item.email}</div>
+                    </div>
+                    {item.target_platform === 'ios' && <span className="mc-badge mc-badge-ios">iOS</span>}
+                    {item.target_platform === 'android' && <span className="mc-badge mc-badge-android">Android</span>}
+                    {item.target_platform === 'both' && <span className="mc-badge mc-badge-both">iOS & Android</span>}
+                  </div>
+
+                  <div className="mc-mobile-card-body">
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Referral:</span>
+                      <span className="mc-mobile-card-value">
+                        {item.referral_code ? (
+                          <code style={{ fontSize: 11, background: '#F1F5F9', padding: '1px 5px', borderRadius: 4 }}>
+                            {item.referral_code}
+                          </code>
+                        ) : (
+                          'Direct'
+                        )}
+                      </span>
+                    </div>
+
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Registered:</span>
+                      <span className="mc-mobile-card-value">
+                        {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recent'}
+                      </span>
+                    </div>
+
+                    {(item.like_features || []).length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                        {(item.like_features || []).slice(0, 3).map((feat: string, idx: number) => (
+                          <span key={idx} className="mc-badge mc-badge-tag" style={{ fontSize: 10 }}>
+                            {feat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

@@ -305,8 +305,8 @@ export const BetaUsersTab: React.FC = () => {
           boxShadow: 'var(--mc-shadow-sm)',
         }}
       >
-        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 8, flex: 1, minWidth: 260 }}>
-          <div className="mc-input-wrapper" style={{ maxWidth: 360 }}>
+        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 8, flex: 1, minWidth: 200, flexWrap: 'wrap' }}>
+          <div className="mc-input-wrapper" style={{ flex: 1, minWidth: 180 }}>
             <Search size={16} className="mc-input-icon-left" />
             <input
               type="search"
@@ -334,7 +334,7 @@ export const BetaUsersTab: React.FC = () => {
         </form>
 
         {/* Platform Filter Buttons */}
-        <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: 'var(--mc-text-muted)', marginRight: 4 }}>Platform:</span>
           {(['all', 'ios', 'android', 'both'] as const).map((p) => (
             <button
@@ -362,11 +362,12 @@ export const BetaUsersTab: React.FC = () => {
 
       {/* Main Table */}
       <div className="mc-card-table">
-        <div className="mc-table-wrap">
+        {/* Desktop View */}
+        <div className="mc-table-wrap mc-desktop-only">
           <table className="mc-table">
             <thead>
               <tr>
-                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
+                <th style={{ width: 40, textAlign: 'center' }}>#</th>
                 <th>Customer</th>
                 <th>Target Platform</th>
                 <th>Referral Code</th>
@@ -500,6 +501,107 @@ export const BetaUsersTab: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Native Card View (< 768px) */}
+        <div className="mc-mobile-only">
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              Loading early-bird users...
+            </div>
+          ) : filteredUsers.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
+              {error ? (
+                <span style={{ color: 'var(--mc-danger)' }}>{error}</span>
+              ) : (
+                'No matching early-bird registrations found.'
+              )}
+            </div>
+          ) : (
+            <div className="mc-mobile-card-list">
+              {filteredUsers.map((user, index) => (
+                <div key={user._id} className="mc-mobile-card">
+                  <div className="mc-mobile-card-header">
+                    <div style={{ minWidth: 0 }}>
+                      <div className="mc-mobile-card-title">
+                        #{((page - 1) * limit + index + 1)} {user.name}
+                      </div>
+                      <div className="mc-mobile-card-sub">{user.email}</div>
+                    </div>
+                    {user.target_platform === 'ios' && <span className="mc-badge mc-badge-ios">iOS</span>}
+                    {user.target_platform === 'android' && <span className="mc-badge mc-badge-android">Android</span>}
+                    {user.target_platform === 'both' && <span className="mc-badge mc-badge-both">iOS & Android</span>}
+                  </div>
+
+                  <div className="mc-mobile-card-body">
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Referral Code:</span>
+                      <span className="mc-mobile-card-value">
+                        {user.referral_code ? (
+                          <code style={{ fontSize: 11, background: '#F1F5F9', padding: '2px 6px', borderRadius: 4 }}>
+                            {user.referral_code}
+                          </code>
+                        ) : (
+                          '—'
+                        )}
+                      </span>
+                    </div>
+
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Address:</span>
+                      <span className="mc-mobile-card-value" style={{ maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {user.address || '—'}
+                      </span>
+                    </div>
+
+                    <div className="mc-mobile-card-row">
+                      <span className="mc-mobile-card-label">Registered:</span>
+                      <span className="mc-mobile-card-value">
+                        {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Recent'}
+                      </span>
+                    </div>
+
+                    {(user.like_features || []).length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                        {(user.like_features || []).map((feat, idx) => (
+                          <span key={idx} className="mc-badge mc-badge-tag" style={{ fontSize: 10 }}>
+                            {feat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mc-mobile-card-actions">
+                    <button
+                      className="mc-mobile-card-btn"
+                      onClick={() => setSelectedUser(user)}
+                    >
+                      <Eye size={13} />
+                      <span>View</span>
+                    </button>
+
+                    <button
+                      className="mc-mobile-card-btn"
+                      onClick={() => handleOpenEdit(user)}
+                      style={{ color: 'var(--mc-brand-purple)' }}
+                    >
+                      <Edit size={13} />
+                      <span>Edit</span>
+                    </button>
+
+                    <button
+                      className="mc-mobile-card-btn danger"
+                      onClick={() => setUserToDelete(user)}
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Pagination Footer */}
