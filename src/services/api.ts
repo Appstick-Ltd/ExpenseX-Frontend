@@ -3,8 +3,8 @@
  * Handles all network requests to the ExpenseX backend.
  */
 
-// Dynamically read the base URL from Vite environment or fall back to local dev
-const RAW_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+// Dynamically read the base URL from Vite environment or fall back to production endpoint
+const RAW_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.xpenstick.appstick.com.bd/api/v1';
 export const API_BASE_URL = RAW_BASE_URL.replace(/\/+$/, '');
 
 export interface BetaUserPayload {
@@ -83,7 +83,7 @@ export async function submitBetaUser(payload: BetaUserPayload): Promise<BetaUser
     // If it's a TypeError (e.g. Failed to fetch / CORS / connection refused)
     if (err.name === 'TypeError' && err.message?.includes('fetch')) {
       throw new Error(
-        `Unable to reach server at ${API_BASE_URL}. Please ensure your local backend is running at http://localhost:8080.`
+        `Unable to reach server at ${API_BASE_URL}. Please ensure the backend server is running and accessible.`
       );
     }
     throw err;
