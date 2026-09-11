@@ -23,7 +23,7 @@ const PortalAuthContext = createContext<PortalAuthContextType | undefined>(undef
 export const PortalAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setTokenState] = useState<string | null>(() => getAdminToken());
   const [user, setUserState] = useState<any | null>(() => getStoredAdminUser());
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => !!getAdminToken());
 
   const refreshProfile = useCallback(async () => {
     const currentToken = getAdminToken();
@@ -48,28 +48,27 @@ export const PortalAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, []);
 
   useEffect(() => {
-    refreshProfile();
-  }, [refreshProfile]);
-
-  const login = async (identifier: string, pass: string) => {
-    setIsLoading(true);
-    try {
-      const res = await adminLogin(identifier, pass);
-      const retrievedToken = getAdminToken();
-      setTokenState(retrievedToken);
-
-      const retrievedUser = res?.data?.user || res?.data || getStoredAdminUser();
-      setUserState(retrievedUser);
-    } finally {
+    if (token) {
+      refreshProfile();
+    } else {
       setIsLoading(false);
     }
+  }, [refreshProfile, token]);
+
+  const login = async (identifier: string, pass: string) => {
+    const res = await adminLogin(identifier, pass);
+    const retrievedToken = getAdminToken();
+    setTokenState(retrievedToken);
+
+    const retrievedUser = res?.data?.user || res?.data || getStoredAdminUser();
+    setUserState(retrievedUser);
   };
 
   const logout = async () => {
-    setIsLoading(true);
     try {
       await adminLogout();
     } finally {
+      clearAdminSession();
       setTokenState(null);
       setUserState(null);
       setIsLoading(false);

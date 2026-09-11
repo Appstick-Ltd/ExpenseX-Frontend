@@ -43,10 +43,6 @@ export const PortalLogin: React.FC<PortalLoginProps> = ({ onSuccess }) => {
       await login(identifier.trim(), password);
       if (onSuccess) {
         onSuccess();
-      } else {
-        // Change URL to /mc-portal
-        window.history.pushState(null, '', '/mc-portal');
-        window.dispatchEvent(new PopStateEvent('popstate'));
       }
     } catch (err: any) {
       const msg = err?.message || 'Invalid credentials or unauthorized access.';

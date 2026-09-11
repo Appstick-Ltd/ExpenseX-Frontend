@@ -82,16 +82,25 @@ async function adminFetch<T = any>(
   const baseUrl = getApiBaseUrl();
   const url = `${baseUrl}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
   let response: Response;
   try {
     response = await fetch(url, {
       ...options,
       headers,
+      signal: options.signal || controller.signal,
     });
   } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error(`Connection to ${baseUrl} timed out. Please check your network.`);
+    }
     throw new Error(
       `Cannot reach server at ${baseUrl}. (Server returned 502 Bad Gateway / Connection Refused).`
     );
+  } finally {
+    clearTimeout(timeoutId);
   }
 
   let data: any = null;

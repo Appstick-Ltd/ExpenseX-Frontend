@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PortalAuthProvider, usePortalAuth } from './context/PortalAuthContext';
 import { PortalLogin } from './components/PortalLogin';
 import { PortalLayout } from './components/PortalLayout';
@@ -7,21 +7,17 @@ import './portal.css';
 
 const PortalRouteHandler: React.FC = () => {
   const { isAuthenticated, isLoading } = usePortalAuth();
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
+  // Safely synchronize browser URL with auth state via useEffect
   useEffect(() => {
-    const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  const navigateTo = (path: string) => {
-    window.history.pushState(null, '', path);
-    setCurrentPath(path);
-  };
+    if (!isLoading) {
+      if (isAuthenticated && window.location.pathname.startsWith('/mc-portal/auth')) {
+        window.history.replaceState(null, '', '/mc-portal');
+      } else if (!isAuthenticated && !window.location.pathname.startsWith('/mc-portal/auth')) {
+        window.history.replaceState(null, '', '/mc-portal/auth');
+      }
+    }
+  }, [isAuthenticated, isLoading]);
 
   if (isLoading) {
     return (
@@ -37,29 +33,17 @@ const PortalRouteHandler: React.FC = () => {
         }}
       >
         <Loader2 size={24} className="animate-spin" color="var(--mc-primary)" />
-        <span style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>Verifying superadmin session...</span>
+        <span style={{ fontSize: 13, color: 'var(--mc-text-muted)', fontWeight: 500 }}>
+          Verifying superadmin session...
+        </span>
       </div>
     );
   }
 
-  const isAuthRoute = currentPath.startsWith('/mc-portal/auth');
-
-  // If on /mc-portal/auth and already authenticated -> navigate to /mc-portal
-  if (isAuthRoute) {
-    if (isAuthenticated) {
-      navigateTo('/mc-portal');
-      return <PortalLayout />;
-    }
-    return <PortalLogin onSuccess={() => navigateTo('/mc-portal')} />;
-  }
-
-  // If on /mc-portal (or subpath) and not authenticated -> navigate to /mc-portal/auth
   if (!isAuthenticated) {
-    navigateTo('/mc-portal/auth');
-    return <PortalLogin onSuccess={() => navigateTo('/mc-portal')} />;
+    return <PortalLogin />;
   }
 
-  // Authenticated on /mc-portal
   return <PortalLayout />;
 };
 
