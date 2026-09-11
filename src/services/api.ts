@@ -3,9 +3,27 @@
  * Handles all network requests to the ExpenseX backend.
  */
 
-// Dynamically read the base URL from Vite environment or fall back to production endpoint
-const RAW_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.xpenstick.appstick.com.bd/api/v1';
-export const API_BASE_URL = RAW_BASE_URL.replace(/\/+$/, '');
+// Dynamically read the base URL from local storage, Vite environment, or fall back to local/production endpoint
+export function getApiBaseUrl(): string {
+  try {
+    const saved = localStorage.getItem('expensex_api_base_url');
+    if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
+  } catch {}
+  const raw = import.meta.env.VITE_API_BASE_URL || 'https://api.xpenstick.appstick.com.bd/api/v1';
+  return raw.replace(/\/+$/, '');
+}
+
+export function setApiBaseUrl(url: string): void {
+  try {
+    if (!url) {
+      localStorage.removeItem('expensex_api_base_url');
+    } else {
+      localStorage.setItem('expensex_api_base_url', url.trim().replace(/\/+$/, ''));
+    }
+  } catch {}
+}
+
+export const API_BASE_URL = getApiBaseUrl();
 
 export interface BetaUserPayload {
   name: string;
@@ -29,7 +47,7 @@ export interface BetaUserResponse {
  * POST /users/bata-user
  */
 export async function submitBetaUser(payload: BetaUserPayload): Promise<BetaUserResponse> {
-  const endpoint = `${API_BASE_URL}/users/bata-user`;
+  const endpoint = `${getApiBaseUrl()}/users/bata-user`;
 
   try {
     const bodyData: Record<string, any> = {

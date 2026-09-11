@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { captureReferralCodeFromUrl } from './utils/referral';
+import { PortalRouter } from './portal/PortalRouter';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CursorGlow } from './components/CursorGlow';
@@ -22,20 +23,35 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
-  useEffect(() => {
-    // Automatically capture referral code if present in URL
-    captureReferralCodeFromUrl();
+  const [isPortalRoute, setIsPortalRoute] = useState(() =>
+    window.location.pathname.startsWith('/mc-portal')
+  );
 
-    // Clean any hash from address bar so URL remains pure
-    const cleanHash = () => {
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setIsPortalRoute(window.location.pathname.startsWith('/mc-portal'));
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+
+    // If on consumer landing page
+    if (!window.location.pathname.startsWith('/mc-portal')) {
+      // Automatically capture referral code if present in URL
+      captureReferralCodeFromUrl();
+
+      // Clean any hash from address bar so URL remains pure
       if (window.location.hash) {
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
-    };
-    cleanHash();
-    window.addEventListener('hashchange', cleanHash);
-    return () => window.removeEventListener('hashchange', cleanHash);
+    }
+
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
+
+  // Dedicated Superadmin Management Portal
+  if (isPortalRoute) {
+    return <PortalRouter />;
+  }
 
   return (
     <div className="app-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>

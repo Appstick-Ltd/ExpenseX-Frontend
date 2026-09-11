@@ -6,14 +6,17 @@ interface LogoProps {
   showText?: boolean;
   className?: string;
   onClick?: () => void;
+  variant?: 'dark' | 'light';
 }
 
-export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, className = '', onClick }) => {
+export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, className = '', onClick, variant = 'dark' }) => {
   const iconDimensions = {
     sm: { height: 22, width: 29 },
     md: { height: 30, width: 39 },
     lg: { height: 42, width: 55 },
   }[size];
+
+  const isLight = variant === 'light';
 
   return (
     <div
@@ -34,7 +37,9 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, classN
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          filter: 'drop-shadow(0 0 14px rgba(109, 61, 245, 0.45))',
+          filter: isLight
+            ? 'drop-shadow(0 2px 8px rgba(109, 61, 245, 0.25))'
+            : 'drop-shadow(0 0 14px rgba(109, 61, 245, 0.45))',
           flexShrink: 0,
         }}
       >
@@ -59,7 +64,7 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, classN
             style={{
               fontWeight: 800,
               letterSpacing: '-0.03em',
-              color: '#FFFFFF',
+              color: isLight ? '#0F172A' : '#FFFFFF',
               fontSize: size === 'sm' ? '17px' : size === 'md' ? '21px' : '28px',
               lineHeight: 1,
             }}
@@ -73,10 +78,16 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, classN
               letterSpacing: '0.08em',
               padding: '2px 6px',
               borderRadius: '6px',
-              background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.25), rgba(255, 90, 54, 0.2))',
-              border: '1px solid rgba(139, 92, 246, 0.4)',
-              color: '#FFFFFF',
-              boxShadow: '0 0 10px rgba(109, 61, 245, 0.3)',
+              background: isLight
+                ? 'linear-gradient(135deg, rgba(109, 61, 245, 0.12), rgba(255, 90, 54, 0.12))'
+                : 'linear-gradient(135deg, rgba(109, 61, 245, 0.25), rgba(255, 90, 54, 0.2))',
+              border: isLight
+                ? '1px solid rgba(139, 92, 246, 0.3)'
+                : '1px solid rgba(139, 92, 246, 0.4)',
+              color: isLight ? '#6D3DF5' : '#FFFFFF',
+              boxShadow: isLight
+                ? '0 0 8px rgba(109, 61, 245, 0.15)'
+                : '0 0 10px rgba(109, 61, 245, 0.3)',
               lineHeight: 1.2,
             }}
           >
