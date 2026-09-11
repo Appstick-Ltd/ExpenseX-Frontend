@@ -25,11 +25,12 @@ export const TypewriterText: React.FC = () => {
         .typewriter-hero-block {
           display: flex;
           align-items: baseline;
+          flex-wrap: wrap;
           gap: 8px;
           margin-bottom: 24px;
-          font-size: clamp(16px, 2.2vw, 21px);
+          font-size: clamp(14px, 1.8vw, 18px);
           line-height: 1.4;
-          min-height: 32px;
+          min-height: 28px;
         }
 
         .typewriter-prefix {

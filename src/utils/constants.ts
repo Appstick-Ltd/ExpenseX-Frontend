@@ -15,21 +15,21 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const HERO_DATA = {
-  eyebrow: 'YOUR PERSONAL FINANCE COMPANION',
-  headlinePart1: 'Track less.',
-  headlinePart2: 'Know more.',
-  typewriterPrefix: 'Your money, understood.',
+  eyebrow: 'YOUR AI MONEY ASSISTANT',
+  headlinePart1: 'Your money should',
+  headlinePart2: 'explain itself.',
+  typewriterPrefix: 'No typing needed.',
   typewriterStrings: [
-    'Spend more consciously.',
-    'Capture automatically.',
-    'Understand intelligently.',
-    'Build better habits.',
-    'Voice. Receipts. SMS. Email.',
+    'Speak: "Spent $42 on dinner"',
+    'Snap receipts with instant AI OCR',
+    'Auto-parse bank transaction SMS',
+    'Extract digital purchase emails',
+    'Understand where your money goes',
   ],
-  descriptionPrimary: "You don't have to track every expense. ExpenseX AI does it for you.",
-  descriptionSecondary: 'Capture transactions through voice, receipts, SMS, email or manual entry — then let AI organize and understand your financial life.',
-  ctaPrimary: 'Download ExpenseX AI',
-  ctaSecondary: 'Take a Quick Tour →',
+  descriptionPrimary: 'Track, understand, and control your money with AI.',
+  descriptionSecondary: 'ExpenseX uses AI to automatically turn your voice, receipts, SMS, and emails into structured financial intelligence.',
+  ctaPrimary: 'Take a Tour',
+  ctaSecondary: 'AI Features',
   availability: 'Available on iOS and Android',
 };
 
