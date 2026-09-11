@@ -220,16 +220,18 @@ export const UsersTab: React.FC = () => {
             <Search size={16} className="mc-input-icon-left" />
             <input
               type="search"
-              name="admin_users_search"
-              id="admin_users_search"
+              name="admin_users_query"
+              id="admin_users_query"
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
               data-lpignore="true"
               data-1p-ignore="true"
+              data-protonpass-ignore="true"
+              data-bitwarden-ignore="true"
               data-form-type="other"
-              placeholder="Search user name or email..."
+              placeholder="Search user accounts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="mc-input with-left-icon"
@@ -272,6 +274,7 @@ export const UsersTab: React.FC = () => {
           <table className="mc-table">
             <thead>
               <tr>
+                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
                 <th>User</th>
                 <th>Role</th>
                 <th>Phone Number</th>
@@ -282,19 +285,22 @@ export const UsersTab: React.FC = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
                     Loading users...
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
                     No system users returned.
                   </td>
                 </tr>
               ) : (
-                users.map((u) => (
+                users.map((u, index) => (
                   <tr key={u._id}>
+                    <td style={{ textAlign: 'center', fontWeight: 600, color: 'var(--mc-text-muted)', fontSize: 13 }}>
+                      {(page - 1) * limit + index + 1}
+                    </td>
                     <td>
                       <div style={{ fontWeight: 600 }}>{u.name || 'Unnamed'}</div>
                       <div style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>{u.email}</div>

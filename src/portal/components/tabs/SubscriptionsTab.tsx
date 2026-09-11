@@ -21,6 +21,8 @@ export const SubscriptionsTab: React.FC = () => {
   const [addNameBn, setAddNameBn] = useState('');
   const [addAmount, setAddAmount] = useState<number | string>('19.99');
   const [addDayValue, setAddDayValue] = useState<number | string>('30');
+  const [addIsPopular, setAddIsPopular] = useState(false);
+  const [addStatus, setAddStatus] = useState(true);
   const [addFacilityInput, setAddFacilityInput] = useState('');
   const [addFacilities, setAddFacilities] = useState<string[]>([
     'Unlimited receipt scans',
@@ -36,6 +38,8 @@ export const SubscriptionsTab: React.FC = () => {
   const [editNameBn, setEditNameBn] = useState('');
   const [editAmount, setEditAmount] = useState<number | string>('');
   const [editDayValue, setEditDayValue] = useState<number | string>('');
+  const [editIsPopular, setEditIsPopular] = useState(false);
+  const [editStatus, setEditStatus] = useState(true);
   const [editFacilityInput, setEditFacilityInput] = useState('');
   const [editFacilities, setEditFacilities] = useState<string[]>([]);
   const [editError, setEditError] = useState<string | null>(null);
@@ -43,6 +47,7 @@ export const SubscriptionsTab: React.FC = () => {
 
   // Delete State
   const [planToDelete, setPlanToDelete] = useState<SubscriptionPlanItem | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchPlansAndHistory = async () => {
@@ -113,6 +118,8 @@ export const SubscriptionsTab: React.FC = () => {
         amount: amt,
         dayValue: days,
         facilities: addFacilities,
+        isPopular: addIsPopular,
+        status: addStatus,
       });
 
       setShowAddModal(false);
@@ -120,6 +127,8 @@ export const SubscriptionsTab: React.FC = () => {
       setAddNameBn('');
       setAddAmount('19.99');
       setAddDayValue('30');
+      setAddIsPopular(false);
+      setAddStatus(true);
       fetchPlansAndHistory();
     } catch (err: any) {
       setAddError(err?.message || 'Failed to create subscription plan.');
@@ -137,6 +146,8 @@ export const SubscriptionsTab: React.FC = () => {
     setEditNameBn(bnName);
     setEditAmount(plan.amount ?? plan.price ?? 0);
     setEditDayValue(plan.dayValue ?? 30);
+    setEditIsPopular(!!plan.isPopular);
+    setEditStatus(plan.status !== false);
 
     const facs: string[] = (plan.facilities || []).map((f: any) =>
       typeof f === 'object' ? f.en || f.bn || '' : String(f)
@@ -185,6 +196,8 @@ export const SubscriptionsTab: React.FC = () => {
         amount: amt,
         dayValue: days,
         facilities: editFacilities,
+        isPopular: editIsPopular,
+        status: editStatus,
       });
 
       setEditingPlan(null);
@@ -200,12 +213,13 @@ export const SubscriptionsTab: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (!planToDelete) return;
     setIsDeleting(true);
+    setDeleteError(null);
     try {
       await deleteSubscriptionPlan(planToDelete._id);
       setPlanToDelete(null);
       fetchPlansAndHistory();
     } catch (err: any) {
-      alert(`Delete failed: ${err?.message || 'Error'}`);
+      setDeleteError(err?.message || 'Failed to delete plan.');
     } finally {
       setIsDeleting(false);
     }
@@ -388,6 +402,7 @@ export const SubscriptionsTab: React.FC = () => {
           <table className="mc-table">
             <thead>
               <tr>
+                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
                 <th>Subscription ID</th>
                 <th>Plan Reference</th>
                 <th>Status</th>
@@ -397,19 +412,22 @@ export const SubscriptionsTab: React.FC = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={4} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
                     Loading history...
                   </td>
                 </tr>
               ) : history.length === 0 ? (
                 <tr>
-                  <td colSpan={4} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
                     No recorded transactions yet.
                   </td>
                 </tr>
               ) : (
                 history.map((h, i) => (
                   <tr key={h._id || i}>
+                    <td style={{ textAlign: 'center', fontWeight: 600, color: 'var(--mc-text-muted)', fontSize: 13 }}>
+                      {i + 1}
+                    </td>
                     <td>
                       <code style={{ fontSize: 11, background: '#F1F5F9', padding: '2px 6px', borderRadius: 4 }}>
                         {h._id || '—'}
@@ -567,6 +585,27 @@ export const SubscriptionsTab: React.FC = () => {
                       </span>
                     ))}
                   </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--mc-border)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: 'var(--mc-text-main)' }}>
+                    <input
+                      type="checkbox"
+                      checked={addIsPopular}
+                      onChange={(e) => setAddIsPopular(e.target.checked)}
+                      style={{ width: 16, height: 16, accentColor: 'var(--mc-brand-purple)' }}
+                    />
+                    <span>Highlight as Popular</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: 'var(--mc-text-main)' }}>
+                    <input
+                      type="checkbox"
+                      checked={addStatus}
+                      onChange={(e) => setAddStatus(e.target.checked)}
+                      style={{ width: 16, height: 16, accentColor: 'var(--mc-brand-purple)' }}
+                    />
+                    <span>Active (Visible to users)</span>
+                  </label>
                 </div>
               </div>
 
@@ -728,6 +767,27 @@ export const SubscriptionsTab: React.FC = () => {
                     ))}
                   </div>
                 </div>
+
+                <div style={{ display: 'flex', gap: 20, marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--mc-border)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: 'var(--mc-text-main)' }}>
+                    <input
+                      type="checkbox"
+                      checked={editIsPopular}
+                      onChange={(e) => setEditIsPopular(e.target.checked)}
+                      style={{ width: 16, height: 16, accentColor: 'var(--mc-brand-purple)' }}
+                    />
+                    <span>Highlight as Popular</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: 'var(--mc-text-main)' }}>
+                    <input
+                      type="checkbox"
+                      checked={editStatus}
+                      onChange={(e) => setEditStatus(e.target.checked)}
+                      style={{ width: 16, height: 16, accentColor: 'var(--mc-brand-purple)' }}
+                    />
+                    <span>Active (Visible to users)</span>
+                  </label>
+                </div>
               </div>
 
               <div className="mc-modal-footer">
@@ -772,6 +832,26 @@ export const SubscriptionsTab: React.FC = () => {
             </div>
 
             <div className="mc-modal-body">
+              {deleteError && (
+                <div
+                  style={{
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    background: 'var(--mc-danger-light)',
+                    border: '1px solid var(--mc-danger-border)',
+                    color: 'var(--mc-danger)',
+                    fontSize: 12,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    marginBottom: 12,
+                  }}
+                >
+                  <AlertCircle size={14} />
+                  <span>{deleteError}</span>
+                </div>
+              )}
+
               <p style={{ fontSize: 14, margin: '0 0 12px 0', color: 'var(--mc-text-main)' }}>
                 Are you sure you want to permanently delete plan{' '}
                 <b>

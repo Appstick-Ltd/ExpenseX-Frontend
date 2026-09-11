@@ -198,6 +198,7 @@ export const CategoriesTab: React.FC = () => {
           <table className="mc-table">
             <thead>
               <tr>
+                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
                 <th>Category Name</th>
                 <th>Bangla Label</th>
                 <th>Description</th>
@@ -208,24 +209,27 @@ export const CategoriesTab: React.FC = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
                     Loading categories...
                   </td>
                 </tr>
               ) : categories.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
                     No categories configured yet.
                   </td>
                 </tr>
               ) : (
-                categories.map((c) => {
+                categories.map((c, index) => {
                   const enName = typeof c.name === 'object' ? c.name?.en : c.name;
                   const bnName = typeof c.name === 'object' ? c.name?.bn : '—';
                   const desc = typeof c.description === 'object' ? c.description?.en : c.description;
 
                   return (
                     <tr key={c._id}>
+                      <td style={{ textAlign: 'center', fontWeight: 600, color: 'var(--mc-text-muted)', fontSize: 13 }}>
+                        {index + 1}
+                      </td>
                       <td>
                         <div style={{ fontWeight: 600 }}>{enName || 'Unnamed'}</div>
                         <div style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>ID: {c._id}</div>

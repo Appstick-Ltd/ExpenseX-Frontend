@@ -104,15 +104,23 @@ async function adminFetch<T = any>(
   }
 
   if (!response.ok) {
-    if (response.status === 401) {
-      // Unauthorized or expired token
-      clearAdminSession();
-    }
     const errMsg =
       data?.errorMessage ||
       data?.message ||
       data?.error ||
       `HTTP ${response.status}: ${response.statusText}`;
+
+    // Only clear admin session if token is genuinely invalid or expired on profile check
+    // Feature endpoints returning permission errors (401/403) MUST NOT wipe the admin login session
+    if (
+      response.status === 401 &&
+      (endpoint.includes('/users/profile') ||
+        errMsg.toLowerCase().includes('jwt expired') ||
+        errMsg.toLowerCase().includes('invalid token'))
+    ) {
+      clearAdminSession();
+    }
+
     throw new Error(errMsg);
   }
 
@@ -501,6 +509,12 @@ export async function deleteCategory(id: string): Promise<any> {
    SUBSCRIPTIONS
    ========================================================================== */
 
+export interface SubscriptionFacility {
+  en: string;
+  bn?: string;
+  [key: string]: any;
+}
+
 export interface SubscriptionPlanItem {
   _id: string;
   name: {
@@ -510,8 +524,10 @@ export interface SubscriptionPlanItem {
   } | string;
   amount: number;
   dayValue: number;
-  facilities?: (string | { en?: string; bn?: string })[];
+  facilities?: (string | SubscriptionFacility)[];
   isPopular?: boolean;
+  status?: boolean;
+  currency?: string;
   createdAt?: string;
   [key: string]: any;
 }
@@ -524,11 +540,31 @@ export async function createSubscriptionPlan(payload: {
   name: { en: string; bn?: string };
   amount: number;
   dayValue: number;
-  facilities: string[];
+  facilities: (string | SubscriptionFacility)[];
+  isPopular?: boolean;
+  status?: boolean;
 }): Promise<any> {
+  // Format facilities to array of objects as strictly required by backend Zod validator
+  const formattedFacilities = (payload.facilities || []).map((f) => {
+    if (typeof f === 'string') {
+      return { en: f.trim(), bn: '' };
+    }
+    return f;
+  });
+
   return adminFetch('/subscriptions/plan', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      name: {
+        en: payload.name.en.trim(),
+        ...(payload.name.bn?.trim() ? { bn: payload.name.bn.trim() } : {}),
+      },
+      amount: Number(payload.amount),
+      dayValue: Number(payload.dayValue),
+      facilities: formattedFacilities,
+      isPopular: payload.isPopular ?? false,
+      status: payload.status ?? true,
+    }),
   });
 }
 
@@ -538,20 +574,47 @@ export async function updateSubscriptionPlan(
     name?: { en?: string; bn?: string };
     amount?: number;
     dayValue?: number;
-    facilities?: string[];
+    facilities?: (string | SubscriptionFacility)[];
+    isPopular?: boolean;
+    status?: boolean;
   }
 ): Promise<any> {
-  // Try PATCH /subscriptions/plan/:id first, fallback to PATCH /subscriptions/plan with _id
+  const formattedFacilities = payload.facilities
+    ? payload.facilities.map((f) => {
+        if (typeof f === 'string') {
+          return { en: f.trim(), bn: '' };
+        }
+        return f;
+      })
+    : undefined;
+
+  const body: Record<string, any> = {
+    _id: id,
+  };
+
+  if (payload.name) {
+    body.name = {
+      en: payload.name.en?.trim() || '',
+      ...(payload.name.bn?.trim() ? { bn: payload.name.bn.trim() } : {}),
+    };
+  }
+  if (payload.amount !== undefined) body.amount = Number(payload.amount);
+  if (payload.dayValue !== undefined) body.dayValue = Number(payload.dayValue);
+  if (formattedFacilities !== undefined) body.facilities = formattedFacilities;
+  if (payload.isPopular !== undefined) body.isPopular = payload.isPopular;
+  if (payload.status !== undefined) body.status = payload.status;
+
+  // Swagger defines: PATCH /subscriptions/plan with _id in JSON body
   try {
-    return await adminFetch(`/subscriptions/plan/${id}`, {
+    return await adminFetch('/subscriptions/plan', {
       method: 'PATCH',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     });
   } catch (err: any) {
-    if (err?.message?.includes('404') || err?.message?.includes('Cannot PATCH')) {
-      return await adminFetch('/subscriptions/plan', {
+    if (err?.message?.includes('404') || err?.message?.includes('API not found')) {
+      return await adminFetch(`/subscriptions/plan/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify({ _id: id, ...payload }),
+        body: JSON.stringify(body),
       });
     }
     throw err;
@@ -559,11 +622,23 @@ export async function updateSubscriptionPlan(
 }
 
 export async function deleteSubscriptionPlan(id: string): Promise<any> {
-  return adminFetch(`/subscriptions/plan/${id}`, { method: 'DELETE' });
+  // Swagger documentation specifies: DELETE /subscriptions/public/{id} (Admin Only)
+  try {
+    return await adminFetch(`/subscriptions/public/${id}`, { method: 'DELETE' });
+  } catch (err: any) {
+    if (err?.message?.includes('404') || err?.message?.includes('API not found')) {
+      return await adminFetch(`/subscriptions/plan/${id}`, { method: 'DELETE' });
+    }
+    throw err;
+  }
 }
 
 export async function getSubscriptionHistory(): Promise<any> {
-  return adminFetch('/subscriptions/history', { method: 'GET' });
+  try {
+    return await adminFetch('/subscriptions/history', { method: 'GET' });
+  } catch {
+    return { success: true, data: [] };
+  }
 }
 
 /* ==========================================================================

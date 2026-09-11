@@ -310,16 +310,18 @@ export const BetaUsersTab: React.FC = () => {
             <Search size={16} className="mc-input-icon-left" />
             <input
               type="search"
-              name="admin_beta_search"
-              id="admin_beta_search"
+              name="admin_beta_search_query"
+              id="admin_beta_search_query"
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
               data-lpignore="true"
               data-1p-ignore="true"
+              data-protonpass-ignore="true"
+              data-bitwarden-ignore="true"
               data-form-type="other"
-              placeholder="Search by name, email, or referral..."
+              placeholder="Search name, code, or keyword..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="mc-input with-left-icon"
@@ -364,6 +366,7 @@ export const BetaUsersTab: React.FC = () => {
           <table className="mc-table">
             <thead>
               <tr>
+                <th style={{ width: 60, textAlign: 'center' }}>Sl No</th>
                 <th>Customer</th>
                 <th>Target Platform</th>
                 <th>Referral Code</th>
@@ -376,13 +379,13 @@ export const BetaUsersTab: React.FC = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '40px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '40px 0', color: 'var(--mc-text-muted)' }}>
                     Loading early-bird users...
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '40px 0', color: 'var(--mc-text-muted)' }}>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '40px 0', color: 'var(--mc-text-muted)' }}>
                     {error ? (
                       <span style={{ color: 'var(--mc-danger)' }}>{error}</span>
                     ) : (
@@ -391,8 +394,11 @@ export const BetaUsersTab: React.FC = () => {
                   </td>
                 </tr>
               ) : (
-                filteredUsers.map((user) => (
+                filteredUsers.map((user, index) => (
                   <tr key={user._id}>
+                    <td style={{ textAlign: 'center', fontWeight: 600, color: 'var(--mc-text-muted)', fontSize: 13 }}>
+                      {(page - 1) * limit + index + 1}
+                    </td>
                     <td>
                       <div style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>{user.name}</div>
                       <div style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>{user.email}</div>
