@@ -658,10 +658,55 @@ export async function getSettings(): Promise<any> {
   return adminFetch('/settings', { method: 'GET' });
 }
 
-export async function getCurrencyRates(): Promise<any> {
-  return adminFetch('/settings/currency-rate', { method: 'GET' });
+export async function updateSystemSettings(payload: any): Promise<any> {
+  return adminFetch('/settings', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
 }
 
-export async function getLanguages(): Promise<any> {
-  return adminFetch('/settings/languages', { method: 'GET' });
+export async function getCurrencyRates(page = 1, limit = 50): Promise<any> {
+  return adminFetch(`/settings/currency-rate?page=${page}&limit=${limit}`, { method: 'GET' });
 }
+
+export async function createCurrencyRate(payload: { toCurrency: string; rate: number }): Promise<any> {
+  return adminFetch('/settings/currency-rate', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateCurrencyRate(payload: { _id: string; fromCurrency?: string; toCurrency?: string; rate: number }): Promise<any> {
+  return adminFetch('/settings/currency-rate', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getLanguages(params?: { search?: string; page?: number; limit?: number }): Promise<any> {
+  const query = new URLSearchParams();
+  if (params?.search) query.append('search', params.search);
+  if (params?.page) query.append('page', String(params.page));
+  if (params?.limit) query.append('limit', String(params.limit));
+  const qs = query.toString() ? `?${query.toString()}` : '';
+  return adminFetch(`/settings/languages${qs}`, { method: 'GET' });
+}
+
+export async function createLanguage(payload: { name: string; code: string; rtl?: boolean; flag?: string }): Promise<any> {
+  return adminFetch('/settings/languages', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateLanguage(payload: { _id: string; [key: string]: any }): Promise<any> {
+  return adminFetch('/settings/languages', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteLanguage(id: string): Promise<any> {
+  return adminFetch(`/settings/languages/${id}`, { method: 'DELETE' });
+}
+
