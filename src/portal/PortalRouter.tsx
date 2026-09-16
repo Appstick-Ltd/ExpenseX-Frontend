@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { PortalAuthProvider, usePortalAuth } from './context/PortalAuthContext';
 import { PortalLogin } from './components/PortalLogin';
 import { PortalLayout } from './components/PortalLayout';
-import { Loader2 } from 'lucide-react';
+import { ShimmerDashboardScreen } from './components/common/Shimmer';
 import './portal.css';
 
 const PortalRouteHandler: React.FC = () => {
@@ -20,24 +20,7 @@ const PortalRouteHandler: React.FC = () => {
   }, [isAuthenticated, isLoading]);
 
   if (isLoading) {
-    return (
-      <div
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'var(--mc-bg)',
-          gap: 12,
-        }}
-      >
-        <Loader2 size={24} className="animate-spin" color="var(--mc-primary)" />
-        <span style={{ fontSize: 13, color: 'var(--mc-text-muted)', fontWeight: 500 }}>
-          Verifying superadmin session...
-        </span>
-      </div>
-    );
+    return <ShimmerDashboardScreen />;
   }
 
   if (!isAuthenticated) {

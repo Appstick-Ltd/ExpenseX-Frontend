@@ -24,6 +24,7 @@ import {
   Trash2,
   Sliders,
 } from 'lucide-react';
+import { Shimmer } from '../common/Shimmer';
 
 type SettingsSubTab = 'general' | 'stripe' | 'twilio' | 'email' | 'social'; // | 'json';
 
@@ -408,9 +409,22 @@ export const SettingsTab: React.FC = () => {
             </h3>
           </div>
           {currencyRates.length === 0 ? (
-            <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
-              {loading ? 'Fetching rates...' : `Base: ${currencyCode || 'USD'} (${currencySymbol || '$'})`}
-            </div>
+            loading ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#F8FAFC', borderRadius: 6 }}>
+                  <Shimmer width={70} height={14} />
+                  <Shimmer width={50} height={14} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#F8FAFC', borderRadius: 6 }}>
+                  <Shimmer width={80} height={14} />
+                  <Shimmer width={50} height={14} />
+                </div>
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
+                Base: {currencyCode || 'USD'} ({currencySymbol || '$'})
+              </div>
+            )
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 110, overflowY: 'auto' }}>
               {currencyRates.map((cr, idx) => (
@@ -450,9 +464,22 @@ export const SettingsTab: React.FC = () => {
             </h3>
           </div>
           {languages.length === 0 ? (
-            <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
-              {loading ? 'Fetching languages...' : 'English (en) • বাংলা (bn)'}
-            </div>
+            loading ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', background: '#F8FAFC', borderRadius: 6 }}>
+                  <Shimmer width={85} height={14} />
+                  <Shimmer width={40} height={16} className="mc-shimmer-pill" />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', background: '#F8FAFC', borderRadius: 6 }}>
+                  <Shimmer width={75} height={14} />
+                  <Shimmer width={40} height={16} className="mc-shimmer-pill" />
+                </div>
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
+                English (en) • বাংলা (bn)
+              </div>
+            )
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 110, overflowY: 'auto' }}>
               {languages.map((l, idx) => (
@@ -682,7 +709,28 @@ export const SettingsTab: React.FC = () => {
 
         {/* ===================== SUB-TAB CONTENT ===================== */}
         <div style={{ padding: 24 }}>
-          {/* TAB 1: GENERAL & SITE */}
+          {loading ? (
+            <div>
+              <div style={{ marginBottom: 24 }}>
+                <Shimmer width={240} height={18} style={{ marginBottom: 8 }} />
+                <Shimmer width={380} height={13} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 20 }}>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i}>
+                    <Shimmer width={100} height={12} style={{ marginBottom: 8 }} />
+                    <Shimmer width="100%" height={40} borderRadius={8} />
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 24 }}>
+                <Shimmer width={180} height={16} style={{ marginBottom: 10 }} />
+                <Shimmer width="100%" height={80} borderRadius={8} />
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* TAB 1: GENERAL & SITE */}
           {activeSubTab === 'general' && (
             <div>
               <div style={{ marginBottom: 20 }}>
@@ -1560,6 +1608,8 @@ export const SettingsTab: React.FC = () => {
             </div>
           )}
           */}
+            </>
+          )}
         </div>
 
         {/* Bottom Save Bar */}

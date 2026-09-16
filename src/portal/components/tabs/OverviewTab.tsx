@@ -17,6 +17,11 @@ import {
   CheckCircle2,
   ExternalLink,
 } from 'lucide-react';
+import {
+  ShimmerMetricGrid,
+  ShimmerTableRows,
+  ShimmerMobileCardList,
+} from '../common/Shimmer';
 
 interface OverviewTabProps {
   onNavigateTab: (tabId: string) => void;
@@ -140,60 +145,64 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
       </div>
 
       {/* Grid of Dense KPI Metric Cards */}
-      <div className="mc-grid-metrics">
-        {/* Beta Signups */}
-        <div className="mc-stat-card">
-          <div>
-            <div className="mc-stat-label">Total Beta Signups</div>
-            <div className="mc-stat-value">{stats.totalBetaUsers}</div>
-            <div className="mc-stat-sub" style={{ color: 'var(--mc-brand-purple)', fontWeight: 600 }}>
-              Early-bird customer demand
+      {loading ? (
+        <ShimmerMetricGrid count={4} />
+      ) : (
+        <div className="mc-grid-metrics">
+          {/* Beta Signups */}
+          <div className="mc-stat-card">
+            <div>
+              <div className="mc-stat-label">Total Beta Signups</div>
+              <div className="mc-stat-value">{stats.totalBetaUsers}</div>
+              <div className="mc-stat-sub" style={{ color: 'var(--mc-brand-purple)', fontWeight: 600 }}>
+                Early-bird customer demand
+              </div>
+            </div>
+            <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.12), rgba(139, 92, 246, 0.06))', color: 'var(--mc-brand-purple)' }}>
+              <Sparkles size={20} />
             </div>
           </div>
-          <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.12), rgba(139, 92, 246, 0.06))', color: 'var(--mc-brand-purple)' }}>
-            <Sparkles size={20} />
-          </div>
-        </div>
 
-        {/* Platform Distribution */}
-        <div className="mc-stat-card">
-          <div>
-            <div className="mc-stat-label">Platform Breakdown</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-              <span className="mc-badge mc-badge-ios">iOS: {stats.iosCount}</span>
-              <span className="mc-badge mc-badge-android">Android: {stats.androidCount}</span>
+          {/* Platform Distribution */}
+          <div className="mc-stat-card">
+            <div>
+              <div className="mc-stat-label">Platform Breakdown</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                <span className="mc-badge mc-badge-ios">iOS: {stats.iosCount}</span>
+                <span className="mc-badge mc-badge-android">Android: {stats.androidCount}</span>
+              </div>
+              <div className="mc-stat-sub">Cross-platform: {stats.bothCount}</div>
             </div>
-            <div className="mc-stat-sub">Cross-platform: {stats.bothCount}</div>
+            <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.06))', color: '#2563EB' }}>
+              <Smartphone size={20} />
+            </div>
           </div>
-          <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.06))', color: '#2563EB' }}>
-            <Smartphone size={20} />
-          </div>
-        </div>
 
-        {/* Categories */}
-        <div className="mc-stat-card">
-          <div>
-            <div className="mc-stat-label">Expense Categories</div>
-            <div className="mc-stat-value">{stats.totalCategories}</div>
-            <div className="mc-stat-sub">Multilingual definitions</div>
+          {/* Categories */}
+          <div className="mc-stat-card">
+            <div>
+              <div className="mc-stat-label">Expense Categories</div>
+              <div className="mc-stat-value">{stats.totalCategories}</div>
+              <div className="mc-stat-sub">Multilingual definitions</div>
+            </div>
+            <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(255, 90, 54, 0.12), rgba(249, 115, 22, 0.06))', color: 'var(--mc-brand-coral)' }}>
+              <Layers size={20} />
+            </div>
           </div>
-          <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(255, 90, 54, 0.12), rgba(249, 115, 22, 0.06))', color: 'var(--mc-brand-coral)' }}>
-            <Layers size={20} />
-          </div>
-        </div>
 
-        {/* Subscription Plans */}
-        <div className="mc-stat-card">
-          <div>
-            <div className="mc-stat-label">Subscription Plans</div>
-            <div className="mc-stat-value">{stats.totalPlans}</div>
-            <div className="mc-stat-sub">Active monetization tiers</div>
-          </div>
-          <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.12), rgba(139, 92, 246, 0.06))', color: 'var(--mc-brand-purple)' }}>
-            <CreditCard size={20} />
+          {/* Subscription Plans */}
+          <div className="mc-stat-card">
+            <div>
+              <div className="mc-stat-label">Subscription Plans</div>
+              <div className="mc-stat-value">{stats.totalPlans}</div>
+              <div className="mc-stat-sub">Active monetization tiers</div>
+            </div>
+            <div className="mc-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(109, 61, 245, 0.12), rgba(139, 92, 246, 0.06))', color: 'var(--mc-brand-purple)' }}>
+              <CreditCard size={20} />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Recent Beta Registrations Showcase */}
       <div className="mc-card-table" style={{ marginBottom: 24 }}>
@@ -230,10 +239,21 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
               </tr>
             </thead>
             <tbody>
-              {recentBetaUsers.length === 0 ? (
+              {loading ? (
+                <ShimmerTableRows
+                  rows={5}
+                  columns={[
+                    { width: '220px', hasSubtitle: true },
+                    { width: '80px', isBadge: true },
+                    { width: '100px' },
+                    { width: '140px' },
+                    { width: '90px' },
+                  ]}
+                />
+              ) : recentBetaUsers.length === 0 ? (
                 <tr>
                   <td colSpan={5} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
-                    {loading ? 'Fetching records...' : 'No early-bird users recorded yet.'}
+                    No early-bird users recorded yet.
                   </td>
                 </tr>
               ) : (
@@ -283,9 +303,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
 
         {/* Mobile Native Card View (< 768px) */}
         <div className="mc-mobile-only">
-          {recentBetaUsers.length === 0 ? (
+          {loading ? (
+            <ShimmerMobileCardList count={3} rowsCount={2} hasTags={true} />
+          ) : recentBetaUsers.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '24px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
-              {loading ? 'Fetching records...' : 'No early-bird users recorded yet.'}
+              No early-bird users recorded yet.
             </div>
           ) : (
             <div className="mc-mobile-card-list">

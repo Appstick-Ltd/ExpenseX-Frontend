@@ -9,6 +9,7 @@ import {
   type SubscriptionPlanItem,
 } from '../../services/portalApi';
 import { Check, RefreshCw, Plus, Edit, Trash2, X, AlertCircle, Sparkles, Clock } from 'lucide-react';
+import { ShimmerPlanCards, ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
 
 export const SubscriptionsTab: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlanItem[]>([]);
@@ -267,14 +268,15 @@ export const SubscriptionsTab: React.FC = () => {
       </div>
 
       {/* Subscription Plans Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 16, marginBottom: 24 }}>
-        {loading ? (
-          <div style={{ padding: 24, color: 'var(--mc-text-muted)' }}>Loading plans...</div>
-        ) : plans.length === 0 ? (
-          <div style={{ padding: 32, background: '#FFFFFF', borderRadius: 12, border: '1px solid var(--mc-border)', textAlign: 'center', color: 'var(--mc-text-muted)', gridColumn: '1 / -1' }}>
-            No subscription plans found. Click <b>"Add Subscription Tier"</b> above to create your first monetization tier.
-          </div>
-        ) : (
+      {loading ? (
+        <ShimmerPlanCards count={3} />
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 16, marginBottom: 24 }}>
+          {plans.length === 0 ? (
+            <div style={{ padding: 32, background: '#FFFFFF', borderRadius: 12, border: '1px solid var(--mc-border)', textAlign: 'center', color: 'var(--mc-text-muted)', gridColumn: '1 / -1' }}>
+              No subscription plans found. Click <b>"Add Subscription Tier"</b> above to create your first monetization tier.
+            </div>
+          ) : (
           plans.map((p) => {
             const nameEn = typeof p.name === 'object' ? p.name?.en : p.name;
             const nameBn = typeof p.name === 'object' ? p.name?.bn : '';
@@ -389,7 +391,8 @@ export const SubscriptionsTab: React.FC = () => {
             );
           })
         )}
-      </div>
+        </div>
+      )}
 
       {/* Subscription History Table */}
       <div className="mc-card-table">
@@ -412,11 +415,16 @@ export const SubscriptionsTab: React.FC = () => {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
-                    Loading history...
-                  </td>
-                </tr>
+                <ShimmerTableRows
+                  rows={5}
+                  columns={[
+                    { width: 36, align: 'center' },
+                    { width: '130px' },
+                    { width: '170px' },
+                    { width: '70px', isBadge: true },
+                    { width: '100px' },
+                  ]}
+                />
               ) : history.length === 0 ? (
                 <tr>
                   <td colSpan={5} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--mc-text-muted)' }}>
@@ -453,9 +461,7 @@ export const SubscriptionsTab: React.FC = () => {
         {/* Mobile Native Card View (< 768px) */}
         <div className="mc-mobile-only">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
-              Loading history...
-            </div>
+            <ShimmerMobileCardList count={3} rowsCount={2} hasTags={false} />
           ) : history.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
               No recorded transactions yet.

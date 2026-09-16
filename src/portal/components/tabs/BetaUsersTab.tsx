@@ -21,6 +21,7 @@ import {
   FileSpreadsheet,
   Check,
 } from 'lucide-react';
+import { ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
 
 export const BetaUsersTab: React.FC = () => {
   const [users, setUsers] = useState<BetaUser[]>([]);
@@ -379,11 +380,19 @@ export const BetaUsersTab: React.FC = () => {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={8} style={{ textAlign: 'center', padding: '40px 0', color: 'var(--mc-text-muted)' }}>
-                    Loading early-bird users...
-                  </td>
-                </tr>
+                <ShimmerTableRows
+                  rows={6}
+                  columns={[
+                    { width: 36, align: 'center' },
+                    { width: '180px', hasSubtitle: true },
+                    { width: '80px', isBadge: true },
+                    { width: '85px' },
+                    { width: '130px' },
+                    { width: '110px' },
+                    { width: '90px' },
+                    { width: '70px', align: 'right' },
+                  ]}
+                />
               ) : filteredUsers.length === 0 ? (
                 <tr>
                   <td colSpan={8} style={{ textAlign: 'center', padding: '40px 0', color: 'var(--mc-text-muted)' }}>
@@ -506,9 +515,7 @@ export const BetaUsersTab: React.FC = () => {
         {/* Mobile Native Card View (< 768px) */}
         <div className="mc-mobile-only">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
-              Loading early-bird users...
-            </div>
+            <ShimmerMobileCardList count={4} rowsCount={3} hasTags={true} />
           ) : filteredUsers.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
               {error ? (

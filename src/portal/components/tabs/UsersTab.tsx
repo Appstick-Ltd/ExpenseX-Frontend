@@ -20,6 +20,7 @@ import {
   Shield,
   User,
 } from 'lucide-react';
+import { ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
 
 export const UsersTab: React.FC = () => {
   const [users, setUsers] = useState<UserItem[]>([]);
@@ -287,11 +288,17 @@ export const UsersTab: React.FC = () => {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
-                    Loading users...
-                  </td>
-                </tr>
+                <ShimmerTableRows
+                  rows={6}
+                  columns={[
+                    { width: 36, align: 'center' },
+                    { width: '200px', hasSubtitle: true },
+                    { width: '80px', isBadge: true },
+                    { width: '110px' },
+                    { width: '90px' },
+                    { width: '70px', align: 'right' },
+                  ]}
+                />
               ) : users.length === 0 ? (
                 <tr>
                   <td colSpan={6} style={{ textAlign: 'center', padding: '36px 0', color: 'var(--mc-text-muted)' }}>
@@ -367,9 +374,7 @@ export const UsersTab: React.FC = () => {
         {/* Mobile Native Card View (< 768px) */}
         <div className="mc-mobile-only">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
-              Loading users...
-            </div>
+            <ShimmerMobileCardList count={4} rowsCount={2} hasTags={false} />
           ) : users.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--mc-text-muted)', fontSize: 13 }}>
               No system users returned.

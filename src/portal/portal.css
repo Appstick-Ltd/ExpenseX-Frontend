@@ -1404,3 +1404,76 @@ img[src*="tempmail" i] {
   border-color: #FECACA;
   color: var(--mc-danger);
 }
+
+/* ==========================================================================
+   SHIMMER & SKELETON LOADING EFFECTS
+   High-performance GPU-accelerated wave shimmer
+   ========================================================================== */
+@keyframes mc-shimmer-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.mc-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #E2E8F0;
+  border-radius: 6px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.mc-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: mc-shimmer-wave 1.6s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.mc-shimmer-circle {
+  border-radius: 50% !important;
+}
+
+.mc-shimmer-pill {
+  border-radius: 9999px !important;
+}
+
+/* Shimmer card container matching portal card style */
+.mc-shimmer-card {
+  background: #FFFFFF;
+  border: 1px solid var(--mc-border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--mc-shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Skeleton table row styling */
+.mc-table tbody tr.mc-skeleton-tr {
+  background: #FFFFFF;
+}
+
+.mc-table tbody tr.mc-skeleton-tr:hover {
+  background: #FFFFFF;
+}
+
+.mc-table tbody tr.mc-skeleton-tr td {
+  padding: 16px 14px;
+  vertical-align: middle;
+}
