@@ -1,0 +1,134 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/admin/setting/[subtab]",
+      "regex": "^/admin/setting/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPsubtab": "nxtPsubtab"
+      },
+      "namedRegex": "^/admin/setting/(?<nxtPsubtab>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/admin/settings/[subtab]",
+      "regex": "^/admin/settings/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPsubtab": "nxtPsubtab"
+      },
+      "namedRegex": "^/admin/settings/(?<nxtPsubtab>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/auth",
+      "regex": "^/admin/auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/auth(?:/)?$"
+    },
+    {
+      "page": "/admin/setting",
+      "regex": "^/admin/setting(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/setting(?:/)?$"
+    },
+    {
+      "page": "/admin/settings",
+      "regex": "^/admin/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings(?:/)?$"
+    },
+    {
+      "page": "/admin/settings/email-settings",
+      "regex": "^/admin/settings/email\\-settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings/email\\-settings(?:/)?$"
+    },
+    {
+      "page": "/admin/settings/general-settings",
+      "regex": "^/admin/settings/general\\-settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings/general\\-settings(?:/)?$"
+    },
+    {
+      "page": "/admin/settings/page-settings",
+      "regex": "^/admin/settings/page\\-settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings/page\\-settings(?:/)?$"
+    },
+    {
+      "page": "/admin/settings/payment-settings",
+      "regex": "^/admin/settings/payment\\-settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings/payment\\-settings(?:/)?$"
+    },
+    {
+      "page": "/admin/users",
+      "regex": "^/admin/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/users(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

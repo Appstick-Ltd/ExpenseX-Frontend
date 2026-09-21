@@ -1,0 +1,16 @@
+{
+  "/(dashboard)/admin/auth/page": "/admin/auth",
+  "/(dashboard)/admin/page": "/admin",
+  "/(dashboard)/admin/setting/[subtab]/page": "/admin/setting/[subtab]",
+  "/(dashboard)/admin/setting/page": "/admin/setting",
+  "/(dashboard)/admin/settings/[subtab]/page": "/admin/settings/[subtab]",
+  "/(dashboard)/admin/settings/email-settings/page": "/admin/settings/email-settings",
+  "/(dashboard)/admin/settings/general-settings/page": "/admin/settings/general-settings",
+  "/(dashboard)/admin/settings/page": "/admin/settings",
+  "/(dashboard)/admin/settings/page-settings/page": "/admin/settings/page-settings",
+  "/(dashboard)/admin/settings/payment-settings/page": "/admin/settings/payment-settings",
+  "/(dashboard)/admin/users/page": "/admin/users",
+  "/(site)/page": "/",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found"
+}

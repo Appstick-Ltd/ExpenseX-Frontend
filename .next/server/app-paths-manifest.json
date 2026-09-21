@@ -1,0 +1,16 @@
+{
+  "/(dashboard)/admin/auth/page": "app/(dashboard)/admin/auth/page.js",
+  "/(dashboard)/admin/page": "app/(dashboard)/admin/page.js",
+  "/(dashboard)/admin/setting/[subtab]/page": "app/(dashboard)/admin/setting/[subtab]/page.js",
+  "/(dashboard)/admin/setting/page": "app/(dashboard)/admin/setting/page.js",
+  "/(dashboard)/admin/settings/[subtab]/page": "app/(dashboard)/admin/settings/[subtab]/page.js",
+  "/(dashboard)/admin/settings/email-settings/page": "app/(dashboard)/admin/settings/email-settings/page.js",
+  "/(dashboard)/admin/settings/general-settings/page": "app/(dashboard)/admin/settings/general-settings/page.js",
+  "/(dashboard)/admin/settings/page": "app/(dashboard)/admin/settings/page.js",
+  "/(dashboard)/admin/settings/page-settings/page": "app/(dashboard)/admin/settings/page-settings/page.js",
+  "/(dashboard)/admin/settings/payment-settings/page": "app/(dashboard)/admin/settings/payment-settings/page.js",
+  "/(dashboard)/admin/users/page": "app/(dashboard)/admin/users/page.js",
+  "/(site)/page": "app/(site)/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
+}
