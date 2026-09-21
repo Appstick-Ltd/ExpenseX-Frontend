@@ -7,7 +7,7 @@ import {
   deleteBetaUser,
   extractListFromResponse,
   type BetaUser,
-} from '../../helpers/portalApi';
+} from '../../helpers/backend';
 import {
   Search,
   Trash2,

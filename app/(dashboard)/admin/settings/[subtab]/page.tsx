@@ -1,9 +1,9 @@
 'use client';
 import { useParams } from 'next/navigation';
-import { PortalRouter } from '../../../../components/dashboard/PortalRouter';
+import { SettingsTab } from '../../../../components/dashboard/SettingsTab';
 
-export default function DashboardSettingsSubtab() {
+export default function AdminSettingsSubtab() {
   const params = useParams();
-  const subtab = (params?.subtab as string) || 'general';
-  return <PortalRouter initialTab="settings" initialSubTab={subtab} />;
+  const subtab = (params?.subtab as string) || 'general-settings';
+  return <SettingsTab subTab={subtab} />;
 }

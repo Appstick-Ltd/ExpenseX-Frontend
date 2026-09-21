@@ -1,6 +1,6 @@
 'use client';
-import { PortalRouter } from '../../components/dashboard/PortalRouter';
+import { OverviewTab } from '../../components/dashboard/OverviewTab';
 
-export default function DashboardPage() {
-  return <PortalRouter initialTab="overview" />;
+export default function AdminOverviewPage() {
+  return <OverviewTab />;
 }

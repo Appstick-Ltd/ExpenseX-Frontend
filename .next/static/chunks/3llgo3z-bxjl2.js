@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,64188,t=>{"use strict";var e=t.i(43476),s=t.i(18566),i=t.i(9708);t.s(["default",0,function(){let t=(0,s.useParams)(),u=t?.subtab||"general-settings";return(0,e.jsx)(i.SettingsTab,{subTab:u})}])}]);

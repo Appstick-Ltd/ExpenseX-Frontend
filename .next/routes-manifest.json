@@ -23,14 +23,6 @@
   },
   "dynamicRoutes": [
     {
-      "page": "/admin/setting/[subtab]",
-      "regex": "^/admin/setting/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPsubtab": "nxtPsubtab"
-      },
-      "namedRegex": "^/admin/setting/(?<nxtPsubtab>[^/]+?)(?:/)?$"
-    },
-    {
       "page": "/admin/settings/[subtab]",
       "regex": "^/admin/settings/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -71,12 +63,6 @@
       "namedRegex": "^/admin/auth(?:/)?$"
     },
     {
-      "page": "/admin/setting",
-      "regex": "^/admin/setting(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/admin/setting(?:/)?$"
-    },
-    {
       "page": "/admin/settings",
       "regex": "^/admin/settings(?:/)?$",
       "routeKeys": {},
@@ -87,6 +73,12 @@
       "regex": "^/admin/settings/email\\-settings(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/settings/email\\-settings(?:/)?$"
+    },
+    {
+      "page": "/admin/settings/faq",
+      "regex": "^/admin/settings/faq(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings/faq(?:/)?$"
     },
     {
       "page": "/admin/settings/general-settings",

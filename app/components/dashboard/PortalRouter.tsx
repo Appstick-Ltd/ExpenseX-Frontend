@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import { PortalAuthProvider, usePortalAuth } from '../../context/PortalAuthContext';
-import { PortalLogin } from '../auth/PortalLogin';
+import { Login } from '../auth/Login';
 import { PortalLayout } from './PortalLayout';
 import { ShimmerDashboardScreen } from '../common/Shimmer';
 import '../../../styles/portal.css';
@@ -30,7 +30,7 @@ const PortalRouteHandler: React.FC<PortalRouterProps> = ({ initialTab, initialSu
   }
 
   if (!isAuthenticated) {
-    return <PortalLogin />;
+    return <Login />;
   }
 
   return <PortalLayout initialTab={initialTab} initialSubTab={initialSubTab} />;

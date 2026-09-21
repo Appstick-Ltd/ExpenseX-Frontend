@@ -7,7 +7,7 @@ import {
   getAdminToken,
   getStoredAdminUser,
   clearAdminSession,
-} from '../helpers/portalApi';
+} from '../helpers/backend';
 
 interface PortalAuthContextType {
   token: string | null;
@@ -36,13 +36,30 @@ export const PortalAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     try {
       const res = await getAdminProfile();
-      const profile = res?.data || res?.user || res;
-      setUserState(profile);
-    } catch (err) {
-      console.warn('Admin token validation failed:', err);
-      clearAdminSession();
-      setTokenState(null);
-      setUserState(null);
+      const profile = res?.data?.user || res?.data || res?.user || res;
+      if (profile && typeof profile === 'object' && Object.keys(profile).length > 0) {
+        setUserState(profile);
+      }
+    } catch (err: any) {
+      console.warn('Admin token validation check:', err);
+      const errMsg = (err?.message || '').toLowerCase();
+      // Only clear the session if the backend explicitly rejected authentication (401 Unauthorized / Token Expired)
+      if (
+        errMsg.includes('401') ||
+        errMsg.includes('unauthorized') ||
+        errMsg.includes('jwt expired') ||
+        errMsg.includes('invalid token')
+      ) {
+        clearAdminSession();
+        setTokenState(null);
+        setUserState(null);
+      } else {
+        // Retain cached admin user if server is unreachable or returned 404 for profile endpoint
+        const stored = getStoredAdminUser();
+        if (stored) {
+          setUserState(stored);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -57,12 +74,18 @@ export const PortalAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, [refreshProfile, token]);
 
   const login = async (identifier: string, pass: string) => {
-    const res = await adminLogin(identifier, pass);
-    const retrievedToken = getAdminToken();
-    setTokenState(retrievedToken);
+    setIsLoading(true);
+    try {
+      const res = await adminLogin(identifier, pass);
+      const retrievedToken = getAdminToken();
+      setTokenState(retrievedToken);
 
-    const retrievedUser = res?.data?.user || res?.data || getStoredAdminUser();
-    setUserState(retrievedUser);
+      const retrievedUser = res?.data?.user || res?.data || getStoredAdminUser();
+      setUserState(retrievedUser);
+      return res;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = async () => {

@@ -7,7 +7,7 @@ import {
   getSubscriptionPlans,
   extractListFromResponse,
   type BetaUser,
-} from '../../helpers/portalApi';
+} from '../../helpers/backend';
 import {
   Smartphone,
   Layers,
@@ -25,7 +25,7 @@ import {
 } from '../common/Shimmer';
 
 interface OverviewTabProps {
-  onNavigateTab: (tabId: string) => void;
+  onNavigateTab?: (tabId: string) => void;
 }
 
 export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
@@ -218,7 +218,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
           </div>
 
           <button
-            onClick={() => onNavigateTab('beta-users')}
+            onClick={() => onNavigateTab?.('beta-users')}
             className="mc-btn-accent"
             style={{ padding: '6px 12px', fontSize: 12 }}
           >

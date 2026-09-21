@@ -54,24 +54,6 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
-// Validate ../../app/(dashboard)/admin/setting/[subtab]/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/admin/setting/[subtab]">> = Specific
-  const handler = {} as typeof import("../../app/(dashboard)/admin/setting/[subtab]/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../app/(dashboard)/admin/setting/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/admin/setting">> = Specific
-  const handler = {} as typeof import("../../app/(dashboard)/admin/setting/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../app/(dashboard)/admin/settings/[subtab]/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin/settings/[subtab]">> = Specific
@@ -85,6 +67,15 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin/settings/email-settings">> = Specific
   const handler = {} as typeof import("../../app/(dashboard)/admin/settings/email-settings/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/admin/settings/faq/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/admin/settings/faq">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/admin/settings/faq/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -149,6 +140,15 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 
 
 
+
+// Validate ../../app/(dashboard)/admin/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/admin">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/admin/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
 
 // Validate ../../app/(dashboard)/layout.tsx
 {

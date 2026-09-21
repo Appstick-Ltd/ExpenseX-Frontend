@@ -3,7 +3,7 @@ import { X, Sparkles, Check, CheckCircle2, User, Mail, MapPin, Smartphone, Alert
 import { subscribeToEarlyAccessModal } from '../../helpers/modalEvents';
 import { playMicroClick, playSuccessChime } from '../../helpers/audio';
 import { triggerHaptic } from '../../helpers/haptics';
-import { submitBetaUser } from '../../helpers/api';
+import { submitBetaUser } from '../../helpers/backend';
 import { getStoredReferralCode } from '../../helpers/referral';
 const appleLogoSrc = '/apple-logo.png';
 const googlePlaySrc = '/Google_Play_2022_icon.svg';

@@ -7,7 +7,7 @@ import {
   deleteCategory,
   extractListFromResponse,
   type CategoryItem,
-} from '../../helpers/portalApi';
+} from '../../helpers/backend';
 import { Layers, Plus, Edit, Trash2, RefreshCw, X, AlertCircle, Image as ImageIcon } from 'lucide-react';
 import { ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
 

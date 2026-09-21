@@ -7,7 +7,7 @@ import {
   deleteUser,
   extractListFromResponse,
   type UserItem,
-} from '../../helpers/portalApi';
+} from '../../helpers/backend';
 import {
   Search,
   Trash2,

@@ -1,11 +1,14 @@
 'use client';
 import React from 'react';
-import { PortalLogin } from '../../../components/auth/PortalLogin';
+import { useRouter } from 'next/navigation';
+import { Login } from '../../../components/auth/Login';
 
 export default function DashboardAuthPage() {
+  const router = useRouter();
+
   return (
     <div className="mc-root">
-      <PortalLogin />
+      <Login onSuccess={() => router.push('/admin')} />
     </div>
   );
 }

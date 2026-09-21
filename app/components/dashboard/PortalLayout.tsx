@@ -18,14 +18,21 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Sparkles,
   Activity,
   Menu,
   X,
   ExternalLink,
   ShieldCheck,
+  Sliders,
+  Mail,
+  FileText,
+  HelpCircle,
   type LucideIcon,
 } from 'lucide-react';
+
+import { useRouter } from 'next/navigation';
 
 interface NavItemDef {
   id: 'overview' | 'beta-users' | 'users' | 'categories' | 'subscriptions' | 'settings';
@@ -36,43 +43,72 @@ interface NavItemDef {
 }
 
 export interface PortalLayoutProps {
+  children?: React.ReactNode;
   initialTab?: NavItemDef['id'];
   initialSubTab?: string;
 }
 
-export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialSubTab }) => {
+interface SettingsSubItemDef {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+const SETTINGS_SUB_ITEMS: SettingsSubItemDef[] = [
+  { id: 'general-settings', label: 'General Settings', icon: Sliders },
+  { id: 'email-settings', label: 'Email Settings', icon: Mail },
+  { id: 'payment-settings', label: 'Payment Settings', icon: CreditCard },
+  { id: 'page-settings', label: 'Page Settings', icon: FileText },
+  { id: 'faq', label: 'FAQ', icon: HelpCircle },
+];
+
+export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab, initialSubTab }) => {
   const { user, logout } = usePortalAuth();
+  const router = useRouter();
 
   const getTabFromUrl = (): NavItemDef['id'] => {
     if (initialTab) return initialTab;
     if (typeof window === 'undefined') return 'overview';
     const path = window.location.pathname;
-    if (path.startsWith('/dashboard/setting') || path.startsWith('/dashboard/settings')) return 'settings';
-    if (path.startsWith('/dashboard/beta-users')) return 'beta-users';
-    if (path.startsWith('/dashboard/users')) return 'users';
-    if (path.startsWith('/dashboard/categories')) return 'categories';
-    if (path.startsWith('/dashboard/subscriptions')) return 'subscriptions';
+    if (
+      path.startsWith('/admin/settings') ||
+      path.startsWith('/admin/setting') ||
+      path.startsWith('/dashboard/setting') ||
+      path.startsWith('/dashboard/settings')
+    ) {
+      return 'settings';
+    }
+    if (path.startsWith('/admin/beta-users') || path.startsWith('/dashboard/beta-users')) return 'beta-users';
+    if (path.startsWith('/admin/users') || path.startsWith('/dashboard/users')) return 'users';
+    if (path.startsWith('/admin/categories') || path.startsWith('/dashboard/categories')) return 'categories';
+    if (path.startsWith('/admin/subscriptions') || path.startsWith('/dashboard/subscriptions')) return 'subscriptions';
     return 'overview';
   };
 
   const getSubTabFromUrl = (): string => {
     if (initialSubTab) return initialSubTab;
-    if (typeof window === 'undefined') return 'general';
+    if (typeof window === 'undefined') return 'general-settings';
     const path = window.location.pathname;
-    const match = path.match(/\/dashboard\/settings?\/([^/]+)/);
-    if (match && match[1]) return match[1];
-    return 'general';
+    const match = path.match(/\/(admin|dashboard)\/settings?\/([^/]+)/);
+    if (match && match[2]) return match[2];
+    return 'general-settings';
   };
 
   const [activeTab, setActiveTab] = useState<NavItemDef['id']>(() => getTabFromUrl());
   const [activeSubTab, setActiveSubTab] = useState<string>(() => getSubTabFromUrl());
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(() => getTabFromUrl() === 'settings');
   const [collapsed, setCollapsed] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     const handlePopState = () => {
-      setActiveTab(getTabFromUrl());
-      setActiveSubTab(getSubTabFromUrl());
+      const tab = getTabFromUrl();
+      const sub = getSubTabFromUrl();
+      setActiveTab(tab);
+      setActiveSubTab(sub);
+      if (tab === 'settings') {
+        setSettingsOpen(true);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -84,23 +120,43 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
     { id: 'users', label: 'System Users', shortLabel: 'Users', icon: UserCheck },
     { id: 'categories', label: 'Categories Dictionary', shortLabel: 'Categories', icon: Layers },
     { id: 'subscriptions', label: 'Subscription Tiers', shortLabel: 'Plans', icon: CreditCard },
-    { id: 'settings', label: 'System Settings', shortLabel: 'Settings', icon: Settings },
+    { id: 'settings', label: 'Settings', shortLabel: 'Settings', icon: Settings },
   ];
 
-  const handleTabSelect = (tabId: NavItemDef['id'], sub?: string) => {
+  const handleTabSelect = (tabId: NavItemDef['id']) => {
     triggerHaptic('selection');
-    setActiveTab(tabId);
-    if (sub) setActiveSubTab(sub);
-    setIsDrawerOpen(false);
-    if (typeof window !== 'undefined') {
-      if (tabId === 'settings') {
-        window.history.pushState(null, '', `/dashboard/setting/${sub || activeSubTab || 'general'}`);
-      } else if (tabId === 'overview') {
-        window.history.pushState(null, '', `/dashboard`);
+    const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
+    const basePrefix = isDashboardPath ? '/dashboard' : '/admin';
+
+    if (tabId === 'settings') {
+      if (activeTab === 'settings') {
+        setSettingsOpen(!settingsOpen);
       } else {
-        window.history.pushState(null, '', `/dashboard/${tabId}`);
+        setActiveTab('settings');
+        setSettingsOpen(true);
+        router.push(`${basePrefix}/settings/${activeSubTab || 'general-settings'}`);
       }
+      return;
     }
+
+    setActiveTab(tabId);
+    setIsDrawerOpen(false);
+    if (tabId === 'overview') {
+      router.push(basePrefix);
+    } else {
+      router.push(`${basePrefix}/${tabId}`);
+    }
+  };
+
+  const handleSubTabSelect = (subId: string) => {
+    triggerHaptic('selection');
+    setActiveTab('settings');
+    setActiveSubTab(subId);
+    setSettingsOpen(true);
+    setIsDrawerOpen(false);
+    const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
+    const basePrefix = isDashboardPath ? '/dashboard/settings' : '/admin/settings';
+    router.push(`${basePrefix}/${subId}`);
   };
 
   const toggleDrawer = () => {
@@ -133,7 +189,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
                   paddingLeft: 37,
                 }}
               >
-                Superadmin
+                Admin
               </span>
             </div>
           ) : (
@@ -171,23 +227,89 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
+            const isSettings = item.id === 'settings';
+
             return (
-              <button
-                key={item.id}
-                className={`mc-nav-btn ${isActive ? 'active' : ''}`}
-                onClick={() => handleTabSelect(item.id)}
-                title={item.label}
-              >
-                <Icon size={18} style={{ flexShrink: 0 }} />
-                {!collapsed && (
-                  <>
-                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {item.label}
-                    </span>
-                    {item.badge && <span className="mc-nav-badge">{item.badge}</span>}
-                  </>
+              <div key={item.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                <button
+                  className={`mc-nav-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => handleTabSelect(item.id)}
+                  title={item.label}
+                  style={{ position: 'relative' }}
+                >
+                  <Icon size={18} style={{ flexShrink: 0 }} />
+                  {!collapsed && (
+                    <>
+                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1, textAlign: 'left' }}>
+                        {item.label}
+                      </span>
+                      {item.badge && <span className="mc-nav-badge">{item.badge}</span>}
+                      {isSettings && (
+                        <ChevronDown
+                          size={15}
+                          style={{
+                            transition: 'transform 0.2s ease',
+                            transform: settingsOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                            color: isActive ? 'var(--mc-brand-purple)' : 'var(--mc-text-subtle)',
+                            flexShrink: 0,
+                          }}
+                        />
+                      )}
+                    </>
+                  )}
+                </button>
+
+                {/* Expandable Settings Sub-menu (Desktop) */}
+                {isSettings && !collapsed && settingsOpen && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 2,
+                      paddingLeft: 28,
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                      marginLeft: 14,
+                      borderLeft: '1.5px solid var(--mc-border)',
+                      marginTop: 2,
+                    }}
+                  >
+                    {SETTINGS_SUB_ITEMS.map((sub) => {
+                      const SubIcon = sub.icon;
+                      const isSubActive = activeTab === 'settings' && activeSubTab === sub.id;
+
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => handleSubTabSelect(sub.id)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10,
+                            padding: '8px 12px',
+                            borderRadius: 6,
+                            border: 'none',
+                            background: isSubActive ? 'rgba(109,61,245,0.08)' : 'transparent',
+                            color: isSubActive ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
+                            fontWeight: isSubActive ? 600 : 500,
+                            fontSize: 12.5,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'all 0.15s ease',
+                            position: 'relative',
+                          }}
+                        >
+                          <SubIcon size={14} style={{ flexShrink: 0 }} />
+                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {sub.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
-              </button>
+              </div>
             );
           })}
         </nav>
@@ -217,7 +339,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
                 </div>
                 <div style={{ overflow: 'hidden' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {user?.name || 'Superadmin'}
+                    {user?.name || 'Admin'}
                   </div>
                   <div style={{ fontSize: 10, color: 'var(--mc-text-subtle)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {user?.email || 'Active Session'}
@@ -291,11 +413,11 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
                 {userInitial}
               </div>
               <div className="mc-drawer-profile-info">
-                <div className="mc-drawer-name">{user?.name || 'Superadmin'}</div>
+                <div className="mc-drawer-name">{user?.name || 'Admin'}</div>
                 <div className="mc-drawer-email">{user?.email || 'admin@expensex.ai'}</div>
                 <div className="mc-drawer-status-pill">
                   <ShieldCheck size={11} />
-                  <span>Superadmin</span>
+                  <span>Admin</span>
                 </div>
               </div>
             </div>
@@ -306,16 +428,75 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
+              const isSettings = item.id === 'settings';
+
               return (
-                <button
-                  key={item.id}
-                  className={`mc-drawer-nav-item ${isActive ? 'active' : ''}`}
-                  onClick={() => handleTabSelect(item.id)}
-                >
-                  <Icon size={18} style={{ flexShrink: 0 }} />
-                  <span>{item.label}</span>
-                  {item.badge && <span className="mc-drawer-nav-badge">{item.badge}</span>}
-                </button>
+                <div key={item.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <button
+                    className={`mc-drawer-nav-item ${isActive ? 'active' : ''}`}
+                    onClick={() => handleTabSelect(item.id)}
+                  >
+                    <Icon size={18} style={{ flexShrink: 0 }} />
+                    <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>
+                    {item.badge && <span className="mc-drawer-nav-badge">{item.badge}</span>}
+                    {isSettings && (
+                      <ChevronDown
+                        size={15}
+                        style={{
+                          transition: 'transform 0.2s ease',
+                          transform: settingsOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                          color: isActive ? 'var(--mc-brand-purple)' : 'var(--mc-text-subtle)',
+                        }}
+                      />
+                    )}
+                  </button>
+
+                  {/* Expandable Settings Sub-menu (Mobile Drawer) */}
+                  {isSettings && settingsOpen && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        paddingLeft: 36,
+                        paddingTop: 4,
+                        paddingBottom: 4,
+                        marginLeft: 18,
+                        borderLeft: '1.5px solid var(--mc-border)',
+                      }}
+                    >
+                      {SETTINGS_SUB_ITEMS.map((sub) => {
+                        const SubIcon = sub.icon;
+                        const isSubActive = activeTab === 'settings' && activeSubTab === sub.id;
+
+                        return (
+                          <button
+                            key={sub.id}
+                            type="button"
+                            onClick={() => handleSubTabSelect(sub.id)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 10,
+                              padding: '10px 14px',
+                              borderRadius: 6,
+                              border: 'none',
+                              background: isSubActive ? 'rgba(109,61,245,0.08)' : 'transparent',
+                              color: isSubActive ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
+                              fontWeight: isSubActive ? 600 : 500,
+                              fontSize: 13,
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                            }}
+                          >
+                            <SubIcon size={15} />
+                            <span>{sub.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </nav>
@@ -382,19 +563,6 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
         {/* DESKTOP TOPBAR (> 768px) */}
         <header className="mc-topbar">
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span
-              className="mc-badge mc-badge-purple"
-              style={{
-                padding: '4px 10px',
-              }}
-            >
-              <Activity size={12} />
-              <span>Production Cluster</span>
-            </span>
-
-            <span style={{ fontSize: 12, color: 'var(--mc-text-subtle)' }}>
-              api.xpenstick.appstick.com.bd
-            </span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -420,20 +588,22 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
 
         {/* CONTENT */}
         <main className="mc-content-body">
-          {activeTab === 'overview' && <OverviewTab onNavigateTab={(tab) => handleTabSelect(tab as any)} />}
-          {activeTab === 'beta-users' && <BetaUsersTab />}
-          {activeTab === 'users' && <UsersTab />}
-          {activeTab === 'categories' && <CategoriesTab />}
-          {activeTab === 'settings' && (
-            <SettingsTab
-              subTab={activeSubTab}
-              onSubTabChange={(sub) => {
-                setActiveSubTab(sub);
-                if (typeof window !== 'undefined') {
-                  window.history.pushState(null, '', `/dashboard/setting/${sub}`);
-                }
-              }}
-            />
+          {children ? (
+            children
+          ) : (
+            <>
+              {activeTab === 'overview' && <OverviewTab onNavigateTab={(tab) => handleTabSelect(tab as any)} />}
+              {activeTab === 'beta-users' && <BetaUsersTab />}
+              {activeTab === 'users' && <UsersTab />}
+              {activeTab === 'categories' && <CategoriesTab />}
+              {activeTab === 'subscriptions' && <SubscriptionsTab />}
+              {activeTab === 'settings' && (
+                <SettingsTab
+                  subTab={activeSubTab}
+                  onSubTabChange={(sub) => handleSubTabSelect(sub)}
+                />
+              )}
+            </>
           )}
         </main>
 
@@ -502,4 +672,3 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ initialTab, initialS
     </div>
   );
 };
-

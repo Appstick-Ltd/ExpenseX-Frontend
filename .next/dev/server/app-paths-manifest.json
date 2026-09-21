@@ -1,0 +1,5 @@
+{
+  "/(dashboard)/admin/settings/email-settings/page": "app/(dashboard)/admin/settings/email-settings/page.js",
+  "/(dashboard)/admin/settings/general-settings/page": "app/(dashboard)/admin/settings/general-settings/page.js",
+  "/(dashboard)/admin/settings/payment-settings/page": "app/(dashboard)/admin/settings/payment-settings/page.js"
+}

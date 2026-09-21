@@ -8,7 +8,7 @@ import {
   getSubscriptionHistory,
   extractListFromResponse,
   type SubscriptionPlanItem,
-} from '../../helpers/portalApi';
+} from '../../helpers/backend';
 import { Check, RefreshCw, Plus, Edit, Trash2, X, AlertCircle, Sparkles, Clock } from 'lucide-react';
 import { ShimmerPlanCards, ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
 
@@ -190,7 +190,8 @@ export const SubscriptionsTab: React.FC = () => {
     setEditError(null);
 
     try {
-      await updateSubscriptionPlan(editingPlan._id, {
+      await updateSubscriptionPlan({
+        _id: editingPlan._id,
         name: {
           en: editNameEn.trim(),
           bn: editNameBn.trim() || undefined,
