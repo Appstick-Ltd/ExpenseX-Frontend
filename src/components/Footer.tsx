@@ -383,7 +383,15 @@ export const Footer: React.FC = () => {
             </a>
           </div>
           <div className="footer-powered-by">
-            Powered by <strong style={{ color: '#FFFFFF', fontWeight: 600 }}>Appstick Ltd</strong>
+            Powered by{' '}
+            <a
+              href="https://appstick.com.bd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-powered-by-link"
+            >
+              Appstick
+            </a>
           </div>
         </div>
       </div>
@@ -549,6 +557,18 @@ export const Footer: React.FC = () => {
 
         .footer-legal-dot {
           color: #334155;
+        }
+
+        .footer-powered-by-link {
+          color: #FFFFFF;
+          font-weight: 600;
+          text-decoration: none;
+          transition: color 0.2s ease, text-decoration 0.2s ease;
+        }
+
+        .footer-powered-by-link:hover {
+          color: #A78BFA;
+          text-decoration: underline;
         }
 
         /* Tablet Layout */
