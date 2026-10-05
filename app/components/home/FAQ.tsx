@@ -76,7 +76,7 @@ export const FAQ: React.FC = () => {
           </h2>
 
           <p className="section-description" style={{ margin: '0 auto', maxWidth: '640px' }}>
-            Learn how autonomous expense tracking, multi-channel capture, and AI financial intelligence empower you to track less and know more.
+            Learn how autonomous expense tracking, multi-channel capture, and AI financial intelligence empower ExpenseX — Meet Your AI Money Assistant.
           </p>
         </div>
 

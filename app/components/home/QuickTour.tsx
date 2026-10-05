@@ -905,7 +905,7 @@ export const QuickTour: React.FC = () => {
                             paddingTop: '8px',
                           }}
                         >
-                          Track less. Know more.
+                          Meet Your AI Money Assistant
                         </div>
                       </div>
                     )}

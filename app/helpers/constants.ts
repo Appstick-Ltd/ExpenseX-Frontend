@@ -15,7 +15,7 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const HERO_DATA = {
-  eyebrow: 'YOUR AI MONEY ASSISTANT',
+  eyebrow: 'Meet Your AI Money Assistant',
   headlinePart1: 'Your money should',
   headlinePart2: 'explain itself.',
   typewriterPrefix: 'No typing needed.',
