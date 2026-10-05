@@ -67,7 +67,7 @@ export const Footer: React.FC = () => {
           <div className="footer-col-brand">
             <Logo size="md" />
             <p className="footer-brand-desc">
-              Track less. <span className="text-gradient-purple">Know more.</span>
+              Meet Your <span className="text-gradient-purple">AI Money Assistant.</span>
             </p>
 
             {/* Circular Social Badges */}
@@ -219,7 +219,7 @@ export const Footer: React.FC = () => {
           <div className="footer-m-card footer-m-brand-card">
             <Logo size="md" />
             <div className="footer-m-tagline">
-              Track less. <span className="text-gradient-purple">Know more.</span>
+              Meet Your <span className="text-gradient-purple">AI Money Assistant.</span>
             </div>
 
             {/* Social Badges Row */}
