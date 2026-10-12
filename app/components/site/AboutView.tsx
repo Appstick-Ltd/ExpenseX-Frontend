@@ -13,10 +13,10 @@ export const AboutView: React.FC = () => {
   }, []);
 
   const stats = [
-    { value: '< 140ms', label: 'AI OCR Latency', icon: <Zap size={18} color="#FF5A36" /> },
-    { value: '99.4%', label: 'Extraction Precision', icon: <Award size={18} color="#A78BFA" /> },
-    { value: '100%', label: 'Hands-Free Capable', icon: <Cpu size={18} color="#38BDF8" /> },
-    { value: 'Zero', label: 'Public Model Training', icon: <Lock size={18} color="#10B981" /> },
+    { value: 'Sub-Sec', label: 'AI Inference Speed', icon: <Zap size={18} color="#FF5A36" /> },
+    { value: 'Multi-Modal', label: 'Vision, Voice & NLP', icon: <Award size={18} color="#A78BFA" /> },
+    { value: 'Hands-Free', label: 'Autonomous Capture', icon: <Cpu size={18} color="#38BDF8" /> },
+    { value: 'Zero Ads', label: 'No Model Training', icon: <Lock size={18} color="#10B981" /> },
   ];
 
   const aiPillars = [
@@ -24,8 +24,8 @@ export const AboutView: React.FC = () => {
       icon: <Sparkles size={24} color="#FF5A36" />,
       tag: 'VISION OCR',
       title: 'Multi-Modal Receipt Intelligence',
-      desc: 'Our proprietary vision pipeline extracts merchant names, tax breakdowns, itemized SKUs, and transaction totals from crumpled physical paper receipts and digital screenshots in milliseconds.',
-      highlight: 'Sub-second parsing with 99.4% OCR benchmark accuracy',
+      desc: 'Our proprietary vision pipeline extracts merchant names, tax breakdowns, itemized SKUs, and transaction totals from physical paper receipts and digital screenshots.',
+      highlight: 'Sub-second parsing with high-accuracy neural vision models',
     },
     {
       icon: <Cpu size={24} color="#A78BFA" />,
@@ -225,7 +225,7 @@ export const AboutView: React.FC = () => {
                   Most budgeting apps fail because they place the data-entry burden onto the consumer. Within two weeks of manual entry, 85% of users give up.
                 </p>
                 <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-                  ExpenseX AI is engineered around the premise of ambient intelligence: snap a receipt picture, dictate a quick voice note while walking, or forward a digital invoice. Our AI resolves the rest in under 140ms.
+                  ExpenseX AI is engineered around the premise of ambient intelligence: snap a receipt picture, dictate a quick voice note while walking, or forward a digital invoice. Our AI resolves the rest in sub-second inference pipelines.
                 </p>
               </div>
 
@@ -269,10 +269,10 @@ export const AboutView: React.FC = () => {
                   <Building2 size={14} /> CORPORATE GOVERNANCE
                 </div>
                 <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#FFFFFF', marginBottom: '16px' }}>
-                  Powered by Appstick Ltd.
+                  A Flagship Product of Appstick Ltd.
                 </h2>
                 <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
-                  ExpenseX AI is conceived, developed, and globally operated by <strong>Appstick Ltd.</strong>, an international software engineering and product innovation firm headquartered in Khulna, Bangladesh.
+                  ExpenseX AI is conceived, developed, and globally operated by <strong>Appstick Ltd.</strong>, an incorporated software engineering organization headquartered in Khulna, Bangladesh. ExpenseX AI is an official software product of Appstick Ltd. and is not a separately incorporated entity.
                 </p>
                 <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '14px', padding: '16px 20px', marginBottom: '16px' }}>
                   <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '4px' }}>FOUNDER &amp; CEO</div>

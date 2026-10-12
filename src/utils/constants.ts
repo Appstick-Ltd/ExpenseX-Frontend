@@ -100,7 +100,7 @@ export const CAPTURE_CHANNELS = [
       amount: '$384',
       date: 'Today, 2:15 PM',
       category: 'Groceries',
-      confidence: '99.4%',
+      confidence: 'High Confidence Match',
     },
   },
   {
@@ -258,15 +258,15 @@ export const PRIVACY_POINTS = [
   },
   {
     title: 'Complete Data Export & Deletion',
-    desc: 'Export your clean transactions to CSV/JSON anytime. Delete your account and all associated data permanently with zero retention.',
+    desc: 'Export your clean transactions to CSV/JSON anytime. Delete your account and all associated records permanently within 30 days.',
   },
 ];
 
 export const ROADMAP_PHASES = [
   {
     phase: 'PHASE 1',
-    title: 'AI Capture Foundation',
-    status: 'LIVE',
+    title: 'Core Capture Foundation',
+    status: 'AVAILABLE NOW (PRIVATE BETA)',
     isLive: true,
     items: [
       'Voice Natural Language Capture',
@@ -281,8 +281,8 @@ export const ROADMAP_PHASES = [
   },
   {
     phase: 'PHASE 2',
-    title: 'Intelligent Finance',
-    status: 'COMING SOON',
+    title: 'Intelligent Finance & Conversational AI',
+    status: 'IN DEVELOPMENT',
     isLive: false,
     items: [
       'Ask ExpenseX Conversational AI',
@@ -297,7 +297,7 @@ export const ROADMAP_PHASES = [
   },
   {
     phase: 'PHASE 3',
-    title: 'Growth & Social Finance',
+    title: 'Autonomous & Social Finance',
     status: 'COMING SOON',
     isLive: false,
     items: [
@@ -318,7 +318,7 @@ export const FAQ_ITEMS = [
   },
   {
     question: 'Is my financial data secure?',
-    answer: 'Absolutely. We practice strict zero-knowledge encryption in transit and at rest. We never sell your data to marketers or advertisers. You have complete control to connect, disconnect, export, or permanently wipe your account and history whenever you want.',
+    answer: 'Security is our highest priority. All data in transit and at rest is protected with enterprise AES-256 encryption via Google Cloud Key Management Service (KMS). We never sell your data to marketers or advertisers, and your personal financial records are never used to train public foundation models. You have complete control to export or permanently wipe your account.',
   },
   {
     question: 'What happens if I receive both an SMS and an email for the same purchase?',

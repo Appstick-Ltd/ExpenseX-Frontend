@@ -97,14 +97,6 @@ const jsonLdSoftwareApp = {
     priceCurrency: 'USD',
     availability: 'https://schema.org/InStock',
   },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    bestRating: '5.0',
-    worstRating: '1.0',
-    ratingCount: '1280',
-    reviewCount: '940',
-  },
   featureList: [
     'Instant Receipt OCR Scanning',
     'Automated Bank SMS Detection',
@@ -113,7 +105,7 @@ const jsonLdSoftwareApp = {
     'Safe-to-Spend Daily Predictive Limit',
     'Dynamic Envelope Budgeting',
     'Autonomous Multi-Goal Savings',
-    'Zero-Knowledge Financial Data Privacy',
+    'Enterprise AES-256 KMS Cloud Encryption',
   ],
   screenshot: 'https://expensexai.com/logo-512.png',
   image: 'https://expensexai.com/logo-512.png',
@@ -153,14 +145,68 @@ const jsonLdOrg = {
       '@type': 'ContactPoint',
       contactType: 'Corporate Inquiries',
       email: 'info@expensexai.com',
-      telephone: '+8801404049797',
+      telephone: '+880 1404-049797',
       availableLanguage: ['English', 'Bengali'],
     },
     {
       '@type': 'ContactPoint',
       contactType: 'Customer Support',
       email: 'support@expensexai.com',
+      telephone: '+880 1404-049797',
       availableLanguage: ['English', 'Bengali'],
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'Privacy & Data Protection',
+      email: 'privacy@expensexai.com',
+      availableLanguage: ['English', 'Bengali'],
+    },
+  ],
+};
+
+const jsonLdFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is ExpenseX AI and how does it track expenses automatically?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'ExpenseX AI is an autonomous personal finance platform developed by Appstick Ltd. It captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does ExpenseX AI compare to traditional manual expense trackers?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Traditional expense trackers require you to manually enter merchant names, amounts, dates, and categories. ExpenseX AI automates this workflow: our multi-modal vision and NLP pipeline extracts merchant data, taxes, currencies, and line items from receipts, audio, and messages without tedious form typing.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does the Safe-to-Spend algorithm work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Safe-to-Spend is a predictive financial guidance metric calculated by ExpenseX AI. It projects recurring bills, active savings goal commitments, and typical spending velocity to give you a clear daily spending ceiling to prevent overdrafts.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is my financial data secure and private with ExpenseX AI?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Security and data privacy are foundational at ExpenseX AI. All data in transit and at rest is protected with enterprise AES-256 encryption via Google Cloud Key Management Service (KMS). Multi-modal processing occurs in isolated cloud environments: we never sell your data, never broker transaction history to advertisers, and your personal financial information is never used to train public foundation models.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which platforms and operating systems are supported?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'ExpenseX AI is designed for iOS, Android, and modern desktop web browsers. Categorized transactions and budgets synchronize across all authorized devices in the beta cohort.',
+      },
     },
   ],
 };
@@ -187,6 +233,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
+        />
       </head>
       <body suppressHydrationWarning>
         <ToasterProvider />
@@ -202,21 +252,25 @@ export default function RootLayout({
   </p>
   <p style="font-size: 14px; color: #334155;">
     <strong>Official Website:</strong> <a href="https://expensexai.com/">https://expensexai.com/</a> | 
-    <strong>Contact Email:</strong> <a href="mailto:info@expensexai.com">info@expensexai.com</a> | 
-    <strong>Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> | 
+    <strong>Corporate Inquiries:</strong> <a href="mailto:info@expensexai.com">info@expensexai.com</a> | 
+    <strong>User &amp; Beta Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> | 
+    <strong>Privacy Office:</strong> <a href="mailto:privacy@expensexai.com">privacy@expensexai.com</a> | 
     <strong>Phone:</strong> +880 1404-049797
   </p>
+  <div style="padding: 12px 16px; background: #f8fafc; border-left: 4px solid #6366f1; margin: 16px 0; border-radius: 4px; font-size: 13.5px; color: #334155;">
+    <strong>Product Status Note:</strong> ExpenseX AI is currently in Private Beta. Core capture capabilities are available to registered beta cohort testers. All balances, spending metrics, and transaction ledgers presented on this website represent <em>illustrative demo data</em> for preview purposes.
+  </div>
   <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
   <h2 style="color: #0f172a; font-size: 20px;">About ExpenseX AI</h2>
-  <p>ExpenseX AI is an AI-first personal finance platform developed by Appstick Ltd. to eliminate manual expense logging. The application leverages multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
-  <h2 style="color: #0f172a; font-size: 20px;">AI Architecture &amp; Key Features</h2>
+  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick Ltd. to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
+  <h2 style="color: #0f172a; font-size: 20px;">Feature Availability Status</h2>
   <ul style="padding-left: 20px;">
-    <li><strong>AI Vision OCR Receipt Scanning:</strong> Multi-modal document processing capable of reading crumpled receipts and digital invoices in &lt;140ms with 99.4% accuracy.</li>
-    <li><strong>Voice Expense Capture:</strong> Natural language voice entry that automatically parses merchant, amount, category, and timestamps without typing.</li>
-    <li><strong>Bank SMS &amp; Digital Invoice Parsing:</strong> Contextual processing of transaction alerts and email receipts with intelligent deduplication.</li>
-    <li><strong>Safe-to-Spend&trade; Predictive Intelligence:</strong> Real-time predictive cashflow velocity algorithms calculating safe daily spending limits.</li>
-    <li><strong>Bank-Grade Zero-Knowledge Privacy:</strong> AES-256 field encryption. User financial records are never sold or used to train public foundation models.</li>
+    <li><strong>Available Now (Private Beta):</strong> Multi-Modal Vision OCR Receipt Capture, Voice Expense Entry, Bank SMS Transaction Parsing, Email Invoice Sync, Smart Categorization, Deduplication Engine.</li>
+    <li><strong>In Development:</strong> Safe-to-Spend&trade; Daily Spending Ceilings, Envelope Budgeting Engine, Real-Time Cashflow Alerts.</li>
+    <li><strong>Coming Soon:</strong> Conversational AI Money Assistant, 30-Day Predictive Forecasting, Multi-Goal Autonomous Savings.</li>
   </ul>
+  <h2 style="color: #0f172a; font-size: 20px;">Enterprise Security &amp; Cloud Privacy</h2>
+  <p>User privacy is protected through hardware-backed AES-256 cloud KMS encryption in transit and at rest. Multi-modal intelligence is hosted in isolated Google Cloud VPC environments. Under our enterprise data policy, customer financial data is never sold, never shared with third-party advertisers, and never used to train public foundation models.</p>
   <h2 style="color: #0f172a; font-size: 20px;">Public Pages &amp; Verification Links</h2>
   <ul style="padding-left: 20px;">
     <li><a href="/about">About Us &amp; Company Overview</a></li>

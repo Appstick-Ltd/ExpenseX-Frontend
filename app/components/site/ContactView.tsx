@@ -137,12 +137,18 @@ export const ContactView: React.FC = () => {
                     <Mail size={20} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '3px' }}>PRIMARY INQUIRIES &bull; SUPPORT</div>
-                    <a href="mailto:support@expensexai.com" style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', textDecoration: 'none' }}>
-                      support@expensexai.com
-                    </a>
-                    <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                      Corporate: <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none' }}>info@expensexai.com</a>
+                    <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '3px' }}>DIRECT INQUIRY DESKS</div>
+                    <div style={{ fontSize: '14.5px', color: '#FFFFFF', marginBottom: '4px' }}>
+                      <strong style={{ color: 'var(--purple-light)' }}>User &amp; Beta Support:</strong>{' '}
+                      <a href="mailto:support@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>support@expensexai.com</a>
+                    </div>
+                    <div style={{ fontSize: '14.5px', color: '#FFFFFF', marginBottom: '4px' }}>
+                      <strong style={{ color: 'var(--purple-light)' }}>Corporate &amp; Partnerships:</strong>{' '}
+                      <a href="mailto:info@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>info@expensexai.com</a>
+                    </div>
+                    <div style={{ fontSize: '14.5px', color: '#FFFFFF' }}>
+                      <strong style={{ color: 'var(--purple-light)' }}>Privacy &amp; Data Rights:</strong>{' '}
+                      <a href="mailto:privacy@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>privacy@expensexai.com</a>
                     </div>
                   </div>
                 </div>

@@ -13,31 +13,31 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'What is ExpenseX AI and how does it track expenses automatically?',
     answer:
-      'ExpenseX AI is an autonomous AI expense tracker and personal finance companion. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes your transactions automatically across camera receipt scans (OCR), bank SMS transaction alerts, natural language voice memos, and WhatsApp AI bot integration—delivering 100% automated personal finance.',
+      'ExpenseX AI is an autonomous personal finance platform and expense companion developed by Appstick Ltd. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
     keywords: 'AI expense tracker, automatic finance, receipt scanner',
   },
   {
     question: 'How does ExpenseX AI compare to traditional manual expense trackers?',
     answer:
-      'Manual expense tracker apps require you to type every single merchant name, amount, date, and category, leading to tracker fatigue within weeks. ExpenseX AI operates on autopilot: our neural engine extracts merchant data, tax, currency, and line items in under 140ms with 99.4% OCR precision, eliminating manual typing completely.',
+      'Manual expense tracker apps require you to type every single merchant name, amount, date, and category, leading to tracker fatigue within weeks. ExpenseX AI operates on autopilot: our neural vision and NLP engine automatically extracts merchant data, taxes, currencies, and line items from receipts, audio, and messages, eliminating tedious manual typing.',
     keywords: 'Best expense tracker app, manual vs automatic, AI OCR',
   },
   {
     question: 'How does the Safe-to-Spend algorithm work?',
     answer:
-      'Safe-to-Spend is a predictive financial health metric calculated continuously by ExpenseX AI. It projects your recurring subscription bills, active savings goal commitments, and typical spending velocity to give you a single, guilt-free daily and weekly spending number so you never overdraft or fall short of your savings.',
+      'Safe-to-Spend is a predictive financial health metric calculated by ExpenseX AI. It projects your recurring subscription bills, active savings goal commitments, and typical spending velocity to give you a single, clear daily and weekly spending ceiling so you never overdraft or fall short of your savings.',
     keywords: 'Safe to spend, smart budgets, financial health score',
   },
   {
     question: 'Is my financial data secure and private with ExpenseX AI?',
     answer:
-      'Security is our highest priority. ExpenseX AI implements bank-grade 256-bit AES encryption in transit and at rest. Whenever possible, receipt parsing and text extraction execute on-device. We have a strict zero-knowledge policy: we never sell your data, monetize your transaction history, or share your financial records with third parties.',
-    keywords: 'Bank-grade security, data privacy, AES-256 encryption',
+      'Security is our highest priority. All data in transit and at rest is protected with enterprise AES-256 encryption via Google Cloud Key Management Service (KMS). Multi-modal extraction occurs in isolated enterprise cloud environments under strict confidentiality guarantees: we never sell your data, never broker transaction history to advertisers, and your personal financial information is never used to train public foundation models.',
+    keywords: 'Enterprise cloud security, data privacy, AES-256 encryption',
   },
   {
     question: 'Which platforms and operating systems are supported?',
     answer:
-      'ExpenseX AI is natively supported across iOS (iPhone, iPad), Android devices, and all modern desktop web browsers. Your financial insights, budgets, and categorized transactions synchronize instantaneously across all your authorized devices.',
+      'ExpenseX AI is natively supported across iOS (iPhone, iPad), Android devices, and all modern desktop web browsers. Your financial insights, budgets, and categorized transactions synchronize across all authorized devices in the beta cohort.',
     keywords: 'iOS expense tracker, Android budget app, web dashboard',
   },
 ];
@@ -108,6 +108,7 @@ export const FAQ: React.FC = () => {
                   className="faq-question-row"
                   role="button"
                   aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -161,24 +162,59 @@ export const FAQ: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Accordion Body */}
-                {isOpen && (
-                  <div
-                    className="faq-answer-body"
-                    style={{
-                      padding: '0 24px 22px 70px',
-                      color: '#94A3B8',
-                      fontSize: '14.5px',
-                      lineHeight: 1.6,
-                      animation: 'fadeIn 0.2s ease',
-                    }}
-                  >
-                    <p style={{ margin: 0 }}>{item.answer}</p>
-                  </div>
-                )}
+                {/* Accordion Body - Always kept in DOM for crawler indexation */}
+                <div
+                  id={`faq-answer-${index}`}
+                  className="faq-answer-body"
+                  style={{
+                    display: isOpen ? 'block' : 'none',
+                    padding: '0 24px 22px 70px',
+                    color: '#94A3B8',
+                    fontSize: '14.5px',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ margin: 0 }}>{item.answer}</p>
+                </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Contact Channels Verification Strip */}
+        <div
+          style={{
+            maxWidth: '820px',
+            margin: '36px auto 0 auto',
+            padding: '20px 24px',
+            borderRadius: '16px',
+            background: 'rgba(255, 255, 255, 0.02)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF' }}>Monitored Communication Channels</div>
+            <div style={{ fontSize: '12px', color: '#94A3B8' }}>ExpenseX AI is an official product developed by Appstick Ltd.</div>
+          </div>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px' }}>
+            <div>
+              <span style={{ color: '#94A3B8' }}>Corporate: </span>
+              <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>info@expensexai.com</a>
+            </div>
+            <div>
+              <span style={{ color: '#94A3B8' }}>Beta Support: </span>
+              <a href="mailto:support@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>support@expensexai.com</a>
+            </div>
+            <div>
+              <span style={{ color: '#94A3B8' }}>Privacy Office: </span>
+              <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>privacy@expensexai.com</a>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -18,20 +18,20 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'How does ExpenseX AI compare to traditional manual expense trackers?',
     answer:
-      'Manual expense tracker apps require you to type every single merchant name, amount, date, and category, leading to tracker fatigue within weeks. ExpenseX AI operates on autopilot: our neural engine extracts merchant data, tax, currency, and line items in under 140ms with 99.4% OCR precision, eliminating manual typing completely.',
+      'Manual expense tracker apps require you to type every single merchant name, amount, date, and category, leading to tracker fatigue within weeks. ExpenseX AI operates on autopilot: our neural vision and NLP engine automatically extracts merchant data, taxes, currencies, and line items from receipts, audio, and messages, eliminating tedious manual typing.',
     keywords: 'Best expense tracker app, manual vs automatic, AI OCR',
   },
   {
     question: 'How does the Safe-to-Spend algorithm work?',
     answer:
-      'Safe-to-Spend is a predictive financial health metric calculated continuously by ExpenseX AI. It projects your recurring subscription bills, active savings goal commitments, and typical spending velocity to give you a single, guilt-free daily and weekly spending number so you never overdraft or fall short of your savings.',
+      'Safe-to-Spend is a predictive financial health metric calculated by ExpenseX AI. It projects your recurring subscription bills, active savings goal commitments, and typical spending velocity to give you a single, clear daily and weekly spending ceiling so you never overdraft or fall short of your savings.',
     keywords: 'Safe to spend, smart budgets, financial health score',
   },
   {
     question: 'Is my financial data secure and private with ExpenseX AI?',
     answer:
-      'Security is our highest priority. ExpenseX AI implements bank-grade 256-bit AES encryption in transit and at rest. Whenever possible, receipt parsing and text extraction execute on-device. We have a strict zero-knowledge policy: we never sell your data, monetize your transaction history, or share your financial records with third parties.',
-    keywords: 'Bank-grade security, data privacy, AES-256 encryption',
+      'Security is our highest priority. All data in transit and at rest is protected with enterprise AES-256 encryption via Google Cloud Key Management Service (KMS). Multi-modal extraction occurs in isolated enterprise cloud environments under strict confidentiality guarantees: we never sell your data, never broker transaction history to advertisers, and your personal financial information is never used to train public foundation models.',
+    keywords: 'Enterprise cloud security, data privacy, AES-256 encryption',
   },
   {
     question: 'Which platforms and operating systems are supported?',

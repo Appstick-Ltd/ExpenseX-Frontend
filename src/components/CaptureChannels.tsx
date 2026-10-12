@@ -139,7 +139,7 @@ export const CaptureChannels: React.FC = () => {
                   }}
                 >
                   <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Sweetgreen • $45</span>
-                  <span style={{ color: '#34D399', fontWeight: 700 }}>99.4% OCR match</span>
+                  <span style={{ color: '#34D399', fontWeight: 700 }}>High Confidence Match</span>
                 </div>
               </div>
             </div>

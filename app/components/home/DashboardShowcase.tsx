@@ -58,11 +58,24 @@ export const DashboardShowcase: React.FC = () => {
             }}
           >
             <div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Good morning, Tanvir</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Demo Account &bull; Beta Preview</div>
               <div style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF' }}>September Financial Health</div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+              <span
+                style={{
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  padding: '5px 12px',
+                  borderRadius: '999px',
+                  background: 'rgba(139, 92, 246, 0.15)',
+                  color: '#C084FC',
+                  border: '1px solid rgba(139, 92, 246, 0.35)',
+                }}
+              >
+                Illustrative Demo Data
+              </span>
               <div
                 style={{
                   display: 'flex',
@@ -294,6 +307,11 @@ export const DashboardShowcase: React.FC = () => {
             </div>
           </div>
         </Card3DTilt>
+
+        {/* Illustrative demo note */}
+        <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12.5px', color: '#64748B' }}>
+          * Illustrative demo interface — Sample dashboard preview for beta evaluation. Not actual customer metrics.
+        </div>
       </div>
 
       <style>{`

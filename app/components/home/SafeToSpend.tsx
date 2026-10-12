@@ -96,9 +96,12 @@ export const SafeToSpend: React.FC = () => {
           >
             {/* Left Narrative & Interactive Deductive Breakdown */}
             <div>
-              <div className="section-eyebrow" style={{ marginBottom: '20px' }}>
+              <div className="section-eyebrow" style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <span className="section-eyebrow-dot" />
                 <span>PREDICTIVE CASHFLOW SIMULATOR</span>
+                <span style={{ fontSize: '11px', color: '#C084FC', background: 'rgba(139, 92, 246, 0.15)', padding: '2px 8px', borderRadius: '4px', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
+                  Illustrative Demo Data
+                </span>
               </div>
 
               <h2

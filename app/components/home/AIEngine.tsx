@@ -151,7 +151,7 @@ export const AIEngine: React.FC = () => {
                     flexShrink: 0,
                   }}
                 />
-                <span>Average latency: ~140ms end-to-end</span>
+                <span>Multi-Modal Pipeline • Sub-second response</span>
               </div>
             </div>
           </div>
@@ -256,7 +256,7 @@ export const AIEngine: React.FC = () => {
               >
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>MERCHANT GRAPH</div>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginTop: '2px' }}>
-                  120,000+ Brands
+                  Global Taxonomy
                 </div>
               </div>
               <div
@@ -267,9 +267,9 @@ export const AIEngine: React.FC = () => {
                   border: '1px solid rgba(255,255,255,0.08)',
                 }}
               >
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>DEDUPLICATION ACCURACY</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>DEDUPLICATION ENGINE</div>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: '#34D399', marginTop: '2px' }}>
-                  99.8% Precision
+                  Cross-Channel Match
                 </div>
               </div>
             </div>

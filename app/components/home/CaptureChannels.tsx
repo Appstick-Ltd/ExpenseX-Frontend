@@ -140,7 +140,7 @@ export const CaptureChannels: React.FC = () => {
                   }}
                 >
                   <span style={{ color: '#FFFFFF', fontWeight: 700 }}>Sweetgreen • $45</span>
-                  <span style={{ color: '#34D399', fontWeight: 700 }}>99.4% OCR match</span>
+                  <span style={{ color: '#34D399', fontWeight: 700 }}>High Confidence Match</span>
                 </div>
               </div>
             </div>
@@ -384,6 +384,11 @@ export const CaptureChannels: React.FC = () => {
               <span>Zero app opening needed</span>
             </div>
           </Card3DTilt>
+        </div>
+
+        {/* Illustrative demo note */}
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '12px', color: '#64748B' }}>
+          * Illustrative demo previews — All merchant receipts and sample alerts above are simulated demonstration data.
         </div>
       </div>
 

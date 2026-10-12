@@ -115,11 +115,11 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
   ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
   ctx.font = '600 32px -apple-system, BlinkMacSystemFont, sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('Good morning,', 65, 215);
+  ctx.fillText('Demo Preview •', 65, 215);
 
   ctx.fillStyle = '#FFFFFF';
   ctx.font = '800 58px -apple-system, BlinkMacSystemFont, sans-serif';
-  ctx.fillText('Tanvir', 65, 278);
+  ctx.fillText('Alex (Demo)', 65, 278);
 
   // Avatar icon circle
   ctx.beginPath();
@@ -135,9 +135,9 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
   ctx.fillStyle = '#FFFFFF';
   ctx.font = '800 38px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('T', 935, 258);
+  ctx.fillText('A', 935, 258);
 
-  // 5. Card 1: Financial Health Ring Gauge (Optimal • Top 12%)
+  // 5. Card 1: Financial Health Ring Gauge (Optimal • Projected Score)
   const card1Y = 325;
   const card1H = 205;
   const cardGrad1 = ctx.createLinearGradient(65, card1Y, 65, card1Y + card1H);
@@ -177,7 +177,7 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
 
   ctx.fillStyle = '#10B981';
   ctx.font = '800 38px sans-serif';
-  ctx.fillText('Optimal • Top 12%', 280, card1Y + 135);
+  ctx.fillText('Optimal • Projected Score', 280, card1Y + 135);
 
   // 6. Card 2: Safe to Spend Today
   const card2Y = 560;
@@ -191,7 +191,7 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
   ctx.fillStyle = '#C4B5FD';
   ctx.font = '800 26px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('SAFE TO SPEND TODAY', 115, card2Y + 70);
+  ctx.fillText('SAFE TO SPEND • DEMO DATA', 115, card2Y + 70);
 
   // Large Safe to Spend Value
   ctx.fillStyle = '#FFFFFF';

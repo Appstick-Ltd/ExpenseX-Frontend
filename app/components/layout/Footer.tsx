@@ -162,6 +162,27 @@ export const Footer: React.FC = () => {
             <h4 className="footer-heading">SUPPORT &amp; CONTACT</h4>
             <div className="footer-contact-list">
               {/* Email */}
+              {/* Corporate Inquiries */}
+              <div className="footer-contact-row">
+                <div
+                  className="footer-icon-badge"
+                  style={{ background: 'rgba(109, 61, 245, 0.15)', color: 'var(--purple-light)', border: '1px solid rgba(139, 92, 246, 0.3)' }}
+                >
+                  <Mail size={15} />
+                </div>
+                <div>
+                  <div className="footer-contact-label">CORPORATE &amp; PARTNERSHIPS</div>
+                  <a
+                    href="mailto:info@expensexai.com"
+                    className="footer-contact-value"
+                    onClick={playMicroClick}
+                  >
+                    info@expensexai.com
+                  </a>
+                </div>
+              </div>
+
+              {/* Support Email */}
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
@@ -170,13 +191,33 @@ export const Footer: React.FC = () => {
                   <Mail size={15} />
                 </div>
                 <div>
-                  <div className="footer-contact-label">SUPPORT EMAIL</div>
+                  <div className="footer-contact-label">USER &amp; BETA SUPPORT</div>
                   <a
                     href="mailto:support@expensexai.com"
                     className="footer-contact-value"
                     onClick={playMicroClick}
                   >
                     support@expensexai.com
+                  </a>
+                </div>
+              </div>
+
+              {/* Privacy Office */}
+              <div className="footer-contact-row">
+                <div
+                  className="footer-icon-badge"
+                  style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.3)' }}
+                >
+                  <Mail size={15} />
+                </div>
+                <div>
+                  <div className="footer-contact-label">PRIVACY &amp; DATA DESK</div>
+                  <a
+                    href="mailto:privacy@expensexai.com"
+                    className="footer-contact-value"
+                    onClick={playMicroClick}
+                  >
+                    privacy@expensexai.com
                   </a>
                 </div>
               </div>
@@ -372,7 +413,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Copyright & Powered by Row */}
         <div className="footer-bottom-row">
           <div className="footer-copyright">
-            © 2026 ExpenseX AI. All rights reserved.
+            &copy; 2026 ExpenseX AI &bull; Developed &amp; operated by Appstick Ltd. All transactions shown are illustrative demo data.
           </div>
           <div className="footer-bottom-legal">
             <a
@@ -404,14 +445,14 @@ export const Footer: React.FC = () => {
             </a>
           </div>
           <div className="footer-powered-by">
-            Powered by{' '}
+            A Product of{' '}
             <a
               href="https://appstick.com.bd/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer-powered-by-link"
             >
-              Appstick
+              Appstick Ltd.
             </a>
           </div>
         </div>

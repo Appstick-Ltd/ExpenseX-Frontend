@@ -3,7 +3,7 @@ import { HeroPhone3D } from './HeroPhone3D';
 import { TypewriterText } from './TypewriterText';
 import { ParticleField } from './3d/ParticleField';
 import { HERO_DATA } from '../utils/constants';
-import { ChevronRight, Users, Star, Heart, Globe, ArrowRight } from 'lucide-react';
+import { ChevronRight, Users, ArrowRight, Cpu, Shield, Lock } from 'lucide-react';
 import { Card3DTilt } from './Card3DTilt';
 import { playMicroClick } from '../utils/audio';
 
@@ -95,7 +95,7 @@ export const Hero: React.FC = () => {
               }}
             >
               <span style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
-                ExpenseX AI — #1 Smart AI Expense Tracker &amp; Personal Finance Companion
+                ExpenseX AI — Smart AI Expense Tracker &amp; Personal Finance Companion
               </span>
               <span style={{ color: '#FFFFFF', display: 'block' }}>{HERO_DATA.headlinePart1}</span>
               <span className="text-gradient-purple" style={{ display: 'block' }}>
@@ -207,15 +207,18 @@ export const Hero: React.FC = () => {
                 }}
               />
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>
-                Safe to Spend: $18,500
+                Safe to Spend: $18,500 <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 400 }}>(Demo)</span>
               </span>
             </div>
 
             <HeroPhone3D />
+            <div style={{ position: 'absolute', bottom: '-26px', left: 0, right: 0, textAlign: 'center', fontSize: '11.5px', color: '#94A3B8', pointerEvents: 'none' }}>
+              * Illustrative demo interface • Private Beta Preview
+            </div>
           </div>
         </div>
 
-        {/* Bottom Trust & Metrics Strip (Image 1 style) */}
+        {/* Bottom Trust & Metrics Strip (Verified Feature Highlights) */}
         <div
           className="hero-metrics-strip"
           style={{
@@ -235,41 +238,41 @@ export const Hero: React.FC = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(109, 61, 245, 0.2)', border: '1px solid rgba(139, 92, 246, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A78BFA', flexShrink: 0 }}>
-              <Users size={20} />
+              <Cpu size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>50K+</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Happy Users</div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Multi-Modal</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Voice, OCR &amp; SMS</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(255, 186, 68, 0.15)', border: '1px solid rgba(255, 186, 68, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFBA44', flexShrink: 0 }}>
-              <Star size={20} fill="#FFBA44" />
+              <Users size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>4.8 ★</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>App Rating</div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Private Beta</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Active Testing Cohort</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(236, 72, 153, 0.15)', border: '1px solid rgba(236, 72, 153, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EC4899', flexShrink: 0 }}>
-              <Heart size={20} fill="#EC4899" />
+            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', flexShrink: 0 }}>
+              <Shield size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>100%</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Focused on You</div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>AES-256</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Cloud KMS Encrypted</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38BDF8', flexShrink: 0 }}>
-              <Globe size={20} />
+              <Lock size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Global</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Growing Everyday</div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Zero Ads</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>No Model Training</div>
             </div>
           </div>
         </div>

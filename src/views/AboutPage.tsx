@@ -21,10 +21,10 @@ export const AboutPage: React.FC = () => {
   };
 
   const stats = [
-    { value: '< 140ms', label: 'AI OCR Latency', icon: <Zap size={18} color="#FF5A36" /> },
-    { value: '99.4%', label: 'Extraction Precision', icon: <Award size={18} color="#A78BFA" /> },
-    { value: '100%', label: 'Hands-Free Capable', icon: <Cpu size={18} color="#38BDF8" /> },
-    { value: 'Zero', label: 'Public Model Training', icon: <Lock size={18} color="#10B981" /> },
+    { value: 'Sub-Sec', label: 'AI Inference Speed', icon: <Zap size={18} color="#FF5A36" /> },
+    { value: 'Multi-Modal', label: 'Vision, Voice & NLP', icon: <Award size={18} color="#A78BFA" /> },
+    { value: 'Hands-Free', label: 'Autonomous Capture', icon: <Cpu size={18} color="#38BDF8" /> },
+    { value: 'Zero Ads', label: 'No Model Training', icon: <Lock size={18} color="#10B981" /> },
   ];
 
   const aiPillars = [
@@ -32,8 +32,8 @@ export const AboutPage: React.FC = () => {
       icon: <Sparkles size={24} color="#FF5A36" />,
       tag: 'VISION OCR',
       title: 'Multi-Modal Receipt Intelligence',
-      desc: 'Our proprietary vision pipeline extracts merchant names, tax breakdowns, itemized SKUs, and transaction totals from crumpled physical paper receipts and digital screenshots in milliseconds.',
-      highlight: 'Sub-second parsing with 99.4% OCR benchmark accuracy',
+      desc: 'Our proprietary vision pipeline extracts merchant names, tax breakdowns, itemized SKUs, and transaction totals from physical paper receipts and digital screenshots.',
+      highlight: 'Sub-second parsing with high-accuracy neural vision models',
     },
     {
       icon: <Cpu size={24} color="#A78BFA" />,
