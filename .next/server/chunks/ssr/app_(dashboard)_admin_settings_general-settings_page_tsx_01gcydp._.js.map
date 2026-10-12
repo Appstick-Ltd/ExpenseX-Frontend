@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../app/%28dashboard%29/admin/settings/general-settings/page.tsx"],"sourcesContent":["'use client';\nexport { default } from '../page';\n"],"names":[],"mappings":"uCACA,IAAA,EAAA,EAAA,CAAA,CAAA"}

@@ -1,5 +1,11 @@
 {
-  "/(dashboard)/admin/settings/email-settings/page": "app/(dashboard)/admin/settings/email-settings/page.js",
+  "/(dashboard)/admin/auth/page": "app/(dashboard)/admin/auth/page.js",
+  "/(dashboard)/admin/page": "app/(dashboard)/admin/page.js",
+  "/(dashboard)/admin/services/category/page": "app/(dashboard)/admin/services/category/page.js",
   "/(dashboard)/admin/settings/general-settings/page": "app/(dashboard)/admin/settings/general-settings/page.js",
-  "/(dashboard)/admin/settings/payment-settings/page": "app/(dashboard)/admin/settings/payment-settings/page.js"
+  "/(dashboard)/admin/subscription/history/page": "app/(dashboard)/admin/subscription/history/page.js",
+  "/(dashboard)/admin/subscription/plan/page": "app/(dashboard)/admin/subscription/plan/page.js",
+  "/(dashboard)/admin/users/system-users/page": "app/(dashboard)/admin/users/system-users/page.js",
+  "/(site)/page": "app/(site)/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }

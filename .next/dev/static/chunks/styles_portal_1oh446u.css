@@ -179,7 +179,7 @@
 }
 
 .mc-input:focus {
-  background: #fff !important;
+  background-color: #fff !important;
   border-color: #6d3df5 !important;
   box-shadow: 0 0 0 3px #6d3df529 !important;
 }
@@ -208,6 +208,32 @@ input.mc-input, textarea.mc-input, select.mc-input {
   display: block !important;
   position: relative !important;
   left: 0 !important;
+}
+
+.mc-card {
+  border: 1px solid var(--mc-border);
+  box-shadow: var(--mc-shadow-sm);
+  background: #fff;
+  border-radius: 14px;
+}
+
+select.mc-input {
+  cursor: pointer;
+  appearance: none !important;
+  background-color: #fff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-position: right 14px center !important;
+  background-repeat: no-repeat !important;
+  background-size: 16px 16px !important;
+  padding-right: 40px !important;
+}
+
+select.mc-input:focus {
+  background-color: #fff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236D3DF5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-position: right 14px center !important;
+  background-repeat: no-repeat !important;
+  background-size: 16px 16px !important;
 }
 
 button[class*="tempmail" i], span[class*="tempmail" i], div[class*="tempmail" i], div[id*="tempmail" i], div[class*="temp-mail" i], div[id*="temp-mail" i], img[src*="tempmail" i] {
@@ -527,8 +553,28 @@ button[class*="tempmail" i], span[class*="tempmail" i], div[class*="tempmail" i]
 }
 
 .mc-table-wrap {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
   width: 100%;
   overflow-x: auto;
+}
+
+.mc-table-wrap::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.mc-table-wrap::-webkit-scrollbar-track {
+  background: none;
+}
+
+.mc-table-wrap::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.mc-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .mc-table {
@@ -1421,6 +1467,18 @@ button[class*="tempmail" i], span[class*="tempmail" i], div[class*="tempmail" i]
 .mc-table tbody tr.mc-skeleton-tr td {
   vertical-align: middle;
   padding: 16px 14px;
+}
+
+.mc-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  display: grid;
+}
+
+@media (max-width: 640px) {
+  .mc-grid-2 {
+    grid-template-columns: 1fr;
+  }
 }
 
 /*# sourceMappingURL=styles_portal_1oh446u.css.map*/

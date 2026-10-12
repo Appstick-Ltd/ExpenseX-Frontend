@@ -1,3 +1,0 @@
-module.exports=[96427,a=>{"use strict";a.s(["default",()=>b]);let b=(0,a.i(11857).registerClientReference)(function(){throw Error("Attempted to call the default export of [project]/app/loading.tsx from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"[project]/app/loading.tsx","default")},63588,a=>{"use strict";var b=a.i(96427);a.n(b)},45538,function(a){a.n(a.i(63588))}];
-
-//# sourceMappingURL=app_loading_tsx_1msu4cw._.js.map

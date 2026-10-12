@@ -1,3 +1,0 @@
-{
-  "/(dashboard)/admin/settings/[subtab]/page": "app/(dashboard)/admin/settings/[subtab]/page.js"
-}

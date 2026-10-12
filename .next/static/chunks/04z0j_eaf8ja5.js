@@ -1,5 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,5789,e=>{"use strict";var i=e.i(43476);e.s(["default",0,function(){return(0,i.jsxs)("div",{style:{minHeight:"100vh",background:"#05070D",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:"20px"},children:[(0,i.jsx)("div",{style:{width:"50px",height:"50px",borderRadius:"50%",border:"3px solid rgba(109, 61, 245, 0.2)",borderTopColor:"#6D3DF5",borderRightColor:"#FF5A36",animation:"spin 0.8s linear infinite"}}),(0,i.jsx)("span",{style:{fontSize:"14px",color:"#94A3B8",letterSpacing:"0.05em",fontFamily:"'Geist', 'Inter', sans-serif"},children:"Loading ExpenseX..."}),(0,i.jsx)("style",{children:`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `})]})}])}]);
