@@ -71,7 +71,7 @@ export const AboutView: React.FC = () => {
 
       <div style={{ paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           {/* Back Pill Button */}
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <Link
@@ -269,10 +269,10 @@ export const AboutView: React.FC = () => {
                   <Building2 size={14} /> CORPORATE GOVERNANCE
                 </div>
                 <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#FFFFFF', marginBottom: '16px' }}>
-                  A Flagship Product of Appstick Ltd.
+                  A Flagship Product of Appstick
                 </h2>
                 <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
-                  ExpenseX AI is conceived, developed, and globally operated by <strong>Appstick Ltd.</strong>, an incorporated software engineering organization headquartered in Khulna, Bangladesh. ExpenseX AI is an official software product of Appstick Ltd. and is not a separately incorporated entity.
+                  ExpenseX AI is conceived, developed, and globally operated by <strong>Appstick</strong>, an incorporated software engineering organization headquartered in Khulna, Bangladesh. ExpenseX AI is an official software product of Appstick and is not a separately incorporated entity.
                 </p>
                 <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '14px', padding: '16px 20px', marginBottom: '16px' }}>
                   <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '4px' }}>FOUNDER &amp; CEO</div>

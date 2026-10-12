@@ -13,7 +13,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'What is ExpenseX AI and how does it track expenses automatically?',
     answer:
-      'ExpenseX AI is an autonomous personal finance platform and expense companion developed by Appstick Ltd. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
+      'ExpenseX AI is an autonomous personal finance platform and expense companion developed by Appstick Unlike traditional manual budget apps, ExpenseX AI captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
     keywords: 'AI expense tracker, automatic finance, receipt scanner',
   },
   {
@@ -199,7 +199,7 @@ export const FAQ: React.FC = () => {
         >
           <div>
             <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF' }}>Monitored Communication Channels</div>
-            <div style={{ fontSize: '12px', color: '#94A3B8' }}>ExpenseX AI is an official product developed by Appstick Ltd.</div>
+            <div style={{ fontSize: '12px', color: '#94A3B8' }}>ExpenseX AI is an official product developed by Appstick</div>
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px' }}>
             <div>

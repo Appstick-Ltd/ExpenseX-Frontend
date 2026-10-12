@@ -413,7 +413,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Copyright & Powered by Row */}
         <div className="footer-bottom-row">
           <div className="footer-copyright">
-            &copy; 2026 ExpenseX AI &bull; Developed &amp; operated by Appstick Ltd. All transactions shown are illustrative demo data.
+            &copy; 2026 ExpenseX AI &bull; Developed &amp; operated by Appstick All transactions shown are illustrative demo data.
           </div>
           <div className="footer-bottom-legal">
             <a
@@ -452,7 +452,7 @@ export const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="footer-powered-by-link"
             >
-              Appstick Ltd.
+              Appstick
             </a>
           </div>
         </div>

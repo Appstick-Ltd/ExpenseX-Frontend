@@ -11,7 +11,7 @@ export const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
-    document.title = 'Official Contact Channels — ExpenseX AI & Appstick Ltd.';
+    document.title = 'Official Contact Channels — ExpenseX AI & Appstick';
     window.scrollTo(0, 0);
   }, []);
 
@@ -30,7 +30,7 @@ export const ContactPage: React.FC = () => {
 
   return (
     <div className="app-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)', position: 'relative', overflowX: 'hidden' }}>
-      
+
       {/* Ambient background glow */}
       <div
         style={{
@@ -52,7 +52,7 @@ export const ContactPage: React.FC = () => {
 
       <main style={{ flex: 1, paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '1060px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <a
               href="/"
@@ -207,7 +207,7 @@ export const ContactPage: React.FC = () => {
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '3px' }}>PARENT COMPANY &bull; LEADERSHIP</div>
-                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>Appstick Ltd.</div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>Appstick</div>
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Founder &amp; CEO: Md. Riaz Mahmud</div>
                   </div>
                 </div>

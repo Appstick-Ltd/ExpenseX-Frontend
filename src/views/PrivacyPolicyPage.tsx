@@ -7,7 +7,7 @@ import { playMicroClick } from '../utils/audio';
 
 export const PrivacyPolicyPage: React.FC = () => {
   useEffect(() => {
-    document.title = 'Privacy Policy & Data Rights — ExpenseX AI & Appstick Ltd.';
+    document.title = 'Privacy Policy & Data Rights — ExpenseX AI & Appstick';
     window.scrollTo(0, 0);
   }, []);
 
@@ -20,7 +20,7 @@ export const PrivacyPolicyPage: React.FC = () => {
 
   return (
     <div className="app-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)', position: 'relative', overflowX: 'hidden' }}>
-      
+
       {/* Ambient background glow */}
       <div
         style={{
@@ -42,7 +42,7 @@ export const PrivacyPolicyPage: React.FC = () => {
 
       <main style={{ flex: 1, paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <a
               href="/"
@@ -87,7 +87,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               Privacy Policy &amp; Security Charter
             </h1>
             <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>
-              Effective Date: October 1, 2026 &bull; Published by Appstick Ltd. &bull; Last Audited: October 6, 2026
+              Effective Date: October 1, 2026 &bull; Published by Appstick &bull; Last Audited: October 6, 2026
             </p>
           </div>
 
@@ -152,7 +152,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                 1. Data Controller &amp; Legal Entity
               </h2>
               <p>
-                ExpenseX AI (&ldquo;ExpenseX AI&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) is operated by <strong>Appstick Ltd.</strong>, an incorporated software engineering organization headquartered at 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh. This policy governs data collected through <a href="https://expensexai.com" style={{ color: 'var(--purple-light)' }}>https://expensexai.com</a>, our iOS and Android mobile software, and backend APIs.
+                ExpenseX AI (&ldquo;ExpenseX AI&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) is operated by <strong>Appstick</strong>, an incorporated software engineering organization headquartered at 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh. This policy governs data collected through <a href="https://expensexai.com" style={{ color: 'var(--purple-light)' }}>https://expensexai.com</a>, our iOS and Android mobile software, and backend APIs.
               </p>
             </section>
 
@@ -204,7 +204,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                 5. Privacy Inquiries &amp; Governance
               </h2>
               <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '24px' }}>
-                <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick Ltd. (ExpenseX AI Privacy Governance)</div>
+                <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick (ExpenseX AI Privacy Governance)</div>
                 <div>50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh</div>
                 <div>Official Contact: <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)' }}>info@expensexai.com</a> | <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)' }}>privacy@expensexai.com</a></div>
                 <div>Direct Telephone / WhatsApp: +880 1404-049797</div>

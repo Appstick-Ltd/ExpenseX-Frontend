@@ -31,7 +31,7 @@ export const TermsView: React.FC = () => {
 
       <div style={{ paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           {/* Back Pill Button */}
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <Link
@@ -76,7 +76,7 @@ export const TermsView: React.FC = () => {
               Terms of Service
             </h1>
             <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>
-              Effective Date: October 1, 2026 &bull; Published by Appstick Ltd. &bull; Last Revised: October 6, 2026
+              Effective Date: October 1, 2026 &bull; Published by Appstick &bull; Last Revised: October 6, 2026
             </p>
           </div>
 
@@ -101,7 +101,7 @@ export const TermsView: React.FC = () => {
                 Important Financial Disclaimer
               </h3>
               <p style={{ fontSize: '14.5px', color: '#CBD5E1', lineHeight: 1.6, margin: 0 }}>
-                ExpenseX AI is an algorithmic organization and expense tracking platform. ExpenseX AI and Appstick Ltd. are not licensed financial planners, brokers, or tax advisors. Predictions (such as the Safe-to-Spend™ metric) are computational projections and should not be considered fiduciary advice.
+                ExpenseX AI is an algorithmic organization and expense tracking platform. ExpenseX AI and Appstick are not licensed financial planners, brokers, or tax advisors. Predictions (such as the Safe-to-Spend™ metric) are computational projections and should not be considered fiduciary advice.
               </p>
             </div>
           </div>
@@ -127,7 +127,7 @@ export const TermsView: React.FC = () => {
                 1. Acceptance of Binding Agreement
               </h2>
               <p>
-                By creating an account, accessing <a href="https://expensexai.com" style={{ color: 'var(--purple-light)' }}>https://expensexai.com</a>, or utilizing ExpenseX AI mobile applications, you agree to comply with and be bound by these Terms of Service between you and <strong>Appstick Ltd.</strong>
+                By creating an account, accessing <a href="https://expensexai.com" style={{ color: 'var(--purple-light)' }}>https://expensexai.com</a>, or utilizing ExpenseX AI mobile applications, you agree to comply with and be bound by these Terms of Service between you and <strong>Appstick</strong>
               </p>
             </section>
 
@@ -147,7 +147,7 @@ export const TermsView: React.FC = () => {
                 3. Intellectual Property Ownership
               </h2>
               <p>
-                All brand marks, logos, user experience designs, computer vision algorithms, and backend software systems associated with ExpenseX AI are the exclusive intellectual property of Appstick Ltd. You are granted a personal, non-transferable license to access the platform.
+                All brand marks, logos, user experience designs, computer vision algorithms, and backend software systems associated with ExpenseX AI are the exclusive intellectual property of Appstick You are granted a personal, non-transferable license to access the platform.
               </p>
             </section>
 
@@ -167,7 +167,7 @@ export const TermsView: React.FC = () => {
                 5. Legal Contact Information
               </h2>
               <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '24px' }}>
-                <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick Ltd. (Legal Affairs)</div>
+                <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick (Legal Affairs)</div>
                 <div>50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh</div>
                 <div>Official Email: <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)' }}>info@expensexai.com</a></div>
                 <div>Telephone / WhatsApp: +880 1404-049797</div>

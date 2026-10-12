@@ -9,7 +9,7 @@ import { openEarlyAccessModal } from '../utils/modalEvents';
 
 export const AboutPage: React.FC = () => {
   useEffect(() => {
-    document.title = 'About ExpenseX AI — Autonomous Personal Finance by Appstick Ltd.';
+    document.title = 'About ExpenseX AI — Autonomous Personal Finance by Appstick';
     window.scrollTo(0, 0);
   }, []);
 
@@ -60,7 +60,7 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="app-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)', position: 'relative', overflowX: 'hidden' }}>
-      
+
       {/* Cinematic Ambient Atmosphere Glow */}
       <div
         style={{
@@ -82,7 +82,7 @@ export const AboutPage: React.FC = () => {
 
       <main style={{ flex: 1, paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           {/* Back Pill Button */}
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <a
@@ -123,7 +123,7 @@ export const AboutPage: React.FC = () => {
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
               <div className="section-eyebrow" style={{ display: 'inline-flex', marginBottom: '16px' }}>
                 <span className="section-eyebrow-dot" />
-                <span>EXPENSEX AI • POWERED BY APPSTICK LTD.</span>
+                <span>EXPENSEX AI • POWERED BY Appstick</span>
               </div>
             </motion.div>
 
@@ -229,7 +229,7 @@ export const AboutPage: React.FC = () => {
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>Appstick Ltd.</h2>
+                      <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>Appstick</h2>
                       <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                         VERIFIED ENTITY
                       </span>

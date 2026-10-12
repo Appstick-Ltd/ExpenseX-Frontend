@@ -31,7 +31,7 @@ export const PrivacyPolicyView: React.FC = () => {
 
       <div style={{ paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           {/* Back Pill Button */}
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <Link
@@ -77,7 +77,7 @@ export const PrivacyPolicyView: React.FC = () => {
               Privacy Policy &amp; Data Rights
             </h1>
             <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>
-              Effective Date: October 1, 2026 &bull; Published by Appstick Ltd. &bull; Last Revised: October 12, 2026
+              Effective Date: October 1, 2026 &bull; Published by Appstick &bull; Last Revised: October 12, 2026
             </p>
           </div>
 
@@ -142,7 +142,7 @@ export const PrivacyPolicyView: React.FC = () => {
                 1. Data Controller &amp; Legal Entity
               </h2>
               <p>
-                ExpenseX AI (&ldquo;ExpenseX AI&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) is a proprietary consumer finance software platform developed, owned, and globally operated by <strong>Appstick Ltd.</strong>, an incorporated software engineering firm headquartered at 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh. This policy governs data collected through <a href="https://expensexai.com" style={{ color: 'var(--purple-light)' }}>https://expensexai.com</a>, our iOS and Android mobile software, and backend cloud APIs.
+                ExpenseX AI (&ldquo;ExpenseX AI&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) is a proprietary consumer finance software platform developed, owned, and globally operated by <strong>Appstick</strong>, an incorporated software engineering firm headquartered at 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh. This policy governs data collected through <a href="https://expensexai.com" style={{ color: 'var(--purple-light)' }}>https://expensexai.com</a>, our iOS and Android mobile software, and backend cloud APIs.
               </p>
             </section>
 
@@ -213,7 +213,7 @@ export const PrivacyPolicyView: React.FC = () => {
                 6. Contact &amp; Governance Channels
               </h2>
               <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '24px' }}>
-                <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick Ltd. (ExpenseX AI Privacy Governance)</div>
+                <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick (ExpenseX AI Privacy Governance)</div>
                 <div>50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh</div>
                 <div style={{ marginTop: '8px' }}>
                   <strong>Corporate Inquiries:</strong> <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)' }}>info@expensexai.com</a>

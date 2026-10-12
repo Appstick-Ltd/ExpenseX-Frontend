@@ -115,7 +115,7 @@ const jsonLdOrg = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'ExpenseX AI',
-  legalName: 'Appstick Ltd.',
+  legalName: 'Appstick',
   url: 'https://expensexai.com/',
   logo: 'https://expensexai.com/logo-512.png',
   foundingLocation: {
@@ -173,7 +173,7 @@ const jsonLdFaq = {
       name: 'What is ExpenseX AI and how does it track expenses automatically?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'ExpenseX AI is an autonomous personal finance platform developed by Appstick Ltd. It captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
+        text: 'ExpenseX AI is an autonomous personal finance platform developed by Appstick It captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
       },
     },
     {
@@ -246,7 +246,7 @@ export default function RootLayout({
             __html: `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 840px; margin: 40px auto; padding: 24px; line-height: 1.6; color: #1e293b; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
   <h1 style="color: #0f172a; margin-bottom: 8px;">ExpenseX AI — Autonomous Personal Finance &amp; Expense Manager</h1>
   <p style="font-size: 15px; color: #475569; margin-bottom: 16px;">
-    <strong>Company:</strong> Appstick Ltd. &bull; 
+    <strong>Company:</strong> Appstick &bull; 
     <strong>Founder &amp; CEO:</strong> Md. Riaz Mahmud &bull; 
     <strong>Headquarters:</strong> 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh
   </p>
@@ -262,7 +262,7 @@ export default function RootLayout({
   </div>
   <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
   <h2 style="color: #0f172a; font-size: 20px;">About ExpenseX AI</h2>
-  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick Ltd. to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
+  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
   <h2 style="color: #0f172a; font-size: 20px;">Feature Availability Status</h2>
   <ul style="padding-left: 20px;">
     <li><strong>Available Now (Private Beta):</strong> Multi-Modal Vision OCR Receipt Capture, Voice Expense Entry, Bank SMS Transaction Parsing, Email Invoice Sync, Smart Categorization, Deduplication Engine.</li>

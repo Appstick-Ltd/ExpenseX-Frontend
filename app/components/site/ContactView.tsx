@@ -41,7 +41,7 @@ export const ContactView: React.FC = () => {
 
       <div style={{ paddingTop: '110px', paddingBottom: '90px', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 24px' }}>
-          
+
           {/* Back Pill Button */}
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <Link
@@ -188,7 +188,7 @@ export const ContactView: React.FC = () => {
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '3px' }}>PARENT COMPANY &bull; LEADERSHIP</div>
-                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>Appstick Ltd.</div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>Appstick</div>
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Founder &amp; CEO: Md. Riaz Mahmud</div>
                   </div>
                 </div>
