@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import '../styles/globals.css';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import { ToasterProvider } from './components/common/ToasterProvider';
 
 export const metadata: Metadata = {
   title: 'ExpenseX AI — Your AI Money Assistant | Track Expenses Without Typing',
@@ -160,6 +162,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <ToasterProvider />
         <div id="root">{children}</div>
       </body>
     </html>

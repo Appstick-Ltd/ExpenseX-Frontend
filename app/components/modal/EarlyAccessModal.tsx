@@ -5,6 +5,7 @@ import { playMicroClick, playSuccessChime } from '../../helpers/audio';
 import { triggerHaptic } from '../../helpers/haptics';
 import { submitBetaUser } from '../../helpers/backend';
 import { getStoredReferralCode } from '../../helpers/referral';
+import { showErrorToast } from '../../helpers/notification';
 const appleLogoSrc = '/apple-logo.png';
 const googlePlaySrc = '/Google_Play_2022_icon.svg';
 
@@ -233,14 +234,16 @@ export const EarlyAccessModal: React.FC = () => {
         rawMessage.toLowerCase().includes('network');
 
       if (isNetworkError) {
-        setApiError('Unable to reach server. Please check your internet connection and try again.');
+        const errorMsg = 'Unable to reach server. Please check your internet connection and try again.';
+        setApiError(errorMsg);
+        showErrorToast(errorMsg);
       } else {
         const targetEmail = email.trim();
-        setApiError(
-          targetEmail
-            ? `Each email address can only be used once. If you have already registered with (${targetEmail}), your early access spot is already secured!`
-            : 'Each email address can only be used once for registration. If you already signed up, your spot is confirmed.'
-        );
+        const errorMsg = targetEmail
+          ? `Each email address can only be used once. If you have already registered with (${targetEmail}), your early access spot is already secured!`
+          : 'Each email address can only be used once for registration. If you already signed up, your spot is confirmed.';
+        setApiError(errorMsg);
+        showErrorToast(errorMsg);
       }
     } finally {
       setIsSubmitting(false);

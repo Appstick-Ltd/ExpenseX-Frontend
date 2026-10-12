@@ -3,14 +3,24 @@ import React, { useEffect, useState, useMemo } from 'react';
 import {
   getSettingsPages,
   updateSettingsPage,
-  SettingPageItem,
 } from '../../../../helpers/backend';
+
+export interface SettingPageItem {
+  _id: string;
+  slug: string;
+  content: {
+    title?: string | Record<string, string> | null;
+    description?: string | Record<string, string> | null;
+    [key: string]: any;
+  };
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
 import {
   FileText,
   Save,
   RefreshCw,
-  CheckCircle2,
-  AlertCircle,
   Globe,
   Eye,
   Code,
@@ -20,9 +30,9 @@ import {
   Info,
   PhoneCall,
   Scale,
-  Sparkles,
 } from 'lucide-react';
 import { Shimmer } from '../../../../components/common/Shimmer';
+import { showSuccessAlert, showErrorToast } from '../../../../helpers/notification';
 
 // Known default icons per slug
 const SLUG_ICONS: Record<string, React.ElementType> = {
@@ -89,18 +99,15 @@ export default function AdminPageSettingsPage() {
   const [selectedSlug, setSelectedSlug] = useState<string>('about');
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
 
   // Active page state for editing
   const [activeId, setActiveId] = useState<string>('');
   const [activeStatus, setActiveStatus] = useState<boolean>(true);
-  const [activeLanguage, setActiveLanguage] = useState<string>('en');
-  const [availableLanguages, setAvailableLanguages] = useState<string[]>(['en']);
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'bn'>('en');
 
-  // Multilingual or string content maps
-  const [titleMap, setTitleMap] = useState<Record<string, string>>({ en: '' });
-  const [descriptionMap, setDescriptionMap] = useState<Record<string, string>>({ en: '' });
+  // Multilingual content maps
+  const [titleMap, setTitleMap] = useState<Record<string, string>>({ en: '', bn: '' });
+  const [descriptionMap, setDescriptionMap] = useState<Record<string, string>>({ en: '', bn: '' });
 
   // Preview Mode: 'edit' or 'preview'
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
@@ -108,14 +115,12 @@ export default function AdminPageSettingsPage() {
   // Load all pages from GET /settings/pages
   const fetchAllPages = async (targetSlugToSelect?: string) => {
     setLoading(true);
-    setSaveError(null);
     try {
       const res = await getSettingsPages();
       const rawList: SettingPageItem[] = Array.isArray(res?.data) ? res.data : [];
 
       let mergedList = [...rawList];
       if (mergedList.length === 0) {
-        // Fallback to defaults if backend collection is currently empty
         mergedList = DEFAULT_PAGES as SettingPageItem[];
       }
 
@@ -129,8 +134,7 @@ export default function AdminPageSettingsPage() {
       }
     } catch (err: any) {
       console.warn('Failed to load page settings:', err);
-      setSaveError(err?.message || 'Failed to connect to /settings/pages API.');
-      // Use defaults as fallback for seamless editing
+      showErrorToast(err?.message || 'Failed to connect to /settings/pages API.');
       setPages(DEFAULT_PAGES as SettingPageItem[]);
       const fallback = (DEFAULT_PAGES as SettingPageItem[]).find((p) => p.slug === selectedSlug) || DEFAULT_PAGES[0];
       if (fallback) loadPageIntoEditor(fallback as SettingPageItem);
@@ -147,7 +151,7 @@ export default function AdminPageSettingsPage() {
     const rawContent = page.content || {};
 
     // Extract Titles
-    const tMap: Record<string, string> = {};
+    const tMap: Record<string, string> = { en: '', bn: '' };
     if (typeof rawContent.title === 'object' && rawContent.title !== null) {
       Object.entries(rawContent.title).forEach(([k, v]) => {
         tMap[k] = typeof v === 'string' ? v : String(v || '');
@@ -157,7 +161,7 @@ export default function AdminPageSettingsPage() {
     }
 
     // Extract Descriptions
-    const dMap: Record<string, string> = {};
+    const dMap: Record<string, string> = { en: '', bn: '' };
     if (typeof rawContent.description === 'object' && rawContent.description !== null) {
       Object.entries(rawContent.description).forEach(([k, v]) => {
         dMap[k] = typeof v === 'string' ? v : String(v || '');
@@ -166,16 +170,7 @@ export default function AdminPageSettingsPage() {
       dMap['en'] = rawContent.description;
     }
 
-    // Determine available language keys
-    const langSet = new Set<string>(['en', ...Object.keys(tMap), ...Object.keys(dMap)]);
-    const langArr = Array.from(langSet).filter(Boolean);
-    setAvailableLanguages(langArr.length > 0 ? langArr : ['en']);
-
-    if (!langArr.includes(activeLanguage)) {
-      setActiveLanguage(langArr[0] || 'en');
-    }
-
-    setTitleMap(Object.keys(tMap).length > 0 ? tMap : { en: formatSlugTitle(page.slug) });
+    setTitleMap(tMap);
     setDescriptionMap(dMap);
   };
 
@@ -184,8 +179,6 @@ export default function AdminPageSettingsPage() {
   }, []);
 
   const handleSelectPage = (page: SettingPageItem) => {
-    setSaveSuccess(null);
-    setSaveError(null);
     loadPageIntoEditor(page);
   };
 
@@ -203,34 +196,25 @@ export default function AdminPageSettingsPage() {
     }));
   };
 
-  const handleAddLanguage = () => {
-    const code = prompt('Enter 2-letter language code (e.g. es, de, bn, ar):');
-    if (code && code.trim()) {
-      const clean = code.trim().toLowerCase();
-      if (!availableLanguages.includes(clean)) {
-        setAvailableLanguages((prev) => [...prev, clean]);
-        setActiveLanguage(clean);
-      }
-    }
-  };
-
-  // Submit PATCH /settings/pages matching backend updateSettingPageValidationSchema strictly
+  // Submit PATCH /settings/pages
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeId) {
-      setSaveError('Page _id is required to update page setting.');
+      showErrorToast('Page ID is missing.');
       return;
     }
 
     setSaving(true);
-    setSaveSuccess(null);
-    setSaveError(null);
 
-    // Build normalized content payload
-    // If only 'en' exists and was originally a simple string or single object
     const finalContent: Record<string, any> = {
-      title: titleMap,
-      description: descriptionMap,
+      title: {
+        ...(typeof activePageItem?.content?.title === 'object' ? activePageItem.content.title : {}),
+        ...titleMap,
+      },
+      description: {
+        ...(typeof activePageItem?.content?.description === 'object' ? activePageItem.content.description : {}),
+        ...descriptionMap,
+      },
     };
 
     const payload = {
@@ -241,14 +225,16 @@ export default function AdminPageSettingsPage() {
 
     try {
       const res = await updateSettingsPage(payload);
+      if (res?.success === false || res?.statusCode >= 400) {
+        showErrorToast(res?.message || res?.errorMessage || 'Failed to update page settings.');
+        return;
+      }
       const msg = res?.message || res?.data?.message || 'Page setting updated successfully!';
-      setSaveSuccess(msg);
-      setTimeout(() => setSaveSuccess(null), 4000);
+      showSuccessAlert(msg);
 
-      // Refresh list to sync updated timestamps and status
       await fetchAllPages(selectedSlug);
     } catch (err: any) {
-      setSaveError(err?.message || 'Failed to update page settings via PATCH /settings/pages.');
+      showErrorToast(err?.message || 'Failed to update page settings.');
     } finally {
       setSaving(false);
     }
@@ -262,101 +248,15 @@ export default function AdminPageSettingsPage() {
   const CurrentIcon = SLUG_ICONS[selectedSlug] || FileText;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Top Header Banner */}
-      <div
-        className="mc-card"
-        style={{
-          padding: '20px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 16,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div
-            style={{
-              width: 46,
-              height: 46,
-              borderRadius: 12,
-              background: 'linear-gradient(135deg, rgba(109,61,245,0.15), rgba(139,92,246,0.06))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--mc-brand-purple)',
-              boxShadow: '0 2px 8px rgba(109,61,245,0.1)',
-            }}
-          >
-            <FileText size={24} />
-          </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
-                Page Settings & Telemetry CMS
-              </h2>
-              <span className="mc-brand-badge" style={{ fontSize: 10, padding: '2px 8px' }}>
-                /settings/pages API
-              </span>
-            </div>
-            <p style={{ fontSize: 13, margin: '4px 0 0 0', color: 'var(--mc-text-muted)' }}>
-              Manage public disclosure pages, terms, and informational content via unified <code>GET/PATCH /settings/pages</code>
-            </p>
-          </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
+            Page Settings
+          </h2>
         </div>
-
-        <button
-          type="button"
-          onClick={() => fetchAllPages(selectedSlug)}
-          className="mc-btn-secondary"
-          style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}
-        >
-          <RefreshCw size={14} className={loading ? 'mc-spin' : ''} />
-          <span>Reload Pages</span>
-        </button>
       </div>
-
-      {/* Feedback Alerts */}
-      {saveSuccess && (
-        <div
-          style={{
-            padding: '12px 16px',
-            borderRadius: 8,
-            background: '#F0FDF4',
-            border: '1px solid #BBF7D0',
-            color: '#15803D',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 14,
-            fontWeight: 500,
-          }}
-        >
-          <CheckCircle2 size={18} />
-          <span>{saveSuccess}</span>
-        </div>
-      )}
-
-      {saveError && (
-        <div
-          style={{
-            padding: '12px 16px',
-            borderRadius: 8,
-            background: '#FEF2F2',
-            border: '1px solid #FECACA',
-            color: '#B91C1C',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 14,
-            fontWeight: 500,
-          }}
-        >
-          <AlertCircle size={18} />
-          <span>{saveError}</span>
-        </div>
-      )}
 
       {/* Main 2-Column Responsive Layout */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1fr) 3fr', gap: '20px' }}>
@@ -504,9 +404,6 @@ export default function AdminPageSettingsPage() {
                         <Tag size={12} />
                         <code>slug: {selectedSlug}</code>
                       </span>
-                      {activeId && (
-                        <span>• <code>_id: {activeId}</code></span>
-                      )}
                       {activePageItem?.updatedAt && (
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                           • <Clock size={12} /> {new Date(activePageItem.updatedAt).toLocaleDateString()}
@@ -569,46 +466,47 @@ export default function AdminPageSettingsPage() {
                   <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', marginRight: 4 }}>
                     Language:
                   </span>
-                  {availableLanguages.map((lang) => {
-                    const isActive = activeLanguage === lang;
-                    return (
-                      <button
-                        key={lang}
-                        type="button"
-                        onClick={() => setActiveLanguage(lang)}
-                        style={{
-                          padding: '4px 10px',
-                          borderRadius: 6,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          cursor: 'pointer',
-                          border: isActive ? '1px solid var(--mc-brand-purple)' : '1px solid #E2E8F0',
-                          background: isActive ? 'var(--mc-brand-purple)' : '#FFFFFF',
-                          color: isActive ? '#FFFFFF' : '#475569',
-                          transition: 'all 0.15s',
-                        }}
-                      >
-                        {lang}
-                      </button>
-                    );
-                  })}
-
                   <button
                     type="button"
-                    onClick={handleAddLanguage}
+                    onClick={() => setActiveLanguage('en')}
                     style={{
-                      padding: '4px 8px',
+                      padding: '5px 12px',
                       borderRadius: 6,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color: 'var(--mc-brand-purple)',
-                      background: 'none',
-                      border: '1px dashed var(--mc-brand-purple)',
+                      fontSize: 12,
+                      fontWeight: activeLanguage === 'en' ? 700 : 500,
                       cursor: 'pointer',
+                      border: activeLanguage === 'en' ? '1px solid var(--mc-brand-purple)' : '1px solid #E2E8F0',
+                      background: activeLanguage === 'en' ? 'var(--mc-brand-purple)' : '#FFFFFF',
+                      color: activeLanguage === 'en' ? '#FFFFFF' : 'var(--mc-text-main)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      transition: 'all 0.15s',
                     }}
                   >
-                    + Add Lang
+                    <span>🇬🇧</span>
+                    <span>English</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLanguage('bn')}
+                    style={{
+                      padding: '5px 12px',
+                      borderRadius: 6,
+                      fontSize: 12,
+                      fontWeight: activeLanguage === 'bn' ? 700 : 500,
+                      cursor: 'pointer',
+                      border: activeLanguage === 'bn' ? '1px solid var(--mc-brand-purple)' : '1px solid #E2E8F0',
+                      background: activeLanguage === 'bn' ? 'var(--mc-brand-purple)' : '#FFFFFF',
+                      color: activeLanguage === 'bn' ? '#FFFFFF' : 'var(--mc-text-main)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <span>🇧🇩</span>
+                    <span>বাংলা</span>
                   </button>
                 </div>
 
@@ -618,14 +516,14 @@ export default function AdminPageSettingsPage() {
                     type="button"
                     onClick={() => setViewMode('edit')}
                     style={{
-                      padding: '4px 10px',
+                      padding: '5px 12px',
                       borderRadius: 6,
                       fontSize: 12,
                       fontWeight: 600,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 4,
+                      gap: 6,
                       border: viewMode === 'edit' ? '1px solid var(--mc-brand-purple)' : '1px solid transparent',
                       background: viewMode === 'edit' ? 'rgba(109,61,245,0.1)' : 'transparent',
                       color: viewMode === 'edit' ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
@@ -639,14 +537,14 @@ export default function AdminPageSettingsPage() {
                     type="button"
                     onClick={() => setViewMode('preview')}
                     style={{
-                      padding: '4px 10px',
+                      padding: '5px 12px',
                       borderRadius: 6,
                       fontSize: 12,
                       fontWeight: 600,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 4,
+                      gap: 6,
                       border: viewMode === 'preview' ? '1px solid var(--mc-brand-purple)' : '1px solid transparent',
                       background: viewMode === 'preview' ? 'rgba(109,61,245,0.1)' : 'transparent',
                       color: viewMode === 'preview' ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
@@ -661,11 +559,10 @@ export default function AdminPageSettingsPage() {
               {/* EDITOR VIEW */}
               {viewMode === 'edit' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {/* Title Attribute Field */}
+                  {/* Title Field */}
                   <div className="mc-input-group">
-                    <label className="mc-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Page Title ({activeLanguage.toUpperCase()}) *</span>
-                      <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>attribute: <code>content.title.{activeLanguage}</code></span>
+                    <label className="mc-label">
+                      Page Title ({activeLanguage === 'en' ? 'English' : 'বাংলা'}) <span style={{ color: '#EF4444' }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -677,11 +574,10 @@ export default function AdminPageSettingsPage() {
                     />
                   </div>
 
-                  {/* Description Attribute Field */}
+                  {/* Description Field */}
                   <div className="mc-input-group">
-                    <label className="mc-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Page Description / HTML Content ({activeLanguage.toUpperCase()}) *</span>
-                      <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>attribute: <code>content.description.{activeLanguage}</code></span>
+                    <label className="mc-label">
+                      Page Description / HTML Content ({activeLanguage === 'en' ? 'English' : 'বাংলা'}) <span style={{ color: '#EF4444' }}>*</span>
                     </label>
                     <textarea
                       required
@@ -724,19 +620,12 @@ export default function AdminPageSettingsPage() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
+                  justifyContent: 'flex-end',
                   borderTop: '1px solid var(--mc-border)',
                   paddingTop: 16,
                   marginTop: 8,
-                  flexWrap: 'wrap',
-                  gap: 12,
                 }}
               >
-                <div style={{ fontSize: 12, color: 'var(--mc-text-subtle)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Sparkles size={14} color="var(--mc-brand-purple)" />
-                  <span>Payload matches backend <code>updateSettingPageValidationSchema</code> strictly</span>
-                </div>
-
                 <button
                   type="submit"
                   disabled={saving || !activeId}
@@ -744,7 +633,7 @@ export default function AdminPageSettingsPage() {
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px' }}
                 >
                   {saving ? <RefreshCw size={16} className="mc-spin" /> : <Save size={16} />}
-                  <span>{saving ? 'Saving via PATCH /settings/pages...' : 'Save Page Setting'}</span>
+                  <span>{saving ? 'Saving...' : 'Save Page Setting'}</span>
                 </button>
               </div>
             </form>

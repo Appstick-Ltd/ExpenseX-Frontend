@@ -6,8 +6,7 @@ import {
   updateBetaUser,
   deleteBetaUser,
   extractListFromResponse,
-  type BetaUser,
-} from '../../helpers/backend';
+} from '../../../../helpers/backend';
 import {
   Search,
   Trash2,
@@ -22,9 +21,22 @@ import {
   FileSpreadsheet,
   Check,
 } from 'lucide-react';
-import { ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
+import { ShimmerTableRows, ShimmerMobileCardList } from '../../../../components/common/Shimmer';
+import { showSuccessAlert, showErrorToast } from '../../../../helpers/notification';
 
-export const BetaUsersTab: React.FC = () => {
+export interface BetaUser {
+  _id: string;
+  name: string;
+  email: string;
+  referral_code?: string;
+  target_platform: 'ios' | 'android' | 'both';
+  address?: string;
+  like_features?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export default function BetaUsersPage() {
   const [users, setUsers] = useState<BetaUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -136,9 +148,10 @@ export const BetaUsersTab: React.FC = () => {
     try {
       await deleteBetaUser(userToDelete._id);
       setUserToDelete(null);
+      showSuccessAlert('Early-bird user deleted successfully.');
       fetchUsers();
     } catch (err: any) {
-      alert(`Delete failed: ${err?.message || 'Unknown error'}`);
+      showErrorToast(err?.message || 'Failed to delete early-bird user.');
     } finally {
       setIsDeleting(false);
     }
@@ -167,9 +180,11 @@ export const BetaUsersTab: React.FC = () => {
       setAddEmail('');
       setAddReferral('');
       setAddAddress('');
+      showSuccessAlert('Early-bird user registered successfully!');
       fetchUsers();
     } catch (err: any) {
       setAddError(err?.message || 'Failed to create beta user.');
+      showErrorToast(err?.message || 'Failed to create beta user.');
     } finally {
       setIsAdding(false);
     }
@@ -206,9 +221,11 @@ export const BetaUsersTab: React.FC = () => {
         like_features: editFeatures,
       });
       setEditingUser(null);
+      showSuccessAlert('Early-bird user updated successfully!');
       fetchUsers();
     } catch (err: any) {
       setEditError(err?.message || 'Failed to update user.');
+      showErrorToast(err?.message || 'Failed to update user.');
     } finally {
       setIsUpdating(false);
     }
@@ -258,7 +275,7 @@ export const BetaUsersTab: React.FC = () => {
             Early-Bird Beta Users
           </h1>
           <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
-            Customers registered via landing page modal • <code>GET /users/bata-user</code>
+            Customers registered via landing page modal
           </p>
         </div>
 
@@ -278,15 +295,6 @@ export const BetaUsersTab: React.FC = () => {
           >
             <FileSpreadsheet size={14} color="var(--mc-brand-purple)" />
             <span>Export CSV</span>
-          </button>
-
-          <button
-            onClick={fetchUsers}
-            disabled={loading}
-            className="mc-btn-secondary"
-          >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            <span>Refresh</span>
           </button>
         </div>
       </div>
@@ -788,11 +796,8 @@ export const BetaUsersTab: React.FC = () => {
             </div>
 
             <div className="mc-modal-body">
-              <p style={{ fontSize: 14, margin: '0 0 12px 0', color: 'var(--mc-text-main)' }}>
+              <p style={{ fontSize: 14, margin: '0', color: 'var(--mc-text-main)' }}>
                 Are you sure you want to delete early-bird registration for <b>{userToDelete.name}</b> ({userToDelete.email})?
-              </p>
-              <p style={{ fontSize: 12, color: 'var(--mc-text-muted)', margin: 0 }}>
-                This will trigger <code>DELETE /users/bata-user/{userToDelete._id}</code> and permanently remove their reservation from the database.
               </p>
             </div>
 
@@ -1149,3 +1154,5 @@ export const BetaUsersTab: React.FC = () => {
     </div>
   );
 };
+
+export { BetaUsersPage as BetaUsersTab };

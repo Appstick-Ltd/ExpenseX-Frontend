@@ -4,7 +4,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Ensure transpilation for packages if needed
   transpilePackages: ['lucide-react', 'three', 'typewriter-effect'],
 };
 

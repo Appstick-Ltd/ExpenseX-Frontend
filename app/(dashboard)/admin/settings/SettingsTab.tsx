@@ -1,20 +1,18 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import GeneralSettings from '../../(dashboard)/admin/settings/page';
-import EmailSettings from '../../(dashboard)/admin/settings/email-settings/page';
-import PaymentSettings from '../../(dashboard)/admin/settings/payment-settings/page';
-import PageSettings from '../../(dashboard)/admin/settings/page-settings/page';
-import FaqSettings from '../../(dashboard)/admin/settings/faq/page';
+import GeneralSettings from './page';
+import EmailSettings from './email-settings/page';
+import PageSettings from './page-settings/page';
+import FaqSettings from './faq/page';
 import {
   Sliders,
   Mail,
-  CreditCard,
   FileText,
   HelpCircle,
 } from 'lucide-react';
-import { triggerHaptic } from '../../helpers/haptics';
+import { triggerHaptic } from '../../../helpers/haptics';
 
-export type SettingsSubTab = 'general-settings' | 'email-settings' | 'payment-settings' | 'page-settings' | 'faq';
+export type SettingsSubTab = 'general-settings' | 'email-settings' | 'page-settings' | 'faq';
 
 export interface SettingsTabProps {
   subTab?: string;
@@ -24,7 +22,6 @@ export interface SettingsTabProps {
 const SUB_TABS: Array<{ id: SettingsSubTab; label: string; icon: React.ElementType }> = [
   { id: 'general-settings', label: 'General Settings', icon: Sliders },
   { id: 'email-settings', label: 'Email Settings', icon: Mail },
-  { id: 'payment-settings', label: 'Payment Settings', icon: CreditCard },
   { id: 'page-settings', label: 'Page Settings', icon: FileText },
   { id: 'faq', label: 'FAQ', icon: HelpCircle },
 ];
@@ -34,7 +31,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ subTab, onSubTabChange
     if (!val) return 'general-settings';
     const lower = val.toLowerCase().replace(/^\/+/, '');
     if (lower === 'email' || lower === 'email-settings') return 'email-settings';
-    if (lower === 'payment' || lower === 'payment-settings' || lower === 'payment-method') return 'payment-settings';
     if (lower === 'page' || lower === 'pages' || lower === 'page-settings') return 'page-settings';
     if (lower === 'faq' || lower === 'faqs') return 'faq';
     return 'general-settings';
@@ -108,9 +104,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ subTab, onSubTabChange
       {/* Render Active View */}
       {activeSubTab === 'general-settings' && <GeneralSettings />}
       {activeSubTab === 'email-settings' && <EmailSettings />}
-      {activeSubTab === 'payment-settings' && <PaymentSettings />}
       {activeSubTab === 'page-settings' && <PageSettings />}
       {activeSubTab === 'faq' && <FaqSettings />}
     </div>
   );
 };
+
+export default SettingsTab;

@@ -8,7 +8,7 @@ import {
   extractListFromResponse,
   type SubscriptionPlanItem,
 } from '../../services/portalApi';
-import { Check, RefreshCw, Plus, Edit, Trash2, X, AlertCircle, Sparkles, Clock } from 'lucide-react';
+import { Check, RefreshCw, Plus, Edit, Trash2, X, AlertCircle, Sparkles, Clock, Coins } from 'lucide-react';
 import { ShimmerPlanCards, ShimmerTableRows, ShimmerMobileCardList } from '../common/Shimmer';
 
 export const SubscriptionsTab: React.FC = () => {
@@ -22,6 +22,7 @@ export const SubscriptionsTab: React.FC = () => {
   const [addNameBn, setAddNameBn] = useState('');
   const [addAmount, setAddAmount] = useState<number | string>('19.99');
   const [addDayValue, setAddDayValue] = useState<number | string>('30');
+  const [addCoin, setAddCoin] = useState<number | string>('0');
   const [addIsPopular, setAddIsPopular] = useState(false);
   const [addStatus, setAddStatus] = useState(true);
   const [addFacilityInput, setAddFacilityInput] = useState('');
@@ -39,6 +40,7 @@ export const SubscriptionsTab: React.FC = () => {
   const [editNameBn, setEditNameBn] = useState('');
   const [editAmount, setEditAmount] = useState<number | string>('');
   const [editDayValue, setEditDayValue] = useState<number | string>('');
+  const [editCoin, setEditCoin] = useState<number | string>('0');
   const [editIsPopular, setEditIsPopular] = useState(false);
   const [editStatus, setEditStatus] = useState(true);
   const [editFacilityInput, setEditFacilityInput] = useState('');
@@ -118,6 +120,7 @@ export const SubscriptionsTab: React.FC = () => {
         },
         amount: amt,
         dayValue: days,
+        coin: parseInt(addCoin.toString(), 10) || 0,
         facilities: addFacilities,
         isPopular: addIsPopular,
         status: addStatus,
@@ -128,6 +131,7 @@ export const SubscriptionsTab: React.FC = () => {
       setAddNameBn('');
       setAddAmount('19.99');
       setAddDayValue('30');
+      setAddCoin('0');
       setAddIsPopular(false);
       setAddStatus(true);
       fetchPlansAndHistory();
@@ -147,6 +151,7 @@ export const SubscriptionsTab: React.FC = () => {
     setEditNameBn(bnName);
     setEditAmount(plan.amount ?? plan.price ?? 0);
     setEditDayValue(plan.dayValue ?? 30);
+    setEditCoin(plan.coin ?? 0);
     setEditIsPopular(!!plan.isPopular);
     setEditStatus(plan.status !== false);
 
@@ -196,6 +201,7 @@ export const SubscriptionsTab: React.FC = () => {
         },
         amount: amt,
         dayValue: days,
+        coin: parseInt(editCoin.toString(), 10) || 0,
         facilities: editFacilities,
         isPopular: editIsPopular,
         status: editStatus,
@@ -317,6 +323,12 @@ export const SubscriptionsTab: React.FC = () => {
                     </span>
                     <span style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>/ cycle</span>
                   </div>
+                  {p.coin !== undefined && Number(p.coin) > 0 ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12, fontSize: 13, color: '#D97706', fontWeight: 600 }}>
+                      <Coins size={15} />
+                      <span>{p.coin} Reward Coins</span>
+                    </div>
+                  ) : null}
 
                   <div style={{ borderTop: '1px solid var(--mc-border-light)', paddingTop: 14 }}>
                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--mc-text-muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -564,7 +576,7 @@ export const SubscriptionsTab: React.FC = () => {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 14 }}>
                   <div>
                     <label className="mc-label">Amount / Price (৳) *</label>
                     <input
@@ -586,6 +598,17 @@ export const SubscriptionsTab: React.FC = () => {
                       value={addDayValue}
                       onChange={(e) => setAddDayValue(e.target.value)}
                       required
+                    />
+                  </div>
+                  <div>
+                    <label className="mc-label">Reward Coins</label>
+                    <input
+                      type="number"
+                      className="mc-input"
+                      placeholder="0"
+                      value={addCoin}
+                      onChange={(e) => setAddCoin(e.target.value)}
+                      min="0"
                     />
                   </div>
                 </div>
@@ -745,7 +768,7 @@ export const SubscriptionsTab: React.FC = () => {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 14 }}>
                   <div>
                     <label className="mc-label">Amount / Price (৳) *</label>
                     <input
@@ -767,6 +790,17 @@ export const SubscriptionsTab: React.FC = () => {
                       value={editDayValue}
                       onChange={(e) => setEditDayValue(e.target.value)}
                       required
+                    />
+                  </div>
+                  <div>
+                    <label className="mc-label">Reward Coins</label>
+                    <input
+                      type="number"
+                      className="mc-input"
+                      placeholder="0"
+                      value={editCoin}
+                      onChange={(e) => setEditCoin(e.target.value)}
+                      min="0"
                     />
                   </div>
                 </div>

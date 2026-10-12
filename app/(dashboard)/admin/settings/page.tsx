@@ -6,88 +6,138 @@ import {
   postSingleImage,
 } from '../../../helpers/backend';
 import {
-  Settings as SettingsIcon,
   Upload,
   Save,
   RefreshCw,
-  CheckCircle2,
-  AlertCircle,
   Globe,
   Mail,
   Phone,
   MapPin,
-  HardDrive,
   Image as ImageIcon,
   DollarSign,
+  Server,
+  Key,
+  Coins,
+  MessageSquare,
+  ShieldCheck,
+  CreditCard,
+  FileText,
+  Sparkles,
 } from 'lucide-react';
 import { Shimmer } from '../../../components/common/Shimmer';
+import { Input, Select, Textarea } from '../../../components/common/form';
+import { showSuccessAlert, showErrorToast } from '../../../helpers/notification';
+
+const CURRENCY_OPTIONS = [
+  { code: 'USD', symbol: '$', name: 'USD - US Dollar ($)' },
+  { code: 'BDT', symbol: '৳', name: 'BDT - Bangladeshi Taka (৳)' },
+  { code: 'EUR', symbol: '€', name: 'EUR - Euro (€)' },
+  { code: 'GBP', symbol: '£', name: 'GBP - British Pound (£)' },
+  { code: 'INR', symbol: '₹', name: 'INR - Indian Rupee (₹)' },
+  { code: 'CAD', symbol: 'CA$', name: 'CAD - Canadian Dollar ($)' },
+  { code: 'AUD', symbol: 'AU$', name: 'AUD - Australian Dollar ($)' },
+  { code: 'JPY', symbol: '¥', name: 'JPY - Japanese Yen (¥)' },
+  { code: 'CNY', symbol: '¥', name: 'CNY - Chinese Yuan (¥)' },
+  { code: 'AED', symbol: 'AED', name: 'AED - UAE Dirham (د.إ)' },
+  { code: 'SAR', symbol: 'SAR', name: 'SAR - Saudi Riyal (﷼)' },
+  { code: 'SGD', symbol: 'SG$', name: 'SGD - Singapore Dollar ($)' },
+  { code: 'MYR', symbol: 'RM', name: 'MYR - Malaysian Ringgit (RM)' },
+  { code: 'PKR', symbol: '₨', name: 'PKR - Pakistani Rupee (₨)' },
+  { code: 'CHF', symbol: 'CHF', name: 'CHF - Swiss Franc (CHF)' },
+  { code: 'BRL', symbol: 'R$', name: 'BRL - Brazilian Real (R$)' },
+  { code: 'RUB', symbol: '₽', name: 'RUB - Russian Ruble (₽)' },
+  { code: 'KRW', symbol: '₩', name: 'KRW - South Korean Won (₩)' },
+  { code: 'TRY', symbol: '₺', name: 'TRY - Turkish Lira (₺)' },
+  { code: 'THB', symbol: '฿', name: 'THB - Thai Baht (฿)' },
+  { code: 'IDR', symbol: 'Rp', name: 'IDR - Indonesian Rupiah (Rp)' },
+  { code: 'NGN', symbol: '₦', name: 'NGN - Nigerian Naira (₦)' },
+  { code: 'EGP', symbol: 'E£', name: 'EGP - Egyptian Pound (E£)' },
+  { code: 'PHP', symbol: '₱', name: 'PHP - Philippine Peso (₱)' },
+  { code: 'VND', symbol: '₫', name: 'VND - Vietnamese Dong (₫)' },
+  { code: 'ZAR', symbol: 'R', name: 'ZAR - South African Rand (R)' },
+];
+
+const CURRENCY_SYMBOLS = [
+  { symbol: '$', label: '$ (Dollar)' },
+  { symbol: '৳', label: '৳ (Taka)' },
+  { symbol: '€', label: '€ (Euro)' },
+  { symbol: '£', label: '£ (Pound)' },
+  { symbol: '₹', label: '₹ (Rupee)' },
+  { symbol: '¥', label: '¥ (Yen / Yuan)' },
+  { symbol: '﷼', label: '﷼ (Riyal)' },
+  { symbol: 'AED', label: 'AED (Dirham)' },
+  { symbol: 'CHF', label: 'CHF (Franc)' },
+  { symbol: 'RM', label: 'RM (Ringgit)' },
+  { symbol: '₨', label: '₨ (Rupee)' },
+  { symbol: '₩', label: '₩ (Won)' },
+  { symbol: '₺', label: '₺ (Lira)' },
+  { symbol: '฿', label: '฿ (Baht)' },
+  { symbol: 'Rp', label: 'Rp (Rupiah)' },
+  { symbol: '₦', label: '₦ (Naira)' },
+  { symbol: '₱', label: '₱ (Peso)' },
+  { symbol: '₫', label: '₫ (Dong)' },
+  { symbol: 'R', label: 'R (Rand)' },
+  { symbol: 'CA$', label: 'CA$ (CAD)' },
+  { symbol: 'AU$', label: 'AU$ (AUD)' },
+  { symbol: 'SG$', label: 'SG$ (SGD)' },
+];
 
 export default function AdminGeneralSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
 
-  // Form State matching roofstick-frontend/app/(dashboard)/admin/settings/page.js
+  // Form State: exact fields matching backend setting model
   const [settingId, setSettingId] = useState<string>('');
-  const [logo, setLogo] = useState<string>('');
-  const [footerLogo, setFooterLogo] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [facebook, setFacebook] = useState<string>('');
-  const [twitter, setTwitter] = useState<string>('');
-  const [instagram, setInstagram] = useState<string>('');
-  const [linkedin, setLinkedin] = useState<string>('');
-  const [youtube, setYoutube] = useState<string>('');
-  const [playStore, setPlayStore] = useState<string>('');
-  const [appStore, setAppStore] = useState<string>('');
-  const [fileUploadPath, setFileUploadPath] = useState<'file' | 's3'>('file');
-
-  // ExpenseX dynamic currency / limits
+  const [siteName, setSiteName] = useState<string>('');
+  const [siteLogo, setSiteLogo] = useState<string>('');
+  const [siteEmail, setSiteEmail] = useState<string>('');
+  const [sitePhone, setSitePhone] = useState<string>('');
+  const [siteAddress, setSiteAddress] = useState<string>('');
+  const [siteFooter, setSiteFooter] = useState<string>('');
+  const [siteDescription, setSiteDescription] = useState<string>('');
   const [currencyCode, setCurrencyCode] = useState<string>('USD');
   const [currencySymbol, setCurrencySymbol] = useState<string>('$');
+  const [clientSideUrl, setClientSideUrl] = useState<string>('');
+  const [serverSideUrl, setServerSideUrl] = useState<string>('');
   const [otpVerificationType, setOtpVerificationType] = useState<'email' | 'phone'>('email');
+  const [parReferralCoin, setParReferralCoin] = useState<number | string>(0);
+  const [exchangeRateAPIKey, setExchangeRateAPIKey] = useState<string>('');
   const [maxFreeAmountLimit, setMaxFreeAmountLimit] = useState<number | string>(0);
+  const [inputTokenPerCredit, setInputTokenPerCredit] = useState<number | string>(1);
+  const [outputTokenPerCredit, setOutputTokenPerCredit] = useState<number | string>(1);
+  const [discordChannel, setDiscordChannel] = useState<string>('');
 
-  // Uploading flags
+  // Uploading state
   const [uploadingLogo, setUploadingLogo] = useState(false);
-  const [uploadingFooter, setUploadingFooter] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
-    setSaveError(null);
     try {
       const res = await fetchSettings();
       const d = res?.data || res;
       if (d) {
         setSettingId(d._id || '');
-        setTitle(d.title || d.siteName || '');
-        setDescription(d.description || d.siteDescription || '');
-        setEmail(d.email || d.siteEmail || '');
-        setPhone(d.phone || d.sitePhone || '');
-        setAddress(d.address || d.siteAddress || '');
 
-        const logoVal = typeof d.logo === 'string' ? d.logo : d.logo?.[0]?.url || d.siteLogo || '';
-        setLogo(logoVal);
-        const footerVal = typeof d.footer_logo === 'string' ? d.footer_logo : d.footer_logo?.[0]?.url || d.siteFooter || '';
-        setFooterLogo(footerVal);
+        setSiteName(d.siteName || '');
+        setSiteLogo(d.siteLogo || '');
+        setSiteEmail(d.siteEmail || '');
+        setSitePhone(d.sitePhone || '');
+        setSiteAddress(d.siteAddress || '');
+        setSiteFooter(d.siteFooter || '');
+        setSiteDescription(d.siteDescription || '');
 
-        setFacebook(d.facebook || '');
-        setTwitter(d.twitter || '');
-        setInstagram(d.instagram || '');
-        setLinkedin(d.linkedin || '');
-        setYoutube(d.youtube || '');
-        setPlayStore(d.playStore || '');
-        setAppStore(d.appStore || '');
-        setFileUploadPath(d.fileUploadPath === 's3' ? 's3' : 'file');
+        setCurrencyCode(d.currencyCode || 'USD');
+        setCurrencySymbol(d.currencySymbol || '$');
 
-        if (d.currencyCode) setCurrencyCode(d.currencyCode);
-        if (d.currencySymbol) setCurrencySymbol(d.currencySymbol);
-        if (d.otpVerificationType) setOtpVerificationType(d.otpVerificationType);
-        if (d.maxFreeAmountLimit !== undefined) setMaxFreeAmountLimit(d.maxFreeAmountLimit);
+        setClientSideUrl(d.clientSideUrl || '');
+        setServerSideUrl(d.serverSideUrl || '');
+        setOtpVerificationType(d.otpVerificationType === 'phone' ? 'phone' : 'email');
+        setParReferralCoin(d.parReferralCoin !== undefined ? d.parReferralCoin : 0);
+        setExchangeRateAPIKey(d.exchangeRateAPIKey || '');
+        setMaxFreeAmountLimit(d.maxFreeAmountLimit !== undefined ? d.maxFreeAmountLimit : 0);
+        setInputTokenPerCredit(d.inputTokenPerCredit !== undefined ? d.inputTokenPerCredit : 1);
+        setOutputTokenPerCredit(d.outputTokenPerCredit !== undefined ? d.outputTokenPerCredit : 1);
+        setDiscordChannel(d.discordChannel || '');
       }
     } catch (err: any) {
       console.warn('Could not load settings from backend:', err);
@@ -100,69 +150,55 @@ export default function AdminGeneralSettingsPage() {
     loadData();
   }, []);
 
-  const handleFileUpload = async (file: File, type: 'logo' | 'footer_logo') => {
+  const handleFileUpload = async (file: File) => {
     try {
-      if (type === 'logo') setUploadingLogo(true);
-      else setUploadingFooter(true);
-
-      const res = await postSingleImage({ image: file, image_name: type });
+      setUploadingLogo(true);
+      const res = await postSingleImage({ image: file, image_name: 'siteLogo' });
       const imgUrl = res?.image || res?.data?.image || res?.url || '';
       if (imgUrl) {
-        if (type === 'logo') setLogo(imgUrl);
-        else setFooterLogo(imgUrl);
+        setSiteLogo(imgUrl);
       }
     } catch (err: any) {
-      console.error(`Failed to upload ${type}:`, err);
+      console.error('Failed to upload siteLogo:', err);
       const preview = URL.createObjectURL(file);
-      if (type === 'logo') setLogo(preview);
-      else setFooterLogo(preview);
+      setSiteLogo(preview);
     } finally {
-      if (type === 'logo') setUploadingLogo(false);
-      else setUploadingFooter(false);
+      setUploadingLogo(false);
     }
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setSaveSuccess(null);
-    setSaveError(null);
 
     const payload: Record<string, any> = {
       _id: settingId || undefined,
-      title: title.trim(),
-      siteName: title.trim(),
-      description: description.trim(),
-      siteDescription: description.trim(),
-      email: email.trim(),
-      siteEmail: email.trim(),
-      phone: phone.trim(),
-      sitePhone: phone.trim(),
-      address: address.trim(),
-      siteAddress: address.trim(),
-      logo: logo.trim(),
-      footer_logo: footerLogo.trim(),
-      facebook: facebook.trim(),
-      twitter: twitter.trim(),
-      instagram: instagram.trim(),
-      linkedin: linkedin.trim(),
-      youtube: youtube.trim(),
-      playStore: playStore.trim(),
-      appStore: appStore.trim(),
-      fileUploadPath,
-      currencyCode,
-      currencySymbol,
+      siteName: siteName.trim(),
+      siteLogo: siteLogo.trim(),
+      siteEmail: siteEmail.trim(),
+      sitePhone: sitePhone.trim(),
+      siteAddress: siteAddress.trim(),
+      siteFooter: siteFooter.trim(),
+      siteDescription: siteDescription.trim(),
+      currencyCode: currencyCode.trim().toUpperCase(),
+      currencySymbol: currencySymbol.trim(),
+      clientSideUrl: clientSideUrl.trim(),
+      serverSideUrl: serverSideUrl.trim(),
       otpVerificationType,
+      parReferralCoin: Number(parReferralCoin) || 0,
+      exchangeRateAPIKey: exchangeRateAPIKey.trim(),
       maxFreeAmountLimit: Number(maxFreeAmountLimit) || 0,
+      inputTokenPerCredit: inputTokenPerCredit !== '' ? Number(inputTokenPerCredit) : 1,
+      outputTokenPerCredit: outputTokenPerCredit !== '' ? Number(outputTokenPerCredit) : 1,
+      discordChannel: discordChannel.trim(),
     };
 
     try {
       const res = await postSettings(payload);
-      setSaveSuccess(res?.msg || res?.message || 'General settings saved successfully!');
-      setTimeout(() => setSaveSuccess(null), 4000);
+      showSuccessAlert(res?.msg || res?.message || 'General settings saved successfully!');
       loadData();
     } catch (err: any) {
-      setSaveError(err?.message || 'Failed to save settings. Please verify backend connection.');
+      showErrorToast(err?.message || 'Failed to save settings. Please verify backend connection.');
     } finally {
       setSaving(false);
     }
@@ -179,95 +215,34 @@ export default function AdminGeneralSettingsPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header Banner */}
-      <div className="mc-card" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 10,
-              background: 'linear-gradient(135deg, rgba(109,61,245,0.12), rgba(139,92,246,0.06))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--mc-brand-purple)',
-            }}
-          >
-            <SettingsIcon size={22} />
-          </div>
-          <div>
-            <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
-              General Settings
-            </h2>
-            <p style={{ fontSize: 13, margin: 0, color: 'var(--mc-text-muted)' }}>
-              Configure brand identities, metadata, contact info, social links, and storage provider.
-            </p>
-          </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
+            General Settings
+          </h2>
         </div>
-
-        <button
-          type="button"
-          onClick={loadData}
-          className="mc-btn-secondary"
-          style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}
-        >
-          <RefreshCw size={14} />
-          <span>Reload</span>
-        </button>
       </div>
 
-      {saveSuccess && (
-        <div
-          style={{
-            padding: '12px 16px',
-            borderRadius: 8,
-            background: '#F0FDF4',
-            border: '1px solid #BBF7D0',
-            color: '#15803D',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 14,
-            fontWeight: 500,
-          }}
-        >
-          <CheckCircle2 size={18} />
-          <span>{saveSuccess}</span>
-        </div>
-      )}
-
-      {saveError && (
-        <div
-          style={{
-            padding: '12px 16px',
-            borderRadius: 8,
-            background: '#FEF2F2',
-            border: '1px solid #FECACA',
-            color: '#B91C1C',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 14,
-            fontWeight: 500,
-          }}
-        >
-          <AlertCircle size={18} />
-          <span>{saveError}</span>
-        </div>
-      )}
-
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {/* SECTION 1: Brand Assets & Logos */}
-        <div className="mc-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 16px 0', color: 'var(--mc-text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <ImageIcon size={18} color="var(--mc-brand-purple)" />
-            Brand Assets & Logos
-          </h3>
-
+        {/* SINGLE BORDERED CONTAINER FOR ALL SETTINGS */}
+        <div
+          className="mc-card"
+          style={{
+            padding: '28px',
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '28px',
+          }}
+        >
+          {/* Logo Section */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label className="mc-label">Main Logo</label>
+            <label className="mc-label">Site Logo (siteLogo)</label>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div
                 style={{
@@ -282,8 +257,12 @@ export default function AdminGeneralSettingsPage() {
                   overflow: 'hidden',
                 }}
               >
-                {logo ? (
-                  <img src={logo} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                {siteLogo ? (
+                  <img
+                    src={siteLogo}
+                    alt="Site Logo"
+                    style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                  />
                 ) : (
                   <ImageIcon size={24} color="var(--mc-text-subtle)" />
                 )}
@@ -300,165 +279,236 @@ export default function AdminGeneralSettingsPage() {
                   style={{ display: 'none' }}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
-                    if (file) handleFileUpload(file, 'logo');
+                    if (file) handleFileUpload(file);
                   }}
                 />
               </label>
             </div>
           </div>
-        </div>
 
-        {/* SECTION 2: General & Contact Information */}
-        <div className="mc-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 16px 0', color: 'var(--mc-text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Globe size={18} color="var(--mc-brand-purple)" />
-            Application & Contact Details
-          </h3>
+          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-            <div className="mc-input-group">
-              <label className="mc-label">Site Name / Title *</label>
-              <input
-                type="text"
+          {/* Application & Contact Details */}
+          <div>
+            <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 16px 0', color: 'var(--mc-text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Globe size={18} color="var(--mc-brand-purple)" />
+              Application & Contact Details
+            </h3>
+
+            <div className="mc-grid-2">
+              {/* Site Name */}
+              <Input
+                label="Site Name (siteName)"
                 required
-                className="mc-input"
-                placeholder="ExpenseX — Precision AI Money Tracking"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                leftIcon={<Globe size={16} />}
+                placeholder="ExpenseX"
+                value={siteName}
+                onChange={(e) => setSiteName(e.target.value)}
               />
-            </div>
 
-            <div className="mc-input-group">
-              <label className="mc-label">Contact Email *</label>
-              <div className="mc-input-wrapper">
-                <Mail size={16} className="mc-input-icon-left" />
-                <input
-                  type="email"
-                  required
-                  className="mc-input with-left-icon"
-                  placeholder="support@expensex.ai"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="mc-input-group">
-              <label className="mc-label">Phone Number *</label>
-              <div className="mc-input-wrapper">
-                <Phone size={16} className="mc-input-icon-left" />
-                <input
-                  type="tel"
-                  required
-                  className="mc-input with-left-icon"
-                  placeholder="+1 (800) 555-0199"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="mc-input-group">
-              <label className="mc-label">Physical Address *</label>
-              <div className="mc-input-wrapper">
-                <MapPin size={16} className="mc-input-icon-left" />
-                <input
-                  type="text"
-                  required
-                  className="mc-input with-left-icon"
-                  placeholder="742 Evergreen Terrace, Suite 100"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="mc-input-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="mc-label">Meta Description *</label>
-              <textarea
+              {/* Contact Email */}
+              <Input
+                label="Contact Email (siteEmail)"
+                type="email"
                 required
-                className="mc-input"
+                leftIcon={<Mail size={16} />}
+                placeholder="contact@expensex.ai"
+                value={siteEmail}
+                onChange={(e) => setSiteEmail(e.target.value)}
+              />
+
+              {/* Contact Phone */}
+              <Input
+                label="Contact Phone (sitePhone)"
+                type="tel"
+                required
+                leftIcon={<Phone size={16} />}
+                placeholder="+1 (800) 555-0199"
+                value={sitePhone}
+                onChange={(e) => setSitePhone(e.target.value)}
+              />
+
+              {/* Physical Address */}
+              <Input
+                label="Physical Address (siteAddress)"
+                required
+                leftIcon={<MapPin size={16} />}
+                placeholder="Dhaka, Bangladesh"
+                value={siteAddress}
+                onChange={(e) => setSiteAddress(e.target.value)}
+              />
+
+              {/* Site Footer */}
+              <Input
+                label="Site Footer Text (siteFooter)"
+                leftIcon={<FileText size={16} />}
+                placeholder="© 2026 ExpenseX. All rights reserved."
+                value={siteFooter}
+                onChange={(e) => setSiteFooter(e.target.value)}
+              />
+
+              {/* Client Side URL */}
+              <Input
+                label="Client Side URL (clientSideUrl)"
+                type="url"
+                leftIcon={<Globe size={16} />}
+                placeholder="http://localhost:3000"
+                value={clientSideUrl}
+                onChange={(e) => setClientSideUrl(e.target.value)}
+              />
+
+              {/* Server Side URL */}
+              <Input
+                label="Server Side URL (serverSideUrl)"
+                type="url"
+                leftIcon={<Server size={16} />}
+                placeholder="http://localhost:8080/api/v1"
+                value={serverSideUrl}
+                onChange={(e) => setServerSideUrl(e.target.value)}
+              />
+
+              {/* Discord Channel */}
+              <Input
+                label="Discord Channel (discordChannel)"
+                leftIcon={<MessageSquare size={16} />}
+                placeholder="https://discord.gg/expensex"
+                value={discordChannel}
+                onChange={(e) => setDiscordChannel(e.target.value)}
+              />
+
+              {/* Site Description */}
+              <Textarea
+                label="Site Description (siteDescription)"
+                required
                 rows={3}
-                placeholder="Enter search engine and sharing description..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                containerStyle={{ gridColumn: '1 / -1' }}
+                placeholder="Best finance management platform..."
+                value={siteDescription}
+                onChange={(e) => setSiteDescription(e.target.value)}
               />
             </div>
           </div>
-        </div>
 
+          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
 
+          {/* Currency, Limits & Integrations */}
+          <div>
+            <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 16px 0', color: 'var(--mc-text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <DollarSign size={18} color="var(--mc-brand-purple)" />
+              Currency, Limits & Integrations
+            </h3>
 
-        {/* SECTION 4: Storage & Financial Preferences */}
-        <div className="mc-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, margin: '0 0 16px 0', color: 'var(--mc-text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <HardDrive size={18} color="var(--mc-brand-purple)" />
-            Storage & System Preferences
-          </h3>
+            <div className="mc-grid-2">
+              {/* Currency Code */}
+              <Select
+                label="Currency Code (currencyCode)"
+                leftIcon={<DollarSign size={16} />}
+                searchable
+                value={currencyCode}
+                onChange={(newCode) => {
+                  setCurrencyCode(newCode);
+                  const match = CURRENCY_OPTIONS.find((c) => c.code === newCode);
+                  if (match) {
+                    setCurrencySymbol(match.symbol);
+                  }
+                }}
+                options={CURRENCY_OPTIONS.map((c) => ({
+                  value: c.code,
+                  label: c.name,
+                  badge: c.code,
+                }))}
+              />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-            <div className="mc-input-group">
-              <label className="mc-label">File Upload Storage Provider *</label>
-              <select
-                className="mc-input"
-                value={fileUploadPath}
-                onChange={(e) => setFileUploadPath(e.target.value as 'file' | 's3')}
-              >
-                <option value="file">Local Filesystem Storage (/uploads)</option>
-                <option value="s3">Amazon Web Services S3 Bucket</option>
-              </select>
-            </div>
-
-            <div className="mc-input-group">
-              <label className="mc-label">Default Currency Code</label>
-              <div className="mc-input-wrapper">
-                <DollarSign size={16} className="mc-input-icon-left" />
-                <input
-                  type="text"
-                  className="mc-input with-left-icon"
-                  placeholder="USD"
-                  value={currencyCode}
-                  onChange={(e) => setCurrencyCode(e.target.value.toUpperCase())}
-                />
-              </div>
-            </div>
-
-            <div className="mc-input-group">
-              <label className="mc-label">Currency Symbol</label>
-              <input
-                type="text"
-                className="mc-input"
-                placeholder="$"
+              {/* Currency Symbol */}
+              <Select
+                label="Currency Symbol (currencySymbol)"
                 value={currencySymbol}
-                onChange={(e) => setCurrencySymbol(e.target.value)}
+                onChange={(newSymbol) => setCurrencySymbol(newSymbol)}
+                options={CURRENCY_SYMBOLS.map((s) => ({
+                  value: s.symbol,
+                  label: s.label,
+                }))}
+              />
+
+              {/* User AI Credit (Default) */}
+              <Input
+                label="User Ai Credit (Default) (maxFreeAmountLimit)"
+                type="number"
+                leftIcon={<CreditCard size={16} />}
+                placeholder="1000"
+                value={maxFreeAmountLimit}
+                onChange={(e) => setMaxFreeAmountLimit(e.target.value)}
+              />
+
+              {/* Exchange Rate API Key with Eye Toggle */}
+              <Input
+                label="Exchange Rate API Key (exchangeRateAPIKey)"
+                showPasswordToggle
+                leftIcon={<Key size={16} />}
+                placeholder="ex_live_xxxxxxxxxxxxxxxx"
+                value={exchangeRateAPIKey}
+                onChange={(e) => setExchangeRateAPIKey(e.target.value)}
+              />
+
+              {/* OTP Verification Type */}
+              <Select
+                label="OTP Verification Type (otpVerificationType)"
+                leftIcon={<ShieldCheck size={16} />}
+                dropdownPosition="bottom"
+                value={otpVerificationType}
+                onChange={(val) => setOtpVerificationType(val as 'email' | 'phone')}
+                options={[
+                  { value: 'email', label: 'Email Verification Code' },
+                  { value: 'phone', label: 'SMS / Phone Verification Code' },
+                ]}
+              />
+
+              {/* Per Referral Coin */}
+              <Input
+                label="Per Referral Coin (parReferralCoin)"
+                type="number"
+                leftIcon={<Coins size={16} />}
+                placeholder="10"
+                value={parReferralCoin}
+                onChange={(e) => setParReferralCoin(e.target.value)}
+              />
+
+              {/* Input Token Per Credit */}
+              <Input
+                label="Input Token Per Credit (inputTokenPerCredit)"
+                type="number"
+                leftIcon={<Sparkles size={16} />}
+                placeholder="1"
+                value={inputTokenPerCredit}
+                onChange={(e) => setInputTokenPerCredit(e.target.value)}
+              />
+
+              {/* Output Token Per Credit */}
+              <Input
+                label="Output Token Per Credit (outputTokenPerCredit)"
+                type="number"
+                leftIcon={<Sparkles size={16} />}
+                placeholder="1"
+                value={outputTokenPerCredit}
+                onChange={(e) => setOutputTokenPerCredit(e.target.value)}
               />
             </div>
-
-            <div className="mc-input-group">
-              <label className="mc-label">Primary 2FA / OTP Verification</label>
-              <select
-                className="mc-input"
-                value={otpVerificationType}
-                onChange={(e) => setOtpVerificationType(e.target.value as 'email' | 'phone')}
-              >
-                <option value="email">Email Verification Code (Recommended)</option>
-                <option value="phone">SMS / Phone Verification</option>
-              </select>
-            </div>
           </div>
-        </div>
 
-        {/* Submit Bar */}
-        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <button
-            type="submit"
-            disabled={saving}
-            className="mc-btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 24px' }}
-          >
-            {saving ? <RefreshCw size={16} className="mc-spin" /> : <Save size={16} />}
-            <span>{saving ? 'Saving...' : 'Save'}</span>
-          </button>
+          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+
+          {/* Submit Bar */}
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <button
+              type="submit"
+              disabled={saving}
+              className="mc-btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 24px' }}
+            >
+              {saving ? <RefreshCw size={16} className="mc-spin" /> : <Save size={16} />}
+              <span>{saving ? 'Saving...' : 'Save Settings'}</span>
+            </button>
+          </div>
         </div>
       </form>
     </div>

@@ -21,11 +21,11 @@ import { FAQ } from './components/FAQ';
 import { EarlyAccessModal } from './components/EarlyAccessModal';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
-import { AboutPage } from './pages/AboutPage';
-import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
-import { TermsPage } from './pages/TermsPage';
-import { ContactPage } from './pages/ContactPage';
-import { PricingPage } from './pages/PricingPage';
+import { AboutPage } from './views/AboutPage';
+import { PrivacyPolicyPage } from './views/PrivacyPolicyPage';
+import { TermsPage } from './views/TermsPage';
+import { ContactPage } from './views/ContactPage';
+import { PricingPage } from './views/PricingPage';
 
 export const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname);

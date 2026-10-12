@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { usePortalAuth } from '../../context/PortalAuthContext';
-import { PortalLayout } from '../../components/dashboard/PortalLayout';
+import { PortalLayout } from '../../components/layout/PortalLayout';
 import { Login } from '../../components/auth/Login';
 import { ShimmerDashboardScreen } from '../../components/common/Shimmer';
 
@@ -26,7 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (isAuthPage) {
     return <>{children}</>;
   }
-
+  console.log(isAuthPage);
   if (isLoading) {
     return <ShimmerDashboardScreen />;
   }

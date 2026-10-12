@@ -7,7 +7,7 @@ import { ShimmerDashboardScreen } from '../common/Shimmer';
 import '../../../styles/portal.css';
 
 export interface PortalRouterProps {
-  initialTab?: 'overview' | 'beta-users' | 'users' | 'categories' | 'subscriptions' | 'settings';
+  initialTab?: 'overview' | 'beta-users' | 'users' | 'settings';
   initialSubTab?: string;
 }
 

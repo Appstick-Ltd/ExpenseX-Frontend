@@ -533,6 +533,7 @@ export interface SubscriptionPlanItem {
   } | string;
   amount: number;
   dayValue: number;
+  coin?: number;
   facilities?: (string | SubscriptionFacility)[];
   isPopular?: boolean;
   status?: boolean;
@@ -549,6 +550,7 @@ export async function createSubscriptionPlan(payload: {
   name: { en: string; bn?: string };
   amount: number;
   dayValue: number;
+  coin?: number;
   facilities: (string | SubscriptionFacility)[];
   isPopular?: boolean;
   status?: boolean;
@@ -570,6 +572,7 @@ export async function createSubscriptionPlan(payload: {
       },
       amount: Number(payload.amount),
       dayValue: Number(payload.dayValue),
+      ...(payload.coin !== undefined && !isNaN(Number(payload.coin)) ? { coin: Number(payload.coin) } : {}),
       facilities: formattedFacilities,
       isPopular: payload.isPopular ?? false,
       status: payload.status ?? true,
@@ -583,6 +586,7 @@ export async function updateSubscriptionPlan(
     name?: { en?: string; bn?: string };
     amount?: number;
     dayValue?: number;
+    coin?: number;
     facilities?: (string | SubscriptionFacility)[];
     isPopular?: boolean;
     status?: boolean;
@@ -609,6 +613,7 @@ export async function updateSubscriptionPlan(
   }
   if (payload.amount !== undefined) body.amount = Number(payload.amount);
   if (payload.dayValue !== undefined) body.dayValue = Number(payload.dayValue);
+  if (payload.coin !== undefined && !isNaN(Number(payload.coin))) body.coin = Number(payload.coin);
   if (formattedFacilities !== undefined) body.facilities = formattedFacilities;
   if (payload.isPopular !== undefined) body.isPopular = payload.isPopular;
   if (payload.status !== undefined) body.status = payload.status;
@@ -642,9 +647,15 @@ export async function deleteSubscriptionPlan(id: string): Promise<any> {
   }
 }
 
-export async function getSubscriptionHistory(): Promise<any> {
+export async function getSubscriptionHistory(params?: any): Promise<any> {
   try {
-    return await adminFetch('/subscriptions/history', { method: 'GET' });
+    const q = new URLSearchParams();
+    if (params?.searchTerm) q.set('searchTerm', params.searchTerm);
+    if (params?.search) q.set('search', params.search);
+    if (params?.page) q.set('page', params.page.toString());
+    if (params?.limit) q.set('limit', params.limit.toString());
+    const query = q.toString() ? `?${q.toString()}` : '';
+    return await adminFetch(`/google-play/subscription/history${query}`, { method: 'GET' });
   } catch {
     return { success: true, data: [] };
   }

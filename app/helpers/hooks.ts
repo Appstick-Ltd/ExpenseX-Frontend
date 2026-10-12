@@ -70,7 +70,7 @@ export const useFetch = <T = any>(
 /**
  * Hook to detect clicks outside a referenced element
  */
-export const userOutSideClick = (
+export const useOutsideClick = (
   ref: React.RefObject<HTMLElement | null>,
   callback?: () => void
 ) => {
@@ -87,3 +87,5 @@ export const userOutSideClick = (
     };
   }, [ref, callback]);
 };
+
+export const userOutSideClick = useOutsideClick;

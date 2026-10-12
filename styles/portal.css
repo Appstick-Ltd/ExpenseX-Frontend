@@ -154,7 +154,7 @@
 }
 
 .mc-input:focus {
-  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
   border-color: #6D3DF5 !important;
   box-shadow: 0 0 0 3px rgba(109, 61, 245, 0.16) !important;
 }
@@ -178,6 +178,36 @@ select.mc-input {
   position: relative !important;
   left: 0 !important;
   pointer-events: auto !important;
+}
+
+/* Card Container with clean border */
+.mc-card {
+  background: #FFFFFF;
+  border: 1px solid var(--mc-border);
+  border-radius: 14px;
+  box-shadow: var(--mc-shadow-sm);
+}
+
+/* Select Dropdown Styling with clear downward arrow */
+select.mc-input {
+  cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: #FFFFFF !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 16px 16px !important;
+  padding-right: 40px !important;
+}
+
+select.mc-input:focus {
+  background-color: #FFFFFF !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236D3DF5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 16px 16px !important;
 }
 
 /* ==========================================================================
@@ -529,6 +559,26 @@ img[src*="tempmail" i] {
 .mc-table-wrap {
   width: 100%;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 transparent;
+}
+
+.mc-table-wrap::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.mc-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mc-table-wrap::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+.mc-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }
 
 .mc-table {
@@ -1476,4 +1526,17 @@ img[src*="tempmail" i] {
 .mc-table tbody tr.mc-skeleton-tr td {
   padding: 16px 14px;
   vertical-align: middle;
+}
+
+/* 2-column responsive grid */
+.mc-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .mc-grid-2 {
+    grid-template-columns: 1fr;
+  }
 }

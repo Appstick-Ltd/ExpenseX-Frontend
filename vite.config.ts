@@ -7,6 +7,9 @@ export default defineConfig({
   server: {
     host: true, // Listen on all local IP addresses (0.0.0.0)
     port: 5173,
+    watch: {
+      ignored: ['**/.next/**'],
+    },
   },
   build: {
     chunkSizeWarningLimit: 1600,
