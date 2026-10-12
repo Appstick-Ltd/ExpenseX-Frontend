@@ -1,16 +1,1 @@
-{
-  "/(dashboard)/admin/users/system-users/page": "app/(dashboard)/admin/users/system-users/page.js",
-  "/(dashboard)/mc-portal/page": "app/(dashboard)/mc-portal/page.js",
-  "/(dashboard)/mc-portal/services/category/page": "app/(dashboard)/mc-portal/services/category/page.js",
-  "/(dashboard)/mc-portal/settings/email-settings/page": "app/(dashboard)/mc-portal/settings/email-settings/page.js",
-  "/(dashboard)/mc-portal/settings/faq/page": "app/(dashboard)/mc-portal/settings/faq/page.js",
-  "/(dashboard)/mc-portal/settings/general-settings/page": "app/(dashboard)/mc-portal/settings/general-settings/page.js",
-  "/(dashboard)/mc-portal/settings/page-settings/page": "app/(dashboard)/mc-portal/settings/page-settings/page.js",
-  "/(dashboard)/mc-portal/subscription/history/page": "app/(dashboard)/mc-portal/subscription/history/page.js",
-  "/(dashboard)/mc-portal/subscription/plan/page": "app/(dashboard)/mc-portal/subscription/plan/page.js",
-  "/(dashboard)/mc-portal/users/beta-users/page": "app/(dashboard)/mc-portal/users/beta-users/page.js",
-  "/(dashboard)/mc-portal/users/rewards/page": "app/(dashboard)/mc-portal/users/rewards/page.js",
-  "/(dashboard)/mc-portal/users/system-users/page": "app/(dashboard)/mc-portal/users/system-users/page.js",
-  "/(site)/page": "app/(site)/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
-}
+{}
