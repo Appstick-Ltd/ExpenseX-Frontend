@@ -34,7 +34,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push('/admin');
+        router.push('/mc-portal');
       }
     } catch (err: any) {
       const msg = err?.message || 'Invalid credentials or unauthorized access.';

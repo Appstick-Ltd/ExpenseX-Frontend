@@ -43,8 +43,8 @@ axiosApi.interceptors.response.use(
           localStorage.removeItem("isLogged");
           localStorage.removeItem("expensex_superadmin_token");
           localStorage.removeItem("expensex_superadmin_user");
-          if (window.location.pathname !== "/signin" && window.location.pathname !== "/login" && window.location.pathname !== "/admin/auth") {
-            window.location.href = "/admin";
+          if (window.location.pathname !== "/signin" && window.location.pathname !== "/login" && window.location.pathname !== "/mc-portal/auth") {
+            window.location.href = "/mc-portal";
           }
         }
       }

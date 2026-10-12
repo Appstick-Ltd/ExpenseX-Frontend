@@ -8,7 +8,7 @@ export default function DashboardAuthPage() {
 
   return (
     <div className="mc-root">
-      <Login onSuccess={() => router.push('/admin')} />
+      <Login onSuccess={() => router.push('/mc-portal')} />
     </div>
   );
 }

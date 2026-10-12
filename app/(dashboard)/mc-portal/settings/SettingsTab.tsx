@@ -50,7 +50,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ subTab, onSubTabChange
     if (onSubTabChange) {
       onSubTabChange(id);
     } else if (typeof window !== 'undefined') {
-      window.history.pushState(null, '', `/admin/settings/${id}`);
+      window.history.pushState(null, '', `/mc-portal/settings/${id}`);
     }
   };
 

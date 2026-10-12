@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { usePortalAuth } from '../../context/PortalAuthContext';
 import { Logo } from '../common/Logo';
 const logoSrc = '/logo.png';
-import { Overview } from '../../(dashboard)/admin/page';
-import { UsersMainTab } from '../../(dashboard)/admin/users/page';
-import { SettingsTab } from '../../(dashboard)/admin/settings/SettingsTab';
-import { SubscriptionMainTab } from '../../(dashboard)/admin/subscription/page';
+import { Overview } from '../../(dashboard)/mc-portal/page';
+import { UsersMainTab } from '../../(dashboard)/mc-portal/users/page';
+import { SettingsTab } from '../../(dashboard)/mc-portal/settings/SettingsTab';
+import { SubscriptionMainTab } from '../../(dashboard)/mc-portal/subscription/page';
 import { triggerHaptic } from '../../helpers/haptics';
 import {
   LayoutDashboard,
@@ -90,30 +90,30 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     if (typeof window === 'undefined') return 'overview';
     const path = window.location.pathname;
     if (
-      path.startsWith('/admin/settings') ||
-      path.startsWith('/admin/setting') ||
+      path.startsWith('/mc-portal/settings') ||
+      path.startsWith('/mc-portal/setting') ||
       path.startsWith('/dashboard/setting') ||
       path.startsWith('/dashboard/settings')
     ) {
       return 'settings';
     }
     if (
-      path.startsWith('/admin/subscription') ||
+      path.startsWith('/mc-portal/subscription') ||
       path.startsWith('/dashboard/subscription')
     ) {
       return 'subscription';
     }
     if (
-      path.startsWith('/admin/services') ||
-      path.startsWith('/admin/service') ||
+      path.startsWith('/mc-portal/services') ||
+      path.startsWith('/mc-portal/service') ||
       path.startsWith('/dashboard/services') ||
       path.startsWith('/dashboard/service')
     ) {
       return 'services';
     }
     if (
-      path.startsWith('/admin/users') ||
-      path.startsWith('/admin/beta-users') ||
+      path.startsWith('/mc-portal/users') ||
+      path.startsWith('/mc-portal/beta-users') ||
       path.startsWith('/dashboard/users') ||
       path.startsWith('/dashboard/beta-users')
     ) {
@@ -127,7 +127,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     const path = window.location.pathname;
     if (path.includes('beta-users') || path.includes('early-bird')) return 'beta-users';
     if (path.includes('rewards')) return 'rewards';
-    const match = path.match(/\/(admin|dashboard)\/users\/([^/]+)/);
+    const match = path.match(/\/(mc-portal|dashboard)\/users\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'system-users';
   };
@@ -135,7 +135,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const getServicesSubTabFromUrl = (): string => {
     if (typeof window === 'undefined') return 'category';
     const path = window.location.pathname;
-    const match = path.match(/\/(admin|dashboard)\/services?\/([^/]+)/);
+    const match = path.match(/\/(mc-portal|dashboard)\/services?\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'category';
   };
@@ -143,7 +143,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const getSubscriptionSubTabFromUrl = (): string => {
     if (typeof window === 'undefined') return 'plan';
     const path = window.location.pathname;
-    const match = path.match(/\/(admin|dashboard)\/subscription\/([^/]+)/);
+    const match = path.match(/\/(mc-portal|dashboard)\/subscription\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'plan';
   };
@@ -152,7 +152,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     if (initialSubTab) return initialSubTab;
     if (typeof window === 'undefined') return 'general-settings';
     const path = window.location.pathname;
-    const match = path.match(/\/(admin|dashboard)\/settings?\/([^/]+)/);
+    const match = path.match(/\/(mc-portal|dashboard)\/settings?\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'general-settings';
   };
@@ -209,7 +209,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const handleTabSelect = (tabId: NavItemDef['id']) => {
     triggerHaptic('selection');
     const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
-    const basePrefix = isDashboardPath ? '/dashboard' : '/admin';
+    const basePrefix = isDashboardPath ? '/dashboard' : '/mc-portal';
 
     if (tabId === 'users') {
       if (activeTab === 'users') {
@@ -271,7 +271,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     setUsersOpen(true);
     setIsDrawerOpen(false);
     const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
-    const basePrefix = isDashboardPath ? '/dashboard/users' : '/admin/users';
+    const basePrefix = isDashboardPath ? '/dashboard/users' : '/mc-portal/users';
     router.push(`${basePrefix}/${subId}`);
   };
 
@@ -282,7 +282,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     setServicesOpen(true);
     setIsDrawerOpen(false);
     const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
-    const basePrefix = isDashboardPath ? '/dashboard/services' : '/admin/services';
+    const basePrefix = isDashboardPath ? '/dashboard/services' : '/mc-portal/services';
     router.push(`${basePrefix}/${subId}`);
   };
 
@@ -293,7 +293,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     setSubscriptionOpen(true);
     setIsDrawerOpen(false);
     const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
-    const basePrefix = isDashboardPath ? '/dashboard/subscription' : '/admin/subscription';
+    const basePrefix = isDashboardPath ? '/dashboard/subscription' : '/mc-portal/subscription';
     router.push(`${basePrefix}/${subId}`);
   };
 
@@ -304,7 +304,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     setSettingsOpen(true);
     setIsDrawerOpen(false);
     const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
-    const basePrefix = isDashboardPath ? '/dashboard/settings' : '/admin/settings';
+    const basePrefix = isDashboardPath ? '/dashboard/settings' : '/mc-portal/settings';
     router.push(`${basePrefix}/${subId}`);
   };
 

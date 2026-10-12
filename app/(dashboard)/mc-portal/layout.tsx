@@ -11,14 +11,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const { isAuthenticated, isLoading } = usePortalAuth();
 
-  const isAuthPage = pathname === '/admin/auth';
+  const isAuthPage = pathname === '/mc-portal/auth';
 
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated && isAuthPage) {
-        router.replace('/admin');
-      } else if (!isAuthenticated && !isAuthPage && pathname.startsWith('/admin')) {
-        router.replace('/admin/auth');
+        router.replace('/mc-portal');
+      } else if (!isAuthenticated && !isAuthPage && pathname.startsWith('/mc-portal')) {
+        router.replace('/mc-portal/auth');
       }
     }
   }, [isAuthenticated, isLoading, isAuthPage, pathname, router]);
@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   if (!isAuthenticated) {
-    return <Login onSuccess={() => router.push('/admin')} />;
+    return <Login onSuccess={() => router.push('/mc-portal')} />;
   }
 
   return (
