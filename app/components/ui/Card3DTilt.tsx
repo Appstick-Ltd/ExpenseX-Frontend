@@ -28,17 +28,10 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({
   });
   const [isHovered, setIsHovered] = useState(false);
 
-  const isTouchOrMobile = typeof window !== 'undefined' && (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
-
-  if (isTouchOrMobile) {
-    return (
-      <div className={`card-3d-tilt ${className}`} onClick={onClick} style={style}>
-        {children}
-      </div>
-    );
-  }
-
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== 'undefined' && (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches)) {
+      return;
+    }
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -62,6 +55,9 @@ export const Card3DTilt: React.FC<Card3DTiltProps> = ({
   };
 
   const handleMouseEnter = () => {
+    if (typeof window !== 'undefined' && (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches)) {
+      return;
+    }
     setIsHovered(true);
     playGlassyHover();
   };

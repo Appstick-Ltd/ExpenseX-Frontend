@@ -1,10 +1,19 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 export const ToasterProvider: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
-    <Toaster
+    <div suppressHydrationWarning>
+      <Toaster
       position="top-right"
       reverseOrder={false}
       gutter={8}
@@ -48,5 +57,6 @@ export const ToasterProvider: React.FC = () => {
         },
       }}
     />
+    </div>
   );
 };

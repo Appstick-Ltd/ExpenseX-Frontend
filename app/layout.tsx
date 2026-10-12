@@ -171,7 +171,7 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -188,49 +188,48 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ToasterProvider />
-        {/* Accessible Static Crawler Fallback */}
-        <noscript>
-          <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", maxWidth: '840px', margin: '40px auto', padding: '24px', lineHeight: 1.6, color: '#1e293b', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-            <h1 style={{ color: '#0f172a', marginBottom: '8px' }}>ExpenseX AI — Autonomous Personal Finance &amp; Expense Manager</h1>
-            <p style={{ fontSize: '15px', color: '#475569', marginBottom: '16px' }}>
-              <strong>Company:</strong> Appstick Ltd. &bull;
-              <strong>Founder &amp; CEO:</strong> Md. Riaz Mahmud &bull;
-              <strong>Headquarters:</strong> 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh
-            </p>
-            <p style={{ fontSize: '14px', color: '#334155' }}>
-              <strong>Official Website:</strong> <a href="https://expensexai.com/">https://expensexai.com/</a> |
-              <strong>Contact Email:</strong> <a href="mailto:info@expensexai.com">info@expensexai.com</a> |
-              <strong>Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> |
-              <strong>Phone:</strong> +880 1404-049797
-            </p>
-            <hr style={{ border: 0, borderTop: '1px solid #e2e8f0', margin: '20px 0' }} />
-
-            <h2 style={{ color: '#0f172a', fontSize: '20px' }}>About ExpenseX AI</h2>
-            <p>ExpenseX AI is an AI-first personal finance platform developed by Appstick Ltd. to eliminate manual expense logging. The application leverages multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
-
-            <h2 style={{ color: '#0f172a', fontSize: '20px' }}>AI Architecture &amp; Key Features</h2>
-            <ul style={{ paddingLeft: '20px' }}>
-              <li><strong>AI Vision OCR Receipt Scanning:</strong> Multi-modal document processing capable of reading crumpled receipts and digital invoices in &lt;140ms with 99.4% accuracy.</li>
-              <li><strong>Voice Expense Capture:</strong> Natural language voice entry that automatically parses merchant, amount, category, and timestamps without typing.</li>
-              <li><strong>Bank SMS &amp; Digital Invoice Parsing:</strong> Contextual processing of transaction alerts and email receipts with intelligent deduplication.</li>
-              <li><strong>Safe-to-Spend&trade; Predictive Intelligence:</strong> Real-time predictive cashflow velocity algorithms calculating safe daily spending limits.</li>
-              <li><strong>Bank-Grade Zero-Knowledge Privacy:</strong> AES-256 field encryption. User financial records are never sold or used to train public foundation models.</li>
-            </ul>
-
-            <h2 style={{ color: '#0f172a', fontSize: '20px' }}>Public Pages &amp; Verification Links</h2>
-            <ul style={{ paddingLeft: '20px' }}>
-              <li><a href="/about">About Us &amp; Company Overview</a></li>
-              <li><a href="/pricing">Pricing &amp; Early-Bird Beta Plans</a></li>
-              <li><a href="/privacy-policy">Privacy Policy &amp; Data Rights</a></li>
-              <li><a href="/terms-of-service">Terms of Service</a></li>
-              <li><a href="/contact">Official Contact Information</a></li>
-            </ul>
-            <p style={{ fontSize: '13px', color: '#64748b', marginTop: '24px' }}>Note: JavaScript is recommended to experience the full interactive 3D web application.</p>
-          </div>
-        </noscript>
-        <div id="root">{children}</div>
+        {/* Accessible Static Crawler Fallback (safe from React hydration mismatch) */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 840px; margin: 40px auto; padding: 24px; line-height: 1.6; color: #1e293b; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+  <h1 style="color: #0f172a; margin-bottom: 8px;">ExpenseX AI — Autonomous Personal Finance &amp; Expense Manager</h1>
+  <p style="font-size: 15px; color: #475569; margin-bottom: 16px;">
+    <strong>Company:</strong> Appstick Ltd. &bull; 
+    <strong>Founder &amp; CEO:</strong> Md. Riaz Mahmud &bull; 
+    <strong>Headquarters:</strong> 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh
+  </p>
+  <p style="font-size: 14px; color: #334155;">
+    <strong>Official Website:</strong> <a href="https://expensexai.com/">https://expensexai.com/</a> | 
+    <strong>Contact Email:</strong> <a href="mailto:info@expensexai.com">info@expensexai.com</a> | 
+    <strong>Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> | 
+    <strong>Phone:</strong> +880 1404-049797
+  </p>
+  <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+  <h2 style="color: #0f172a; font-size: 20px;">About ExpenseX AI</h2>
+  <p>ExpenseX AI is an AI-first personal finance platform developed by Appstick Ltd. to eliminate manual expense logging. The application leverages multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
+  <h2 style="color: #0f172a; font-size: 20px;">AI Architecture &amp; Key Features</h2>
+  <ul style="padding-left: 20px;">
+    <li><strong>AI Vision OCR Receipt Scanning:</strong> Multi-modal document processing capable of reading crumpled receipts and digital invoices in &lt;140ms with 99.4% accuracy.</li>
+    <li><strong>Voice Expense Capture:</strong> Natural language voice entry that automatically parses merchant, amount, category, and timestamps without typing.</li>
+    <li><strong>Bank SMS &amp; Digital Invoice Parsing:</strong> Contextual processing of transaction alerts and email receipts with intelligent deduplication.</li>
+    <li><strong>Safe-to-Spend&trade; Predictive Intelligence:</strong> Real-time predictive cashflow velocity algorithms calculating safe daily spending limits.</li>
+    <li><strong>Bank-Grade Zero-Knowledge Privacy:</strong> AES-256 field encryption. User financial records are never sold or used to train public foundation models.</li>
+  </ul>
+  <h2 style="color: #0f172a; font-size: 20px;">Public Pages &amp; Verification Links</h2>
+  <ul style="padding-left: 20px;">
+    <li><a href="/about">About Us &amp; Company Overview</a></li>
+    <li><a href="/pricing">Pricing &amp; Early-Bird Beta Plans</a></li>
+    <li><a href="/privacy-policy">Privacy Policy &amp; Data Rights</a></li>
+    <li><a href="/terms-of-service">Terms of Service</a></li>
+    <li><a href="/contact">Official Contact Information</a></li>
+  </ul>
+  <p style="font-size: 13px; color: #64748b; margin-top: 24px;">Note: JavaScript is recommended to experience the full interactive 3D web application.</p>
+</div>`,
+          }}
+        />
+        <div id="root" suppressHydrationWarning>{children}</div>
       </body>
     </html>
   );
