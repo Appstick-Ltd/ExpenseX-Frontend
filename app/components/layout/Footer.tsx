@@ -11,8 +11,9 @@ export const Footer: React.FC = () => {
     { label: 'Features', href: '#features' },
     { label: 'How It Works', href: '#tour' },
     { label: 'AI Engine', href: '#ai-engine' },
-    { label: 'Safe to Spend', href: '#safe-to-spend' },
-    { label: 'Roadmap', href: '#roadmap' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Contact', href: '/contact' },
     { label: 'FAQ', href: '#faq' },
   ];
 
@@ -21,8 +22,9 @@ export const Footer: React.FC = () => {
     { label: 'Features', href: '#features' },
     { label: 'How It Works', href: '#tour' },
     { label: 'AI Engine', href: '#ai-engine' },
-    { label: 'Safe to Spend', href: '#safe-to-spend' },
-    { label: 'Roadmap', href: '#roadmap' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Contact', href: '/contact' },
     { label: 'FAQ', href: '#faq' },
     { label: 'Early Access', href: '#', isVip: true },
   ];
@@ -33,6 +35,10 @@ export const Footer: React.FC = () => {
       playMicroClick();
 
       if (href === '#home' || href === '/') {
+        if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+          window.location.href = '/';
+          return;
+        }
         window.scrollTo({
           top: 0,
           behavior: 'smooth',
@@ -55,6 +61,8 @@ export const Footer: React.FC = () => {
         if (window.location.hash) {
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
+      } else if (typeof window !== 'undefined') {
+        window.location.href = '/' + href;
       }
     }
   };
@@ -368,19 +376,31 @@ export const Footer: React.FC = () => {
           </div>
           <div className="footer-bottom-legal">
             <a
-              href="#privacy"
+              href="/privacy-policy"
               className="footer-legal-link"
-              onClick={(e) => handleNavClick(e, '#privacy')}
             >
               Privacy Policy
             </a>
             <span className="footer-legal-dot">•</span>
             <a
-              href="#privacy"
+              href="/terms-of-service"
               className="footer-legal-link"
-              onClick={(e) => handleNavClick(e, '#privacy')}
             >
               Terms of Service
+            </a>
+            <span className="footer-legal-dot">•</span>
+            <a
+              href="/about"
+              className="footer-legal-link"
+            >
+              About
+            </a>
+            <span className="footer-legal-dot">•</span>
+            <a
+              href="/contact"
+              className="footer-legal-link"
+            >
+              Contact
             </a>
           </div>
           <div className="footer-powered-by">

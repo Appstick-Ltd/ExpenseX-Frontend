@@ -123,19 +123,46 @@ const jsonLdOrg = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'ExpenseX AI',
+  legalName: 'Appstick Ltd.',
   url: 'https://expensexai.com/',
   logo: 'https://expensexai.com/logo-512.png',
+  foundingLocation: {
+    '@type': 'Place',
+    name: 'Khulna, Bangladesh',
+  },
+  founder: {
+    '@type': 'Person',
+    name: 'Md. Riaz Mahmud',
+    jobTitle: 'Founder & CEO',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '50, KDA Outer Bypass Rd',
+    addressLocality: 'Khulna',
+    postalCode: '9100',
+    addressCountry: 'BD',
+  },
   sameAs: [
     'https://twitter.com/ExpenseX_AI',
     'https://github.com/ExpenseX-AI',
     'https://linkedin.com/company/expensex-ai',
+    'https://appstick.com.bd/',
   ],
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'Customer Support',
-    email: 'support@expensex.ai',
-    availableLanguage: ['English'],
-  },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      contactType: 'Corporate Inquiries',
+      email: 'info@expensexai.com',
+      telephone: '+8801404049797',
+      availableLanguage: ['English', 'Bengali'],
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'Customer Support',
+      email: 'support@expensexai.com',
+      availableLanguage: ['English', 'Bengali'],
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -163,6 +190,46 @@ export default function RootLayout({
       </head>
       <body>
         <ToasterProvider />
+        {/* Accessible Static Crawler Fallback */}
+        <noscript>
+          <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", maxWidth: '840px', margin: '40px auto', padding: '24px', lineHeight: 1.6, color: '#1e293b', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+            <h1 style={{ color: '#0f172a', marginBottom: '8px' }}>ExpenseX AI — Autonomous Personal Finance &amp; Expense Manager</h1>
+            <p style={{ fontSize: '15px', color: '#475569', marginBottom: '16px' }}>
+              <strong>Company:</strong> Appstick Ltd. &bull; 
+              <strong>Founder &amp; CEO:</strong> Md. Riaz Mahmud &bull; 
+              <strong>Headquarters:</strong> 50, KDA Outer Bypass Rd, Khulna 9100, Bangladesh
+            </p>
+            <p style={{ fontSize: '14px', color: '#334155' }}>
+              <strong>Official Website:</strong> <a href="https://expensexai.com/">https://expensexai.com/</a> | 
+              <strong>Contact Email:</strong> <a href="mailto:info@expensexai.com">info@expensexai.com</a> | 
+              <strong>Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> | 
+              <strong>Phone:</strong> +880 1404-049797
+            </p>
+            <hr style={{ border: 0, borderTop: '1px solid #e2e8f0', margin: '20px 0' }} />
+            
+            <h2 style={{ color: '#0f172a', fontSize: '20px' }}>About ExpenseX AI</h2>
+            <p>ExpenseX AI is an AI-first personal finance platform developed by Appstick Ltd. to eliminate manual expense logging. The application leverages multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
+            
+            <h2 style={{ color: '#0f172a', fontSize: '20px' }}>AI Architecture &amp; Key Features</h2>
+            <ul style={{ paddingLeft: '20px' }}>
+              <li><strong>AI Vision OCR Receipt Scanning:</strong> Multi-modal document processing capable of reading crumpled receipts and digital invoices in &lt;140ms with 99.4% accuracy.</li>
+              <li><strong>Voice Expense Capture:</strong> Natural language voice entry that automatically parses merchant, amount, category, and timestamps without typing.</li>
+              <li><strong>Bank SMS &amp; Digital Invoice Parsing:</strong> Contextual processing of transaction alerts and email receipts with intelligent deduplication.</li>
+              <li><strong>Safe-to-Spend&trade; Predictive Intelligence:</strong> Real-time predictive cashflow velocity algorithms calculating safe daily spending limits.</li>
+              <li><strong>Bank-Grade Zero-Knowledge Privacy:</strong> AES-256 field encryption. User financial records are never sold or used to train public foundation models.</li>
+            </ul>
+
+            <h2 style={{ color: '#0f172a', fontSize: '20px' }}>Public Pages &amp; Verification Links</h2>
+            <ul style={{ paddingLeft: '20px' }}>
+              <li><a href="/about">About Us &amp; Company Overview</a></li>
+              <li><a href="/pricing">Pricing &amp; Early-Bird Beta Plans</a></li>
+              <li><a href="/privacy-policy">Privacy Policy &amp; Data Rights</a></li>
+              <li><a href="/terms-of-service">Terms of Service</a></li>
+              <li><a href="/contact">Official Contact Information</a></li>
+            </ul>
+            <p style={{ fontSize: '13px', color: '#64748b', marginTop: '24px' }}>Note: JavaScript is recommended to experience the full interactive 3D web application.</p>
+          </div>
+        </noscript>
         <div id="root">{children}</div>
       </body>
     </html>

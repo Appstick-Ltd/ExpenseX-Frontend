@@ -143,6 +143,10 @@ export const Navbar: React.FC = () => {
 
     // Special handling for Home / Top: smooth scroll to 0 and remove hash
     if (href === '#home' || href === '/') {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+        window.location.href = '/';
+        return;
+      }
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
@@ -165,6 +169,8 @@ export const Navbar: React.FC = () => {
       if (window.location.hash) {
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+    } else if (typeof window !== 'undefined') {
+      window.location.href = '/' + href;
     }
   };
 
