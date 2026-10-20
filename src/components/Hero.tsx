@@ -4,8 +4,8 @@ import { TypewriterText } from './TypewriterText';
 import { ParticleField } from './3d/ParticleField';
 import { HERO_DATA } from '../utils/constants';
 import { ChevronRight, Users, ArrowRight, Cpu, Shield, Lock } from 'lucide-react';
-import { Card3DTilt } from './Card3DTilt';
 import { playMicroClick } from '../utils/audio';
+import { openEarlyAccessModal } from '../utils/modalEvents';
 
 export const Hero: React.FC = () => {
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -108,22 +108,25 @@ export const Hero: React.FC = () => {
 
             {/* Call to Actions */}
             <div className="hero-cta-group">
+              <button
+                type="button"
+                onClick={() => {
+                  playMicroClick();
+                  openEarlyAccessModal('both');
+                }}
+                className="btn-primary hero-btn-primary"
+              >
+                <span>Get Early Access</span>
+                <ArrowRight size={15} />
+              </button>
+
               <a
                 href="#tour"
                 onClick={(e) => handleScrollTo(e, '#tour')}
-                className="btn-primary hero-btn-primary"
+                className="btn-secondary hero-btn-secondary"
               >
                 <span>Take a Tour</span>
                 <ChevronRight size={15} />
-              </a>
-
-              <a
-                href="#features"
-                onClick={(e) => handleScrollTo(e, '#features')}
-                className="btn-secondary hero-btn-secondary"
-              >
-                <span>AI Features</span>
-                <ArrowRight size={14} />
               </a>
             </div>
 
@@ -381,6 +384,10 @@ export const Hero: React.FC = () => {
           color: #FFFFFF !important;
           transition: transform 0.2s ease, box-shadow 0.2s ease !important;
           text-decoration: none !important;
+          border: none !important;
+          cursor: pointer !important;
+          font-family: inherit !important;
+          outline: none;
         }
         .hero-btn-primary:hover {
           box-shadow: 0 12px 28px -4px rgba(109, 61, 245, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
@@ -405,6 +412,8 @@ export const Hero: React.FC = () => {
           color: #FFFFFF !important;
           transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease !important;
           text-decoration: none !important;
+          cursor: pointer !important;
+          font-family: inherit !important;
         }
         .hero-btn-secondary:hover {
           background: rgba(255, 255, 255, 0.08) !important;
@@ -504,7 +513,8 @@ export const Hero: React.FC = () => {
             gap: 10px !important;
             margin: 0 auto 12px auto !important;
           }
-          .hero-cta-group a {
+          .hero-cta-group a,
+          .hero-cta-group button {
             flex: 1 !important;
             width: auto !important;
             height: 42px !important;
@@ -550,7 +560,8 @@ export const Hero: React.FC = () => {
             max-width: 300px !important;
             gap: 8px !important;
           }
-          .hero-cta-group a {
+          .hero-cta-group a,
+          .hero-cta-group button {
             font-size: 12.5px !important;
             padding: 0 8px !important;
             height: 40px !important;

@@ -28,8 +28,8 @@ export const HERO_DATA = {
   ],
   descriptionPrimary: 'Track, understand, and control your money with AI.',
   descriptionSecondary: 'ExpenseX uses AI to automatically turn your voice, receipts, SMS, and emails into structured financial intelligence.',
-  ctaPrimary: 'Take a Tour',
-  ctaSecondary: 'AI Features',
+  ctaPrimary: 'Get Early Access',
+  ctaSecondary: 'Take a Tour',
   availability: 'Available on iOS and Android',
 };
 

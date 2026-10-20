@@ -477,7 +477,9 @@ export interface CategoryItem {
     en: string;
     bn?: string;
     [lang: string]: string | undefined;
-  };
+  } | string;
+  type?: 'expense' | 'income' | 'both';
+  user?: string | null;
   description?: {
     en?: string;
     bn?: string;
@@ -487,11 +489,25 @@ export interface CategoryItem {
   createdAt?: string;
 }
 
-export async function getCategories(): Promise<any> {
-  return adminFetch('/categories', { method: 'GET' });
+export async function getCategories(params?: {
+  type?: string;
+  scope?: string;
+  pagination?: boolean;
+}): Promise<any> {
+  const q = new URLSearchParams();
+  if (params?.type && params.type !== 'all') q.set('type', params.type);
+  if (params?.scope && params.scope !== 'all') q.set('scope', params.scope);
+  if (params?.pagination !== undefined) q.set('pagination', String(params.pagination));
+  const query = q.toString() ? `?${q.toString()}` : '';
+  return adminFetch(`/categories${query}`, { method: 'GET' });
 }
 
-export async function createCategory(payload: Partial<CategoryItem>): Promise<any> {
+export async function createCategory(payload: {
+  name: { en: string; bn?: string } | string;
+  type?: 'expense' | 'income' | 'both';
+  description?: { en?: string; bn?: string };
+  image?: string;
+}): Promise<any> {
   return adminFetch('/categories', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -500,8 +516,9 @@ export async function createCategory(payload: Partial<CategoryItem>): Promise<an
 
 export async function updateCategory(payload: {
   _id: string;
-  name?: { en?: string; bn?: string; [lang: string]: string | undefined };
-  description?: { en?: string; bn?: string; [lang: string]: string | undefined };
+  name?: { en?: string; bn?: string } | string;
+  type?: 'expense' | 'income' | 'both';
+  description?: { en?: string; bn?: string };
   image?: string;
 }): Promise<any> {
   return adminFetch('/categories', {
