@@ -6,7 +6,15 @@ import {
   updateSubscriptionPlan,
   deleteSubscriptionPlan,
   extractListFromResponse,
+  getLanguages,
 } from '../../../../helpers/backend';
+
+export interface ActiveLanguageOption {
+  code: string;
+  name: string;
+  flag: string;
+  isDefault?: boolean;
+}
 
 export interface SubscriptionPlanItem {
   _id: string;
@@ -79,27 +87,85 @@ export default function SubscriptionPlanPage() {
   const [planToDelete, setPlanToDelete] = useState<SubscriptionPlanItem | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Active Languages State
+  const [activeLanguages, setActiveLanguages] = useState<ActiveLanguageOption[]>([
+    { code: 'en', name: 'English', flag: '🇬🇧', isDefault: true },
+    { code: 'bn', name: 'বাংলা', flag: '🇧🇩', isDefault: false },
+  ]);
+
   // Add Form State
-  const [addName, setAddName] = useState<{ en: string; bn: string }>({ en: '', bn: '' });
+  const [addName, setAddName] = useState<Record<string, string>>({});
   const [addProductId, setAddProductId] = useState('');
   const [addAiCredit, setAddAiCredit] = useState<number | string>('');
   const [addCoin, setAddCoin] = useState<number | string>('');
   const [addDayValue, setAddDayValue] = useState<number | string>(30);
-  const [addFacilities, setAddFacilities] = useState<{ en: string; bn: string }[]>([{ en: '', bn: '' }]);
-  const [addModalLang, setAddModalLang] = useState<'en' | 'bn'>('en');
+  const [addFacilities, setAddFacilities] = useState<Record<string, string>[]>([{}]);
+  const [addModalLang, setAddModalLang] = useState<string>('en');
   const [isAdding, setIsAdding] = useState(false);
 
   // Edit Form State
-  const [editName, setEditName] = useState<{ en: string; bn: string }>({ en: '', bn: '' });
+  const [editName, setEditName] = useState<Record<string, string>>({});
   const [editProductId, setEditProductId] = useState('');
   const [editAiCredit, setEditAiCredit] = useState<number | string>('');
   const [editCoin, setEditCoin] = useState<number | string>('');
   const [editDayValue, setEditDayValue] = useState<number | string>('');
-  const [editFacilities, setEditFacilities] = useState<{ en: string; bn: string }[]>([{ en: '', bn: '' }]);
+  const [editFacilities, setEditFacilities] = useState<Record<string, string>[]>([{}]);
   const [editStatus, setEditStatus] = useState(true);
   const [editIsPopular, setEditIsPopular] = useState(false);
-  const [editModalLang, setEditModalLang] = useState<'en' | 'bn'>('en');
+  const [editModalLang, setEditModalLang] = useState<string>('en');
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Fetch active languages from backend
+  useEffect(() => {
+    const fetchActiveLanguages = async () => {
+      try {
+        const res = await getLanguages();
+        const list = Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res?.data?.data)
+            ? res.data.data
+            : Array.isArray(res?.data?.languages)
+              ? res.data.languages
+              : Array.isArray(res?.languages)
+                ? res.languages
+                : Array.isArray(res)
+                  ? res
+                  : [];
+
+        const filtered = list.filter((l: any) => {
+          const isActive =
+            l.active !== undefined
+              ? Boolean(l.active)
+              : l.status !== undefined
+                ? Boolean(l.status)
+                : l.isActive !== undefined
+                  ? Boolean(l.isActive)
+                  : true;
+          return isActive;
+        });
+
+        if (filtered.length > 0) {
+          const mapped: ActiveLanguageOption[] = filtered.map((l: any) => ({
+            code: l.code || 'en',
+            name: l.name || l.title || l.code,
+            flag: l.flag || '🌐',
+            isDefault: Boolean(l.default || l.isDefault),
+          }));
+          setActiveLanguages(mapped);
+
+          const def = mapped.find((l) => l.isDefault) || mapped[0];
+          if (def) {
+            setAddModalLang(def.code);
+            setEditModalLang(def.code);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load active languages for plans:', err);
+      }
+    };
+
+    fetchActiveLanguages();
+  }, []);
 
   // Fetch Plans from GET /subscriptions/plan
   const fetchPlans = useCallback(async () => {
@@ -130,10 +196,10 @@ export default function SubscriptionPlanPage() {
   const filteredPlans = plans.filter((plan) => {
     if (!search.trim()) return true;
     const q = search.trim().toLowerCase();
-    const nameEn = plan.name?.en?.toLowerCase() || '';
-    const nameBn = plan.name?.bn?.toLowerCase() || '';
+    const names = Object.values(plan.name || {}).map((n) => (n || '').toLowerCase());
+    const nameMatch = names.some((n) => n.includes(q));
     const productIdMatch = (plan.productId || '').toLowerCase().includes(q);
-    return nameEn.includes(q) || nameBn.includes(q) || productIdMatch;
+    return nameMatch || productIdMatch;
   });
 
   // Pagination
@@ -142,11 +208,26 @@ export default function SubscriptionPlanPage() {
   // Create Plan (POST /subscriptions/plan)
   const handleCreatePlan = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!addName.en.trim()) {
-      showErrorToast('Plan name (English) is required.');
+    const namePayload: Record<string, string> = {};
+    Object.entries(addName).forEach(([k, v]) => {
+      if (typeof v === 'string' && v.trim()) namePayload[k] = v.trim();
+    });
+
+    if (Object.keys(namePayload).length === 0) {
+      showErrorToast('Plan name is required.');
       return;
     }
-    const validFacilities = addFacilities.filter((f) => f.en.trim() || f.bn.trim());
+
+    const validFacilities = addFacilities
+      .map((f) => {
+        const itemObj: Record<string, string> = {};
+        Object.entries(f).forEach(([k, v]) => {
+          if (typeof v === 'string' && v.trim()) itemObj[k] = v.trim();
+        });
+        return itemObj;
+      })
+      .filter((f) => Object.keys(f).length > 0);
+
     if (validFacilities.length === 0) {
       showErrorToast('Please provide at least one facility.');
       return;
@@ -155,15 +236,9 @@ export default function SubscriptionPlanPage() {
     setIsAdding(true);
 
     const payload: any = {
-      name: {
-        en: addName.en.trim(),
-        ...(addName.bn.trim() ? { bn: addName.bn.trim() } : {}),
-      },
+      name: namePayload,
       productId: addProductId.trim(),
-      facilities: validFacilities.map((f) => ({
-        en: f.en.trim(),
-        ...(f.bn.trim() ? { bn: f.bn.trim() } : {}),
-      })),
+      facilities: validFacilities,
     };
 
     if (addAiCredit !== '' && Number(addAiCredit) >= 0) {
@@ -197,39 +272,40 @@ export default function SubscriptionPlanPage() {
   };
 
   const resetAddForm = () => {
-    setAddName({ en: '', bn: '' });
+    setAddName({});
     setAddProductId('');
     setAddAiCredit('');
     setAddCoin('');
     setAddDayValue(30);
-    setAddFacilities([{ en: '', bn: '' }]);
-    setAddModalLang('en');
+    setAddFacilities([{}]);
+    const def = activeLanguages.find((l) => l.isDefault) || activeLanguages[0];
+    setAddModalLang(def?.code || 'en');
   };
 
   // Open Edit Modal
   const handleOpenEdit = (plan: SubscriptionPlanItem) => {
     setEditingPlan(plan);
-    setEditName({
-      en: plan.name?.en || '',
-      bn: plan.name?.bn || '',
-    });
+    setEditName(plan.name && typeof plan.name === 'object' ? { ...plan.name } : {});
     setEditProductId(plan.productId || '');
     setEditAiCredit(plan.aiCredit ?? '');
     setEditCoin(plan.coin ?? '');
     setEditDayValue(plan.dayValue ?? 30);
     setEditStatus(plan.status !== false);
     setEditIsPopular(plan.isPopular === true);
-    setEditModalLang('en');
+    const def = activeLanguages.find((l) => l.isDefault) || activeLanguages[0];
+    setEditModalLang(def?.code || 'en');
 
     if (Array.isArray(plan.facilities) && plan.facilities.length > 0) {
       setEditFacilities(
-        plan.facilities.map((f: any) => ({
-          en: typeof f === 'object' ? f?.en || '' : String(f),
-          bn: typeof f === 'object' ? f?.bn || '' : '',
-        }))
+        plan.facilities.map((f: any) => {
+          if (typeof f === 'object' && f !== null) {
+            return { ...f };
+          }
+          return { en: String(f) };
+        })
       );
     } else {
-      setEditFacilities([{ en: '', bn: '' }]);
+      setEditFacilities([{}]);
     }
   };
 
@@ -244,12 +320,16 @@ export default function SubscriptionPlanPage() {
       _id: editingPlan._id,
     };
 
-    if (editName.en.trim()) {
-      payload.name = {
-        en: editName.en.trim(),
-        ...(editName.bn.trim() ? { bn: editName.bn.trim() } : {}),
-      };
+    const namePayload: Record<string, string> = {};
+    Object.entries(editName).forEach(([k, v]) => {
+      if (typeof v === 'string' && v.trim()) {
+        namePayload[k] = v.trim();
+      }
+    });
+    if (Object.keys(namePayload).length > 0) {
+      payload.name = namePayload;
     }
+
     if (editProductId.trim()) {
       payload.productId = editProductId.trim();
     }
@@ -265,12 +345,18 @@ export default function SubscriptionPlanPage() {
     payload.status = editStatus;
     payload.isPopular = editIsPopular;
 
-    const validFacilities = editFacilities.filter((f) => f.en.trim() || f.bn.trim());
+    const validFacilities = editFacilities
+      .map((f) => {
+        const itemObj: Record<string, string> = {};
+        Object.entries(f).forEach(([k, v]) => {
+          if (typeof v === 'string' && v.trim()) itemObj[k] = v.trim();
+        });
+        return itemObj;
+      })
+      .filter((f) => Object.keys(f).length > 0);
+
     if (validFacilities.length > 0) {
-      payload.facilities = validFacilities.map((f) => ({
-        en: f.en.trim(),
-        ...(f.bn.trim() ? { bn: f.bn.trim() } : {}),
-      }));
+      payload.facilities = validFacilities;
     }
 
     try {
@@ -311,9 +397,9 @@ export default function SubscriptionPlanPage() {
   // Facility helpers
   const addFacilityRow = (type: 'add' | 'edit') => {
     if (type === 'add') {
-      setAddFacilities((prev) => [...prev, { en: '', bn: '' }]);
+      setAddFacilities((prev) => [...prev, {}]);
     } else {
-      setEditFacilities((prev) => [...prev, { en: '', bn: '' }]);
+      setEditFacilities((prev) => [...prev, {}]);
     }
   };
 
@@ -325,7 +411,7 @@ export default function SubscriptionPlanPage() {
     }
   };
 
-  const updateFacility = (type: 'add' | 'edit', index: number, lang: 'en' | 'bn', value: string) => {
+  const updateFacility = (type: 'add' | 'edit', index: number, lang: string, value: string) => {
     if (type === 'add') {
       setAddFacilities((prev) =>
         prev.map((f, i) => (i === index ? { ...f, [lang]: value } : f))
@@ -351,39 +437,58 @@ export default function SubscriptionPlanPage() {
     activeLang,
     onSelect,
   }: {
-    activeLang: 'en' | 'bn';
-    onSelect: (lang: 'en' | 'bn') => void;
+    activeLang: string;
+    onSelect: (lang: string) => void;
   }) => (
     <div
       style={{
         display: 'flex',
-        gap: 4,
-        padding: 3,
+        flexWrap: 'wrap',
+        gap: 6,
+        padding: 4,
         background: '#F1F5F9',
         borderRadius: 8,
         width: 'fit-content',
         marginBottom: 12,
       }}
     >
-      {(['en', 'bn'] as const).map((lang) => (
+      {activeLanguages.map((lang) => (
         <button
-          key={lang}
+          key={lang.code}
           type="button"
-          onClick={() => onSelect(lang)}
+          onClick={() => onSelect(lang.code)}
           style={{
-            padding: '5px 14px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '6px 14px',
             borderRadius: 6,
             border: 'none',
             fontSize: 12,
             fontWeight: 600,
             cursor: 'pointer',
-            background: activeLang === lang ? '#FFFFFF' : 'transparent',
-            color: activeLang === lang ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
-            boxShadow: activeLang === lang ? '0 1px 2px rgba(0,0,0,0.08)' : 'none',
+            background: activeLang === lang.code ? '#FFFFFF' : 'transparent',
+            color: activeLang === lang.code ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
+            boxShadow: activeLang === lang.code ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             transition: 'all 0.15s ease',
           }}
         >
-          {lang === 'en' ? '🇺🇸 English' : '🇧🇩 বাংলা'}
+          <span>{lang.flag || '🌐'}</span>
+          <span>{lang.name}</span>
+          {lang.isDefault && (
+            <span
+              style={{
+                fontSize: 10,
+                background: 'rgba(109, 61, 245, 0.1)',
+                color: 'var(--mc-brand-purple)',
+                padding: '1px 5px',
+                borderRadius: 4,
+                fontWeight: 700,
+              }}
+            >
+              Default
+            </span>
+          )}
         </button>
       ))}
     </div>
@@ -913,16 +1018,15 @@ export default function SubscriptionPlanPage() {
               {/* Name */}
               <div>
                 <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-main)', marginBottom: 6, display: 'block' }}>
-                  Plan Name {addModalLang === 'en' ? '(English)' : '(বাংলা)'} *
+                  Plan Name ({activeLanguages.find((l) => l.code === addModalLang)?.name || addModalLang}) *
                 </label>
                 <input
                   type="text"
-                  value={addModalLang === 'en' ? addName.en : addName.bn}
+                  value={addName[addModalLang] || ''}
                   onChange={(e) =>
                     setAddName((prev) => ({ ...prev, [addModalLang]: e.target.value }))
                   }
-                  placeholder={addModalLang === 'en' ? 'e.g. Premium Plan' : 'e.g. প্রিমিয়াম পরিকল্পনা'}
-                  required={addModalLang === 'en'}
+                  placeholder={`e.g. Premium Plan (${activeLanguages.find((l) => l.code === addModalLang)?.name || addModalLang})`}
                   style={{
                     width: '100%',
                     padding: '10px 14px',
@@ -1050,7 +1154,7 @@ export default function SubscriptionPlanPage() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-main)' }}>
-                    Facilities {addModalLang === 'en' ? '(English)' : '(বাংলা)'} *
+                    Facilities ({activeLanguages.find((l) => l.code === addModalLang)?.name || addModalLang}) *
                   </label>
                   <button
                     type="button"
@@ -1077,9 +1181,9 @@ export default function SubscriptionPlanPage() {
                     <div key={idx} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                       <input
                         type="text"
-                        value={addModalLang === 'en' ? facility.en : facility.bn}
+                        value={facility[addModalLang] || ''}
                         onChange={(e) => updateFacility('add', idx, addModalLang, e.target.value)}
-                        placeholder={addModalLang === 'en' ? `Feature ${idx + 1}` : `বৈশিষ্ট্য ${idx + 1}`}
+                        placeholder={`Feature ${idx + 1} (${activeLanguages.find((l) => l.code === addModalLang)?.name || addModalLang})`}
                         style={{
                           flex: 1,
                           padding: '8px 12px',
@@ -1202,15 +1306,15 @@ export default function SubscriptionPlanPage() {
               {/* Name */}
               <div>
                 <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-main)', marginBottom: 6, display: 'block' }}>
-                  Plan Name {editModalLang === 'en' ? '(English)' : '(বাংলা)'}
+                  Plan Name ({activeLanguages.find((l) => l.code === editModalLang)?.name || editModalLang})
                 </label>
                 <input
                   type="text"
-                  value={editModalLang === 'en' ? editName.en : editName.bn}
+                  value={editName[editModalLang] || ''}
                   onChange={(e) =>
                     setEditName((prev) => ({ ...prev, [editModalLang]: e.target.value }))
                   }
-                  placeholder={editModalLang === 'en' ? 'e.g. Premium Plan' : 'e.g. প্রিমিয়াম পরিকল্পনা'}
+                  placeholder={`e.g. Premium Plan (${activeLanguages.find((l) => l.code === editModalLang)?.name || editModalLang})`}
                   style={{
                     width: '100%',
                     padding: '10px 14px',
@@ -1438,7 +1542,7 @@ export default function SubscriptionPlanPage() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-main)' }}>
-                    Facilities {editModalLang === 'en' ? '(English)' : '(বাংলা)'}
+                    Facilities ({activeLanguages.find((l) => l.code === editModalLang)?.name || editModalLang})
                   </label>
                   <button
                     type="button"
@@ -1465,9 +1569,9 @@ export default function SubscriptionPlanPage() {
                     <div key={idx} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                       <input
                         type="text"
-                        value={editModalLang === 'en' ? facility.en : facility.bn}
+                        value={facility[editModalLang] || ''}
                         onChange={(e) => updateFacility('edit', idx, editModalLang, e.target.value)}
-                        placeholder={editModalLang === 'en' ? `Feature ${idx + 1}` : `বৈশিষ্ট্য ${idx + 1}`}
+                        placeholder={`Feature ${idx + 1} (${activeLanguages.find((l) => l.code === editModalLang)?.name || editModalLang})`}
                         style={{
                           flex: 1,
                           padding: '8px 12px',

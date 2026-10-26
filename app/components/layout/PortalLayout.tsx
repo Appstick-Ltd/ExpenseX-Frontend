@@ -25,6 +25,7 @@ import {
   Mail,
   FileText,
   HelpCircle,
+  Globe,
   Layers,
   FolderTree,
   CreditCard,
@@ -76,6 +77,7 @@ const SETTINGS_SUB_ITEMS: SubItemDef[] = [
   { id: 'email-settings', label: 'Email Settings', icon: Mail },
   { id: 'page-settings', label: 'Page Settings', icon: FileText },
   { id: 'faq', label: 'FAQ', icon: HelpCircle },
+  { id: 'language-settings', label: 'Language Settings', icon: Globe },
 ];
 
 export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab, initialSubTab }) => {

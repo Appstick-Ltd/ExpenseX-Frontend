@@ -4,15 +4,17 @@ import GeneralSettings from './page';
 import EmailSettings from './email-settings/page';
 import PageSettings from './page-settings/page';
 import FaqSettings from './faq/page';
+import LanguageSettings from './language-settings/page';
 import {
   Sliders,
   Mail,
   FileText,
   HelpCircle,
+  Globe,
 } from 'lucide-react';
 import { triggerHaptic } from '../../../helpers/haptics';
 
-export type SettingsSubTab = 'general-settings' | 'email-settings' | 'page-settings' | 'faq';
+export type SettingsSubTab = 'general-settings' | 'email-settings' | 'page-settings' | 'faq' | 'language-settings';
 
 export interface SettingsTabProps {
   subTab?: string;
@@ -24,6 +26,7 @@ const SUB_TABS: Array<{ id: SettingsSubTab; label: string; icon: React.ElementTy
   { id: 'email-settings', label: 'Email Settings', icon: Mail },
   { id: 'page-settings', label: 'Page Settings', icon: FileText },
   { id: 'faq', label: 'FAQ', icon: HelpCircle },
+  { id: 'language-settings', label: 'Language Settings', icon: Globe },
 ];
 
 export const SettingsTab: React.FC<SettingsTabProps> = ({ subTab, onSubTabChange }) => {
@@ -33,6 +36,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ subTab, onSubTabChange
     if (lower === 'email' || lower === 'email-settings') return 'email-settings';
     if (lower === 'page' || lower === 'pages' || lower === 'page-settings') return 'page-settings';
     if (lower === 'faq' || lower === 'faqs') return 'faq';
+    if (lower === 'language' || lower === 'languages' || lower === 'language-settings' || lower === 'language-setting') {
+      return 'language-settings';
+    }
     return 'general-settings';
   };
 
@@ -106,6 +112,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ subTab, onSubTabChange
       {activeSubTab === 'email-settings' && <EmailSettings />}
       {activeSubTab === 'page-settings' && <PageSettings />}
       {activeSubTab === 'faq' && <FaqSettings />}
+      {activeSubTab === 'language-settings' && <LanguageSettings />}
     </div>
   );
 };

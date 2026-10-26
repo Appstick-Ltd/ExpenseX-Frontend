@@ -12,14 +12,17 @@ export const ToasterProvider: React.FC = () => {
   if (!mounted) return null;
 
   return (
-    <div suppressHydrationWarning>
-      <Toaster
+    <Toaster
       position="top-right"
       reverseOrder={false}
       gutter={8}
+      containerStyle={{
+        zIndex: 99999999,
+      }}
       toastOptions={{
         duration: 4000,
         style: {
+          zIndex: 99999999,
           background: '#0F172A',
           color: '#F8FAFC',
           fontSize: '13px',
@@ -31,6 +34,7 @@ export const ToasterProvider: React.FC = () => {
         },
         error: {
           style: {
+            zIndex: 99999999,
             background: '#FEF2F2',
             color: '#991B1B',
             border: '1px solid #FCA5A5',
@@ -44,6 +48,7 @@ export const ToasterProvider: React.FC = () => {
         },
         success: {
           style: {
+            zIndex: 99999999,
             background: '#F0FDF4',
             color: '#166534',
             border: '1px solid #86EFAC',
@@ -57,6 +62,5 @@ export const ToasterProvider: React.FC = () => {
         },
       }}
     />
-    </div>
   );
 };
