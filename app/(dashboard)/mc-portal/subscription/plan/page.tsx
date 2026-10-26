@@ -52,6 +52,7 @@ import {
   Save,
   ChevronDown,
   Coins,
+  Globe,
 } from 'lucide-react';
 import { ShimmerTableRows, ShimmerMobileCardList } from '../../../../components/common/Shimmer';
 import { showSuccessAlert, showErrorToast, showConfirmDialog } from '../../../../helpers/notification';
@@ -151,6 +152,15 @@ export default function SubscriptionPlanPage() {
             flag: l.flag || '🌐',
             isDefault: Boolean(l.default || l.isDefault),
           }));
+          mapped.sort((a, b) => {
+            if (a.isDefault && !b.isDefault) return -1;
+            if (!a.isDefault && b.isDefault) return 1;
+            if (a.code === 'en') return -1;
+            if (b.code === 'en') return 1;
+            if (a.code === 'bn') return -1;
+            if (b.code === 'bn') return 1;
+            return a.name.localeCompare(b.name);
+          });
           setActiveLanguages(mapped);
 
           const def = mapped.find((l) => l.isDefault) || mapped[0];
@@ -196,7 +206,10 @@ export default function SubscriptionPlanPage() {
   const filteredPlans = plans.filter((plan) => {
     if (!search.trim()) return true;
     const q = search.trim().toLowerCase();
-    const names = Object.values(plan.name || {}).map((n) => (n || '').toLowerCase());
+    const names =
+      typeof plan.name === 'string'
+        ? [(plan.name as any).toLowerCase()]
+        : Object.values(plan.name || {}).map((n) => String(n || '').toLowerCase());
     const nameMatch = names.some((n) => n.includes(q));
     const productIdMatch = (plan.productId || '').toLowerCase().includes(q);
     return nameMatch || productIdMatch;
@@ -436,61 +449,96 @@ export default function SubscriptionPlanPage() {
   const LanguageTabBar = ({
     activeLang,
     onSelect,
+    filledMap,
   }: {
     activeLang: string;
     onSelect: (lang: string) => void;
+    filledMap?: Record<string, boolean>;
   }) => (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: 6,
-        padding: 4,
-        background: '#F1F5F9',
-        borderRadius: 8,
-        width: 'fit-content',
-        marginBottom: 12,
-      }}
-    >
-      {activeLanguages.map((lang) => (
-        <button
-          key={lang.code}
-          type="button"
-          onClick={() => onSelect(lang.code)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '6px 14px',
-            borderRadius: 6,
-            border: 'none',
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: 'pointer',
-            background: activeLang === lang.code ? '#FFFFFF' : 'transparent',
-            color: activeLang === lang.code ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
-            boxShadow: activeLang === lang.code ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            transition: 'all 0.15s ease',
-          }}
-        >
-          <span>{lang.flag || '🌐'}</span>
-          <span>{lang.name}</span>
-          {lang.isDefault && (
-            <span
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Globe size={14} color="var(--mc-brand-purple)" />
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-main)' }}>
+            Active Languages ({activeLanguages.length})
+          </span>
+        </div>
+        <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>
+          Click to enter details in each language
+        </span>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 6,
+          padding: 6,
+          background: '#F8FAFC',
+          border: '1px solid var(--mc-border)',
+          borderRadius: 10,
+          maxHeight: 135,
+          overflowY: 'auto',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        {activeLanguages.map((lang) => {
+          const isSelected = activeLang === lang.code;
+          const isFilled = filledMap ? Boolean(filledMap[lang.code]) : false;
+          return (
+            <button
+              key={lang.code}
+              type="button"
+              onClick={() => onSelect(lang.code)}
               style={{
-                fontSize: 10,
-                background: 'rgba(109, 61, 245, 0.1)',
-                color: 'var(--mc-brand-purple)',
-                padding: '1px 5px',
-                borderRadius: 4,
-                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 12px',
+                borderRadius: 7,
+                border: isSelected ? '1px solid var(--mc-brand-purple)' : '1px solid #E2E8F0',
+                fontSize: 12,
+                fontWeight: isSelected ? 700 : 500,
+                cursor: 'pointer',
+                background: isSelected ? '#FFFFFF' : '#FFFFFF',
+                color: isSelected ? 'var(--mc-brand-purple)' : 'var(--mc-text-main)',
+                boxShadow: isSelected ? '0 1px 3px rgba(109, 61, 245, 0.15)' : 'none',
+                transition: 'all 0.15s ease',
               }}
             >
-              Default
-            </span>
-          )}
-        </button>
-      ))}
+              <span>{lang.flag || '🌐'}</span>
+              <span>{lang.name}</span>
+              {lang.isDefault && (
+                <span
+                  style={{
+                    fontSize: 9,
+                    background: 'rgba(109, 61, 245, 0.1)',
+                    color: 'var(--mc-brand-purple)',
+                    padding: '1px 5px',
+                    borderRadius: 4,
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Default
+                </span>
+              )}
+              {isFilled && (
+                <span
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    background: '#10B981',
+                    display: 'inline-block',
+                  }}
+                  title="Content entered for this language"
+                />
+              )}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 
@@ -611,7 +659,18 @@ export default function SubscriptionPlanPage() {
                   </tr>
                 ) : (
                   filteredPlans.map((plan, idx) => {
-                    const planName = plan.name?.en || plan.name?.bn || '—';
+                    const defLang = activeLanguages.find((l) => l.isDefault)?.code || 'en';
+                    const planName =
+                      typeof plan.name === 'string'
+                        ? plan.name
+                        : plan.name?.[defLang] || plan.name?.en || Object.values(plan.name || {})[0] || '—';
+
+                    const otherTranslations =
+                      typeof plan.name === 'object' && plan.name
+                        ? Object.entries(plan.name).filter(([k, v]) => k !== defLang && Boolean(v))
+                        : [];
+                    const secondaryName = otherTranslations[0]?.[1];
+                    const extraCount = otherTranslations.length > 1 ? otherTranslations.length - 1 : 0;
 
                     return (
                       <tr key={plan._id} style={{ borderBottom: '1px solid #F8FAFC', transition: 'background 0.1s ease' }}>
@@ -621,8 +680,15 @@ export default function SubscriptionPlanPage() {
                         <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                             <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--mc-text-main)', whiteSpace: 'nowrap' }}>{planName}</span>
-                            {plan.name?.bn && (
-                              <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)', whiteSpace: 'nowrap' }}>{plan.name.bn}</span>
+                            {secondaryName && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)', whiteSpace: 'nowrap' }}>{secondaryName}</span>
+                                {extraCount > 0 && (
+                                  <span style={{ fontSize: 10, background: '#F1F5F9', color: 'var(--mc-text-muted)', padding: '1px 5px', borderRadius: 4 }}>
+                                    +{extraCount} more
+                                  </span>
+                                )}
+                              </div>
                             )}
                           </div>
                         </td>
@@ -770,7 +836,18 @@ export default function SubscriptionPlanPage() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {filteredPlans.map((plan) => {
-              const planName = plan.name?.en || plan.name?.bn || '—';
+              const defLang = activeLanguages.find((l) => l.isDefault)?.code || 'en';
+              const planName =
+                typeof plan.name === 'string'
+                  ? plan.name
+                  : plan.name?.[defLang] || plan.name?.en || Object.values(plan.name || {})[0] || '—';
+
+              const otherTranslations =
+                typeof plan.name === 'object' && plan.name
+                  ? Object.entries(plan.name).filter(([k, v]) => k !== defLang && Boolean(v))
+                  : [];
+              const secondaryName = otherTranslations[0]?.[1];
+              const extraCount = otherTranslations.length > 1 ? otherTranslations.length - 1 : 0;
               return (
                 <div
                   key={plan._id}
@@ -786,8 +863,15 @@ export default function SubscriptionPlanPage() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--mc-text-main)', marginBottom: 2 }}>{planName}</div>
-                      {plan.name?.bn && (
-                        <div style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>{plan.name.bn}</div>
+                      {secondaryName && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                          <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>{secondaryName}</span>
+                          {extraCount > 0 && (
+                            <span style={{ fontSize: 10, background: '#F1F5F9', color: 'var(--mc-text-muted)', padding: '1px 5px', borderRadius: 4 }}>
+                              +{extraCount} more
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
                     <div style={{ display: 'flex', gap: 6 }}>
@@ -1013,7 +1097,15 @@ export default function SubscriptionPlanPage() {
 
             {/* Modal Form */}
             <form onSubmit={handleCreatePlan} style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <LanguageTabBar activeLang={addModalLang} onSelect={setAddModalLang} />
+              {(() => {
+                const addFilledMap: Record<string, boolean> = {};
+                activeLanguages.forEach((l) => {
+                  const hasName = Boolean(addName[l.code]?.trim());
+                  const hasFacility = addFacilities.some((f) => Boolean(f[l.code]?.trim()));
+                  addFilledMap[l.code] = hasName || hasFacility;
+                });
+                return <LanguageTabBar activeLang={addModalLang} onSelect={setAddModalLang} filledMap={addFilledMap} />;
+              })()}
 
               {/* Name */}
               <div>
@@ -1301,7 +1393,15 @@ export default function SubscriptionPlanPage() {
 
             {/* Modal Form */}
             <form onSubmit={handleUpdatePlan} style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <LanguageTabBar activeLang={editModalLang} onSelect={setEditModalLang} />
+              {(() => {
+                const editFilledMap: Record<string, boolean> = {};
+                activeLanguages.forEach((l) => {
+                  const hasName = Boolean(editName[l.code]?.trim());
+                  const hasFacility = editFacilities.some((f) => Boolean(f[l.code]?.trim()));
+                  editFilledMap[l.code] = hasName || hasFacility;
+                });
+                return <LanguageTabBar activeLang={editModalLang} onSelect={setEditModalLang} filledMap={editFilledMap} />;
+              })()}
 
               {/* Name */}
               <div>
