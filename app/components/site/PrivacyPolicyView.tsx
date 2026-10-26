@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Lock, CheckCircle2, FileText, Database, KeyRound, Building2 } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, CheckCircle2, FileText, Database, KeyRound, Building2, Trash2 } from 'lucide-react';
 import { playMicroClick } from '../../helpers/audio';
 
 export const PrivacyPolicyView: React.FC = () => {
@@ -180,31 +180,80 @@ export const PrivacyPolicyView: React.FC = () => {
             <section>
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <CheckCircle2 size={20} color="#10B981" />
-                4. Data Retention &amp; Backup Policy
+                4. Data Retention &amp; Storage Lifecycle
               </h2>
               <p>
-                We do not promise unrealistic &ldquo;zero retention&rdquo; while an account remains active, because historical ledgers are required to display your spending charts and budgets:
+                We do not promise unrealistic &ldquo;zero retention&rdquo; while an account remains active, because continuous financial tracking requires historical records to compute your spending analytics, category breakdowns, and Safe to Spend margins:
               </p>
               <ul style={{ paddingLeft: '24px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <li><strong>Active Account Data:</strong> Categorized transactions, balances, and budgets are retained while your account remains active.</li>
-                <li><strong>Temporary Audio Files:</strong> Voice recordings are strictly ephemeral and deleted immediately upon transcription.</li>
-                <li><strong>Account Deletion &amp; Backups:</strong> When a user requests account termination, personal data and transactions are deactivated and deleted from active production databases within 48 hours, and completely expunged from encrypted cyclical disaster recovery backups within 30 days.</li>
+                <li><strong>Active Account Records:</strong> Categorized transactions, balances, custom category rules, and budgets are retained securely while your account remains open and active.</li>
+                <li><strong>Ephemeral Voice Audio:</strong> Spoken audio recordings captured during voice logging are strictly ephemeral and processed in memory. Audio files are immediately discarded upon text transcription and intent extraction.</li>
+                <li><strong>Statutory &amp; Accounting Records:</strong> In compliance with applicable legal, fiscal, and tax obligations (such as billing invoices or corporate accounting standards per NBR guidelines), certain subscription payment records and billing receipts may be retained for the mandatory statutory duration. Such records are strictly isolated and encrypted.</li>
               </ul>
             </section>
 
             <section>
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Shield size={20} color="var(--purple-light)" />
-                5. Permission Revocation &amp; User Deletion Rights
+                <Trash2 size={20} color="#EF4444" />
+                5. User Data Deletion, Account Erasure &amp; Sovereignty Rights
               </h2>
               <p>
-                Users maintain full sovereign control over their data permissions:
+                You retain complete sovereign control over your personal and financial data. In adherence to global privacy regulations and mobile application platform policies (including Google Play and Apple App Store data deletion standards), we provide unambiguous, self-service, and support-assisted pathways to delete your data:
               </p>
-              <ul style={{ paddingLeft: '24px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <li><strong>Revoking Permissions:</strong> You can revoke device permissions (Camera, Microphone, SMS) at any time via your device OS settings.</li>
-                <li><strong>Data Export:</strong> You can export your entire financial history in standard CSV or JSON format directly from the application.</li>
-                <li><strong>Permanent Account Deletion:</strong> You can request permanent account deletion and complete data purge at any time by emailing our dedicated privacy desk at <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)' }}>privacy@expensexai.com</a>.</li>
-              </ul>
+
+              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {/* 5.1 How to Request Deletion */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '20px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', marginBottom: '10px' }}>
+                    5.1 How to Request Account &amp; Data Deletion
+                  </h3>
+                  <p style={{ margin: '0 0 10px 0' }}>Users can initiate permanent account and data deletion through either of the following methods:</p>
+                  <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <li>
+                      <strong>Direct In-App Deletion:</strong> Open the ExpenseX mobile app &rarr; Go to <strong>Settings / Profile</strong> &rarr; Select <strong>Privacy &amp; Security</strong> &rarr; Tap <strong>Delete Account &amp; Associated Data</strong> &rarr; Confirm your request with authentication (password or OTP).
+                    </li>
+                    <li>
+                      <strong>Direct Web &amp; Email Deletion Request:</strong> If you no longer have access to the mobile application or prefer an external request, email our dedicated data desk at <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)', fontWeight: 600 }}>privacy@expensexai.com</a> with the subject <em>&ldquo;Data &amp; Account Deletion Request&rdquo;</em> from your registered email address. We verify your identity and process the deletion without requiring app re-installation.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* 5.2 Scope of Data Permanently Deleted */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '20px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', marginBottom: '10px' }}>
+                    5.2 Scope of Data Permanently Deleted
+                  </h3>
+                  <p style={{ margin: '0 0 10px 0' }}>Upon processing your deletion request, the following records are permanently and irreversibly purged:</p>
+                  <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <li><strong>Personal Identity:</strong> Full name, registered email address, phone number, profile preferences, and login credentials/authentication tokens.</li>
+                    <li><strong>Financial Transactions:</strong> All logged income, expenses, custom merchant entries, category histories, payment tags, and personal notes.</li>
+                    <li><strong>Captured Receipts &amp; Signals:</strong> All uploaded receipt images, camera captures, vision OCR tokens, parsed bank alert text, and synchronized digital invoice files.</li>
+                    <li><strong>Budgets &amp; AI Intelligence:</strong> Savings goals, Safe to Spend parameters, financial health metrics, and conversational AI prompt history.</li>
+                  </ul>
+                </div>
+
+                {/* 5.3 Timelines & SLA */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '20px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', marginBottom: '10px' }}>
+                    5.3 Deletion Execution Timelines
+                  </h3>
+                  <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <li><strong>Immediate Account Revocation:</strong> Your account is instantly deactivated, active sessions are invalidated, and you are signed out across all devices.</li>
+                    <li><strong>Active Databases (Within 48–72 Hours):</strong> All personal and financial records are completely purged from active production databases and cloud object stores.</li>
+                    <li><strong>Disaster Recovery Backups (Within 30 Days):</strong> Encrypted cyclical server backups rotate and permanently overwrite all residual snapshots within a maximum of 30 days.</li>
+                  </ul>
+                </div>
+
+                {/* 5.4 Pre-Deletion Data Portability */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '20px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', marginBottom: '10px' }}>
+                    5.4 Data Portability Prior to Deletion
+                  </h3>
+                  <p style={{ margin: 0 }}>
+                    Because data deletion is permanent and cannot be recovered, users have the right to download and export their complete financial ledger in open formats (standard CSV and JSON) directly from the application settings before requesting deletion.
+                  </p>
+                </div>
+              </div>
             </section>
 
             <section>
