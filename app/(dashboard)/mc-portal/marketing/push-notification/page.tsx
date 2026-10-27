@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   sendPushNotification,
   getPushNotificationHistory,
@@ -7,6 +7,7 @@ import {
   getUsers,
   fetchSettings,
   getPushNotificationCountries,
+  postSingleImage,
   extractListFromResponse,
 } from "../../../../helpers/backend";
 import {
@@ -22,6 +23,8 @@ import {
   BellRing,
   Smartphone,
   Sparkles,
+  CheckCircle2,
+  Upload,
   X,
 } from "lucide-react";
 import { ShimmerTableRows } from "../../../../components/common/Shimmer";
@@ -58,6 +61,9 @@ export default function PushNotificationPage() {
   // Composer Form State
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [targetType, setTargetType] = useState<"all" | "single" | "country">("all");
   const [country, setCountry] = useState("");
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
@@ -138,6 +144,39 @@ export default function PushNotificationPage() {
     return () => clearTimeout(timer);
   }, [userQuery, targetType]);
 
+  // Handle Banner Image Upload
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      showErrorToast("Image size must be less than 5MB.");
+      return;
+    }
+
+    setIsUploadingImage(true);
+    try {
+      const res = await postSingleImage({ image: file });
+      const uploadedUrl = res?.image || res?.data?.image || res?.url || res?.data?.url || res?.data?.fileUrl || "";
+      if (uploadedUrl) {
+        setImage(uploadedUrl);
+      } else {
+        setImage(URL.createObjectURL(file));
+      }
+    } catch (err: any) {
+      console.warn("Upload fallback to local preview:", err);
+      setImage(URL.createObjectURL(file));
+    } finally {
+      setIsUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImage("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   // Handle Send Campaign
   const handleSendCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,6 +204,7 @@ export default function PushNotificationPage() {
         title: title.trim(),
         message: message.trim(),
         targetType,
+        image: image.trim() || undefined,
       };
 
       if (targetType === "single" && selectedUser?._id) payload.userId = selectedUser._id;
@@ -180,6 +220,7 @@ export default function PushNotificationPage() {
       // Reset form
       setTitle("");
       setMessage("");
+      setImage("");
       setSelectedUser(null);
       setUserQuery("");
       setCountry("");
@@ -549,6 +590,133 @@ export default function PushNotificationPage() {
               />
             </div>
 
+            {/* OPTIONAL BANNER IMAGE UPLOAD */}
+            <div>
+              <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--mc-text-main)", marginBottom: 6 }}>
+                Banner Image <span style={{ fontSize: 11, fontWeight: 400, color: "var(--mc-text-subtle)" }}>(Optional)</span>
+              </label>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+              />
+
+              {image ? (
+                <div
+                  style={{
+                    position: "relative",
+                    borderRadius: 10,
+                    border: "1px solid var(--mc-border)",
+                    padding: 10,
+                    background: "#F8FAFC",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  <img
+                    src={image}
+                    alt="Uploaded Banner"
+                    style={{
+                      width: 54,
+                      height: 54,
+                      borderRadius: 6,
+                      objectFit: "cover",
+                      background: "#FFFFFF",
+                      border: "1px solid var(--mc-border)",
+                    }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "var(--mc-text-main)", display: "flex", alignItems: "center", gap: 6 }}>
+                      <CheckCircle2 size={14} color="#059669" />
+                      <span>Image attached</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--mc-text-muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      Will be delivered as notification banner
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    title="Remove image"
+                    className="mc-btn mc-btn-secondary"
+                    style={{
+                      padding: "6px 10px",
+                      fontSize: 12,
+                      color: "var(--mc-danger)",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <Trash2 size={13} />
+                    <span>Remove</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingImage}
+                  style={{
+                    width: "100%",
+                    padding: "16px 12px",
+                    borderRadius: 10,
+                    border: "1.5px dashed var(--mc-border)",
+                    background: "#F8FAFC",
+                    cursor: isUploadingImage ? "not-allowed" : "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 6,
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--mc-brand-purple)";
+                    (e.currentTarget as HTMLElement).style.background = "#F5F3FF";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--mc-border)";
+                    (e.currentTarget as HTMLElement).style.background = "#F8FAFC";
+                  }}
+                >
+                  {isUploadingImage ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--mc-brand-purple)", fontSize: 13, fontWeight: 600 }}>
+                      <RefreshCw size={16} className="spin-animate" />
+                      <span>Uploading Image...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        style={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: "50%",
+                          background: "#EEF2FF",
+                          color: "var(--mc-brand-purple)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Upload size={18} />
+                      </div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--mc-text-main)" }}>
+                        Click to upload banner image
+                      </div>
+                      <div style={{ fontSize: 11, color: "var(--mc-text-subtle)" }}>
+                        PNG, JPG, WEBP, or GIF (up to 5MB)
+                      </div>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+
             {/* DISPATCH BUTTON */}
             <button
               type="submit"
@@ -705,6 +873,20 @@ export default function PushNotificationPage() {
                 <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.4, wordBreak: "break-word" }}>
                   {message.trim() || "Type in the composer to view live delivery banner on smartphone."}
                 </div>
+
+                {/* Optional Banner Image Preview */}
+                {image.trim() && (
+                  <div style={{ marginTop: 8, borderRadius: 8, overflow: "hidden", maxHeight: 120, background: "#F1F5F9" }}>
+                    <img
+                      src={image.trim()}
+                      alt="Banner Preview"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = "none";
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

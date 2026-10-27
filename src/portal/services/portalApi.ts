@@ -817,3 +817,12 @@ export async function deletePushNotificationRecord(id: string): Promise<any> {
 export async function getPushNotificationCountries(): Promise<any> {
   return adminFetch(`/notifications/countries`, { method: "GET" });
 }
+
+export async function uploadSingleImage(file: File): Promise<any> {
+  const fd = new FormData();
+  fd.append("image", file);
+  return adminFetch("/files/single-image-upload", {
+    method: "POST",
+    body: fd,
+  });
+}
