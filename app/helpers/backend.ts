@@ -285,3 +285,8 @@ export function extractListFromResponse<T = any>(res: any): {
   }
   return { items: [], total: 0 };
 }
+
+export const sendPushNotification = (data: any) => post("/notifications/send-push", data);
+export const getPushNotificationHistory = (data?: any) => get("/notifications/push-notifications", data);
+export const deletePushNotificationRecord = (id: string) => del(`/notifications/push-notifications/${id}`);
+export const getPushNotificationCountries = () => get("/notifications/countries");

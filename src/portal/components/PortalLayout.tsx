@@ -8,6 +8,7 @@ import { UsersTab } from './tabs/UsersTab';
 import { CategoriesTab } from './tabs/CategoriesTab';
 import { SubscriptionsTab } from './tabs/SubscriptionsTab';
 import { SettingsTab } from './tabs/SettingsTab';
+import { MarketingTab } from './tabs/MarketingTab';
 import { triggerHaptic } from '../../utils/haptics';
 import {
   LayoutDashboard,
@@ -24,11 +25,12 @@ import {
   X,
   ExternalLink,
   ShieldCheck,
+  Megaphone,
   type LucideIcon,
 } from 'lucide-react';
 
 interface NavItemDef {
-  id: 'overview' | 'beta-users' | 'users' | 'categories' | 'subscriptions' | 'settings';
+  id: 'overview' | 'beta-users' | 'users' | 'marketing' | 'categories' | 'subscriptions' | 'settings';
   label: string;
   shortLabel?: string;
   icon: LucideIcon;
@@ -45,6 +47,7 @@ export const PortalLayout: React.FC = () => {
     { id: 'overview', label: 'Overview & Telemetry', shortLabel: 'Overview', icon: LayoutDashboard },
     { id: 'beta-users', label: 'Beta Early-Bird Users', shortLabel: 'Early-Bird', icon: Sparkles, badge: 'Live' },
     { id: 'users', label: 'System Users', shortLabel: 'Users', icon: UserCheck },
+    { id: 'marketing', label: 'Marketing', shortLabel: 'Marketing', icon: Megaphone, badge: 'New' },
     { id: 'categories', label: 'Categories Dictionary', shortLabel: 'Categories', icon: Layers },
     { id: 'subscriptions', label: 'Subscription Tiers', shortLabel: 'Plans', icon: CreditCard },
     { id: 'settings', label: 'System Settings', shortLabel: 'Settings', icon: Settings },
@@ -65,7 +68,7 @@ export const PortalLayout: React.FC = () => {
   const TabIcon = currentTabDef.icon;
   const userInitial = (user?.name || user?.email || 'A')[0].toUpperCase();
 
-  const isMoreActive = activeTab === 'categories' || activeTab === 'settings' || isDrawerOpen;
+  const isMoreActive = activeTab === 'categories' || activeTab === 'settings' || activeTab === 'marketing' || isDrawerOpen;
 
   return (
     <div className="mc-shell">
@@ -376,6 +379,7 @@ export const PortalLayout: React.FC = () => {
           {activeTab === 'overview' && <OverviewTab onNavigateTab={(tab) => handleTabSelect(tab as any)} />}
           {activeTab === 'beta-users' && <BetaUsersTab />}
           {activeTab === 'users' && <UsersTab />}
+          {activeTab === 'marketing' && <MarketingTab />}
           {activeTab === 'categories' && <CategoriesTab />}
           {activeTab === 'subscriptions' && <SubscriptionsTab />}
           {activeTab === 'settings' && <SettingsTab />}
@@ -435,7 +439,7 @@ export const PortalLayout: React.FC = () => {
           >
             <div className="mc-bottom-nav-icon-wrap">
               <Menu size={19} />
-              {(activeTab === 'categories' || activeTab === 'settings') && (
+              {(activeTab === 'categories' || activeTab === 'settings' || activeTab === 'marketing') && (
                 <span className="mc-bottom-badge-dot" style={{ background: 'var(--mc-brand-purple)' }} />
               )}
             </div>

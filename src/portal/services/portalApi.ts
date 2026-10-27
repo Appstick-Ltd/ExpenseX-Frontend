@@ -738,3 +738,82 @@ export async function deleteLanguage(id: string): Promise<any> {
   return adminFetch(`/settings/languages/${id}`, { method: 'DELETE' });
 }
 
+
+export interface PushNotificationPayload {
+  title: string;
+  message: string;
+  image?: string;
+  targetType: "all" | "single" | "country";
+  userId?: string;
+  country?: string;
+  data?: Record<string, any>;
+}
+
+export interface PushNotificationItem {
+  _id: string;
+  title: string;
+  message: string;
+  image?: string;
+  targetType: "all" | "single" | "country";
+  user?: string;
+  country?: string;
+  data?: Record<string, any>;
+  status: "pending" | "processing" | "completed" | "failed";
+  totalTargetUsers?: number;
+  totalTokens?: number;
+  successCount?: number;
+  failedCount?: number;
+  sender?: string;
+  error?: string;
+  targetUser?: {
+    _id: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    image?: string;
+    country?: string;
+  };
+  senderUser?: {
+    _id: string;
+    name?: string;
+    email?: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PushCountryItem {
+  country: string;
+  userCount: number;
+  tokenCount: number;
+}
+
+export async function sendPushNotification(payload: PushNotificationPayload): Promise<any> {
+  return adminFetch("/notifications/send-push", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getPushNotificationHistory(params?: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  targetType?: string;
+}): Promise<any> {
+  const query = new URLSearchParams();
+  if (params?.page) query.append("page", String(params.page));
+  if (params?.limit) query.append("limit", String(params.limit));
+  if (params?.search) query.append("search", params.search);
+  if (params?.targetType) query.append("targetType", params.targetType);
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return adminFetch(`/notifications/push-notifications${qs}`, { method: "GET" });
+}
+
+export async function deletePushNotificationRecord(id: string): Promise<any> {
+  return adminFetch(`/notifications/push-notifications/${id}`, { method: "DELETE" });
+}
+
+export async function getPushNotificationCountries(): Promise<any> {
+  return adminFetch(`/notifications/countries`, { method: "GET" });
+}

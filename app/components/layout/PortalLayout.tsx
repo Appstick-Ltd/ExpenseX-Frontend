@@ -29,6 +29,8 @@ import {
   Layers,
   FolderTree,
   CreditCard,
+  Megaphone,
+  Send,
   Gift,
   History,
   type LucideIcon,
@@ -37,7 +39,7 @@ import {
 import { useRouter } from 'next/navigation';
 
 interface NavItemDef {
-  id: 'overview' | 'users' | 'services' | 'subscription' | 'settings';
+  id: 'overview' | 'users' | 'services' | 'subscription' | 'marketing' | 'settings';
   label: string;
   shortLabel?: string;
   icon: LucideIcon;
@@ -46,7 +48,7 @@ interface NavItemDef {
 
 export interface PortalLayoutProps {
   children?: React.ReactNode;
-  initialTab?: 'overview' | 'beta-users' | 'users' | 'services' | 'subscription' | 'settings';
+  initialTab?: 'overview' | 'beta-users' | 'users' | 'services' | 'subscription' | 'marketing' | 'settings';
   initialSubTab?: string;
 }
 
@@ -72,6 +74,10 @@ const SUBSCRIPTION_SUB_ITEMS: SubItemDef[] = [
   { id: 'history', label: 'History', icon: History },
 ];
 
+const MARKETING_SUB_ITEMS: SubItemDef[] = [
+  { id: 'push-notification', label: 'Push Notification', icon: Send },
+];
+
 const SETTINGS_SUB_ITEMS: SubItemDef[] = [
   { id: 'general-settings', label: 'General Settings', icon: Sliders },
   { id: 'email-settings', label: 'Email Settings', icon: Mail },
@@ -91,6 +97,12 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     }
     if (typeof window === 'undefined') return 'overview';
     const path = window.location.pathname;
+        if (
+      path.startsWith('/mc-portal/marketing') ||
+      path.startsWith('/dashboard/marketing')
+    ) {
+      return 'marketing';
+    }
     if (
       path.startsWith('/mc-portal/settings') ||
       path.startsWith('/mc-portal/setting') ||
@@ -150,6 +162,14 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     return 'plan';
   };
 
+  const getMarketingSubTabFromUrl = (): string => {
+    if (typeof window === 'undefined') return 'push-notification';
+    const path = window.location.pathname;
+    const match = path.match(/\/(mc-portal|dashboard)\/marketing\/([^/]+)/);
+    if (match && match[2]) return match[2];
+    return 'push-notification';
+  };
+
   const getSubTabFromUrl = (): string => {
     if (initialSubTab) return initialSubTab;
     if (typeof window === 'undefined') return 'general-settings';
@@ -166,6 +186,8 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const [servicesOpen, setServicesOpen] = useState<boolean>(() => getTabFromUrl() === 'services');
   const [activeSubscriptionSubTab, setActiveSubscriptionSubTab] = useState<string>(() => getSubscriptionSubTabFromUrl());
   const [subscriptionOpen, setSubscriptionOpen] = useState<boolean>(() => getTabFromUrl() === 'subscription');
+    const [activeMarketingSubTab, setActiveMarketingSubTab] = useState<string>(() => getMarketingSubTabFromUrl());
+  const [marketingOpen, setMarketingOpen] = useState<boolean>(() => getTabFromUrl() === 'marketing');
   const [activeSubTab, setActiveSubTab] = useState<string>(() => getSubTabFromUrl());
   const [settingsOpen, setSettingsOpen] = useState<boolean>(() => getTabFromUrl() === 'settings');
   const [collapsed, setCollapsed] = useState(false);
@@ -177,12 +199,17 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
       const usersSub = getUsersSubTabFromUrl();
       const servicesSub = getServicesSubTabFromUrl();
       const subscriptionSub = getSubscriptionSubTabFromUrl();
+      const marketingSub = getMarketingSubTabFromUrl();
       const sub = getSubTabFromUrl();
       setActiveTab(tab);
       setActiveUsersSubTab(usersSub);
       setActiveServicesSubTab(servicesSub);
       setActiveSubscriptionSubTab(subscriptionSub);
+      setActiveMarketingSubTab(marketingSub);
       setActiveSubTab(sub);
+      if (tab === 'marketing') {
+        setMarketingOpen(true);
+      }
       if (tab === 'settings') {
         setSettingsOpen(true);
       }
@@ -205,6 +232,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     { id: 'users', label: 'User Management', shortLabel: 'Users', icon: UserCheck },
     { id: 'services', label: 'Service Management', shortLabel: 'Services', icon: Layers },
     { id: 'subscription', label: 'Subscription Management', shortLabel: 'Subscription', icon: CreditCard },
+    { id: 'marketing', label: 'Marketing', shortLabel: 'Marketing', icon: Megaphone, badge: 'New' },
     { id: 'settings', label: 'Settings', shortLabel: 'Settings', icon: Settings },
   ];
 
@@ -242,6 +270,17 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
         setActiveTab('subscription');
         setSubscriptionOpen(true);
         router.push(`${basePrefix}/subscription/${activeSubscriptionSubTab || 'plan'}`);
+      }
+      return;
+    }
+
+        if (tabId === 'marketing') {
+      if (activeTab === 'marketing') {
+        setMarketingOpen(!marketingOpen);
+      } else {
+        setActiveTab('marketing');
+        setMarketingOpen(true);
+        router.push(`${basePrefix}/marketing/${activeMarketingSubTab || 'push-notification'}`);
       }
       return;
     }
@@ -299,6 +338,17 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     router.push(`${basePrefix}/${subId}`);
   };
 
+  const handleMarketingSubTabSelect = (subId: string) => {
+    triggerHaptic('selection');
+    setActiveTab('marketing');
+    setActiveMarketingSubTab(subId);
+    setMarketingOpen(true);
+    setIsDrawerOpen(false);
+    const isDashboardPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard');
+    const basePrefix = isDashboardPath ? '/dashboard/marketing' : '/mc-portal/marketing';
+    router.push(`${basePrefix}/${subId}`);
+  };
+
   const handleSubTabSelect = (subId: string) => {
     triggerHaptic('selection');
     setActiveTab('settings');
@@ -319,7 +369,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const TabIcon = currentTabDef.icon;
   const userInitial = (user?.name || user?.email || 'A')[0].toUpperCase();
 
-  const isMoreActive = activeTab === 'settings' || activeTab === 'subscription' || isDrawerOpen;
+  const isMoreActive = activeTab === 'settings' || activeTab === 'subscription' || activeTab === 'marketing' || isDrawerOpen;
 
   return (
     <div className="mc-shell">
@@ -382,8 +432,9 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
             const isUsers = item.id === 'users';
             const isServices = item.id === 'services';
             const isSubscription = item.id === 'subscription';
-            const isExpandable = isSettings || isUsers || isServices || isSubscription;
-            const isExpanded = isSettings ? settingsOpen : isUsers ? usersOpen : isServices ? servicesOpen : isSubscription ? subscriptionOpen : false;
+                        const isMarketing = item.id === 'marketing';
+            const isExpandable = isSettings || isUsers || isServices || isSubscription || isMarketing;
+            const isExpanded = isSettings ? settingsOpen : isUsers ? usersOpen : isServices ? servicesOpen : isSubscription ? subscriptionOpen : isMarketing ? marketingOpen : false;
 
             return (
               <div key={item.id} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -555,6 +606,58 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
                           key={sub.id}
                           type="button"
                           onClick={() => handleSubscriptionSubTabSelect(sub.id)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10,
+                            padding: '8px 12px',
+                            borderRadius: 6,
+                            border: 'none',
+                            background: isSubActive ? 'rgba(109,61,245,0.08)' : 'transparent',
+                            color: isSubActive ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
+                            fontWeight: isSubActive ? 600 : 500,
+                            fontSize: 12.5,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'all 0.15s ease',
+                            position: 'relative',
+                          }}
+                        >
+                          <SubIcon size={14} style={{ flexShrink: 0 }} />
+                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
+                            {sub.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                
+                {/* Expandable Marketing Sub-menu (Desktop) */}
+                {isMarketing && !collapsed && marketingOpen && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 2,
+                      paddingLeft: 28,
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                      marginLeft: 14,
+                      borderLeft: '1.5px solid var(--mc-border)',
+                      marginTop: 2,
+                    }}
+                  >
+                    {MARKETING_SUB_ITEMS.map((sub) => {
+                      const SubIcon = sub.icon;
+                      const isSubActive = activeTab === 'marketing' && activeMarketingSubTab === sub.id;
+
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => handleMarketingSubTabSelect(sub.id)}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -755,8 +858,9 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
               const isUsers = item.id === 'users';
               const isServices = item.id === 'services';
               const isSubscription = item.id === 'subscription';
-              const isExpandable = isSettings || isUsers || isServices || isSubscription;
-              const isExpanded = isSettings ? settingsOpen : isUsers ? usersOpen : isServices ? servicesOpen : isSubscription ? subscriptionOpen : false;
+              const isMarketing = item.id === 'marketing';
+              const isExpandable = isSettings || isUsers || isServices || isSubscription || isMarketing;
+              const isExpanded = isSettings ? settingsOpen : isUsers ? usersOpen : isServices ? servicesOpen : isSubscription ? subscriptionOpen : isMarketing ? marketingOpen : false;
 
               return (
                 <div key={item.id} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -925,6 +1029,53 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
                           >
                             <SubIcon size={15} />
                             <span style={{ flex: 1 }}>{sub.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  
+                  {/* Expandable Marketing Sub-menu (Mobile Drawer) */}
+                  {isMarketing && marketingOpen && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        paddingLeft: 36,
+                        paddingTop: 4,
+                        paddingBottom: 4,
+                        marginLeft: 18,
+                        borderLeft: '1.5px solid var(--mc-border)',
+                      }}
+                    >
+                      {MARKETING_SUB_ITEMS.map((sub) => {
+                        const SubIcon = sub.icon;
+                        const isSubActive = activeTab === 'marketing' && activeMarketingSubTab === sub.id;
+
+                        return (
+                          <button
+                            key={sub.id}
+                            type="button"
+                            onClick={() => handleMarketingSubTabSelect(sub.id)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 10,
+                              padding: '10px 14px',
+                              borderRadius: 6,
+                              border: 'none',
+                              background: isSubActive ? 'rgba(109,61,245,0.08)' : 'transparent',
+                              color: isSubActive ? 'var(--mc-brand-purple)' : 'var(--mc-text-muted)',
+                              fontWeight: isSubActive ? 600 : 500,
+                              fontSize: 13,
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                            }}
+                          >
+                            <SubIcon size={15} />
+                            <span>{sub.label}</span>
                           </button>
                         );
                       })}
