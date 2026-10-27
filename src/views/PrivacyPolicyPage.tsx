@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Lock, CheckCircle2, FileText, Database, KeyRound, Building2 } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, CheckCircle2, FileText, Database, KeyRound, Building2, Trash2 } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { playMicroClick } from '../utils/audio';
@@ -188,20 +188,53 @@ export const PrivacyPolicyPage: React.FC = () => {
             <section>
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <CheckCircle2 size={20} color="#10B981" />
-                4. User Sovereignty &amp; Data Deletion Rights
+                4. Data Retention Lifecycle &amp; Statutory Compliance
               </h2>
               <p>
-                You maintain sovereign ownership of your financial records. Users can export all categorized transactions in standardized CSV/JSON formats at any time.
+                Continuous financial tracking requires historical records to compute your spending analytics and Safe to Spend margins while your account remains active. However, we uphold strict retention limitations:
               </p>
-              <p style={{ marginTop: '10px' }}>
-                To request immediate and irreversible account termination and data purge, email our privacy office at <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)' }}>privacy@expensexai.com</a> or <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)' }}>info@expensexai.com</a>. All personal tokens and financial ledgers will be permanently expunged from production databases within 30 days.
+              <ul style={{ paddingLeft: '24px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <li><strong>Active Ledgers:</strong> Transaction records and custom categories are maintained securely while your account is active.</li>
+                <li><strong>Ephemeral Audio Files:</strong> Voice notes recorded during hands-free logging are held in temporary memory and purged immediately upon transcription.</li>
+                <li><strong>Statutory Retention (NBR &amp; Accounting Standards):</strong> In accordance with statutory legal and tax obligations, commercial subscription invoicing metadata is maintained for the duration mandated by applicable law, isolated and encrypted from active application databases.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Trash2 size={20} color="#EF4444" />
+                5. User Data Deletion &amp; Account Erasure
+              </h2>
+              <p>
+                In compliance with global data privacy principles and app store data safety requirements (including Google Play and Apple App Store policies), you have the permanent right to delete your data and account:
               </p>
+
+              <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '20px' }}>
+                  <h3 style={{ fontSize: '15.5px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    How to Request Deletion:
+                  </h3>
+                  <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <li><strong>In-App:</strong> Open ExpenseX &rarr; Settings &rarr; Privacy &amp; Security &rarr; Tap &ldquo;Delete Account &amp; Data&rdquo;.</li>
+                    <li><strong>Web / Email Request:</strong> Send an email to <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)' }}>privacy@expensexai.com</a> with the subject &ldquo;Data Deletion Request&rdquo; from your registered email.</li>
+                  </ul>
+                </div>
+
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '20px' }}>
+                  <h3 style={{ fontSize: '15.5px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+                    What Data is Deleted:
+                  </h3>
+                  <p style={{ margin: 0 }}>
+                    All profile information, login credentials, transaction ledgers, uploaded receipt photos, OCR extracts, SMS parses, and conversational AI history are permanently erased. Active databases are cleared within 48–72 hours, and encrypted backup snapshots are expunged within 30 days.
+                  </p>
+                </div>
+              </div>
             </section>
 
             <section>
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <Building2 size={20} color="var(--purple-light)" />
-                5. Privacy Inquiries &amp; Governance
+                6. Privacy Inquiries &amp; Governance
               </h2>
               <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '24px' }}>
                 <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '16px', marginBottom: '4px' }}>Appstick (ExpenseX AI Privacy Governance)</div>

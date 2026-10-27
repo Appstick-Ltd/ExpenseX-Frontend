@@ -10,7 +10,6 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'AI Engine', href: '#ai-engine' },
   { label: 'Intelligence', href: '#safe-to-spend' },
   { label: 'Roadmap', href: '#roadmap' },
-  { label: 'Privacy', href: '#privacy' },
   { label: 'FAQ', href: '#faq' },
 ];
 
