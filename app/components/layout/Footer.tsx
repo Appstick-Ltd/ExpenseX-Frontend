@@ -147,9 +147,9 @@ export const Footer: React.FC = () => {
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(109, 61, 245, 0.15)', color: 'var(--purple-light)', border: '1px solid rgba(139, 92, 246, 0.3)' }}
+                  style={{ background: 'rgba(109, 61, 245, 0.16)', color: '#A78BFA', border: '1px solid rgba(139, 92, 246, 0.35)' }}
                 >
-                  <Mail size={15} />
+                  <Mail size={16} />
                 </div>
                 <div>
                   <div className="footer-contact-label">CORPORATE &amp; PARTNERSHIPS</div>
@@ -167,9 +167,9 @@ export const Footer: React.FC = () => {
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(255, 90, 54, 0.15)', color: '#FF5A36', border: '1px solid rgba(255, 90, 54, 0.3)' }}
+                  style={{ background: 'rgba(255, 90, 54, 0.16)', color: '#FF6B4A', border: '1px solid rgba(255, 90, 54, 0.35)' }}
                 >
-                  <Mail size={15} />
+                  <Mail size={16} />
                 </div>
                 <div>
                   <div className="footer-contact-label">CUSTOMER &amp; USER SUPPORT</div>
@@ -183,13 +183,36 @@ export const Footer: React.FC = () => {
                 </div>
               </div>
 
-              {/* WhatsApp */}
+              {/* Privacy Office */}
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(37, 211, 102, 0.15)', color: '#25D366', border: '1px solid rgba(37, 211, 102, 0.3)' }}
+                  style={{ background: 'rgba(56, 189, 248, 0.16)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.35)' }}
                 >
-                  <MessageCircle size={15} />
+                  <Mail size={16} />
+                </div>
+                <div>
+                  <div className="footer-contact-label">PRIVACY &amp; DATA DESK</div>
+                  <a
+                    href="mailto:privacy@expensexai.com"
+                    className="footer-contact-value"
+                    onClick={playMicroClick}
+                  >
+                    privacy@expensexai.com
+                  </a>
+                </div>
+              </div>
+
+              {/* WhatsApp Direct */}
+              <div className="footer-contact-row">
+                <div
+                  className="footer-icon-badge"
+                  style={{ background: 'rgba(37, 211, 102, 0.16)', color: '#25D366', border: '1px solid rgba(37, 211, 102, 0.35)' }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.1-.476-.15-.676.15-.2.3-.777.978-.952 1.178-.175.2-.351.225-.652.075-.301-.15-1.27-.468-2.42-1.493-.895-.798-1.5-1.784-1.675-2.084-.176-.3-.019-.462.132-.612.136-.135.301-.35.451-.525.15-.176.2-.3.301-.5.1-.2.05-.376-.025-.526-.075-.15-.676-1.63-.927-2.232-.244-.588-.493-.508-.676-.517-.175-.009-.376-.01-.576-.01-.2 0-.526.075-.802.375-.276.3-1.053 1.028-1.053 2.508 0 1.48 1.078 2.908 1.228 3.109.15.2 2.121 3.24 5.138 4.544.718.31 1.278.496 1.715.635.721.23 1.378.197 1.897.12.578-.087 1.78-.727 2.031-1.429.251-.702.251-1.303.176-1.429-.076-.125-.276-.2-.577-.35z" />
+                    <path d="M12 2a10 10 0 0 0-8.62 15.08L2 22l5.08-1.33A10 10 0 1 0 12 2zm0 18.2a8.16 8.16 0 0 1-4.17-1.14l-.3-.18-3.09.81.82-3.01-.19-.31A8.2 8.2 0 1 1 12 20.2z" />
+                  </svg>
                 </div>
                 <div>
                   <div className="footer-contact-label">WHATSAPP DIRECT</div>
@@ -209,9 +232,9 @@ export const Footer: React.FC = () => {
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(109, 61, 245, 0.15)', color: '#A78BFA', border: '1px solid rgba(139, 92, 246, 0.3)' }}
+                  style={{ background: 'rgba(109, 61, 245, 0.16)', color: '#A78BFA', border: '1px solid rgba(139, 92, 246, 0.35)' }}
                 >
-                  <MapPin size={15} />
+                  <MapPin size={16} />
                 </div>
                 <div>
                   <div className="footer-contact-label">OFFICE ADDRESS</div>
@@ -508,14 +531,23 @@ export const Footer: React.FC = () => {
         }
 
         .footer-icon-badge {
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
+          min-width: 36px;
+          min-height: 36px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justifyContent: center;
           flex-shrink: 0;
-          margin-top: 2px;
+          box-sizing: border-box;
+          aspect-ratio: 1 / 1;
+        }
+
+        .footer-icon-badge svg {
+          display: block;
+          margin: auto;
+          flex-shrink: 0;
         }
 
         .footer-contact-label {
@@ -650,32 +682,40 @@ export const Footer: React.FC = () => {
           font-weight: 600;
         }
 
+        /* Bottom Copyright & Powered by Row - CSS Grid 3 Columns (Zero Overlap Guaranteed) */
         .footer-bottom-row {
-          display: flex;
-          flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: auto 1fr auto;
           align-items: center;
-          justifyContent: space-between;
-          gap: 18px;
+          width: 100%;
+          gap: 24px;
           padding-top: 32px;
           border-top: 1px solid rgba(255, 255, 255, 0.06);
-          font-size: 12.5px;
+          font-size: 13px;
         }
 
         .footer-copyright {
           color: #64748B;
+          text-align: left;
+          white-space: nowrap;
+          font-size: 12.5px;
         }
 
         .footer-bottom-legal {
           display: flex;
           align-items: center;
-          gap: 10px;
-          flex-wrap: wrap;
+          justifyContent: center;
+          gap: 14px;
+          text-align: center;
+          white-space: nowrap;
+          margin: 0 auto;
         }
 
         .footer-legal-link {
           color: #94A3B8;
           text-decoration: none;
           transition: color 0.2s ease;
+          font-size: 13px;
         }
 
         .footer-legal-link:hover {
@@ -684,22 +724,48 @@ export const Footer: React.FC = () => {
 
         .footer-legal-dot {
           color: #475569;
+          font-size: 11px;
         }
 
         .footer-powered-by {
           color: #64748B;
+          text-align: right;
+          white-space: nowrap;
+          font-size: 12.5px;
         }
 
         .footer-powered-by-link {
-          color: #A78BFA;
+          color: #FFFFFF;
           font-weight: 700;
           text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .footer-powered-by-link:hover {
+          color: #A78BFA;
         }
 
         @media (max-width: 1080px) {
           .footer-desktop-grid {
             grid-template-columns: 1fr 1fr;
             gap: 36px;
+          }
+        }
+
+        @media (max-width: 1150px) {
+          .footer-bottom-row {
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: 14px;
+          }
+          .footer-copyright,
+          .footer-powered-by {
+            text-align: center;
+            white-space: normal;
+          }
+          .footer-bottom-legal {
+            flex-wrap: wrap;
+            justify-content: center;
           }
         }
 
@@ -711,11 +777,6 @@ export const Footer: React.FC = () => {
             display: flex;
             flex-direction: column;
             gap: 16px;
-          }
-          .footer-bottom-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
           }
         }
       `}</style>

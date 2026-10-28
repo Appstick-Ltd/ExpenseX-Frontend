@@ -1,60 +1,43 @@
+'use client';
 import React from 'react';
-import { Logo } from './Logo';
-import { Mail, MessageCircle, MapPin, ChevronRight } from 'lucide-react';
-import { playMicroClick } from '../utils/audio';
-import { openEarlyAccessModal } from '../utils/modalEvents';
+import { Logo } from '../common/Logo';
+import { Mail, MessageCircle, MapPin, ChevronRight, Sparkles, ArrowUpRight } from 'lucide-react';
+import { playMicroClick } from '../../helpers/audio';
 
 export const Footer: React.FC = () => {
-  const quickLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'Features', href: '#features' },
-    { label: 'How It Works', href: '#tour' },
-    { label: 'AI Engine', href: '#ai-engine' },
-    { label: 'Pricing', href: '/pricing' },
-    { label: 'About Us', href: '/about' },
-    { label: 'Contact', href: '/contact' },
-    { label: 'FAQ', href: '#faq' },
+  const platformLinks = [
+    { label: 'Home', href: '/#home' },
+    { label: 'How It Works', href: '/#tour' },
+    { label: 'Capture Channels', href: '/#features' },
+    { label: 'AI Financial Engine', href: '/#ai-engine' },
+    { label: 'Product & Stage', href: '/#product-stage' },
+    { label: 'Frequently Asked Questions', href: '/#faq' },
   ];
 
-  const mobileNavLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'Features', href: '#features' },
-    { label: 'How It Works', href: '#tour' },
-    { label: 'AI Engine', href: '#ai-engine' },
-    { label: 'Pricing', href: '/pricing' },
+  const companyLinks = [
+    { label: 'Pricing & Plans', href: '/pricing', badge: 'PRO' },
     { label: 'About Us', href: '/about' },
-    { label: 'Contact', href: '/contact' },
-    { label: 'FAQ', href: '#faq' },
-    { label: 'Early Access', href: '#', isVip: true },
+    { label: 'Leadership & Team', href: '/about#team' },
+    { label: 'Contact & Support', href: '/contact' },
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms of Service', href: '/terms-of-service' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#') || href === '/') {
-      e.preventDefault();
-      playMicroClick();
-
-      if (href === '#home' || href === '/') {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        });
-        if (window.location.hash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        return;
-      }
-
-      const id = href.replace('#', '');
-      const el = document.getElementById(id);
-      if (el) {
-        const navOffset = window.innerWidth <= 768 ? 36 : 24;
-        const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({
-          top: Math.max(0, elementTop - navOffset),
-          behavior: 'smooth',
-        });
-        if (window.location.hash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    if (href.startsWith('/#') || href.startsWith('#')) {
+      const targetHash = href.includes('#') ? '#' + href.split('#')[1] : href;
+      if (typeof window !== 'undefined' && window.location.pathname === '/') {
+        e.preventDefault();
+        playMicroClick();
+        const id = targetHash.replace('#', '');
+        const el = document.getElementById(id);
+        if (el) {
+          const navOffset = 70;
+          const elementTop = el.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top: Math.max(0, elementTop - navOffset),
+            behavior: 'smooth',
+          });
         }
       }
     }
@@ -63,7 +46,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="expensex-footer">
       <div className="container">
-        {/* ================= DESKTOP & TABLET VIEW ================= */}
+        {/* ================= DESKTOP & TABLET 4-COLUMN VIEW ================= */}
         <div className="footer-desktop-grid">
           {/* Column 1: Brand & Socials */}
           <div className="footer-col-brand">
@@ -71,99 +54,125 @@ export const Footer: React.FC = () => {
             <p className="footer-brand-desc">
               Meet Your <span className="text-gradient-purple">AI Money Assistant.</span>
             </p>
+            <p className="footer-brand-subtext">
+              Turn your voice, receipts, and bank SMS into structured financial intelligence with zero manual typing.
+            </p>
 
-            {/* Circular Social Badges */}
+            {/* Direct Channel Buttons */}
             <div className="footer-social-row">
               <a
-                href="https://facebook.com"
+                href="https://wa.me/8801404049797"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="footer-circle-social"
-                title="Facebook"
-                aria-label="Facebook"
+                className="footer-pill-action"
+                title="WhatsApp Support"
+                aria-label="WhatsApp"
                 onClick={playMicroClick}
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                </svg>
+                <span className="live-dot" />
+                <MessageCircle size={14} color="#25D366" />
+                <span>WhatsApp</span>
               </a>
-
               <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-circle-social"
-                title="Instagram"
-                aria-label="Instagram"
+                href="mailto:support@expensexai.com"
+                className="footer-pill-action"
+                title="Email Support"
+                aria-label="Email"
                 onClick={playMicroClick}
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
-              </a>
-
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-circle-social"
-                title="YouTube"
-                aria-label="YouTube"
-                onClick={playMicroClick}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                </svg>
-              </a>
-
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-circle-social"
-                title="X (Twitter)"
-                aria-label="X"
-                onClick={playMicroClick}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
+                <Mail size={14} color="#A78BFA" />
+                <span>Email Us</span>
               </a>
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Column 2: Platform Links */}
           <div className="footer-col footer-col-links">
-            <h4 className="footer-heading">QUICK LINKS</h4>
+            <h4 className="footer-heading">PLATFORM</h4>
             <ul className="footer-clean-links">
-              {quickLinks.map((link) => (
+              {platformLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
                     className="footer-link-item"
                     onClick={(e) => handleNavClick(e, link.href)}
                   >
-                    {link.label}
+                    <span>{link.label}</span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: Support & Contact */}
+          {/* Column 3: Company & Plans (Moved from Navbar) */}
+          <div className="footer-col footer-col-links">
+            <h4 className="footer-heading">COMPANY &amp; ACCESS</h4>
+            <ul className="footer-clean-links">
+              {companyLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="footer-link-item"
+                    onClick={playMicroClick}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '7px' }}
+                  >
+                    <span>{link.label}</span>
+                    {link.badge && (
+                      <span
+                        style={{
+                          fontSize: '10px',
+                          fontWeight: 800,
+                          padding: '2px 6px',
+                          borderRadius: '999px',
+                          background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(255, 90, 54, 0.25))',
+                          border: '1px solid rgba(167, 139, 250, 0.45)',
+                          color: '#FDF4FF',
+                          letterSpacing: '0.04em',
+                        }}
+                      >
+                        {link.badge}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Support & Contact */}
           <div className="footer-col footer-col-contact">
-            <h4 className="footer-heading">SUPPORT &amp; CONTACT</h4>
+            <h4 className="footer-heading">SUPPORT &amp; HEADQUARTERS</h4>
             <div className="footer-contact-list">
-              {/* Email */}
+              {/* Corporate Inquiries */}
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(255, 90, 54, 0.15)', color: '#FF5A36', border: '1px solid rgba(255, 90, 54, 0.3)' }}
+                  style={{ background: 'rgba(109, 61, 245, 0.16)', color: '#A78BFA', border: '1px solid rgba(139, 92, 246, 0.35)' }}
                 >
-                  <Mail size={15} />
+                  <Mail size={16} />
                 </div>
                 <div>
-                  <div className="footer-contact-label">SUPPORT EMAIL</div>
+                  <div className="footer-contact-label">CORPORATE &amp; PARTNERSHIPS</div>
+                  <a
+                    href="mailto:info@expensexai.com"
+                    className="footer-contact-value"
+                    onClick={playMicroClick}
+                  >
+                    info@expensexai.com
+                  </a>
+                </div>
+              </div>
+
+              {/* Customer Support */}
+              <div className="footer-contact-row">
+                <div
+                  className="footer-icon-badge"
+                  style={{ background: 'rgba(255, 90, 54, 0.16)', color: '#FF6B4A', border: '1px solid rgba(255, 90, 54, 0.35)' }}
+                >
+                  <Mail size={16} />
+                </div>
+                <div>
+                  <div className="footer-contact-label">CUSTOMER &amp; USER SUPPORT</div>
                   <a
                     href="mailto:support@expensexai.com"
                     className="footer-contact-value"
@@ -174,16 +183,39 @@ export const Footer: React.FC = () => {
                 </div>
               </div>
 
-              {/* WhatsApp */}
+              {/* Privacy Office */}
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(37, 211, 102, 0.15)', color: '#25D366', border: '1px solid rgba(37, 211, 102, 0.3)' }}
+                  style={{ background: 'rgba(56, 189, 248, 0.16)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.35)' }}
                 >
-                  <MessageCircle size={15} />
+                  <Mail size={16} />
                 </div>
                 <div>
-                  <div className="footer-contact-label">WHATSAPP CHAT</div>
+                  <div className="footer-contact-label">PRIVACY &amp; DATA DESK</div>
+                  <a
+                    href="mailto:privacy@expensexai.com"
+                    className="footer-contact-value"
+                    onClick={playMicroClick}
+                  >
+                    privacy@expensexai.com
+                  </a>
+                </div>
+              </div>
+
+              {/* WhatsApp Direct */}
+              <div className="footer-contact-row">
+                <div
+                  className="footer-icon-badge"
+                  style={{ background: 'rgba(37, 211, 102, 0.16)', color: '#25D366', border: '1px solid rgba(37, 211, 102, 0.35)' }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.1-.476-.15-.676.15-.2.3-.777.978-.952 1.178-.175.2-.351.225-.652.075-.301-.15-1.27-.468-2.42-1.493-.895-.798-1.5-1.784-1.675-2.084-.176-.3-.019-.462.132-.612.136-.135.301-.35.451-.525.15-.176.2-.3.301-.5.1-.2.05-.376-.025-.526-.075-.15-.676-1.63-.927-2.232-.244-.588-.493-.508-.676-.517-.175-.009-.376-.01-.576-.01-.2 0-.526.075-.802.375-.276.3-1.053 1.028-1.053 2.508 0 1.48 1.078 2.908 1.228 3.109.15.2 2.121 3.24 5.138 4.544.718.31 1.278.496 1.715.635.721.23 1.378.197 1.897.12.578-.087 1.78-.727 2.031-1.429.251-.702.251-1.303.176-1.429-.076-.125-.276-.2-.577-.35z" />
+                    <path d="M12 2a10 10 0 0 0-8.62 15.08L2 22l5.08-1.33A10 10 0 1 0 12 2zm0 18.2a8.16 8.16 0 0 1-4.17-1.14l-.3-.18-3.09.81.82-3.01-.19-.31A8.2 8.2 0 1 1 12 20.2z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="footer-contact-label">WHATSAPP DIRECT</div>
                   <a
                     href="https://wa.me/8801404049797"
                     target="_blank"
@@ -200,9 +232,9 @@ export const Footer: React.FC = () => {
               <div className="footer-contact-row">
                 <div
                   className="footer-icon-badge"
-                  style={{ background: 'rgba(109, 61, 245, 0.15)', color: '#A78BFA', border: '1px solid rgba(139, 92, 246, 0.3)' }}
+                  style={{ background: 'rgba(109, 61, 245, 0.16)', color: '#A78BFA', border: '1px solid rgba(139, 92, 246, 0.35)' }}
                 >
-                  <MapPin size={15} />
+                  <MapPin size={16} />
                 </div>
                 <div>
                   <div className="footer-contact-label">OFFICE ADDRESS</div>
@@ -223,98 +255,88 @@ export const Footer: React.FC = () => {
             <div className="footer-m-tagline">
               Meet Your <span className="text-gradient-purple">AI Money Assistant.</span>
             </div>
+            <p style={{ fontSize: '12.5px', color: '#94A3B8', margin: '4px 0 14px 0', lineHeight: 1.45 }}>
+              Track expenses automatically from voice, receipts, and bank SMS without manual typing.
+            </p>
 
-            {/* Social Badges Row */}
             <div className="footer-m-socials">
               <a
-                href="https://facebook.com"
+                href="https://wa.me/8801404049797"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-m-social-btn"
-                title="Facebook"
                 onClick={playMicroClick}
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                </svg>
+                <MessageCircle size={15} color="#25D366" />
+                <span>WhatsApp</span>
               </a>
-
               <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:support@expensexai.com"
                 className="footer-m-social-btn"
-                title="Instagram"
                 onClick={playMicroClick}
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
-              </a>
-
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-m-social-btn"
-                title="YouTube"
-                onClick={playMicroClick}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                </svg>
-              </a>
-
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-m-social-btn"
-                title="X (Twitter)"
-                onClick={playMicroClick}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
+                <Mail size={15} color="#A78BFA" />
+                <span>Email</span>
               </a>
             </div>
           </div>
 
-          {/* Quick Navigation 2-Column Balanced Grid */}
+          {/* Mobile Company & Plans Card */}
           <div className="footer-m-card">
-            <div className="footer-m-card-title">EXPLORE PAGES</div>
+            <div className="footer-m-card-title">COMPANY &amp; PLANS</div>
             <div className="footer-m-grid-nav">
-              {mobileNavLinks.map((link) => (
+              {companyLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`footer-m-nav-item ${link.isVip ? 'footer-m-nav-vip' : ''}`}
-                  onClick={(e) => {
-                    if (link.isVip) {
-                      e.preventDefault();
-                      playMicroClick();
-                      openEarlyAccessModal();
-                    } else {
-                      handleNavClick(e, link.href);
-                    }
-                  }}
+                  className="footer-m-nav-item"
+                  onClick={playMicroClick}
                 >
-                  <span className="footer-m-nav-text">{link.label}</span>
-                  {link.isVip ? (
-                    <span className="footer-m-vip-badge">VIP</span>
-                  ) : (
-                    <ChevronRight size={13} className="footer-m-nav-arrow" />
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="footer-m-nav-text">{link.label}</span>
+                    {link.badge && (
+                      <span
+                        style={{
+                          fontSize: '9px',
+                          fontWeight: 800,
+                          padding: '1px 5px',
+                          borderRadius: '999px',
+                          background: 'rgba(139, 92, 246, 0.35)',
+                          color: '#C084FC',
+                        }}
+                      >
+                        {link.badge}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronRight size={13} className="footer-m-nav-arrow" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Touch-Friendly Action Rows for Contact */}
+          {/* Mobile Platform Navigation */}
           <div className="footer-m-card">
-            <div className="footer-m-card-title">DIRECT SUPPORT</div>
+            <div className="footer-m-card-title">EXPLORE PLATFORM</div>
+            <div className="footer-m-grid-nav">
+              {platformLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="footer-m-nav-item"
+                  onClick={(e) => handleNavClick(e, link.href)}
+                >
+                  <span className="footer-m-nav-text">{link.label}</span>
+                  <ChevronRight size={13} className="footer-m-nav-arrow" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Touch-Friendly Contact Details */}
+          <div className="footer-m-card">
+            <div className="footer-m-card-title">DIRECT CONTACT</div>
             <div className="footer-m-action-list">
-              {/* WhatsApp Row */}
               <a
                 href="https://wa.me/8801404049797"
                 target="_blank"
@@ -326,13 +348,12 @@ export const Footer: React.FC = () => {
                   <MessageCircle size={16} />
                 </div>
                 <div className="footer-m-item-text">
-                  <div className="footer-m-sub">WHATSAPP CHAT</div>
+                  <div className="footer-m-sub">WHATSAPP DIRECT</div>
                   <div className="footer-m-main">+880 1404-049797</div>
                 </div>
                 <ChevronRight size={16} className="footer-m-chevron" />
               </a>
 
-              {/* Email Row */}
               <a
                 href="mailto:support@expensexai.com"
                 className="footer-m-action-item"
@@ -348,7 +369,6 @@ export const Footer: React.FC = () => {
                 <ChevronRight size={16} className="footer-m-chevron" />
               </a>
 
-              {/* Office Address Row */}
               <div className="footer-m-action-item" style={{ cursor: 'default' }}>
                 <div className="footer-m-icon-wrap" style={{ background: 'rgba(109, 61, 245, 0.15)', color: '#A78BFA' }}>
                   <MapPin size={16} />
@@ -365,39 +385,21 @@ export const Footer: React.FC = () => {
         {/* Bottom Copyright & Powered by Row */}
         <div className="footer-bottom-row">
           <div className="footer-copyright">
-            © 2026 ExpenseX AI. All rights reserved.
+            &copy; 2026 ExpenseX AI &bull; Developed &amp; operated by Appstick. All rights reserved.
           </div>
           <div className="footer-bottom-legal">
-            <a
-              href="/privacy-policy"
-              className="footer-legal-link"
-            >
-              Privacy Policy
-            </a>
+            <a href="/pricing" className="footer-legal-link">Pricing</a>
             <span className="footer-legal-dot">•</span>
-            <a
-              href="/terms-of-service"
-              className="footer-legal-link"
-            >
-              Terms of Service
-            </a>
+            <a href="/about" className="footer-legal-link">About</a>
             <span className="footer-legal-dot">•</span>
-            <a
-              href="/about"
-              className="footer-legal-link"
-            >
-              About
-            </a>
+            <a href="/contact" className="footer-legal-link">Contact</a>
             <span className="footer-legal-dot">•</span>
-            <a
-              href="/contact"
-              className="footer-legal-link"
-            >
-              Contact
-            </a>
+            <a href="/privacy-policy" className="footer-legal-link">Privacy Policy</a>
+            <span className="footer-legal-dot">•</span>
+            <a href="/terms-of-service" className="footer-legal-link">Terms</a>
           </div>
           <div className="footer-powered-by">
-            Powered by{' '}
+            A Product of{' '}
             <a
               href="https://appstick.com.bd/"
               target="_blank"
@@ -419,11 +421,11 @@ export const Footer: React.FC = () => {
           position: relative;
         }
 
-        /* Desktop Layout */
+        /* Desktop 4-Column Layout */
         .footer-desktop-grid {
           display: grid;
-          grid-template-columns: 1.4fr 1fr 1.3fr;
-          gap: 60px;
+          grid-template-columns: 1.35fr 1fr 1.1fr 1.35fr;
+          gap: 44px;
           margin-bottom: 48px;
         }
 
@@ -434,11 +436,19 @@ export const Footer: React.FC = () => {
         .footer-brand-desc {
           font-size: 15px;
           font-weight: 500;
-          line-height: 1.5;
+          line-height: 1.45;
           color: #CBD5E1;
           margin-top: 14px;
-          margin-bottom: 20px;
+          margin-bottom: 8px;
           letter-spacing: -0.01em;
+        }
+
+        .footer-brand-subtext {
+          font-size: 13px;
+          color: #64748B;
+          line-height: 1.55;
+          margin-bottom: 20px;
+          max-width: 290px;
         }
 
         .footer-social-row {
@@ -447,11 +457,41 @@ export const Footer: React.FC = () => {
           gap: 10px;
         }
 
-        .footer-heading {
-          font-size: 12.5px;
-          font-weight: 700;
-          letter-spacing: 0.08em;
+        .footer-pill-action {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 7px 14px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          color: #CBD5E1;
+          font-size: 12px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.2s ease;
+        }
+
+        .footer-pill-action:hover {
+          background: rgba(109, 61, 245, 0.2);
+          border-color: rgba(139, 92, 246, 0.4);
           color: #FFFFFF;
+          transform: translateY(-2px);
+        }
+
+        .live-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #25D366;
+          box-shadow: 0 0 8px #25D366;
+        }
+
+        .footer-heading {
+          font-size: 11.5px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: #E2E8F0;
           margin: 0 0 18px 0;
           text-transform: uppercase;
         }
@@ -462,7 +502,7 @@ export const Footer: React.FC = () => {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 11px;
+          gap: 12px;
         }
 
         .footer-link-item {
@@ -478,27 +518,6 @@ export const Footer: React.FC = () => {
           transform: translateX(3px);
         }
 
-        .footer-circle-social {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #CBD5E1;
-          text-decoration: none;
-          transition: all 0.2s ease;
-        }
-
-        .footer-circle-social:hover {
-          background: rgba(109, 61, 245, 0.25);
-          border-color: rgba(139, 92, 246, 0.5);
-          color: #FFFFFF;
-          transform: translateY(-2px);
-        }
-
         .footer-contact-list {
           display: flex;
           flex-direction: column;
@@ -512,21 +531,30 @@ export const Footer: React.FC = () => {
         }
 
         .footer-icon-badge {
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
+          min-width: 36px;
+          min-height: 36px;
           border-radius: 50%;
           display: flex;
           align-items: center;
-          justify-content: center;
+          justifyContent: center;
           flex-shrink: 0;
-          margin-top: 2px;
+          box-sizing: border-box;
+          aspect-ratio: 1 / 1;
+        }
+
+        .footer-icon-badge svg {
+          display: block;
+          margin: auto;
+          flex-shrink: 0;
         }
 
         .footer-contact-label {
-          font-size: 10.5px;
-          font-weight: 700;
+          font-size: 10px;
+          font-weight: 800;
           color: #64748B;
-          letter-spacing: 0.07em;
+          letter-spacing: 0.08em;
           margin-bottom: 2px;
         }
 
@@ -544,293 +572,211 @@ export const Footer: React.FC = () => {
 
         .address-text {
           line-height: 1.45;
-          font-size: 13px;
+          font-size: 12.5px;
           max-width: 240px;
-        }
-
-        .footer-bottom-row {
-          padding-top: 24px;
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          font-size: 13px;
-          color: #64748B;
-          gap: 16px;
-        }
-
-        .footer-legal-link {
-          color: #64748B;
-          text-decoration: none;
-          transition: color 0.2s ease;
-        }
-
-        .footer-legal-link:hover {
           color: #94A3B8;
         }
 
+        /* Mobile View Styles */
+        .footer-m-card {
+          border-radius: 18px;
+          background: rgba(14, 20, 38, 0.75);
+          border: 1px solid rgba(255, 255, 255, 0.07);
+          padding: 20px;
+        }
+
+        .footer-m-tagline {
+          font-size: 14.5px;
+          font-weight: 600;
+          color: #CBD5E1;
+          margin-top: 10px;
+        }
+
+        .footer-m-socials {
+          display: flex;
+          gap: 10px;
+        }
+
+        .footer-m-social-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #FFFFFF;
+          font-size: 12.5px;
+          font-weight: 600;
+          text-decoration: none;
+        }
+
+        .footer-m-card-title {
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: #A78BFA;
+          margin-bottom: 14px;
+          text-transform: uppercase;
+        }
+
+        .footer-m-grid-nav {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .footer-m-nav-item {
+          display: flex;
+          align-items: center;
+          justifyContent: space-between;
+          padding: 8px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+          text-decoration: none;
+          color: #CBD5E1;
+          font-size: 13.5px;
+        }
+
+        .footer-m-nav-arrow {
+          color: rgba(255, 255, 255, 0.3);
+        }
+
+        .footer-m-action-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .footer-m-action-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 12px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          text-decoration: none;
+          color: #FFFFFF;
+        }
+
+        .footer-m-icon-wrap {
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justifyContent: center;
+          flex-shrink: 0;
+        }
+
+        .footer-m-sub {
+          font-size: 9.5px;
+          font-weight: 800;
+          color: #64748B;
+          letter-spacing: 0.08em;
+        }
+
+        .footer-m-main {
+          font-size: 13px;
+          color: #CBD5E1;
+          font-weight: 600;
+        }
+
+        /* Bottom Copyright & Powered by Row - CSS Grid 3 Columns (Zero Overlap Guaranteed) */
+        .footer-bottom-row {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          width: 100%;
+          gap: 24px;
+          padding-top: 32px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          font-size: 13px;
+        }
+
+        .footer-copyright {
+          color: #64748B;
+          text-align: left;
+          white-space: nowrap;
+          font-size: 12.5px;
+        }
+
+        .footer-bottom-legal {
+          display: flex;
+          align-items: center;
+          justifyContent: center;
+          gap: 14px;
+          text-align: center;
+          white-space: nowrap;
+          margin: 0 auto;
+        }
+
+        .footer-legal-link {
+          color: #94A3B8;
+          text-decoration: none;
+          transition: color 0.2s ease;
+          font-size: 13px;
+        }
+
+        .footer-legal-link:hover {
+          color: #FFFFFF;
+        }
+
         .footer-legal-dot {
-          color: #334155;
+          color: #475569;
+          font-size: 11px;
+        }
+
+        .footer-powered-by {
+          color: #64748B;
+          text-align: right;
+          white-space: nowrap;
+          font-size: 12.5px;
         }
 
         .footer-powered-by-link {
           color: #FFFFFF;
-          font-weight: 600;
+          font-weight: 700;
           text-decoration: none;
-          transition: color 0.2s ease, text-decoration 0.2s ease;
+          transition: color 0.2s ease;
         }
 
         .footer-powered-by-link:hover {
           color: #A78BFA;
-          text-decoration: underline;
         }
 
-        /* Tablet Layout */
-        @media (max-width: 992px) {
+        @media (max-width: 1080px) {
           .footer-desktop-grid {
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-          }
-          .footer-col-brand {
-            grid-column: span 2;
+            gap: 36px;
           }
         }
 
-        /* ================= MOBILE NATIVE UI ================= */
-        @media (max-width: 640px) {
-          .expensex-footer {
-            padding: 32px 0 130px 0 !important; /* Clears floating dock */
-          }
-
-          .footer-desktop-grid {
-            display: none !important;
-          }
-
-          .footer-mobile-view {
-            display: flex !important;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 28px;
-          }
-
-          /* Glassmorphic Mobile Card Frame */
-          .footer-m-card {
-            background: rgba(18, 22, 42, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 20px 18px;
-          }
-
-          .footer-m-brand-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 24px 20px;
-            background: linear-gradient(180deg, rgba(23, 28, 56, 0.7) 0%, rgba(13, 16, 36, 0.8) 100%);
-            border-color: rgba(139, 92, 246, 0.2);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-          }
-
-          .footer-m-tagline {
-            font-size: 15px;
-            font-weight: 500;
-            color: #CBD5E1;
-            margin-top: 10px;
-            margin-bottom: 18px;
-          }
-
-          .footer-m-socials {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-          }
-
-          .footer-m-social-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #CBD5E1;
-            text-decoration: none;
-            transition: all 0.2s ease;
-          }
-
-          .footer-m-social-btn:active {
-            background: rgba(109, 61, 245, 0.3);
-            border-color: rgba(139, 92, 246, 0.5);
-            color: #FFFFFF;
-            transform: scale(0.94);
-          }
-
-          .footer-m-card-title {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.09em;
-            color: #A78BFA;
-            margin-bottom: 14px;
-            text-transform: uppercase;
-          }
-
-          /* 2-Column Balanced Grid Nav */
-          .footer-m-grid-nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-          }
-
-          .footer-m-nav-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 11px 12px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #CBD5E1;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s ease;
-          }
-
-          .footer-m-nav-item:active {
-            background: rgba(109, 61, 245, 0.2);
-            border-color: rgba(139, 92, 246, 0.4);
-            color: #FFFFFF;
-            transform: scale(0.98);
-          }
-
-          .footer-m-nav-text {
-            font-size: 12.5px;
-          }
-
-          .footer-m-nav-arrow {
-            color: #475569;
-            flex-shrink: 0;
-          }
-
-          .footer-m-nav-vip {
-            background: rgba(109, 61, 245, 0.12);
-            border-color: rgba(139, 92, 246, 0.35);
-            color: #E9D5FF;
-          }
-
-          .footer-m-vip-badge {
-            font-size: 9.5px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #6D3DF5 0%, #8B5CF6 100%);
-            color: #FFFFFF;
-            letter-spacing: 0.04em;
-          }
-
-          /* Action Rows */
-          .footer-m-action-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-          }
-
-          .footer-m-action-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s ease;
-          }
-
-          .footer-m-action-item:active {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.12);
-            transform: scale(0.98);
-          }
-
-          .footer-m-icon-wrap {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-right: 12px;
-          }
-
-          .footer-m-item-text {
-            flex: 1;
-            text-align: left;
-          }
-
-          .footer-m-sub {
-            font-size: 9.5px;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            color: #64748B;
-            margin-bottom: 2px;
-          }
-
-          .footer-m-main {
-            font-size: 13.5px;
-            font-weight: 600;
-            color: #F1F5F9;
-          }
-
-          .address-wrap {
-            font-size: 12.5px;
-            font-weight: 400;
-            color: #CBD5E1;
-            line-height: 1.35;
-          }
-
-          .footer-m-chevron {
-            color: #475569;
-            flex-shrink: 0;
-          }
-
-          /* Bottom Row */
+        @media (max-width: 1150px) {
           .footer-bottom-row {
-            flex-direction: column !important;
-            align-items: center !important;
-            text-align: center !important;
-            gap: 10px !important;
-            padding-top: 20px !important;
-            border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
-          }
-
-          .footer-copyright {
-            font-size: 12px;
-            color: #64748B;
-          }
-
-          .footer-bottom-legal {
-            font-size: 12.5px;
-            display: flex;
-            align-items: center;
+            grid-template-columns: 1fr;
+            text-align: center;
             gap: 14px;
           }
-
-          .footer-legal-link {
-            color: #94A3B8;
-          }
-
+          .footer-copyright,
           .footer-powered-by {
-            font-size: 12px;
-            color: #64748B;
-            margin-top: 2px;
+            text-align: center;
+            white-space: normal;
+          }
+          .footer-bottom-legal {
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .footer-desktop-grid {
+            display: none;
+          }
+          .footer-mobile-view {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
           }
         }
       `}</style>
