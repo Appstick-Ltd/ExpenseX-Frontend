@@ -1540,3 +1540,13 @@ img[src*="tempmail" i] {
     grid-template-columns: 1fr;
   }
 }
+
+/* Dashboard Overview Responsive Grid */
+@media (max-width: 1024px) {
+  .mc-overview-two-col {
+    grid-template-columns: 1fr !important;
+  }
+  .mc-overview-bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

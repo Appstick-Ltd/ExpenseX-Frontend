@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Read API URL from NEXT_PUBLIC_API_BASE_URL or VITE_API_BASE_URL in .env
 const getBaseUrl = (): string => {
-  const url = process.env.NEXT_PUBLIC_API_BASE_URL
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.VITE_API_BASE_URL;
 
   if (!url) throw new Error("API base URL is not defined. Set NEXT_PUBLIC_API_BASE_URL in your .env file.");
 

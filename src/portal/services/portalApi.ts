@@ -467,6 +467,11 @@ export async function getDashboardData(month?: string): Promise<any> {
   return adminFetch(`/dashboards${q}`, { method: 'GET' });
 }
 
+export async function getAdminOverview(period?: string): Promise<any> {
+  const q = period ? `?period=${encodeURIComponent(period)}` : '';
+  return adminFetch(`/dashboards/admin/overview${q}`, { method: 'GET' });
+}
+
 /* ==========================================================================
    CATEGORIES
    ========================================================================== */
@@ -611,11 +616,11 @@ export async function updateSubscriptionPlan(
 ): Promise<any> {
   const formattedFacilities = payload.facilities
     ? payload.facilities.map((f) => {
-        if (typeof f === 'string') {
-          return { en: f.trim(), bn: '' };
-        }
-        return f;
-      })
+      if (typeof f === 'string') {
+        return { en: f.trim(), bn: '' };
+      }
+      return f;
+    })
     : undefined;
 
   const body: Record<string, any> = {
@@ -727,7 +732,7 @@ export async function createLanguage(payload: { name: string; code: string; rtl?
   });
 }
 
-export async function updateLanguage(payload: { _id: string; [key: string]: any }): Promise<any> {
+export async function updateLanguage(payload: { _id: string;[key: string]: any }): Promise<any> {
   return adminFetch('/settings/languages', {
     method: 'PATCH',
     body: JSON.stringify(payload),
