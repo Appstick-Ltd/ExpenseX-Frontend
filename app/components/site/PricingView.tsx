@@ -311,8 +311,10 @@ export const PricingView: React.FC = () => {
           }
           setIsLiveApi(true);
         }
-      } catch (err) {
-        console.warn('Using pre-cached Google Play pricing data:', err);
+      } catch (err: any) {
+        // Graceful fallback: when the backend API is offline (e.g. 502 Bad Gateway),
+        // the view smoothly loads the pre-cached Google Play pricing plans.
+        console.info('PricingView: Served pre-cached Google Play pricing plans (backend offline).');
       } finally {
         if (isMounted) setIsLoading(false);
       }

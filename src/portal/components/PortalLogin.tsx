@@ -111,7 +111,7 @@ export const PortalLogin: React.FC<PortalLoginProps> = ({ onSuccess }) => {
             {!isLocalServer && (
               <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(239, 68, 68, 0.2)' }}>
                 <p style={{ fontSize: 11, color: '#64748B', margin: '0 0 6px 0' }}>
-                  Cloud server (<code>api.xpenstick.appstick.com.bd</code>) returned 502 Bad Gateway. Your local office backend is active and online.
+                  Cloud server (<code>backend.expensexai.com</code>) returned 502 Bad Gateway. Your local office backend is active and online.
                 </p>
                 <button
                   type="button"
@@ -242,7 +242,7 @@ export const PortalLogin: React.FC<PortalLoginProps> = ({ onSuccess }) => {
               />
               <span>Server:</span>
               <span style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>
-                {isLocalServer ? 'Local Office (192.168.0.179)' : 'Cloud API (api.xpenstick)'}
+                {isLocalServer ? 'Local Office (192.168.0.179)' : 'Cloud API (backend.expensexai)'}
               </span>
             </div>
             <button

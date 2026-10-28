@@ -349,7 +349,7 @@ export const PortalLayout: React.FC = () => {
             </span>
 
             <span style={{ fontSize: 12, color: 'var(--mc-text-subtle)' }}>
-              api.xpenstick.appstick.com.bd
+              backend.expensexai.com
             </span>
           </div>
 

@@ -362,7 +362,7 @@ export default function AdminGeneralSettingsPage() {
                 label="Server Side URL (serverSideUrl)"
                 type="url"
                 leftIcon={<Server size={16} />}
-                placeholder="http://localhost:8080/api/v1"
+                placeholder="https://backend.expensexai.com/api/v1"
                 value={serverSideUrl}
                 onChange={(e) => setServerSideUrl(e.target.value)}
               />
