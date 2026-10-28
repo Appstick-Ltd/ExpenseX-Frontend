@@ -237,7 +237,7 @@ export const ContactPage: React.FC = () => {
               >
                 <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF', marginBottom: '8px' }}>Send Direct Message</h2>
                 <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', marginBottom: '28px' }}>
-                  Have an inquiry regarding our Google for Startups deployment, API integration, or feature rollout?
+                  Have an inquiry regarding our Google Cloud deployment, API integration, or feature rollout?
                 </p>
 
                 {submitted ? (

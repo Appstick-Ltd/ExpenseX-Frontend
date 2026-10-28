@@ -33,11 +33,8 @@ export const Navbar: React.FC = () => {
     if (href === '/contact') {
       return pathname === '/contact';
     }
-    if (href === '/about#team') {
-      return pathname === '/about' && currentHash === '#team';
-    }
     if (href === '/about') {
-      return pathname === '/about' && currentHash !== '#team';
+      return pathname === '/about';
     }
     if (href.startsWith('/')) {
       return pathname === href;
@@ -54,39 +51,53 @@ export const Navbar: React.FC = () => {
     });
   };
 
-  // Sync hash state and sound settings
+  // Sync hash state and sound settings & strip any hash from route
   useEffect(() => {
     setSoundActive(isSoundEnabled());
 
     if (typeof window !== 'undefined') {
-      setCurrentHash(window.location.hash);
-      const onHashChange = () => setCurrentHash(window.location.hash);
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      const onHashChange = () => {
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      };
       window.addEventListener('hashchange', onHashChange);
       return () => window.removeEventListener('hashchange', onHashChange);
     }
   }, [pathname]);
 
-  // Handle initial hash navigation when landing on homepage
+  // Handle initial scroll target when landing on homepage without leaving # in route
   useEffect(() => {
     if (pathname !== '/') return;
 
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const initialHash = window.location.hash;
-      if (NAV_ITEMS.some((item) => item.href === initialHash)) {
-        updateActiveSection(initialHash);
-        const targetId = initialHash.replace('#', '');
-        setTimeout(() => {
-          const el = document.getElementById(targetId);
-          if (el) {
-            const navOffset = 70;
-            const top = el.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({
-              top: Math.max(0, top - navOffset),
-              behavior: 'smooth',
-            });
+    if (typeof window !== 'undefined') {
+      try {
+        const storedTarget =
+          sessionStorage.getItem('scroll_to_section') ||
+          (window.location.hash ? window.location.hash.replace('#', '') : null);
+
+        if (storedTarget) {
+          sessionStorage.removeItem('scroll_to_section');
+          if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
           }
-        }, 150);
-      }
+          updateActiveSection('#' + storedTarget);
+          setTimeout(() => {
+            const el = document.getElementById(storedTarget);
+            if (el) {
+              const navOffset = 70;
+              const top = el.getBoundingClientRect().top + window.scrollY;
+              window.scrollTo({
+                top: Math.max(0, top - navOffset),
+                behavior: 'smooth',
+              });
+            }
+          }, 150);
+        }
+      } catch {}
     }
   }, [pathname]);
 
@@ -173,8 +184,11 @@ export const Navbar: React.FC = () => {
     // 1. Anchor link (e.g. #home, #tour, #features, #product-stage, #faq)
     if (href.startsWith('#')) {
       if (pathname !== '/') {
-        // Navigate from /pricing, /about etc. to / + hash
-        router.push('/' + href);
+        // Navigate cleanly to homepage without adding '#' to the URL
+        try {
+          sessionStorage.setItem('scroll_to_section', href.replace('#', ''));
+        } catch {}
+        router.push('/');
         return;
       }
 
@@ -193,6 +207,9 @@ export const Navbar: React.FC = () => {
           top: 0,
           behavior: 'smooth',
         });
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
         return;
       }
 
@@ -206,10 +223,13 @@ export const Navbar: React.FC = () => {
           behavior: 'smooth',
         });
       }
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
       return;
     }
 
-    // 2. Route link (e.g. /pricing, /about, /about#team, /contact)
+    // 2. Route link (e.g. /pricing, /about, /contact)
     if (href.startsWith('/')) {
       if (href === '/' && pathname === '/') {
         updateActiveSection('#home');
@@ -217,13 +237,15 @@ export const Navbar: React.FC = () => {
           top: 0,
           behavior: 'smooth',
         });
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
         return;
       }
 
       if (href.includes('#')) {
         const [targetPath, hash] = href.split('#');
         if (pathname === targetPath) {
-          setCurrentHash('#' + hash);
           const el = document.getElementById(hash);
           if (el) {
             const navOffset = 70;
@@ -233,8 +255,14 @@ export const Navbar: React.FC = () => {
               behavior: 'smooth',
             });
           }
+          if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
           return;
         }
+        // If navigating to another page that had a hash, strip the hash
+        router.push(targetPath || '/');
+        return;
       }
 
       router.push(href);
@@ -486,10 +514,14 @@ export const Navbar: React.FC = () => {
                   {soundActive ? 'FX ON' : 'FX OFF'}
                 </span>
               </button>
-              {/* Desktop CTA: Direct Download App */}
+              {/* Desktop CTA: Direct Download App without '#' in URL */}
               <a
-                href="/#download"
-                onClick={() => playMicroClick()}
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playMicroClick();
+                  handleNavClick(e, '#download');
+                }}
                 className="btn-primary desktop-cta"
                 style={{
                   padding: '9px 18px',
@@ -600,11 +632,13 @@ export const Navbar: React.FC = () => {
             );
           })}
           <a
-            href="/#download"
+            href="/"
             className="btn-primary"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               playMicroClick();
               setMobileMenuOpen(false);
+              handleNavClick(e, '#download');
             }}
             style={{ width: '100%', marginTop: '6px', textAlign: 'center', textDecoration: 'none', display: 'block', padding: '12px' }}
           >

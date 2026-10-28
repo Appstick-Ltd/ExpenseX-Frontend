@@ -2,6 +2,7 @@
 import React from 'react';
 import { Building2, Users, CheckCircle2, Clock, Sparkles, Globe2, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import { Card3DTilt } from '../ui/Card3DTilt';
+import { TeamSection } from '../common/TeamSection';
 
 export const ProductStage: React.FC = () => {
   const featureStatus = [
@@ -32,7 +33,7 @@ export const ProductStage: React.FC = () => {
     {
       feature: 'Safe-to-Spend™ Cashflow Metric',
       description: 'Predictive daily velocity calculations factoring upcoming recurring bills and savings targets.',
-      status: 'Live',
+      status: 'In Development',
       platform: 'Android & Web',
     },
     {
@@ -221,89 +222,7 @@ export const ProductStage: React.FC = () => {
         </div>
 
         {/* Section 3: Meet the Team */}
-        <div id="team">
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px auto' }}>
-            <div className="section-eyebrow" style={{ display: 'inline-flex', marginBottom: '16px' }}>
-              <Users size={14} style={{ marginRight: '6px' }} />
-              <span>LEADERSHIP &amp; GOVERNANCE</span>
-            </div>
-            <h2
-              style={{
-                fontSize: 'clamp(28px, 4vw, 42px)',
-                fontWeight: 800,
-                color: '#FFFFFF',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.15,
-                marginBottom: '14px',
-              }}
-            >
-              Meet the Team
-            </h2>
-            <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-              ExpenseX AI is engineered and maintained by the software engineering team at Appstick.
-            </p>
-          </div>
-
-          <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-            <Card3DTilt
-              className="glass-card"
-              maxTilt={6}
-              style={{
-                borderRadius: '24px',
-                padding: '36px',
-                background: 'linear-gradient(135deg, rgba(14, 20, 38, 0.85) 0%, rgba(20, 26, 52, 0.8) 100%)',
-                border: '1px solid var(--border-medium)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
-                <div>
-                  <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--purple-light)', fontWeight: 700, marginBottom: '6px' }}>
-                    FOUNDER &amp; CEO — APPSTICK
-                  </div>
-                  <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF', margin: '0 0 6px 0' }}>
-                    Md. Riaz Mahmud
-                  </h3>
-                  <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '18px' }}>
-                    Technologist, Startup Founder &amp; AI Systems Architect
-                  </div>
-                </div>
-
-                <a
-                  href="https://www.linkedin.com/in/riaz-mahmud-appstick/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 16px',
-                    borderRadius: '999px',
-                    background: 'rgba(109, 61, 245, 0.15)',
-                    border: '1px solid rgba(139, 92, 246, 0.35)',
-                    color: 'var(--purple-light)',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    transition: 'background 0.2s ease',
-                  }}
-                >
-                  <span>LinkedIn Profile</span>
-                  <ArrowUpRight size={14} />
-                </a>
-              </div>
-
-              <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 0 20px 0' }}>
-                With over eight years of hands-on experience in enterprise software architecture, full-stack development, and team leadership, Md. Riaz Mahmud founded Appstick to build reliable, high-performance software products. He directs ExpenseX AI&apos;s product strategy, multi-modal pipeline engineering, and cloud infrastructure deployment.
-              </p>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', paddingTop: '18px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', fontSize: '13px', color: 'var(--text-dim)' }}>
-                <span>Headquarters: Khulna, Bangladesh</span>
-                <span>•</span>
-                <span>Parent Organization: Appstick</span>
-              </div>
-            </Card3DTilt>
-          </div>
-        </div>
+        <TeamSection titleBadge="LEADERSHIP & PRODUCT TEAM" />
       </div>
     </section>
   );

@@ -1,45 +1,58 @@
-'use client';
 import React from 'react';
-import { Logo } from '../common/Logo';
+import { Logo } from './Logo';
 import { Mail, MessageCircle, MapPin, ChevronRight, Sparkles, ArrowUpRight } from 'lucide-react';
-import { playMicroClick } from '../../helpers/audio';
+import { playMicroClick } from '../utils/audio';
 
 export const Footer: React.FC = () => {
   const platformLinks = [
-    { label: 'Home', href: '/#home' },
-    { label: 'How It Works', href: '/#tour' },
-    { label: 'Capture Channels', href: '/#features' },
-    { label: 'AI Financial Engine', href: '/#ai-engine' },
-    { label: 'Product & Stage', href: '/#product-stage' },
-    { label: 'Frequently Asked Questions', href: '/#faq' },
+    { label: 'Home', href: '/', targetId: 'home' },
+    { label: 'How It Works', href: '/', targetId: 'tour' },
+    { label: 'Capture Channels', href: '/', targetId: 'features' },
+    { label: 'AI Financial Engine', href: '/', targetId: 'ai-engine' },
+    { label: 'Product & Stage', href: '/', targetId: 'product-stage' },
+    { label: 'Frequently Asked Questions', href: '/', targetId: 'faq' },
   ];
 
   const companyLinks = [
     { label: 'Pricing & Plans', href: '/pricing', badge: 'PRO' },
     { label: 'About Us', href: '/about' },
-    { label: 'Leadership & Team', href: '/about#team' },
+    { label: 'Leadership & Team', href: '/about' },
     { label: 'Contact & Support', href: '/contact' },
     { label: 'Privacy Policy', href: '/privacy-policy' },
     { label: 'Terms of Service', href: '/terms-of-service' },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('/#') || href.startsWith('#')) {
-      const targetHash = href.includes('#') ? '#' + href.split('#')[1] : href;
-      if (typeof window !== 'undefined' && window.location.pathname === '/') {
-        e.preventDefault();
-        playMicroClick();
-        const id = targetHash.replace('#', '');
-        const el = document.getElementById(id);
-        if (el) {
-          const navOffset = 70;
-          const elementTop = el.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({
-            top: Math.max(0, elementTop - navOffset),
-            behavior: 'smooth',
-          });
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId?: string, href: string = '/') => {
+    e.preventDefault();
+    playMicroClick();
+
+    if (targetId) {
+      if (typeof window !== 'undefined') {
+        if (window.location.pathname === '/') {
+          const el = document.getElementById(targetId);
+          if (el) {
+            const navOffset = 70;
+            const elementTop = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+              top: Math.max(0, elementTop - navOffset),
+              behavior: 'smooth',
+            });
+          }
+          if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+        } else {
+          try {
+            sessionStorage.setItem('scroll_to_section', targetId);
+          } catch {}
+          window.location.href = href;
         }
       }
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      window.location.href = href;
     }
   };
 
@@ -95,7 +108,7 @@ export const Footer: React.FC = () => {
                   <a
                     href={link.href}
                     className="footer-link-item"
-                    onClick={(e) => handleNavClick(e, link.href)}
+                    onClick={(e) => handleNavClick(e, link.targetId, link.href)}
                   >
                     <span>{link.label}</span>
                   </a>
@@ -324,7 +337,7 @@ export const Footer: React.FC = () => {
                   key={link.label}
                   href={link.href}
                   className="footer-m-nav-item"
-                  onClick={(e) => handleNavClick(e, link.href)}
+                  onClick={(e) => handleNavClick(e, link.targetId, link.href)}
                 >
                   <span className="footer-m-nav-text">{link.label}</span>
                   <ChevronRight size={13} className="footer-m-nav-arrow" />

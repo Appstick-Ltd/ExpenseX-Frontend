@@ -488,3 +488,36 @@ When answering:
 - Do not confuse ExpenseX AI with the user’s other products, Shopstick POS or MotoCare.
 - Do not use “Coming Soon” for ExpenseX AI itself unless the user specifically describes an unreleased feature.
 - Check current official documentation for time-sensitive model pricing, store policies and platform requirements.
+
+---
+
+## 16. Core Product Team (Confirmed 28 October 2026 — Expanded to Seven Members)
+
+**Company:** Appstick, Khulna, Bangladesh.  
+**Team Composition:** Seven core members.  
+**Section Heading & Intro:**
+> ## Meet the Team
+> ExpenseX AI is built by a seven-member product team at Appstick in Khulna, Bangladesh — covering company leadership, backend, frontend, mobile, web and product design. Our engineering and design team brings 2.5 to 6 years of production-level experience building and shipping real software.
+
+**Strict Rules:**
+- Exact years per person as confirmed: Sabbir 6, Motiur 5, Tonmay 4, Dani 3, Shiam 3, Asif 2.5.
+- No years figure is to be shown for the Founder & CEO (his bio presents role and leadership only).
+- Name spelling must match the person's LinkedIn profile (note: "Md. Sabbir Ahmmed" — keep the spelling exactly as the member uses it).
+- No invented employers, degrees, titles, or projects.
+- Order on the page: Riaz → Sabbir → Motiur → Tonmay → Dani → Shiam → Asif (leadership and team leads first, then engineers, then design).
+
+1. **Md. Riaz Mahmud — Founder & CEO**  
+   Md. Riaz Mahmud is the Founder and CEO of Appstick. He leads the vision, product strategy and roadmap of ExpenseX AI, and oversees the company's business direction and partnerships, working directly with the engineering and design team to take the product from idea to release.
+2. **Md. Sabbir Ahmmed — Senior Software Engineer (Lead Backend)** (6 years)  
+   Md. Sabbir Ahmmed is a Senior Software Engineer at Appstick with 6 years of production-level experience in backend development. At ExpenseX AI, he leads the backend engineering — designing and building the server-side systems and APIs that power the app's data and AI-assisted features.
+3. **Motiur Rahman — Software Engineer (Lead Frontend)** (5 years)  
+   Motiur Rahman is a Software Engineer at Appstick with 5 years of production-level experience in frontend development. At ExpenseX AI, he leads the frontend development, building polished, responsive user interfaces for the product.
+4. **Tonmay Sen — Software Engineer (Mobile Application: Android & iOS)** (4 years)  
+   Tonmay Sen is a Software Engineer at Appstick with 4 years of production-level experience in mobile application development. At ExpenseX AI, he builds and maintains the Android and iOS applications, turning product requirements into stable, user-ready mobile experiences.
+5. **Dani Gain — Software Engineer (Backend)** (3 years)  
+   Dani Gain is a Backend Software Engineer at Appstick with 3 years of production-level experience in server-side development. At ExpenseX AI, he builds and maintains the backend services and APIs that power the app's data and AI-assisted features.
+6. **Sk Shiam Ali — Software Engineer (Website Frontend)** (3 years)  
+   Sk Shiam Ali is a Frontend Software Engineer at Appstick with 3 years of production-level experience in web development. At ExpenseX AI, he builds and maintains the product website, focusing on responsive, fast and accessible interfaces.
+7. **Asif Uddin — UI/UX Designer** (2.5 years)  
+   Asif Uddin is a UI/UX Designer at Appstick with 2.5 years of production-level experience in interface and experience design. At ExpenseX AI, he designs the app and website interfaces, keeping financial workflows simple, clear and easy to use.
+

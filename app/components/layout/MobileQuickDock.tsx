@@ -88,10 +88,9 @@ export const MobileQuickDock: React.FC = () => {
           </a>
 
           <a
-            href="/#download"
-            onClick={() => {
-              playMicroClick();
-              triggerHaptic('medium');
+            href="/"
+            onClick={(e) => {
+              handleNavClick(e, '#download');
             }}
             className="dock-cta-btn"
             style={{ textDecoration: 'none' }}

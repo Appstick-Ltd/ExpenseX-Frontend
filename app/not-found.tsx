@@ -275,7 +275,12 @@ export default function NotFound() {
         >
           <span>Need guidance?</span>
           <Link
-            href="/#features"
+            href="/"
+            onClick={() => {
+              try {
+                sessionStorage.setItem('scroll_to_section', 'features');
+              } catch {}
+            }}
             style={{
               color: '#94A3B8',
               textDecoration: 'none',
@@ -287,7 +292,12 @@ export default function NotFound() {
             <Compass size={13} /> Features
           </Link>
           <Link
-            href="/#faq"
+            href="/"
+            onClick={() => {
+              try {
+                sessionStorage.setItem('scroll_to_section', 'faq');
+              } catch {}
+            }}
             style={{
               color: '#94A3B8',
               textDecoration: 'none',
