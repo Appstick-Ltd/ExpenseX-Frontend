@@ -266,7 +266,7 @@ export const HeroPhone3D: React.FC = () => {
     window.addEventListener('resize', handleResize);
 
     // 7. Animation Loop with IntersectionObserver pause for mobile performance
-    let clock = new THREE.Clock();
+    const startTime = performance.now();
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -280,7 +280,7 @@ export const HeroPhone3D: React.FC = () => {
       animationFrameId = requestAnimationFrame(animate);
       if (!isPhoneVisible) return; // Pause WebGL rendering when scrolled away
 
-      const elapsedTime = clock.getElapsedTime();
+      const elapsedTime = (performance.now() - startTime) * 0.001;
       const s = stateRef.current;
 
       // Inertia damping if released

@@ -13,7 +13,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'What is ExpenseX AI and how does it track expenses automatically?',
     answer:
-      'ExpenseX AI is an autonomous personal finance platform and expense companion developed by Appstick Unlike traditional manual budget apps, ExpenseX AI captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
+      'ExpenseX AI is an autonomous personal finance platform and expense companion developed by Appstick. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
     keywords: 'AI expense tracker, automatic finance, receipt scanner',
   },
   {
@@ -37,8 +37,8 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'Which platforms and operating systems are supported?',
     answer:
-      'ExpenseX AI is natively supported across iOS (iPhone, iPad), Android devices, and all modern desktop web browsers. Your financial insights, budgets, and categorized transactions synchronize across all authorized devices in the beta cohort.',
-    keywords: 'iOS expense tracker, Android budget app, web dashboard',
+      'ExpenseX AI is supported across Android mobile devices and all modern desktop web browsers. Your financial insights, budgets, and categorized transactions synchronize securely across all your authorized devices.',
+    keywords: 'Android expense tracker, web budget dashboard, personal finance app',
   },
 ];
 
@@ -181,41 +181,7 @@ export const FAQ: React.FC = () => {
           })}
         </div>
 
-        {/* Contact Channels Verification Strip */}
-        <div
-          style={{
-            maxWidth: '820px',
-            margin: '36px auto 0 auto',
-            padding: '20px 24px',
-            borderRadius: '16px',
-            background: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '16px',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF' }}>Monitored Communication Channels</div>
-            <div style={{ fontSize: '12px', color: '#94A3B8' }}>ExpenseX AI is an official product developed by Appstick</div>
-          </div>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px' }}>
-            <div>
-              <span style={{ color: '#94A3B8' }}>Corporate: </span>
-              <a href="mailto:info@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>info@expensexai.com</a>
-            </div>
-            <div>
-              <span style={{ color: '#94A3B8' }}>Beta Support: </span>
-              <a href="mailto:support@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>support@expensexai.com</a>
-            </div>
-            <div>
-              <span style={{ color: '#94A3B8' }}>Privacy Office: </span>
-              <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>privacy@expensexai.com</a>
-            </div>
-          </div>
-        </div>
+        {/* End of FAQ Accordion */}
       </div>
 
       <style>{`

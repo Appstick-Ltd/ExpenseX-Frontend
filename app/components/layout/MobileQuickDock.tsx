@@ -87,19 +87,18 @@ export const MobileQuickDock: React.FC = () => {
             <span>AI Core</span>
           </a>
 
-          <button
-            type="button"
+          <a
+            href="/#download"
             onClick={() => {
               playMicroClick();
               triggerHaptic('medium');
-              openEarlyAccessModal('both');
             }}
             className="dock-cta-btn"
-            style={{ border: 'none', cursor: 'pointer' }}
+            style={{ textDecoration: 'none' }}
           >
             <Zap size={15} fill="#FFFFFF" />
             <span>Get App</span>
-          </button>
+          </a>
 
           <button
             onClick={scrollToTop}

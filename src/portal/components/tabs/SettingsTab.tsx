@@ -301,10 +301,10 @@ export const SettingsTab: React.FC = () => {
       // Background refresh currency rates and languages
       getCurrencyRates().then((cVal) => {
         setCurrencyRates(Array.isArray(cVal?.data) ? cVal.data : Array.isArray(cVal) ? cVal : []);
-      }).catch(() => {});
+      }).catch(() => { });
       getLanguages().then((lVal) => {
         setLanguages(Array.isArray(lVal?.data) ? lVal.data : Array.isArray(lVal) ? lVal : []);
-      }).catch(() => {});
+      }).catch(() => { });
 
       setSaveSuccess('System environment settings updated and saved successfully!');
       setTimeout(() => setSaveSuccess(null), 5000);
@@ -731,645 +731,31 @@ export const SettingsTab: React.FC = () => {
           ) : (
             <>
               {/* TAB 1: GENERAL & SITE */}
-          {activeSubTab === 'general' && (
-            <div>
-              <div style={{ marginBottom: 20 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
-                  General Platform & Site Configuration
-                </h3>
-                <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
-                  Brand details, default currency, application URLs, and authentication verification rules.
-                </p>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 16 }}>
+              {activeSubTab === 'general' && (
                 <div>
-                  <label className="mc-label">Site Name</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="ExpenseX AI"
-                    value={siteName}
-                    onChange={(e) => setSiteName(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mc-label">Official Contact Email</label>
-                  <input
-                    type="text"
-                    inputMode="email"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="off"
-                    spellCheck={false}
-                    data-lpignore="true"
-                    data-form-type="other"
-                    className="mc-input"
-                    placeholder="support@expensex.ai"
-                    value={siteEmail}
-                    onChange={(e) => setSiteEmail(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mc-label">Contact Phone</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="+8801700000000"
-                    value={sitePhone}
-                    onChange={(e) => setSitePhone(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mc-label">Physical Address</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="Dhaka, Bangladesh"
-                    value={siteAddress}
-                    onChange={(e) => setSiteAddress(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                <div>
-                  <label className="mc-label">Client-Side Web URL</label>
-                  <input
-                    type="url"
-                    className="mc-input"
-                    placeholder="https://expensex.ai"
-                    value={clientSideUrl}
-                    onChange={(e) => setClientSideUrl(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mc-label">Server-Side API Base URL</label>
-                  <input
-                    type="url"
-                    className="mc-input"
-                    placeholder="https://api.xpenstick.appstick.com.bd/api/v1"
-                    value={serverSideUrl}
-                    onChange={(e) => setServerSideUrl(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: 16 }}>
-                <label className="mc-label">Site Meta Description</label>
-                <textarea
-                  className="mc-input"
-                  style={{ height: 70, padding: 10, resize: 'vertical' }}
-                  placeholder="Comprehensive financial and expense management platform powered by AI..."
-                  value={siteDescription}
-                  onChange={(e) => setSiteDescription(e.target.value)}
-                />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 16 }}>
-                <div>
-                  <label className="mc-label">Base Currency Code</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="USD"
-                    value={currencyCode}
-                    onChange={(e) => setCurrencyCode(e.target.value.toUpperCase())}
-                  />
-                  <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>e.g. USD, BDT, EUR, GBP</span>
-                </div>
-
-                <div>
-                  <label className="mc-label">Base Currency Symbol</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="$"
-                    value={currencySymbol}
-                    onChange={(e) => setCurrencySymbol(e.target.value)}
-                  />
-                  <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>e.g. $, ৳, €, £</span>
-                </div>
-
-                <div>
-                  <label className="mc-label">Default OTP Method</label>
-                  <select
-                    className="mc-input"
-                    value={otpVerificationType}
-                    onChange={(e) => setOtpVerificationType(e.target.value as 'email' | 'phone')}
-                  >
-                    <option value="email">Email Verification</option>
-                    <option value="phone">Phone / SMS Verification</option>
-                  </select>
-                  <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>Preferred channel for user 2FA & signups</span>
-                </div>
-
-                <div>
-                  <label className="mc-label">Max Free Amount Limit</label>
-                  <input
-                    type="number"
-                    className="mc-input"
-                    placeholder="0"
-                    value={maxFreeAmountLimit}
-                    onChange={(e) => setMaxFreeAmountLimit(e.target.value)}
-                  />
-                  <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>Set to 0 for unlimited</span>
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                <div>
-                  <label className="mc-label">Exchange Rate API Key</label>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type={showExchangeKey ? 'text' : 'password'}
-                      className="mc-input"
-                      placeholder="e.g. 80b4608c7ab833f4c9a0cf82"
-                      value={exchangeRateAPIKey}
-                      onChange={(e) => setExchangeRateAPIKey(e.target.value)}
-                      style={{ paddingRight: 40 }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowExchangeKey(!showExchangeKey)}
-                      style={{
-                        position: 'absolute',
-                        right: 10,
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        background: 'none',
-                        border: 'none',
-                        color: 'var(--mc-text-muted)',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {showExchangeKey ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
+                  <div style={{ marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
+                      General Platform & Site Configuration
+                    </h3>
+                    <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
+                      Brand details, default currency, application URLs, and authentication verification rules.
+                    </p>
                   </div>
-                </div>
 
-                <div>
-                  <label className="mc-label">Footer Copyright Text</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="© 2026 ExpenseX. All rights reserved."
-                    value={siteFooter}
-                    onChange={(e) => setSiteFooter(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="mc-label">Site Logo URL</label>
-                <input
-                  type="url"
-                  className="mc-input"
-                  placeholder="https://example.com/logo.png"
-                  value={siteLogo}
-                  onChange={(e) => setSiteLogo(e.target.value)}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: STRIPE PAYMENT */}
-          {activeSubTab === 'stripe' && (
-            <div>
-              <div style={{ marginBottom: 20 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
-                  Stripe Payment Gateway Configuration
-                </h3>
-                <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
-                  Manage payment credentials, API keys, webhooks, and toggle the Stripe gateway on or off.
-                </p>
-              </div>
-
-              {/* Active Toggle Card */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '16px 20px',
-                  background: stripeActive ? 'rgba(16, 185, 129, 0.08)' : '#F8FAFC',
-                  border: stripeActive ? '1.5px solid #10B981' : '1px solid var(--mc-border)',
-                  borderRadius: 10,
-                  marginBottom: 20,
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--mc-text-main)' }}>
-                    Stripe Payment Gateway Status
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
-                    {stripeActive
-                      ? 'Gateway is ACTIVE and processing transactions.'
-                      : 'Gateway is INACTIVE. Users cannot make card payments.'}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setStripeActive(!stripeActive)}
-                  style={{
-                    width: 48,
-                    height: 26,
-                    borderRadius: 13,
-                    background: stripeActive ? '#10B981' : '#CBD5E1',
-                    position: 'relative',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s',
-                    padding: 0,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 10,
-                      background: '#FFFFFF',
-                      position: 'absolute',
-                      top: 3,
-                      left: stripeActive ? 25 : 3,
-                      transition: 'left 0.2s',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
-                    }}
-                  />
-                </button>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                <div>
-                  <label className="mc-label">Gateway Display Name</label>
-                  <input
-                    type="text"
-                    className="mc-input"
-                    placeholder="Stripe"
-                    value={stripeName}
-                    onChange={(e) => setStripeName(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mc-label">Gateway Logo URL</label>
-                  <input
-                    type="url"
-                    className="mc-input"
-                    placeholder="https://..."
-                    value={stripeLogo}
-                    onChange={(e) => setStripeLogo(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: 16 }}>
-                <label className="mc-label">Stripe Publishable Key (Client Key)</label>
-                <input
-                  type="text"
-                  className="mc-input"
-                  placeholder="pk_test_... or pk_live_..."
-                  value={stripePublishableKey}
-                  onChange={(e) => setStripePublishableKey(e.target.value)}
-                />
-              </div>
-
-              <div style={{ marginBottom: 16 }}>
-                <label className="mc-label">Stripe Secret Key (Backend Only)</label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showStripeSecret ? 'text' : 'password'}
-                    className="mc-input"
-                    placeholder="sk_test_... or sk_live_..."
-                    value={stripeSecretKey}
-                    onChange={(e) => setStripeSecretKey(e.target.value)}
-                    style={{ paddingRight: 40 }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowStripeSecret(!showStripeSecret)}
-                    style={{
-                      position: 'absolute',
-                      right: 10,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--mc-text-muted)',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {showStripeSecret ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="mc-label">Stripe Webhook Signing Secret</label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showStripeWebhook ? 'text' : 'password'}
-                    className="mc-input"
-                    placeholder="whsec_..."
-                    value={stripeWebhookSecret}
-                    onChange={(e) => setStripeWebhookSecret(e.target.value)}
-                    style={{ paddingRight: 40 }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowStripeWebhook(!showStripeWebhook)}
-                    style={{
-                      position: 'absolute',
-                      right: 10,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--mc-text-muted)',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {showStripeWebhook ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: SMS (TWILIO) */}
-          {activeSubTab === 'twilio' && (
-            <div>
-              <div style={{ marginBottom: 20 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
-                  Twilio SMS Gateway Configuration
-                </h3>
-                <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
-                  Configure Twilio credentials for sending OTP verification codes, SMS alerts, and notifications.
-                </p>
-              </div>
-
-              {/* Active Toggle Card */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '16px 20px',
-                  background: twilioActive ? 'rgba(37, 99, 235, 0.08)' : '#F8FAFC',
-                  border: twilioActive ? '1.5px solid #2563EB' : '1px solid var(--mc-border)',
-                  borderRadius: 10,
-                  marginBottom: 20,
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--mc-text-main)' }}>
-                    Twilio SMS Service Status
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
-                    {twilioActive
-                      ? 'SMS Gateway is ENABLED and dispatching messages.'
-                      : 'SMS Gateway is DISABLED. OTPs will not be sent via SMS.'}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setTwilioActive(!twilioActive)}
-                  style={{
-                    width: 48,
-                    height: 26,
-                    borderRadius: 13,
-                    background: twilioActive ? '#2563EB' : '#CBD5E1',
-                    position: 'relative',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s',
-                    padding: 0,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 10,
-                      background: '#FFFFFF',
-                      position: 'absolute',
-                      top: 3,
-                      left: twilioActive ? 25 : 3,
-                      transition: 'left 0.2s',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
-                    }}
-                  />
-                </button>
-              </div>
-
-              <div style={{ marginBottom: 16 }}>
-                <label className="mc-label">Twilio Account SID</label>
-                <input
-                  type="text"
-                  className="mc-input"
-                  placeholder="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-                  value={twilioAccountSid}
-                  onChange={(e) => setTwilioAccountSid(e.target.value)}
-                />
-              </div>
-
-              <div style={{ marginBottom: 16 }}>
-                <label className="mc-label">Twilio Auth Token</label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showTwilioToken ? 'text' : 'password'}
-                    className="mc-input"
-                    placeholder="Auth Token"
-                    value={twilioAuthToken}
-                    onChange={(e) => setTwilioAuthToken(e.target.value)}
-                    style={{ paddingRight: 40 }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowTwilioToken(!showTwilioToken)}
-                    style={{
-                      position: 'absolute',
-                      right: 10,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--mc-text-muted)',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {showTwilioToken ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="mc-label">Twilio Sender Number / Alphanumeric ID</label>
-                <input
-                  type="text"
-                  className="mc-input"
-                  placeholder="+1234567890"
-                  value={twilioSenderNumber}
-                  onChange={(e) => setTwilioSenderNumber(e.target.value)}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: EMAIL GATEWAY */}
-          {activeSubTab === 'email' && (
-            <div>
-              <div style={{ marginBottom: 20 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
-                  Email Delivery Gateway Configuration
-                </h3>
-                <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
-                  Select your primary SMTP email delivery service and configure host, port, credentials, and sender address.
-                </p>
-              </div>
-
-              {/* Provider Selection Cards */}
-              <div style={{ marginBottom: 20 }}>
-                <label className="mc-label">Default Email Provider</label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-                  {[
-                    { id: 'sendgrid', title: 'SendGrid', desc: 'Cloud SMTP & Web API' },
-                    { id: 'gmail', title: 'Gmail SMTP', desc: 'Google Workspace / App Passwords' },
-                    { id: 'brevo', title: 'Brevo (Sendinblue)', desc: 'Transactional API & SMTP' },
-                  ].map((p) => {
-                    const isSelected = emailProvider === p.id;
-                    return (
-                      <div
-                        key={p.id}
-                        onClick={() => setEmailProvider(p.id as any)}
-                        style={{
-                          padding: '14px 16px',
-                          borderRadius: 10,
-                          border: isSelected ? '2px solid var(--mc-brand-purple)' : '1px solid var(--mc-border)',
-                          background: isSelected ? 'rgba(109, 61, 245, 0.05)' : '#FFFFFF',
-                          cursor: 'pointer',
-                          transition: 'all 0.15s ease',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span style={{ fontWeight: 700, fontSize: 14, color: isSelected ? 'var(--mc-brand-purple)' : 'var(--mc-text-main)' }}>
-                            {p.title}
-                          </span>
-                          {isSelected && <CheckCircle2 size={16} color="var(--mc-brand-purple)" />}
-                        </div>
-                        <div style={{ fontSize: 12, color: 'var(--mc-text-muted)', marginTop: 4 }}>{p.desc}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* SENDGRID FIELDS */}
-              {emailProvider === 'sendgrid' && (
-                <div style={{ padding: 18, background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--mc-border)' }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: 'var(--mc-text-main)' }}>
-                    SendGrid Credentials
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16, marginBottom: 16 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 16 }}>
                     <div>
-                      <label className="mc-label">Host</label>
+                      <label className="mc-label">Site Name</label>
                       <input
                         type="text"
                         className="mc-input"
-                        placeholder="smtp.sendgrid.net"
-                        value={sgHost}
-                        onChange={(e) => setSgHost(e.target.value)}
+                        placeholder="ExpenseX AI"
+                        value={siteName}
+                        onChange={(e) => setSiteName(e.target.value)}
                       />
                     </div>
-                    <div>
-                      <label className="mc-label">Port</label>
-                      <input
-                        type="number"
-                        className="mc-input"
-                        placeholder="587"
-                        value={sgPort}
-                        onChange={(e) => setSgPort(e.target.value)}
-                      />
-                    </div>
-                  </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
                     <div>
-                      <label className="mc-label">Username</label>
-                      <input
-                        type="text"
-                        className="mc-input"
-                        placeholder="apikey"
-                        value={sgUsername}
-                        onChange={(e) => setSgUsername(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label className="mc-label">Password / API Key</label>
-                      <div style={{ position: 'relative' }}>
-                        <input
-                          type={showSgPassword ? 'text' : 'password'}
-                          className="mc-input"
-                          placeholder="SG.xxxxxxxxxxxx"
-                          value={sgPassword}
-                          onChange={(e) => setSgPassword(e.target.value)}
-                          style={{ paddingRight: 40 }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowSgPassword(!showSgPassword)}
-                          style={{
-                            position: 'absolute',
-                            right: 10,
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            background: 'none',
-                            border: 'none',
-                            color: 'var(--mc-text-muted)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {showSgPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mc-label">Verified Sender Email</label>
-                    <input
-                      type="text"
-                      inputMode="email"
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck={false}
-                      data-lpignore="true"
-                      data-form-type="other"
-                      className="mc-input"
-                      placeholder="no-reply@expensex.ai"
-                      value={sgSenderEmail}
-                      onChange={(e) => setSgSenderEmail(e.target.value)}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* GMAIL FIELDS */}
-              {emailProvider === 'gmail' && (
-                <div style={{ padding: 18, background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--mc-border)' }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: 'var(--mc-text-main)' }}>
-                    Google / Gmail SMTP Settings
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                    <div>
-                      <label className="mc-label">Auth Email Address</label>
+                      <label className="mc-label">Official Contact Email</label>
                       <input
                         type="text"
                         inputMode="email"
@@ -1380,228 +766,842 @@ export const SettingsTab: React.FC = () => {
                         data-lpignore="true"
                         data-form-type="other"
                         className="mc-input"
-                        placeholder="yourname@gmail.com"
-                        value={gmailAuthEmail}
-                        onChange={(e) => setGmailAuthEmail(e.target.value)}
+                        placeholder="support@expensex.ai"
+                        value={siteEmail}
+                        onChange={(e) => setSiteEmail(e.target.value)}
                       />
                     </div>
+
                     <div>
-                      <label className="mc-label">Google App Password (16 characters)</label>
-                      <div style={{ position: 'relative' }}>
-                        <input
-                          type={showGmailPassword ? 'text' : 'password'}
-                          className="mc-input"
-                          placeholder="xxxx xxxx xxxx xxxx"
-                          value={gmailPassword}
-                          onChange={(e) => setGmailPassword(e.target.value)}
-                          style={{ paddingRight: 40 }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowGmailPassword(!showGmailPassword)}
-                          style={{
-                            position: 'absolute',
-                            right: 10,
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            background: 'none',
-                            border: 'none',
-                            color: 'var(--mc-text-muted)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {showGmailPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mc-label">Service Provider</label>
-                    <input
-                      type="text"
-                      className="mc-input"
-                      placeholder="gmail"
-                      value={gmailServiceProvider}
-                      onChange={(e) => setGmailServiceProvider(e.target.value)}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* BREVO FIELDS */}
-              {emailProvider === 'brevo' && (
-                <div style={{ padding: 18, background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--mc-border)' }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: 'var(--mc-text-main)' }}>
-                    Brevo (Sendinblue) Credentials
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                    <div>
-                      <label className="mc-label">Sender Email</label>
-                      <input
-                        type="text"
-                        inputMode="email"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck={false}
-                        data-lpignore="true"
-                        data-form-type="other"
-                        className="mc-input"
-                        placeholder="noreply@domain.com"
-                        value={brevoSenderEmail}
-                        onChange={(e) => setBrevoSenderEmail(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label className="mc-label">Brevo API Key (xkeysib-...)</label>
-                      <div style={{ position: 'relative' }}>
-                        <input
-                          type={showBrevoKey ? 'text' : 'password'}
-                          className="mc-input"
-                          placeholder="xkeysib-..."
-                          value={brevoApiKey}
-                          onChange={(e) => setBrevoApiKey(e.target.value)}
-                          style={{ paddingRight: 40 }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowBrevoKey(!showBrevoKey)}
-                          style={{
-                            position: 'absolute',
-                            right: 10,
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            background: 'none',
-                            border: 'none',
-                            color: 'var(--mc-text-muted)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {showBrevoKey ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 5: SOCIAL MEDIA & COMMUNITY */}
-          {activeSubTab === 'social' && (
-            <div>
-              <div style={{ marginBottom: 20 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
-                  Social Channels & Community Links
-                </h3>
-                <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
-                  Manage links to Discord, Facebook, Twitter/X, LinkedIn, and official support communities.
-                </p>
-              </div>
-
-              <div style={{ marginBottom: 20 }}>
-                <label className="mc-label">Discord Channel / Community Invite URL</label>
-                <input
-                  type="url"
-                  className="mc-input"
-                  placeholder="https://discord.gg/expensexai"
-                  value={discordChannel}
-                  onChange={(e) => setDiscordChannel(e.target.value)}
-                />
-              </div>
-
-              <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label className="mc-label" style={{ margin: 0 }}>Social Media Links</label>
-                <button
-                  type="button"
-                  onClick={addSocialLink}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    padding: '6px 12px',
-                    background: '#FFFFFF',
-                    border: '1px solid var(--mc-border)',
-                    borderRadius: 6,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: 'var(--mc-brand-purple)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <Plus size={14} />
-                  <span>Add Social Link</span>
-                </button>
-              </div>
-
-              {socialLinks.length === 0 ? (
-                <div
-                  style={{
-                    padding: 24,
-                    textAlign: 'center',
-                    background: '#F8FAFC',
-                    borderRadius: 8,
-                    border: '1px dashed var(--mc-border)',
-                    fontSize: 13,
-                    color: 'var(--mc-text-muted)',
-                  }}
-                >
-                  No social media links added yet. Click &quot;Add Social Link&quot; above to add Facebook, Twitter, LinkedIn, etc.
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {socialLinks.map((s, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '160px 1fr 40px',
-                        gap: 12,
-                        alignItems: 'center',
-                      }}
-                    >
+                      <label className="mc-label">Contact Phone</label>
                       <input
                         type="text"
                         className="mc-input"
-                        placeholder="Platform (e.g. Facebook)"
-                        value={s.name}
-                        onChange={(e) => updateSocialLink(idx, 'name', e.target.value)}
+                        placeholder="+8801700000000"
+                        value={sitePhone}
+                        onChange={(e) => setSitePhone(e.target.value)}
                       />
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Physical Address</label>
+                      <input
+                        type="text"
+                        className="mc-input"
+                        placeholder="Dhaka, Bangladesh"
+                        value={siteAddress}
+                        onChange={(e) => setSiteAddress(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                    <div>
+                      <label className="mc-label">Client-Side Web URL</label>
                       <input
                         type="url"
                         className="mc-input"
-                        placeholder="https://facebook.com/yourpage"
-                        value={s.link}
-                        onChange={(e) => updateSocialLink(idx, 'link', e.target.value)}
+                        placeholder="https://expensex.ai"
+                        value={clientSideUrl}
+                        onChange={(e) => setClientSideUrl(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Server-Side API Base URL</label>
+                      <input
+                        type="url"
+                        className="mc-input"
+                        placeholder="https://backend.expensexai.com/api/v1"
+                        value={serverSideUrl}
+                        onChange={(e) => setServerSideUrl(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: 16 }}>
+                    <label className="mc-label">Site Meta Description</label>
+                    <textarea
+                      className="mc-input"
+                      style={{ height: 70, padding: 10, resize: 'vertical' }}
+                      placeholder="Comprehensive financial and expense management platform powered by AI..."
+                      value={siteDescription}
+                      onChange={(e) => setSiteDescription(e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 16 }}>
+                    <div>
+                      <label className="mc-label">Base Currency Code</label>
+                      <input
+                        type="text"
+                        className="mc-input"
+                        placeholder="USD"
+                        value={currencyCode}
+                        onChange={(e) => setCurrencyCode(e.target.value.toUpperCase())}
+                      />
+                      <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>e.g. USD, BDT, EUR, GBP</span>
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Base Currency Symbol</label>
+                      <input
+                        type="text"
+                        className="mc-input"
+                        placeholder="$"
+                        value={currencySymbol}
+                        onChange={(e) => setCurrencySymbol(e.target.value)}
+                      />
+                      <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>e.g. $, ৳, €, £</span>
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Default OTP Method</label>
+                      <select
+                        className="mc-input"
+                        value={otpVerificationType}
+                        onChange={(e) => setOtpVerificationType(e.target.value as 'email' | 'phone')}
+                      >
+                        <option value="email">Email Verification</option>
+                        <option value="phone">Phone / SMS Verification</option>
+                      </select>
+                      <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>Preferred channel for user 2FA & signups</span>
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Max Free Amount Limit</label>
+                      <input
+                        type="number"
+                        className="mc-input"
+                        placeholder="0"
+                        value={maxFreeAmountLimit}
+                        onChange={(e) => setMaxFreeAmountLimit(e.target.value)}
+                      />
+                      <span style={{ fontSize: 11, color: 'var(--mc-text-subtle)' }}>Set to 0 for unlimited</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                    <div>
+                      <label className="mc-label">Exchange Rate API Key</label>
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          type={showExchangeKey ? 'text' : 'password'}
+                          className="mc-input"
+                          placeholder="e.g. 80b4608c7ab833f4c9a0cf82"
+                          value={exchangeRateAPIKey}
+                          onChange={(e) => setExchangeRateAPIKey(e.target.value)}
+                          style={{ paddingRight: 40 }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowExchangeKey(!showExchangeKey)}
+                          style={{
+                            position: 'absolute',
+                            right: 10,
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--mc-text-muted)',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {showExchangeKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Footer Copyright Text</label>
+                      <input
+                        type="text"
+                        className="mc-input"
+                        placeholder="© 2026 ExpenseX. All rights reserved."
+                        value={siteFooter}
+                        onChange={(e) => setSiteFooter(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mc-label">Site Logo URL</label>
+                    <input
+                      type="url"
+                      className="mc-input"
+                      placeholder="https://example.com/logo.png"
+                      value={siteLogo}
+                      onChange={(e) => setSiteLogo(e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: STRIPE PAYMENT */}
+              {activeSubTab === 'stripe' && (
+                <div>
+                  <div style={{ marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
+                      Stripe Payment Gateway Configuration
+                    </h3>
+                    <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
+                      Manage payment credentials, API keys, webhooks, and toggle the Stripe gateway on or off.
+                    </p>
+                  </div>
+
+                  {/* Active Toggle Card */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px 20px',
+                      background: stripeActive ? 'rgba(16, 185, 129, 0.08)' : '#F8FAFC',
+                      border: stripeActive ? '1.5px solid #10B981' : '1px solid var(--mc-border)',
+                      borderRadius: 10,
+                      marginBottom: 20,
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--mc-text-main)' }}>
+                        Stripe Payment Gateway Status
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
+                        {stripeActive
+                          ? 'Gateway is ACTIVE and processing transactions.'
+                          : 'Gateway is INACTIVE. Users cannot make card payments.'}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setStripeActive(!stripeActive)}
+                      style={{
+                        width: 48,
+                        height: 26,
+                        borderRadius: 13,
+                        background: stripeActive ? '#10B981' : '#CBD5E1',
+                        position: 'relative',
+                        border: 'none',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s',
+                        padding: 0,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: 10,
+                          background: '#FFFFFF',
+                          position: 'absolute',
+                          top: 3,
+                          left: stripeActive ? 25 : 3,
+                          transition: 'left 0.2s',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                    <div>
+                      <label className="mc-label">Gateway Display Name</label>
+                      <input
+                        type="text"
+                        className="mc-input"
+                        placeholder="Stripe"
+                        value={stripeName}
+                        onChange={(e) => setStripeName(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mc-label">Gateway Logo URL</label>
+                      <input
+                        type="url"
+                        className="mc-input"
+                        placeholder="https://..."
+                        value={stripeLogo}
+                        onChange={(e) => setStripeLogo(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: 16 }}>
+                    <label className="mc-label">Stripe Publishable Key (Client Key)</label>
+                    <input
+                      type="text"
+                      className="mc-input"
+                      placeholder="pk_test_... or pk_live_..."
+                      value={stripePublishableKey}
+                      onChange={(e) => setStripePublishableKey(e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 16 }}>
+                    <label className="mc-label">Stripe Secret Key (Backend Only)</label>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type={showStripeSecret ? 'text' : 'password'}
+                        className="mc-input"
+                        placeholder="sk_test_... or sk_live_..."
+                        value={stripeSecretKey}
+                        onChange={(e) => setStripeSecretKey(e.target.value)}
+                        style={{ paddingRight: 40 }}
                       />
                       <button
                         type="button"
-                        onClick={() => removeSocialLink(idx)}
+                        onClick={() => setShowStripeSecret(!showStripeSecret)}
                         style={{
-                          width: 36,
-                          height: 36,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: 'var(--mc-danger-light)',
-                          border: '1px solid var(--mc-danger-border)',
-                          borderRadius: 8,
-                          color: 'var(--mc-danger)',
+                          position: 'absolute',
+                          right: 10,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--mc-text-muted)',
                           cursor: 'pointer',
                         }}
-                        title="Remove link"
                       >
-                        <Trash2 size={15} />
+                        {showStripeSecret ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
                     </div>
-                  ))}
+                  </div>
+
+                  <div>
+                    <label className="mc-label">Stripe Webhook Signing Secret</label>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type={showStripeWebhook ? 'text' : 'password'}
+                        className="mc-input"
+                        placeholder="whsec_..."
+                        value={stripeWebhookSecret}
+                        onChange={(e) => setStripeWebhookSecret(e.target.value)}
+                        style={{ paddingRight: 40 }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowStripeWebhook(!showStripeWebhook)}
+                        style={{
+                          position: 'absolute',
+                          right: 10,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--mc-text-muted)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {showStripeWebhook ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
-            </div>
-          )}
 
-          {/* TAB 6: RAW JSON TELEMETRY - Commented out per request
+              {/* TAB 3: SMS (TWILIO) */}
+              {activeSubTab === 'twilio' && (
+                <div>
+                  <div style={{ marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
+                      Twilio SMS Gateway Configuration
+                    </h3>
+                    <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
+                      Configure Twilio credentials for sending OTP verification codes, SMS alerts, and notifications.
+                    </p>
+                  </div>
+
+                  {/* Active Toggle Card */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px 20px',
+                      background: twilioActive ? 'rgba(37, 99, 235, 0.08)' : '#F8FAFC',
+                      border: twilioActive ? '1.5px solid #2563EB' : '1px solid var(--mc-border)',
+                      borderRadius: 10,
+                      marginBottom: 20,
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--mc-text-main)' }}>
+                        Twilio SMS Service Status
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
+                        {twilioActive
+                          ? 'SMS Gateway is ENABLED and dispatching messages.'
+                          : 'SMS Gateway is DISABLED. OTPs will not be sent via SMS.'}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setTwilioActive(!twilioActive)}
+                      style={{
+                        width: 48,
+                        height: 26,
+                        borderRadius: 13,
+                        background: twilioActive ? '#2563EB' : '#CBD5E1',
+                        position: 'relative',
+                        border: 'none',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s',
+                        padding: 0,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: 10,
+                          background: '#FFFFFF',
+                          position: 'absolute',
+                          top: 3,
+                          left: twilioActive ? 25 : 3,
+                          transition: 'left 0.2s',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  <div style={{ marginBottom: 16 }}>
+                    <label className="mc-label">Twilio Account SID</label>
+                    <input
+                      type="text"
+                      className="mc-input"
+                      placeholder="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                      value={twilioAccountSid}
+                      onChange={(e) => setTwilioAccountSid(e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 16 }}>
+                    <label className="mc-label">Twilio Auth Token</label>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type={showTwilioToken ? 'text' : 'password'}
+                        className="mc-input"
+                        placeholder="Auth Token"
+                        value={twilioAuthToken}
+                        onChange={(e) => setTwilioAuthToken(e.target.value)}
+                        style={{ paddingRight: 40 }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowTwilioToken(!showTwilioToken)}
+                        style={{
+                          position: 'absolute',
+                          right: 10,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--mc-text-muted)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {showTwilioToken ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mc-label">Twilio Sender Number / Alphanumeric ID</label>
+                    <input
+                      type="text"
+                      className="mc-input"
+                      placeholder="+1234567890"
+                      value={twilioSenderNumber}
+                      onChange={(e) => setTwilioSenderNumber(e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: EMAIL GATEWAY */}
+              {activeSubTab === 'email' && (
+                <div>
+                  <div style={{ marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
+                      Email Delivery Gateway Configuration
+                    </h3>
+                    <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
+                      Select your primary SMTP email delivery service and configure host, port, credentials, and sender address.
+                    </p>
+                  </div>
+
+                  {/* Provider Selection Cards */}
+                  <div style={{ marginBottom: 20 }}>
+                    <label className="mc-label">Default Email Provider</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+                      {[
+                        { id: 'sendgrid', title: 'SendGrid', desc: 'Cloud SMTP & Web API' },
+                        { id: 'gmail', title: 'Gmail SMTP', desc: 'Google Workspace / App Passwords' },
+                        { id: 'brevo', title: 'Brevo (Sendinblue)', desc: 'Transactional API & SMTP' },
+                      ].map((p) => {
+                        const isSelected = emailProvider === p.id;
+                        return (
+                          <div
+                            key={p.id}
+                            onClick={() => setEmailProvider(p.id as any)}
+                            style={{
+                              padding: '14px 16px',
+                              borderRadius: 10,
+                              border: isSelected ? '2px solid var(--mc-brand-purple)' : '1px solid var(--mc-border)',
+                              background: isSelected ? 'rgba(109, 61, 245, 0.05)' : '#FFFFFF',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <span style={{ fontWeight: 700, fontSize: 14, color: isSelected ? 'var(--mc-brand-purple)' : 'var(--mc-text-main)' }}>
+                                {p.title}
+                              </span>
+                              {isSelected && <CheckCircle2 size={16} color="var(--mc-brand-purple)" />}
+                            </div>
+                            <div style={{ fontSize: 12, color: 'var(--mc-text-muted)', marginTop: 4 }}>{p.desc}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* SENDGRID FIELDS */}
+                  {emailProvider === 'sendgrid' && (
+                    <div style={{ padding: 18, background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--mc-border)' }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: 'var(--mc-text-main)' }}>
+                        SendGrid Credentials
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16, marginBottom: 16 }}>
+                        <div>
+                          <label className="mc-label">Host</label>
+                          <input
+                            type="text"
+                            className="mc-input"
+                            placeholder="smtp.sendgrid.net"
+                            value={sgHost}
+                            onChange={(e) => setSgHost(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="mc-label">Port</label>
+                          <input
+                            type="number"
+                            className="mc-input"
+                            placeholder="587"
+                            value={sgPort}
+                            onChange={(e) => setSgPort(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                        <div>
+                          <label className="mc-label">Username</label>
+                          <input
+                            type="text"
+                            className="mc-input"
+                            placeholder="apikey"
+                            value={sgUsername}
+                            onChange={(e) => setSgUsername(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="mc-label">Password / API Key</label>
+                          <div style={{ position: 'relative' }}>
+                            <input
+                              type={showSgPassword ? 'text' : 'password'}
+                              className="mc-input"
+                              placeholder="SG.xxxxxxxxxxxx"
+                              value={sgPassword}
+                              onChange={(e) => setSgPassword(e.target.value)}
+                              style={{ paddingRight: 40 }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowSgPassword(!showSgPassword)}
+                              style={{
+                                position: 'absolute',
+                                right: 10,
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--mc-text-muted)',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {showSgPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mc-label">Verified Sender Email</label>
+                        <input
+                          type="text"
+                          inputMode="email"
+                          autoComplete="off"
+                          autoCorrect="off"
+                          autoCapitalize="off"
+                          spellCheck={false}
+                          data-lpignore="true"
+                          data-form-type="other"
+                          className="mc-input"
+                          placeholder="no-reply@expensex.ai"
+                          value={sgSenderEmail}
+                          onChange={(e) => setSgSenderEmail(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* GMAIL FIELDS */}
+                  {emailProvider === 'gmail' && (
+                    <div style={{ padding: 18, background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--mc-border)' }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: 'var(--mc-text-main)' }}>
+                        Google / Gmail SMTP Settings
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                        <div>
+                          <label className="mc-label">Auth Email Address</label>
+                          <input
+                            type="text"
+                            inputMode="email"
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck={false}
+                            data-lpignore="true"
+                            data-form-type="other"
+                            className="mc-input"
+                            placeholder="yourname@gmail.com"
+                            value={gmailAuthEmail}
+                            onChange={(e) => setGmailAuthEmail(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="mc-label">Google App Password (16 characters)</label>
+                          <div style={{ position: 'relative' }}>
+                            <input
+                              type={showGmailPassword ? 'text' : 'password'}
+                              className="mc-input"
+                              placeholder="xxxx xxxx xxxx xxxx"
+                              value={gmailPassword}
+                              onChange={(e) => setGmailPassword(e.target.value)}
+                              style={{ paddingRight: 40 }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowGmailPassword(!showGmailPassword)}
+                              style={{
+                                position: 'absolute',
+                                right: 10,
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--mc-text-muted)',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {showGmailPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mc-label">Service Provider</label>
+                        <input
+                          type="text"
+                          className="mc-input"
+                          placeholder="gmail"
+                          value={gmailServiceProvider}
+                          onChange={(e) => setGmailServiceProvider(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* BREVO FIELDS */}
+                  {emailProvider === 'brevo' && (
+                    <div style={{ padding: 18, background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--mc-border)' }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: 'var(--mc-text-main)' }}>
+                        Brevo (Sendinblue) Credentials
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                        <div>
+                          <label className="mc-label">Sender Email</label>
+                          <input
+                            type="text"
+                            inputMode="email"
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck={false}
+                            data-lpignore="true"
+                            data-form-type="other"
+                            className="mc-input"
+                            placeholder="noreply@domain.com"
+                            value={brevoSenderEmail}
+                            onChange={(e) => setBrevoSenderEmail(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="mc-label">Brevo API Key (xkeysib-...)</label>
+                          <div style={{ position: 'relative' }}>
+                            <input
+                              type={showBrevoKey ? 'text' : 'password'}
+                              className="mc-input"
+                              placeholder="xkeysib-..."
+                              value={brevoApiKey}
+                              onChange={(e) => setBrevoApiKey(e.target.value)}
+                              style={{ paddingRight: 40 }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowBrevoKey(!showBrevoKey)}
+                              style={{
+                                position: 'absolute',
+                                right: 10,
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--mc-text-muted)',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {showBrevoKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 5: SOCIAL MEDIA & COMMUNITY */}
+              {activeSubTab === 'social' && (
+                <div>
+                  <div style={{ marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
+                      Social Channels & Community Links
+                    </h3>
+                    <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
+                      Manage links to Discord, Facebook, Twitter/X, LinkedIn, and official support communities.
+                    </p>
+                  </div>
+
+                  <div style={{ marginBottom: 20 }}>
+                    <label className="mc-label">Discord Channel / Community Invite URL</label>
+                    <input
+                      type="url"
+                      className="mc-input"
+                      placeholder="https://discord.gg/expensexai"
+                      value={discordChannel}
+                      onChange={(e) => setDiscordChannel(e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label className="mc-label" style={{ margin: 0 }}>Social Media Links</label>
+                    <button
+                      type="button"
+                      onClick={addSocialLink}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6,
+                        padding: '6px 12px',
+                        background: '#FFFFFF',
+                        border: '1px solid var(--mc-border)',
+                        borderRadius: 6,
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: 'var(--mc-brand-purple)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <Plus size={14} />
+                      <span>Add Social Link</span>
+                    </button>
+                  </div>
+
+                  {socialLinks.length === 0 ? (
+                    <div
+                      style={{
+                        padding: 24,
+                        textAlign: 'center',
+                        background: '#F8FAFC',
+                        borderRadius: 8,
+                        border: '1px dashed var(--mc-border)',
+                        fontSize: 13,
+                        color: 'var(--mc-text-muted)',
+                      }}
+                    >
+                      No social media links added yet. Click &quot;Add Social Link&quot; above to add Facebook, Twitter, LinkedIn, etc.
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      {socialLinks.map((s, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: '160px 1fr 40px',
+                            gap: 12,
+                            alignItems: 'center',
+                          }}
+                        >
+                          <input
+                            type="text"
+                            className="mc-input"
+                            placeholder="Platform (e.g. Facebook)"
+                            value={s.name}
+                            onChange={(e) => updateSocialLink(idx, 'name', e.target.value)}
+                          />
+                          <input
+                            type="url"
+                            className="mc-input"
+                            placeholder="https://facebook.com/yourpage"
+                            value={s.link}
+                            onChange={(e) => updateSocialLink(idx, 'link', e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeSocialLink(idx)}
+                            style={{
+                              width: 36,
+                              height: 36,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              background: 'var(--mc-danger-light)',
+                              border: '1px solid var(--mc-danger-border)',
+                              borderRadius: 8,
+                              color: 'var(--mc-danger)',
+                              cursor: 'pointer',
+                            }}
+                            title="Remove link"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 6: RAW JSON TELEMETRY - Commented out per request
           {activeSubTab === 'json' && (
             <div>
               ...
@@ -1624,60 +1624,60 @@ export const SettingsTab: React.FC = () => {
             gap: 10,
           }}
         >
-            <button
-              type="button"
-              onClick={handleDiscard}
-              disabled={isSaving || loading}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '8px 16px',
-                background: '#FFFFFF',
-                border: '1px solid var(--mc-border)',
-                borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--mc-text-muted)',
-                cursor: 'pointer',
-              }}
-            >
-              <RotateCcw size={14} />
-              <span>Reset Values</span>
-            </button>
+          <button
+            type="button"
+            onClick={handleDiscard}
+            disabled={isSaving || loading}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '8px 16px',
+              background: '#FFFFFF',
+              border: '1px solid var(--mc-border)',
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              color: 'var(--mc-text-muted)',
+              cursor: 'pointer',
+            }}
+          >
+            <RotateCcw size={14} />
+            <span>Reset Values</span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => handleSaveSettings()}
-              disabled={isSaving || loading}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '8px 22px',
-                background: 'var(--mc-primary-gradient)',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 600,
-                color: '#FFFFFF',
-                cursor: isSaving ? 'not-allowed' : 'pointer',
-                boxShadow: '0 2px 6px rgba(109, 61, 245, 0.25)',
-              }}
-            >
-              {isSaving ? (
-                <>
-                  <RefreshCw size={14} className="animate-spin" />
-                  <span>Saving Changes...</span>
-                </>
-              ) : (
-                <>
-                  <Save size={14} />
-                  <span>Save Configuration</span>
-                </>
-              )}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => handleSaveSettings()}
+            disabled={isSaving || loading}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '8px 22px',
+              background: 'var(--mc-primary-gradient)',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#FFFFFF',
+              cursor: isSaving ? 'not-allowed' : 'pointer',
+              boxShadow: '0 2px 6px rgba(109, 61, 245, 0.25)',
+            }}
+          >
+            {isSaving ? (
+              <>
+                <RefreshCw size={14} className="animate-spin" />
+                <span>Saving Changes...</span>
+              </>
+            ) : (
+              <>
+                <Save size={14} />
+                <span>Save Configuration</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

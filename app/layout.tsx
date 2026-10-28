@@ -87,7 +87,7 @@ const jsonLdSoftwareApp = {
   ],
   applicationCategory: 'FinanceApplication',
   applicationSubCategory: 'Expense Tracker, Budgeting, Personal Finance',
-  operatingSystem: 'iOS, Android, Web',
+  operatingSystem: 'Android, Web',
   softwareVersion: '2.4.0',
   description:
     'Your money should explain itself. ExpenseX AI is your AI Money Assistant. It eliminates manual expense logging via natural voice capture, receipt vision OCR, bank SMS auto-parsing, and digital email invoices.',
@@ -173,7 +173,7 @@ const jsonLdFaq = {
       name: 'What is ExpenseX AI and how does it track expenses automatically?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'ExpenseX AI is an autonomous personal finance platform developed by Appstick It captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
+        text: 'ExpenseX AI is an autonomous personal finance platform developed by Appstick. It captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
       },
     },
     {
@@ -253,28 +253,28 @@ export default function RootLayout({
   <p style="font-size: 14px; color: #334155;">
     <strong>Official Website:</strong> <a href="https://expensexai.com/">https://expensexai.com/</a> | 
     <strong>Corporate Inquiries:</strong> <a href="mailto:info@expensexai.com">info@expensexai.com</a> | 
-    <strong>User &amp; Beta Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> | 
+    <strong>Customer Support:</strong> <a href="mailto:support@expensexai.com">support@expensexai.com</a> | 
     <strong>Privacy Office:</strong> <a href="mailto:privacy@expensexai.com">privacy@expensexai.com</a> | 
     <strong>Phone:</strong> +880 1404-049797
   </p>
   <div style="padding: 12px 16px; background: #f8fafc; border-left: 4px solid #6366f1; margin: 16px 0; border-radius: 4px; font-size: 13.5px; color: #334155;">
-    <strong>Product Status Note:</strong> ExpenseX AI is currently in Private Beta. Core capture capabilities are available to registered beta cohort testers. All balances, spending metrics, and transaction ledgers presented on this website represent <em>illustrative demo data</em> for preview purposes.
+    <strong>Product Status Note:</strong> ExpenseX AI is currently live in production across Android and Web. All balances, spending metrics, and transaction ledgers presented on this website represent <em>illustrative demo data</em> for preview purposes.
   </div>
   <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
   <h2 style="color: #0f172a; font-size: 20px;">About ExpenseX AI</h2>
-  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across iOS, Android, and Web platforms.</p>
+  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across Android and Web platforms.</p>
   <h2 style="color: #0f172a; font-size: 20px;">Feature Availability Status</h2>
   <ul style="padding-left: 20px;">
-    <li><strong>Available Now (Private Beta):</strong> Multi-Modal Vision OCR Receipt Capture, Voice Expense Entry, Bank SMS Transaction Parsing, Email Invoice Sync, Smart Categorization, Deduplication Engine.</li>
-    <li><strong>In Development:</strong> Safe-to-Spend&trade; Daily Spending Ceilings, Envelope Budgeting Engine, Real-Time Cashflow Alerts.</li>
-    <li><strong>Coming Soon:</strong> Conversational AI Money Assistant, 30-Day Predictive Forecasting, Multi-Goal Autonomous Savings.</li>
+    <li><strong>Available Now (Live in Production):</strong> Multi-Modal Vision OCR Receipt Capture, Voice Expense Entry, Bank SMS Transaction Parsing (Android), Dynamic Envelope Budgeting, Safe-to-Spend Computation, Smart Categorization, Deduplication Engine.</li>
+    <li><strong>In Development:</strong> WhatsApp AI Assistant Bot, Email Invoice Sync, Conversational AI Money Assistant.</li>
+    <li><strong>Coming Soon:</strong> 30-Day Predictive Cashflow Forecasting, Autonomous Financial Wrapped.</li>
   </ul>
   <h2 style="color: #0f172a; font-size: 20px;">Enterprise Security &amp; Cloud Privacy</h2>
   <p>User privacy is protected through hardware-backed AES-256 cloud KMS encryption in transit and at rest. Multi-modal intelligence is hosted in isolated Google Cloud VPC environments. Under our enterprise data policy, customer financial data is never sold, never shared with third-party advertisers, and never used to train public foundation models.</p>
   <h2 style="color: #0f172a; font-size: 20px;">Public Pages &amp; Verification Links</h2>
   <ul style="padding-left: 20px;">
     <li><a href="/about">About Us &amp; Company Overview</a></li>
-    <li><a href="/pricing">Pricing &amp; Early-Bird Beta Plans</a></li>
+    <li><a href="/pricing">Pricing &amp; Plans</a></li>
     <li><a href="/privacy-policy">Privacy Policy &amp; Data Rights</a></li>
     <li><a href="/terms-of-service">Terms of Service</a></li>
     <li><a href="/contact">Official Contact Information</a></li>

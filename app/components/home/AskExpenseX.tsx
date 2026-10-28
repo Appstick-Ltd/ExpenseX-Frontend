@@ -25,7 +25,7 @@ export const AskExpenseX: React.FC = () => {
             <span className="section-eyebrow-dot" />
             <span>CONVERSATIONAL FINANCE</span>
             <span className="badge-coming-soon" style={{ marginLeft: '4px' }}>
-              COMING SOON
+              IN DEVELOPMENT
             </span>
           </div>
 

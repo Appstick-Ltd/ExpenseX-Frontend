@@ -110,17 +110,14 @@ export const Hero: React.FC = () => {
 
             {/* Call to Actions */}
             <div className="hero-cta-group">
-              <button
-                type="button"
-                onClick={() => {
-                  playMicroClick();
-                  openEarlyAccessModal('both');
-                }}
+              <a
+                href="#download"
+                onClick={(e) => handleScrollTo(e, '#download')}
                 className="btn-primary hero-btn-primary"
               >
-                <span>Get Early Access</span>
+                <span>Download App</span>
                 <ArrowRight size={15} />
-              </button>
+              </a>
 
               <a
                 href="#tour"
@@ -218,7 +215,7 @@ export const Hero: React.FC = () => {
 
             <HeroPhone3D />
             <div style={{ position: 'absolute', bottom: '-26px', left: 0, right: 0, textAlign: 'center', fontSize: '11.5px', color: '#94A3B8', pointerEvents: 'none' }}>
-              * Illustrative demo interface • Private Beta Preview
+              * Illustrative demo interface • Live Production Preview
             </div>
           </div>
         </div>
@@ -252,12 +249,12 @@ export const Hero: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(255, 186, 68, 0.15)', border: '1px solid rgba(255, 186, 68, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFBA44', flexShrink: 0 }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(52, 211, 153, 0.15)', border: '1px solid rgba(52, 211, 153, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399', flexShrink: 0 }}>
               <Users size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Private Beta</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Active Testing Cohort</div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Live Production</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Android &amp; Web</div>
             </div>
           </div>
 

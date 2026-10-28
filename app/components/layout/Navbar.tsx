@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Logo } from '../common/Logo';
 import { NAV_ITEMS } from '../../helpers/constants';
@@ -8,15 +9,41 @@ import { isSoundEnabled, setSoundMuted, playMicroClick } from '../../helpers/aud
 import { openEarlyAccessModal } from '../../helpers/modalEvents';
 
 export const Navbar: React.FC = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [soundActive, setSoundActive] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('#home');
+  const [currentHash, setCurrentHash] = useState<string>('');
   const [prevSection, setPrevSection] = useState<string>('#home');
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
 
   const isManualScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const checkIsActive = (href: string): boolean => {
+    if (pathname === '/') {
+      return activeSection === href;
+    }
+    if (href === '/pricing') {
+      return pathname === '/pricing';
+    }
+    if (href === '/contact') {
+      return pathname === '/contact';
+    }
+    if (href === '/about#team') {
+      return pathname === '/about' && currentHash === '#team';
+    }
+    if (href === '/about') {
+      return pathname === '/about' && currentHash !== '#team';
+    }
+    if (href.startsWith('/')) {
+      return pathname === href;
+    }
+    return false;
+  };
 
   const updateActiveSection = (newSection: string) => {
     setActiveSection((current) => {
@@ -27,76 +54,88 @@ export const Navbar: React.FC = () => {
     });
   };
 
+  // Sync hash state and sound settings
   useEffect(() => {
     setSoundActive(isSoundEnabled());
 
-    // Clean any hash from URL on page load so URL stays as pure root domain
-    if (window.location.hash) {
+    if (typeof window !== 'undefined') {
+      setCurrentHash(window.location.hash);
+      const onHashChange = () => setCurrentHash(window.location.hash);
+      window.addEventListener('hashchange', onHashChange);
+      return () => window.removeEventListener('hashchange', onHashChange);
+    }
+  }, [pathname]);
+
+  // Handle initial hash navigation when landing on homepage
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    if (typeof window !== 'undefined' && window.location.hash) {
       const initialHash = window.location.hash;
       if (NAV_ITEMS.some((item) => item.href === initialHash)) {
         updateActiveSection(initialHash);
+        const targetId = initialHash.replace('#', '');
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) {
+            const navOffset = 70;
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+              top: Math.max(0, top - navOffset),
+              behavior: 'smooth',
+            });
+          }
+        }, 150);
       }
-      history.replaceState(null, '', window.location.pathname + window.location.search);
     }
+  }, [pathname]);
 
+  // Scroll listener for scrolled navbar backdrop & in-page section spy on homepage
+  useEffect(() => {
     let ticking = false;
-    let isScrolledLocal = false;
-    let activeSectionLocal = '#home';
 
     const handleScroll = () => {
       const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 25);
 
-      // 1. Scrolled state toggle (only update React state if changed)
-      const shouldBeScrolled = scrollY > 25;
-      if (shouldBeScrolled !== isScrolledLocal) {
-        isScrolledLocal = shouldBeScrolled;
-        setIsScrolled(shouldBeScrolled);
-      }
+      // On non-home pages (/pricing, /about, /contact), do not run in-page section spy
+      if (pathname !== '/') return;
 
       if (isManualScrollRef.current) return;
-
-      // Desktop-only active nav indicator — completely skip DOM checks and state updates on mobile
       if (window.innerWidth < 768) return;
 
       const windowHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
 
-      // Top of page check
-      if (scrollY < 120) {
-        if (activeSectionLocal !== '#home') {
-          activeSectionLocal = '#home';
-          updateActiveSection('#home');
-        }
+      // 1. Top of page check
+      if (scrollY < 140) {
+        updateActiveSection('#home');
         return;
       }
 
-      // Bottom of page check (activates last item, which is FAQ)
-      const lastNavItem = NAV_ITEMS[NAV_ITEMS.length - 1]?.href || '#faq';
-      if (scrollY + windowHeight >= docHeight - 80) {
-        if (activeSectionLocal !== lastNavItem) {
-          activeSectionLocal = lastNavItem;
-          updateActiveSection(lastNavItem);
-        }
+      // 2. Bottom of page check (activates last item: FAQ)
+      if (scrollY + windowHeight >= docHeight - 90) {
+        updateActiveSection('#faq');
         return;
       }
 
-      const checkPosition = scrollY + 180;
-      let matchedSection = '#home';
+      // 3. Viewport-accurate getBoundingClientRect inspection for anchor items
+      const anchorItems = NAV_ITEMS.filter((item) => item.href.startsWith('#'));
+      let matched = '#home';
 
-      // Fast offsetTop inspection without triggering forced layout/reflow
-      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
-        const id = NAV_ITEMS[i].href.replace('#', '');
+      for (let i = anchorItems.length - 1; i >= 0; i--) {
+        const id = anchorItems[i].href.replace('#', '');
         const el = document.getElementById(id);
-        if (el && checkPosition >= el.offsetTop) {
-          matchedSection = NAV_ITEMS[i].href;
-          break;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 240) {
+            matched = anchorItems[i].href;
+            break;
+          }
         }
       }
 
-      if (matchedSection !== activeSectionLocal) {
-        activeSectionLocal = matchedSection;
-        updateActiveSection(matchedSection);
-      }
+      updateActiveSection(matched);
     };
 
     const onScroll = () => {
@@ -116,7 +155,7 @@ export const Navbar: React.FC = () => {
       window.removeEventListener('scroll', onScroll);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
-  }, []);
+  }, [pathname]);
 
   const toggleSound = () => {
     const next = !soundActive;
@@ -130,53 +169,90 @@ export const Navbar: React.FC = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     playMicroClick();
-    updateActiveSection(href);
-    isManualScrollRef.current = true;
 
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-    // Lock scroll spy while smooth scrolling takes place
-    scrollTimeoutRef.current = setTimeout(() => {
-      isManualScrollRef.current = false;
-    }, 850);
-
-    // Special handling for Home / Top: smooth scroll to 0 and remove hash
-    if (href === '#home' || href === '/') {
-      if (typeof window !== 'undefined' && window.location.pathname !== '/') {
-        window.location.href = '/';
+    // 1. Anchor link (e.g. #home, #tour, #features, #product-stage, #faq)
+    if (href.startsWith('#')) {
+      if (pathname !== '/') {
+        // Navigate from /pricing, /about etc. to / + hash
+        router.push('/' + href);
         return;
       }
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-      if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname + window.location.search);
+
+      updateActiveSection(href);
+      isManualScrollRef.current = true;
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        isManualScrollRef.current = false;
+      }, 1000);
+
+      if (href === '#home') {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+        return;
+      }
+
+      const targetId = href.replace('#', '');
+      const el = document.getElementById(targetId);
+      if (el) {
+        const navOffset = 70;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: Math.max(0, elementTop - navOffset),
+          behavior: 'smooth',
+        });
       }
       return;
     }
 
-    const targetId = href.replace('#', '');
-    const el = document.getElementById(targetId);
-    if (el) {
-      const navOffset = window.innerWidth <= 768 ? 36 : 24;
-      const elementTop = el.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: Math.max(0, elementTop - navOffset),
-        behavior: 'smooth',
-      });
-      if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname + window.location.search);
+    // 2. Route link (e.g. /pricing, /about, /about#team, /contact)
+    if (href.startsWith('/')) {
+      if (href === '/' && pathname === '/') {
+        updateActiveSection('#home');
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+        return;
       }
-    } else if (typeof window !== 'undefined') {
-      window.location.href = '/' + href;
+
+      if (href.includes('#')) {
+        const [targetPath, hash] = href.split('#');
+        if (pathname === targetPath) {
+          setCurrentHash('#' + hash);
+          const el = document.getElementById(hash);
+          if (el) {
+            const navOffset = 70;
+            const elementTop = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+              top: Math.max(0, elementTop - navOffset),
+              behavior: 'smooth',
+            });
+          }
+          return;
+        }
+      }
+
+      router.push(href);
     }
   };
 
-  // Rubber band physics calculations based on jump distance and direction
+  // Active item calculation for rubber-band physics
+  const activeItem = NAV_ITEMS.find((item) => checkIsActive(item.href)) || NAV_ITEMS[0];
+  const activeItemHref = activeItem.href;
+
+  useEffect(() => {
+    if (activeItemHref !== prevSection) {
+      setPrevSection(activeItemHref);
+    }
+  }, [activeItemHref]);
+
   const prevIdx = Math.max(0, NAV_ITEMS.findIndex((item) => item.href === prevSection));
-  const currIdx = Math.max(0, NAV_ITEMS.findIndex((item) => item.href === activeSection));
+  const currIdx = Math.max(0, NAV_ITEMS.findIndex((item) => item.href === activeItemHref));
   const distance = Math.abs(currIdx - prevIdx);
   const direction = currIdx >= prevIdx ? 1 : -1;
 
@@ -245,7 +321,7 @@ export const Navbar: React.FC = () => {
               }}
             >
               {NAV_ITEMS.map((item) => {
-                const isActive = activeSection === item.href;
+                const isActive = checkIsActive(item.href);
                 const isHovered = hoveredSection === item.href;
 
                 return (
@@ -410,24 +486,23 @@ export const Navbar: React.FC = () => {
                   {soundActive ? 'FX ON' : 'FX OFF'}
                 </span>
               </button>
-              {/* Desktop CTA: Trigger Early Access VIP Dialog */}
-              <button
-                type="button"
-                onClick={() => {
-                  playMicroClick();
-                  openEarlyAccessModal('both');
-                }}
+              {/* Desktop CTA: Direct Download App */}
+              <a
+                href="/#download"
+                onClick={() => playMicroClick()}
                 className="btn-primary desktop-cta"
                 style={{
                   padding: '9px 18px',
                   fontSize: '13px',
                   borderRadius: '9999px',
-                  border: 'none',
-                  cursor: 'pointer',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
                 }}
               >
-                <span>Get Started</span>
-              </button>
+                <span>Download App</span>
+              </a>
 
               {/* Mobile Hamburger Toggle */}
               <button
@@ -489,7 +564,7 @@ export const Navbar: React.FC = () => {
           }}
         >
           {NAV_ITEMS.map((item) => {
-            const isActive = activeSection === item.href;
+            const isActive = checkIsActive(item.href);
             return (
               <a
                 key={item.label}
@@ -524,18 +599,17 @@ export const Navbar: React.FC = () => {
               </a>
             );
           })}
-          <button
-            type="button"
+          <a
+            href="/#download"
             className="btn-primary"
             onClick={() => {
               playMicroClick();
               setMobileMenuOpen(false);
-              openEarlyAccessModal('both');
             }}
-            style={{ width: '100%', marginTop: '6px', border: 'none', cursor: 'pointer' }}
+            style={{ width: '100%', marginTop: '6px', textAlign: 'center', textDecoration: 'none', display: 'block', padding: '12px' }}
           >
-            <span>Get Started</span>
-          </button>
+            <span>Download App</span>
+          </a>
         </div>
       )}
 

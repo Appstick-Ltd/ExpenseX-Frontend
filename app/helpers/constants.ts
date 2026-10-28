@@ -7,9 +7,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '#home' },
   { label: 'How It Works', href: '#tour' },
   { label: 'Features', href: '#features' },
-  { label: 'AI Engine', href: '#ai-engine' },
-  { label: 'Intelligence', href: '#safe-to-spend' },
-  { label: 'Roadmap', href: '#roadmap' },
+  { label: 'Product & Stage', href: '#product-stage' },
   { label: 'FAQ', href: '#faq' },
 ];
 
@@ -27,9 +25,9 @@ export const HERO_DATA = {
   ],
   descriptionPrimary: 'Track, understand, and control your money with AI.',
   descriptionSecondary: 'ExpenseX uses AI to automatically turn your voice, receipts, SMS, and emails into structured financial intelligence.',
-  ctaPrimary: 'Get Early Access',
+  ctaPrimary: 'Get ExpenseX AI',
   ctaSecondary: 'Take a Tour',
-  availability: 'Available on iOS and Android',
+  availability: 'Available on Android & Web',
 };
 
 export const PHONE_MOCKUP_DATA = {
@@ -130,12 +128,12 @@ export const CAPTURE_CHANNELS = [
   {
     id: 'whatsapp',
     title: 'WhatsApp AI Bot',
-    badge: 'Chatbot Sync',
-    subtitle: 'Forward paper bills, voice notes, or text casual expenses in WhatsApp',
+    badge: 'In Development',
+    subtitle: 'Upcoming: Forward paper bills, voice notes, or text casual expenses in WhatsApp',
     sample: {
       userMessage: 'Paid $85 for fuel at Shell Station ⛽',
-      botResponse: '✓ Logged: $85 under Fuel & Transport',
-      category: 'Fuel & Transport',
+      botResponse: '✓ Logged: $85 under Transportation',
+      category: 'Transportation',
       amount: '$85',
     },
   },
@@ -144,7 +142,7 @@ export const CAPTURE_CHANNELS = [
 export const AI_PIPELINE_STAGES = [
   { step: '01', name: 'Raw Signals', desc: 'Voice, Receipt, SMS, Email, WhatsApp' },
   { step: '02', name: 'AI Extraction', desc: 'Tokenize text & structured entities' },
-  { step: '03', name: 'Categorize', desc: 'Predict taxonomy across 45+ categories' },
+  { step: '03', name: 'Categorize', desc: 'Predict taxonomy across verified core categories' },
   { step: '04', name: 'Recognize', desc: 'Resolve messy merchant descriptors' },
   { step: '05', name: 'Deduplicate', desc: 'Prevent multi-channel double-counting' },
   { step: '06', name: 'Financial Intel', desc: 'Synthesize Safe to Spend & Insights' },
@@ -264,33 +262,33 @@ export const PRIVACY_POINTS = [
 export const ROADMAP_PHASES = [
   {
     phase: 'PHASE 1',
-    title: 'Core Capture Foundation',
-    status: 'AVAILABLE NOW (PRIVATE BETA)',
+    title: 'Core Capture & Budgeting Foundation',
+    status: 'AVAILABLE NOW (PRODUCTION)',
     isLive: true,
     items: [
       'Voice Natural Language Capture',
       'Receipt Vision OCR Scan',
-      'SMS Alert Transaction Parser',
-      'Email Digital Invoice Sync',
+      'SMS Alert Transaction Parser (Android)',
+      'Safe to Spend Dynamic Margin',
+      'Dynamic Envelope Budgeting',
       'Intelligent Categorization',
       'Merchant Resolution Engine',
       'Cross-Channel Duplicate Detection',
-      'Confirmation & Review Queue',
     ],
   },
   {
     phase: 'PHASE 2',
-    title: 'Intelligent Finance & Conversational AI',
+    title: 'Connected Channels & Conversational AI',
     status: 'IN DEVELOPMENT',
     isLive: false,
     items: [
       'Ask ExpenseX Conversational AI',
+      'WhatsApp AI Assistant Bot',
+      'Email Digital Invoice Sync',
       'Dynamic Financial Health Index',
-      'Predictive Safe to Spend Margin',
       'Daily AI Morning Briefing',
       'Monthly Retrospective Review',
       '30-Day Cash Flow Forecast',
-      'AI Autonomous Goal Planner',
       '"Can I Afford It?" Simulator',
     ],
   },

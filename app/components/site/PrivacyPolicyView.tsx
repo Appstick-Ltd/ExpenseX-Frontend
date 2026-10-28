@@ -153,7 +153,7 @@ export const PrivacyPolicyView: React.FC = () => {
               </h2>
               <p>To enable automated personal finance tracking and categorization, ExpenseX AI collects financial inputs solely from sources authorized by the user:</p>
               <ul style={{ paddingLeft: '24px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <li><strong>Account Information:</strong> Name, verified email address, authentication credentials, and beta cohort status.</li>
+                <li><strong>Account Information:</strong> Name, verified email address, authentication credentials, and subscription status.</li>
                 <li><strong>Receipt Photos &amp; Documents:</strong> Camera captures and uploaded digital images of receipts and invoices. Our vision processing pipeline extracts merchant name, total amount, taxes, currency, and line items.</li>
                 <li><strong>Spoken Audio Logs:</strong> Temporary audio voice logs recorded when utilizing hands-free voice logging. Voice inputs are transcribed into structured financial parameters and discarded immediately after processing.</li>
                 <li><strong>Bank Notification SMS Alerts:</strong> When users grant on-device SMS access permissions on supported mobile devices, our system parses incoming transactional debit/credit notifications. Personal text messages outside banking financial patterns are never inspected or uploaded.</li>

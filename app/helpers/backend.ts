@@ -149,6 +149,7 @@ export const createSubscriptionPlan = (data: any) => post('/subscriptions/plan',
 export const updateSubscriptionPlan = (data: any) => patch('/subscriptions/plan', data);
 export const deleteSubscriptionPlan = (id: string) => del(`/subscriptions/public/${id}`);
 export const getSubscriptionHistory = (params?: any) => get('/google-play/subscription/history', params);
+export const getGooglePlayProducts = () => get('/google-play/products');
 
 /* ==========================================================================
    7. System Settings

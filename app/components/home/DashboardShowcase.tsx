@@ -58,7 +58,7 @@ export const DashboardShowcase: React.FC = () => {
             }}
           >
             <div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Demo Account &bull; Beta Preview</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Demo Account &bull; Live Preview</div>
               <div style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF' }}>September Financial Health</div>
             </div>
 
@@ -310,7 +310,7 @@ export const DashboardShowcase: React.FC = () => {
 
         {/* Illustrative demo note */}
         <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12.5px', color: '#64748B' }}>
-          * Illustrative demo interface — Sample dashboard preview for beta evaluation. Not actual customer metrics.
+          * Illustrative demo interface — Sample dashboard preview. Not actual customer metrics.
         </div>
       </div>
 

@@ -14,9 +14,9 @@ export const Roadmap: React.FC = () => {
       statusBg: 'rgba(16, 185, 129, 0.15)',
       statusBorder: 'rgba(52, 211, 153, 0.4)',
       progressPct: 100,
-      progressLabel: 'Available in Private Beta',
+      progressLabel: 'Live in Production',
       icon: MapPin,
-      roadStatusDesc: 'Available for invited private beta cohort',
+      roadStatusDesc: 'Available for all active users in production',
       laneClass: 'road-lane-active',
     },
     {

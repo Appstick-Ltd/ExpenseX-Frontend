@@ -161,7 +161,7 @@ export const QuickTour: React.FC = () => {
                     />
                   )}
                   <span>{step.tab}</span>
-                  {step.isComingSoon && <span className="badge-coming-soon">SOON</span>}
+                  {step.isComingSoon && <span className="badge-coming-soon">DEV</span>}
                 </button>
               );
             })}
@@ -228,7 +228,7 @@ export const QuickTour: React.FC = () => {
                       }}
                     >
                       <span>STEP {currentStep.id} OF 05</span>
-                      {currentStep.isComingSoon && <span className="badge-coming-soon">COMING SOON</span>}
+                      {currentStep.isComingSoon && <span className="badge-coming-soon">IN DEVELOPMENT</span>}
                     </div>
 
                     <h3

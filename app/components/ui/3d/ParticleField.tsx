@@ -114,7 +114,7 @@ export const ParticleField: React.FC = () => {
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-    let clock = new THREE.Clock();
+    const startTime = performance.now();
     let isVisible = true;
 
     const observer = new IntersectionObserver(
@@ -128,7 +128,7 @@ export const ParticleField: React.FC = () => {
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       if (!isVisible) return;
-      const elapsed = clock.getElapsedTime();
+      const elapsed = (performance.now() - startTime) * 0.001;
 
       // Subtle natural drift
       particles.rotation.y = elapsed * 0.03;

@@ -96,7 +96,7 @@ export const FinalCTA: React.FC = () => {
                   textTransform: 'uppercase',
                 }}
               >
-                EARLY BIRD ACCESS • LIMITED SPOTS
+                DOWNLOAD NOW • OFFICIAL APP STORES
               </span>
             </div>
 
@@ -119,7 +119,7 @@ export const FinalCTA: React.FC = () => {
                   display: 'inline-block',
                   filter: 'drop-shadow(0 0 16px rgba(167, 139, 250, 0.45))',
                 }}
-              >X</span> AI on iOS &amp; Android
+              >X</span> AI on Play Store &amp; App Store
             </h2>
 
             {/* Subtitle */}
@@ -132,10 +132,10 @@ export const FinalCTA: React.FC = () => {
                 maxWidth: '480px',
               }}
             >
-              Reserve your exclusive Early Bird VIP pass. Be the first to get Beta builds on the Apple App Store and Google Play Store with priority access.
+              Download ExpenseX AI today. Track income, scan receipts, parse bank SMS, and gain complete clarity over your financial health.
             </p>
 
-            {/* Official App Store & Google Play Store Badge Buttons */}
+            {/* Official Store Badge Buttons */}
             <div
               className="final-cta-store-buttons"
               style={{
@@ -145,9 +145,11 @@ export const FinalCTA: React.FC = () => {
                 gap: '14px',
               }}
             >
-              {/* Apple App Store Badge */}
-              <button
-                onClick={() => handleOpenEarlyAccess('ios')}
+              {/* Google Play Store Badge / Action Button */}
+              <a
+                href="https://play.google.com/store/apps/details?id=com.expensexai.app"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="store-badge-btn"
                 style={{
                   display: 'inline-flex',
@@ -158,53 +160,7 @@ export const FinalCTA: React.FC = () => {
                   background: '#000000',
                   border: '1.5px solid rgba(255, 255, 255, 0.22)',
                   color: '#FFFFFF',
-                  cursor: 'pointer',
-                  boxShadow: '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
-                  transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
-                  userSelect: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.6)';
-                  e.currentTarget.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 255, 255, 0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)';
-                  e.currentTarget.style.boxShadow = '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)';
-                }}
-              >
-                {/* Authentic Apple Icon */}
-                <img
-                  src={appleLogoSrc}
-                  alt="Apple Logo"
-                  style={{
-                    width: '24px',
-                    height: '28px',
-                    objectFit: 'contain',
-                    filter: 'brightness(0) invert(1)',
-                    display: 'block',
-                  }}
-                />
-                <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
-                  <div style={{ fontSize: '10px', color: '#A1A1AA', letterSpacing: '0.04em' }}>Download on the</div>
-                  <div style={{ fontSize: '17px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>App Store</div>
-                </div>
-              </button>
-
-              {/* Google Play Store Badge */}
-              <button
-                onClick={() => handleOpenEarlyAccess('android')}
-                className="store-badge-btn"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '11px 22px',
-                  borderRadius: '14px',
-                  background: '#000000',
-                  border: '1.5px solid rgba(255, 255, 255, 0.22)',
-                  color: '#FFFFFF',
+                  textDecoration: 'none',
                   cursor: 'pointer',
                   boxShadow: '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
                   transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
@@ -236,7 +192,56 @@ export const FinalCTA: React.FC = () => {
                   <div style={{ fontSize: '10px', color: '#A1A1AA', letterSpacing: '0.04em' }}>GET IT ON</div>
                   <div style={{ fontSize: '17px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>Google Play</div>
                 </div>
-              </button>
+              </a>
+
+              {/* Apple App Store Badge / Action Button */}
+              <a
+                href="https://apps.apple.com/app/expensex-ai/id6742358055"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="store-badge-btn"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '11px 22px',
+                  borderRadius: '14px',
+                  background: '#000000',
+                  border: '1.5px solid rgba(255, 255, 255, 0.22)',
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+                  transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
+                  userSelect: 'none',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.6)';
+                  e.currentTarget.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 255, 255, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)';
+                  e.currentTarget.style.boxShadow = '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)';
+                }}
+              >
+                {/* Authentic Apple Icon */}
+                <img
+                  src={appleLogoSrc}
+                  alt="Apple App Store Logo"
+                  style={{
+                    width: '22px',
+                    height: '26px',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                />
+                <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
+                  <div style={{ fontSize: '10px', color: '#A1A1AA', letterSpacing: '0.04em' }}>Download on the</div>
+                  <div style={{ fontSize: '17px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>App Store</div>
+                </div>
+              </a>
             </div>
           </div>
 

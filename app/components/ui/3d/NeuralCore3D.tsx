@@ -213,7 +213,7 @@ export const NeuralCore3D: React.FC = () => {
     window.addEventListener('mouseup', onPointerUp);
 
     // 5. Animation Loop with IntersectionObserver pause for mobile performance
-    let clock = new THREE.Clock();
+    const startTime = performance.now();
     let isCoreVisible = true;
 
     const observer = new IntersectionObserver(
@@ -228,7 +228,7 @@ export const NeuralCore3D: React.FC = () => {
       animationFrameId = requestAnimationFrame(animate);
       if (!isCoreVisible) return; // Pause WebGL loop when scrolled away
 
-      const elapsed = clock.getElapsedTime();
+      const elapsed = (performance.now() - startTime) * 0.001;
 
       if (!isPointerDown) {
         // Natural idle rotation

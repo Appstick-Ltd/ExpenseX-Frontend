@@ -14,14 +14,14 @@ interface Scenario {
 
 const SCENARIOS: Scenario[] = [
   {
-    name: 'Standard Dhaka Runway',
+    name: 'Standard Monthly Runway',
     bankBalance: 63500,
     rentBills: 22000,
     savingsGoal: 15000,
     committedBudgets: 8000,
   },
   {
-    name: 'Festival & Eid Month',
+    name: 'Peak Season / Holiday Month',
     bankBalance: 88000,
     rentBills: 24000,
     savingsGoal: 18000,

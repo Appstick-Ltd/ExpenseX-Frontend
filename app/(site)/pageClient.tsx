@@ -14,17 +14,13 @@ import { SavingsGoals } from '../components/home/SavingsGoals';
 import { Roadmap } from '../components/home/Roadmap';
 import { Privacy } from '../components/home/Privacy';
 import { FAQ } from '../components/home/FAQ';
+import { ProductStage } from '../components/home/ProductStage';
 import { FinalCTA } from '../components/home/FinalCTA';
 
 export default function PageClient() {
   useEffect(() => {
     // Automatically capture referral code if present in URL
     captureReferralCodeFromUrl();
-
-    // Clean any hash from address bar so URL remains pure
-    if (window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search);
-    }
   }, []);
 
   return (
@@ -65,10 +61,13 @@ export default function PageClient() {
       {/* 12. Privacy, Permissions & Data Autonomy */}
       <Privacy />
 
-      {/* 13. High-Authority SEO Knowledge Base & FAQs */}
+      {/* 13. Our Business, Current Stage & Leadership Team */}
+      <ProductStage />
+
+      {/* 14. High-Authority SEO Knowledge Base & FAQs */}
       <FAQ />
 
-      {/* 14. Cinematic Final Call to Action */}
+      {/* 15. Cinematic Final Call to Action */}
       <FinalCTA />
     </>
   );

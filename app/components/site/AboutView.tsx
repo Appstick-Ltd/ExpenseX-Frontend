@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Sparkles, Cpu, ShieldCheck, Mail, Building2, CheckCircle2, Award, Zap, Lock, Globe2, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Sparkles, Cpu, ShieldCheck, Mail, Building2, CheckCircle2, Award, Zap, Lock, Globe2, ArrowRight, Clock, ArrowUpRight, Users } from 'lucide-react';
 import { Card3DTilt } from '../ui/Card3DTilt';
 import { playMicroClick } from '../../helpers/audio';
 import { openEarlyAccessModal } from '../../helpers/modalEvents';
@@ -222,7 +222,7 @@ export const AboutView: React.FC = () => {
                   Zero Manual Typing. 100% Peace of Mind.
                 </h2>
                 <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '20px' }}>
-                  Most budgeting apps fail because they place the data-entry burden onto the consumer. Within two weeks of manual entry, 85% of users give up.
+                  Most budgeting apps fail because they place the data-entry burden onto the consumer. Without automation, tedious manual expense logging leads to tracker fatigue.
                 </p>
                 <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                   ExpenseX AI is engineered around the premise of ambient intelligence: snap a receipt picture, dictate a quick voice note while walking, or forward a digital invoice. Our AI resolves the rest in sub-second inference pipelines.
@@ -232,7 +232,7 @@ export const AboutView: React.FC = () => {
               <div style={{ paddingTop: '24px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', marginTop: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Globe2 size={20} color="var(--purple-light)" />
-                  <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Multi-currency &bull; Worldwide Banking Sync</span>
+                  <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Multi-currency &bull; Automated Transaction Recognition</span>
                 </div>
               </div>
             </Card3DTilt>
@@ -392,7 +392,7 @@ export const AboutView: React.FC = () => {
             </div>
 
             <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '24px' }}>
-              As a participant in the Google for Startups Cloud Program, ExpenseX AI is architected to utilize Google Cloud&apos;s state-of-the-art AI and distributed compute infrastructure:
+              ExpenseX AI is built on Google Cloud services to utilize state-of-the-art AI models, high-performance computing, and zero-trust infrastructure:
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
@@ -413,6 +413,149 @@ export const AboutView: React.FC = () => {
             </div>
           </div>
 
+          {/* Product Capabilities & Deployment Stage */}
+          <div style={{ marginBottom: '64px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+              <div className="section-eyebrow" style={{ display: 'inline-flex', marginBottom: '12px' }}>
+                <Sparkles size={14} style={{ marginRight: '6px' }} />
+                <span>PRODUCT STATUS &amp; CAPABILITIES</span>
+              </div>
+              <h2 style={{ fontSize: 'clamp(26px, 3.8vw, 38px)', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+                Operational Scope &amp; Engineering Pipeline
+              </h2>
+              <p style={{ fontSize: '15px', color: 'var(--text-secondary)', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
+                Clear disclosure of live production features versus capabilities currently undergoing active pipeline development.
+              </p>
+            </div>
+
+            <div
+              className="glass-card"
+              style={{
+                borderRadius: '22px',
+                padding: '28px',
+                overflowX: 'auto',
+                background: 'rgba(14, 20, 38, 0.75)',
+                border: '1px solid var(--border-medium)',
+              }}
+            >
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    <th style={{ padding: '14px 16px' }}>Feature Capability</th>
+                    <th style={{ padding: '14px 16px' }}>Description</th>
+                    <th style={{ padding: '14px 16px' }}>Platform</th>
+                    <th style={{ padding: '14px 16px' }}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'AI Receipt & Invoice Vision OCR', desc: 'Instant extraction of merchant, tax, currency, and total from paper receipts.', platform: 'Android & Web', status: 'Live' },
+                    { name: 'Bank Notification SMS Parsing', desc: 'Automated recognition of incoming financial credit/debit alerts with user consent.', platform: 'Android', status: 'Live' },
+                    { name: 'Conversational Voice Entry', desc: 'Hands-free voice transcription and NLP parameter extraction.', platform: 'Android & Web', status: 'Live' },
+                    { name: 'Dynamic Envelope Budgeting', desc: 'Automated allocation across essential living and discretionary categories.', platform: 'Android & Web', status: 'Live' },
+                    { name: 'Safe-to-Spend™ Cashflow Metric', desc: 'Predictive daily velocity calculations factoring recurring bills and savings goals.', platform: 'Android & Web', status: 'Live' },
+                    { name: 'Digital Email Invoice Detection', desc: 'Automated parsing of digital receipts forwarded from rides, delivery, and online orders.', platform: 'Cloud Pipeline', status: 'In Development' },
+                    { name: 'WhatsApp AI Financial Assistant', desc: 'Forward paper bills or text casual transactions via WhatsApp without opening the app.', platform: 'Cross-Platform Bot', status: 'In Development' },
+                    { name: 'Long-Context Conversational Insights', desc: 'Deep historical spend reasoning and conversational question answering on past trends.', platform: 'Vertex AI Pipeline', status: 'In Development' },
+                  ].map((row) => (
+                    <tr key={row.name} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', fontSize: '14px' }}>
+                      <td style={{ padding: '16px', fontWeight: 700, color: '#FFFFFF' }}>{row.name}</td>
+                      <td style={{ padding: '16px', color: 'var(--text-secondary)', fontSize: '13.5px', maxWidth: '340px', lineHeight: 1.5 }}>{row.desc}</td>
+                      <td style={{ padding: '16px', color: 'var(--text-muted)', fontSize: '13px' }}>{row.platform}</td>
+                      <td style={{ padding: '16px' }}>
+                        {row.status === 'Live' ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', borderRadius: '999px', background: 'rgba(16, 185, 129, 0.14)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', fontSize: '12px', fontWeight: 700 }}>
+                            <CheckCircle2 size={13} /> Live
+                          </span>
+                        ) : (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', borderRadius: '999px', background: 'rgba(255, 90, 54, 0.14)', color: 'var(--coral-accent)', border: '1px solid rgba(255, 90, 54, 0.3)', fontSize: '12px', fontWeight: 700 }}>
+                            <Clock size={13} /> In Development
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Dedicated Team Section */}
+          <div id="team" style={{ marginBottom: '64px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+              <div className="section-eyebrow" style={{ display: 'inline-flex', marginBottom: '12px' }}>
+                <Users size={14} style={{ marginRight: '6px' }} />
+                <span>EXECUTIVE LEADERSHIP</span>
+              </div>
+              <h2 style={{ fontSize: 'clamp(26px, 3.8vw, 38px)', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+                Meet the Team
+              </h2>
+              <p style={{ fontSize: '15px', color: 'var(--text-secondary)', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
+                ExpenseX AI is engineered and maintained by the software engineering team at Appstick.
+              </p>
+            </div>
+
+            <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+              <Card3DTilt
+                className="glass-card"
+                maxTilt={6}
+                style={{
+                  borderRadius: '24px',
+                  padding: '36px',
+                  background: 'linear-gradient(135deg, rgba(14, 20, 38, 0.85) 0%, rgba(20, 26, 52, 0.8) 100%)',
+                  border: '1px solid var(--border-medium)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+                  <div>
+                    <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--purple-light)', fontWeight: 700, marginBottom: '6px' }}>
+                      FOUNDER &amp; CEO — APPSTICK
+                    </div>
+                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF', margin: '0 0 6px 0' }}>
+                      Md. Riaz Mahmud
+                    </h3>
+                    <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '18px' }}>
+                      Technologist, Startup Founder &amp; AI Systems Architect
+                    </div>
+                  </div>
+
+                  <a
+                    href="https://www.linkedin.com/in/riaz-mahmud-appstick/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 16px',
+                      borderRadius: '999px',
+                      background: 'rgba(109, 61, 245, 0.15)',
+                      border: '1px solid rgba(139, 92, 246, 0.35)',
+                      color: 'var(--purple-light)',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      transition: 'background 0.2s ease',
+                    }}
+                  >
+                    <span>LinkedIn Profile</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                </div>
+
+                <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 0 20px 0' }}>
+                  With over eight years of hands-on experience in enterprise software architecture, full-stack systems engineering, and technology leadership, Md. Riaz Mahmud founded Appstick to build reliable, high-performance software products. He directs ExpenseX AI&apos;s product strategy, multi-modal pipeline engineering, and cloud infrastructure deployment.
+                </p>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', paddingTop: '18px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', fontSize: '13px', color: 'var(--text-dim)' }}>
+                  <span>Headquarters: Khulna, Bangladesh</span>
+                  <span>•</span>
+                  <span>Parent Organization: Appstick</span>
+                </div>
+              </Card3DTilt>
+            </div>
+          </div>
+
           {/* Action CTA Banner */}
           <div
             style={{
@@ -430,25 +573,22 @@ export const AboutView: React.FC = () => {
           >
             <div>
               <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF', marginBottom: '8px' }}>
-                Join the ExpenseX AI Pioneer Cohort
+                Experience ExpenseX AI Today
               </h3>
               <p style={{ fontSize: '15px', color: 'var(--text-secondary)', margin: 0, maxWidth: '580px' }}>
-                Be among the first to experience automated expense intelligence with lifetime founding perks.
+                Automate your daily expense tracking with multi-modal machine intelligence and real-time cashflow clarity.
               </p>
             </div>
 
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={() => {
-                  playMicroClick();
-                  openEarlyAccessModal();
-                }}
+              <Link
+                href="/#download"
+                onClick={() => playMicroClick()}
                 className="btn-primary"
-                style={{ padding: '14px 28px', cursor: 'pointer' }}
+                style={{ padding: '14px 28px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
               >
-                Claim Free Early Access <ArrowRight size={16} />
-              </button>
+                Download ExpenseX AI <ArrowRight size={16} />
+              </Link>
               <Link
                 href="/contact"
                 onClick={() => playMicroClick()}

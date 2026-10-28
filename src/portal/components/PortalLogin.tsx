@@ -247,7 +247,7 @@ export const PortalLogin: React.FC<PortalLoginProps> = ({ onSuccess }) => {
             </div>
             <button
               type="button"
-              onClick={() => handleSwitchServer(isLocalServer ? 'https://api.xpenstick.appstick.com.bd/api/v1' : 'http://192.168.0.179:8080/api/v1')}
+              onClick={() => handleSwitchServer(isLocalServer ? 'https://backend.expensexai.com/api/v1' : 'http://192.168.0.179:8080/api/v1')}
               style={{
                 background: 'none',
                 border: 'none',

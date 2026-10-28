@@ -8,8 +8,8 @@ export function getApiBaseUrl(): string {
   try {
     const saved = localStorage.getItem('expensex_api_base_url');
     if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
-  } catch {}
-  const raw = import.meta.env.VITE_API_BASE_URL || 'https://api.xpenstick.appstick.com.bd/api/v1';
+  } catch { }
+  const raw = (import.meta as any).env?.VITE_API_BASE_URL || 'https://backend.expensexai.com/api/v1';
   return raw.replace(/\/+$/, '');
 }
 
@@ -20,7 +20,7 @@ export function setApiBaseUrl(url: string): void {
     } else {
       localStorage.setItem('expensex_api_base_url', url.trim().replace(/\/+$/, ''));
     }
-  } catch {}
+  } catch { }
 }
 
 export const API_BASE_URL = getApiBaseUrl();

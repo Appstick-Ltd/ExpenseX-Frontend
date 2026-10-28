@@ -96,7 +96,7 @@ export const ContactView: React.FC = () => {
               <span className="gradient-text-coral">ExpenseX AI Team.</span>
             </h1>
             <p style={{ fontSize: '17px', color: 'var(--text-secondary)', maxWidth: '700px', lineHeight: 1.65, margin: 0 }}>
-              Whether you have inquiries regarding early beta access, partner API integrations, technical deployment on Google Cloud, or general feedback, our leadership and support engineers are here to assist.
+              Whether you have inquiries regarding ExpenseX AI capabilities, partner API integrations, technical deployment on Google Cloud, or general feedback, our leadership and support engineers are here to assist.
             </p>
           </div>
 
@@ -139,7 +139,7 @@ export const ContactView: React.FC = () => {
                   <div>
                     <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '3px' }}>DIRECT INQUIRY DESKS</div>
                     <div style={{ fontSize: '14.5px', color: '#FFFFFF', marginBottom: '4px' }}>
-                      <strong style={{ color: 'var(--purple-light)' }}>User &amp; Beta Support:</strong>{' '}
+                      <strong style={{ color: 'var(--purple-light)' }}>User &amp; Customer Support:</strong>{' '}
                       <a href="mailto:support@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>support@expensexai.com</a>
                     </div>
                     <div style={{ fontSize: '14.5px', color: '#FFFFFF', marginBottom: '4px' }}>
@@ -218,7 +218,7 @@ export const ContactView: React.FC = () => {
               >
                 <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF', marginBottom: '8px' }}>Send Direct Message</h2>
                 <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', marginBottom: '28px' }}>
-                  Have an inquiry regarding our Google for Startups deployment, API integration, or feature rollout?
+                  Have an inquiry regarding our architecture, API integration, or feature rollout?
                 </p>
 
                 {submitted ? (

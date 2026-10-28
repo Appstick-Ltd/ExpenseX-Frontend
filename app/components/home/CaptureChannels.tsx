@@ -218,7 +218,7 @@ export const CaptureChannels: React.FC = () => {
 
             <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#34D399', fontWeight: 600 }}>
               <Check size={14} />
-              <span>100% on-device parsing</span>
+              <span>Encrypted Cloud Intelligence</span>
             </div>
           </Card3DTilt>
 
@@ -322,9 +322,12 @@ export const CaptureChannels: React.FC = () => {
                 <MessageCircle size={22} />
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>WhatsApp AI Bot</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>WhatsApp AI Bot</h3>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(255, 90, 54, 0.15)', color: 'var(--coral-accent)', border: '1px solid rgba(255, 90, 54, 0.3)', letterSpacing: '0.04em' }}>IN DEVELOPMENT</span>
+              </div>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Forward paper bills, drop voice notes, or text casual expenses directly in WhatsApp without opening the app.
+                Upcoming feature: Forward paper bills, drop voice notes, or text casual expenses directly in WhatsApp without opening the app.
               </p>
 
               {/* WhatsApp Chat Simulation Mock */}
@@ -381,7 +384,7 @@ export const CaptureChannels: React.FC = () => {
 
             <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#25D366', fontWeight: 600 }}>
               <Sparkles size={14} />
-              <span>Zero app opening needed</span>
+              <span>Roadmap Capability</span>
             </div>
           </Card3DTilt>
         </div>
