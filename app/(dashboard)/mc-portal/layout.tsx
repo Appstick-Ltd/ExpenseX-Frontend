@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { usePortalAuth } from '../../context/PortalAuthContext';
 import { PortalLayout } from '../../components/layout/PortalLayout';
@@ -10,25 +10,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, isLoading } = usePortalAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isAuthPage = pathname === '/mc-portal/auth';
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && mounted) {
       if (isAuthenticated && isAuthPage) {
         router.replace('/mc-portal');
       } else if (!isAuthenticated && !isAuthPage && pathname.startsWith('/mc-portal')) {
         router.replace('/mc-portal/auth');
       }
     }
-  }, [isAuthenticated, isLoading, isAuthPage, pathname, router]);
+  }, [isAuthenticated, isLoading, isAuthPage, pathname, router, mounted]);
+
+  if (!mounted || isLoading) {
+    return <ShimmerDashboardScreen />;
+  }
 
   if (isAuthPage) {
     return <>{children}</>;
-  }
-  console.log(isAuthPage);
-  if (isLoading) {
-    return <ShimmerDashboardScreen />;
   }
 
   if (!isAuthenticated) {
@@ -36,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="mc-root">
+    <div className="mc-root" suppressHydrationWarning>
       <PortalLayout>{children}</PortalLayout>
     </div>
   );

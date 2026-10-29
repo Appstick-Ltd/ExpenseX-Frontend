@@ -219,6 +219,94 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof window === 'undefined') return;
+                try {
+                  var isBisMsg = function(args) {
+                    for (var i = 0; i < args.length; i++) {
+                      var a = args[i];
+                      if (typeof a === 'string' && (
+                        a.indexOf('bis_skin_checked') !== -1 ||
+                        a.indexOf('bis_register') !== -1 ||
+                        a.indexOf('bis_frame_id') !== -1 ||
+                        a.indexOf('bis_size') !== -1
+                      )) {
+                        return true;
+                      }
+                    }
+                    return false;
+                  };
+
+                  var origError = console.error;
+                  var filteredError = function() {
+                    if (isBisMsg(arguments)) return;
+                    return origError.apply(console, arguments);
+                  };
+
+                  try {
+                    Object.defineProperty(console, 'error', {
+                      configurable: true,
+                      enumerable: true,
+                      get: function() { return filteredError; },
+                      set: function(fn) { origError = fn; }
+                    });
+                  } catch (e) {
+                    console.error = filteredError;
+                  }
+
+                  var origSetAttr = Element.prototype.setAttribute;
+                  Element.prototype.setAttribute = function(name, val) {
+                    if (name && typeof name === 'string' && name.indexOf('bis_') === 0) {
+                      return;
+                    }
+                    return origSetAttr.apply(this, arguments);
+                  };
+
+                  var cleanNode = function(el) {
+                    if (!el || !el.removeAttribute) return;
+                    el.removeAttribute('bis_skin_checked');
+                    el.removeAttribute('bis_register');
+                    el.removeAttribute('bis_frame_id');
+                    el.removeAttribute('bis_size');
+                  };
+
+                  var cleanAll = function() {
+                    try {
+                      var els = document.querySelectorAll('[bis_skin_checked],[bis_register],[bis_frame_id],[bis_size]');
+                      for (var i = 0; i < els.length; i++) cleanNode(els[i]);
+                    } catch (e) {}
+                  };
+
+                  cleanAll();
+
+                  if (window.MutationObserver) {
+                    var observer = new MutationObserver(function(mutations) {
+                      for (var i = 0; i < mutations.length; i++) {
+                        var m = mutations[i];
+                        if (m.type === 'attributes' && m.attributeName && m.attributeName.indexOf('bis_') === 0) {
+                          cleanNode(m.target);
+                        }
+                      }
+                    });
+                    var target = document.documentElement || document;
+                    observer.observe(target, {
+                      attributes: true,
+                      subtree: true,
+                      attributeFilter: ['bis_skin_checked', 'bis_register', 'bis_frame_id', 'bis_size']
+                    });
+                  }
+
+                  if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', cleanAll);
+                  }
+                } catch (err) {}
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

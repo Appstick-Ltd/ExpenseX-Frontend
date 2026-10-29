@@ -36,7 +36,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface NavItemDef {
   id: 'overview' | 'users' | 'services' | 'subscription' | 'marketing' | 'settings';
@@ -90,14 +90,15 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const { user, logout } = usePortalAuth();
   const router = useRouter();
 
-  const getTabFromUrl = (): NavItemDef['id'] => {
+  const pathname = usePathname() || '';
+
+  const getTabFromUrl = (p: string = pathname): NavItemDef['id'] => {
     if (initialTab) {
       if ((initialTab as any) === 'beta-users') return 'users';
       return initialTab as NavItemDef['id'];
     }
-    if (typeof window === 'undefined') return 'overview';
-    const path = window.location.pathname;
-        if (
+    const path = p || '';
+    if (
       path.startsWith('/mc-portal/marketing') ||
       path.startsWith('/dashboard/marketing')
     ) {
@@ -136,9 +137,8 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     return 'overview';
   };
 
-  const getUsersSubTabFromUrl = (): string => {
-    if (typeof window === 'undefined') return 'system-users';
-    const path = window.location.pathname;
+  const getUsersSubTabFromUrl = (p: string = pathname): string => {
+    const path = p || '';
     if (path.includes('beta-users') || path.includes('early-bird')) return 'beta-users';
     if (path.includes('rewards')) return 'rewards';
     const match = path.match(/\/(mc-portal|dashboard)\/users\/([^/]+)/);
@@ -146,86 +146,78 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
     return 'system-users';
   };
 
-  const getServicesSubTabFromUrl = (): string => {
-    if (typeof window === 'undefined') return 'category';
-    const path = window.location.pathname;
+  const getServicesSubTabFromUrl = (p: string = pathname): string => {
+    const path = p || '';
     const match = path.match(/\/(mc-portal|dashboard)\/services?\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'category';
   };
 
-  const getSubscriptionSubTabFromUrl = (): string => {
-    if (typeof window === 'undefined') return 'plan';
-    const path = window.location.pathname;
+  const getSubscriptionSubTabFromUrl = (p: string = pathname): string => {
+    const path = p || '';
     const match = path.match(/\/(mc-portal|dashboard)\/subscription\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'plan';
   };
 
-  const getMarketingSubTabFromUrl = (): string => {
-    if (typeof window === 'undefined') return 'push-notification';
-    const path = window.location.pathname;
+  const getMarketingSubTabFromUrl = (p: string = pathname): string => {
+    const path = p || '';
     const match = path.match(/\/(mc-portal|dashboard)\/marketing\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'push-notification';
   };
 
-  const getSubTabFromUrl = (): string => {
+  const getSubTabFromUrl = (p: string = pathname): string => {
     if (initialSubTab) return initialSubTab;
-    if (typeof window === 'undefined') return 'general-settings';
-    const path = window.location.pathname;
+    const path = p || '';
     const match = path.match(/\/(mc-portal|dashboard)\/settings?\/([^/]+)/);
     if (match && match[2]) return match[2];
     return 'general-settings';
   };
 
-  const [activeTab, setActiveTab] = useState<NavItemDef['id']>(() => getTabFromUrl());
-  const [activeUsersSubTab, setActiveUsersSubTab] = useState<string>(() => getUsersSubTabFromUrl());
-  const [usersOpen, setUsersOpen] = useState<boolean>(() => getTabFromUrl() === 'users');
-  const [activeServicesSubTab, setActiveServicesSubTab] = useState<string>(() => getServicesSubTabFromUrl());
-  const [servicesOpen, setServicesOpen] = useState<boolean>(() => getTabFromUrl() === 'services');
-  const [activeSubscriptionSubTab, setActiveSubscriptionSubTab] = useState<string>(() => getSubscriptionSubTabFromUrl());
-  const [subscriptionOpen, setSubscriptionOpen] = useState<boolean>(() => getTabFromUrl() === 'subscription');
-    const [activeMarketingSubTab, setActiveMarketingSubTab] = useState<string>(() => getMarketingSubTabFromUrl());
-  const [marketingOpen, setMarketingOpen] = useState<boolean>(() => getTabFromUrl() === 'marketing');
-  const [activeSubTab, setActiveSubTab] = useState<string>(() => getSubTabFromUrl());
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(() => getTabFromUrl() === 'settings');
+  const [activeTab, setActiveTab] = useState<NavItemDef['id']>(() => getTabFromUrl(pathname));
+  const [activeUsersSubTab, setActiveUsersSubTab] = useState<string>(() => getUsersSubTabFromUrl(pathname));
+  const [usersOpen, setUsersOpen] = useState<boolean>(() => getTabFromUrl(pathname) === 'users');
+  const [activeServicesSubTab, setActiveServicesSubTab] = useState<string>(() => getServicesSubTabFromUrl(pathname));
+  const [servicesOpen, setServicesOpen] = useState<boolean>(() => getTabFromUrl(pathname) === 'services');
+  const [activeSubscriptionSubTab, setActiveSubscriptionSubTab] = useState<string>(() => getSubscriptionSubTabFromUrl(pathname));
+  const [subscriptionOpen, setSubscriptionOpen] = useState<boolean>(() => getTabFromUrl(pathname) === 'subscription');
+  const [activeMarketingSubTab, setActiveMarketingSubTab] = useState<string>(() => getMarketingSubTabFromUrl(pathname));
+  const [marketingOpen, setMarketingOpen] = useState<boolean>(() => getTabFromUrl(pathname) === 'marketing');
+  const [activeSubTab, setActiveSubTab] = useState<string>(() => getSubTabFromUrl(pathname));
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(() => getTabFromUrl(pathname) === 'settings');
   const [collapsed, setCollapsed] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
-    const handlePopState = () => {
-      const tab = getTabFromUrl();
-      const usersSub = getUsersSubTabFromUrl();
-      const servicesSub = getServicesSubTabFromUrl();
-      const subscriptionSub = getSubscriptionSubTabFromUrl();
-      const marketingSub = getMarketingSubTabFromUrl();
-      const sub = getSubTabFromUrl();
-      setActiveTab(tab);
-      setActiveUsersSubTab(usersSub);
-      setActiveServicesSubTab(servicesSub);
-      setActiveSubscriptionSubTab(subscriptionSub);
-      setActiveMarketingSubTab(marketingSub);
-      setActiveSubTab(sub);
-      if (tab === 'marketing') {
-        setMarketingOpen(true);
-      }
-      if (tab === 'settings') {
-        setSettingsOpen(true);
-      }
-      if (tab === 'subscription') {
-        setSubscriptionOpen(true);
-      }
-      if (tab === 'services') {
-        setServicesOpen(true);
-      }
-      if (tab === 'users') {
-        setUsersOpen(true);
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+    const tab = getTabFromUrl(pathname);
+    const usersSub = getUsersSubTabFromUrl(pathname);
+    const servicesSub = getServicesSubTabFromUrl(pathname);
+    const subscriptionSub = getSubscriptionSubTabFromUrl(pathname);
+    const marketingSub = getMarketingSubTabFromUrl(pathname);
+    const sub = getSubTabFromUrl(pathname);
+    setActiveTab(tab);
+    setActiveUsersSubTab(usersSub);
+    setActiveServicesSubTab(servicesSub);
+    setActiveSubscriptionSubTab(subscriptionSub);
+    setActiveMarketingSubTab(marketingSub);
+    setActiveSubTab(sub);
+    if (tab === 'marketing') {
+      setMarketingOpen(true);
+    }
+    if (tab === 'settings') {
+      setSettingsOpen(true);
+    }
+    if (tab === 'subscription') {
+      setSubscriptionOpen(true);
+    }
+    if (tab === 'services') {
+      setServicesOpen(true);
+    }
+    if (tab === 'users') {
+      setUsersOpen(true);
+    }
+  }, [pathname]);
 
   const navItems: NavItemDef[] = [
     { id: 'overview', label: 'Overview & Telemetry', shortLabel: 'Overview', icon: LayoutDashboard },

@@ -21,9 +21,72 @@ import {
   Sparkles,
   Globe,
   Coins,
+  Crown,
+  Copy,
+  Check,
+  CreditCard,
+  Calendar,
+  Clock,
 } from 'lucide-react';
 import { ShimmerTableRows, ShimmerMobileCardList } from '../../../../components/common/Shimmer';
 import { showSuccessAlert, showErrorToast } from '../../../../helpers/notification';
+
+export interface UserActiveSubscription {
+  _id?: string;
+  status?: string;
+  expiryTime?: string;
+  payment?: any;
+  subscriptionPlan?: {
+    _id?: string;
+    name?: string | Record<string, string>;
+    dayValue?: number;
+    currency?: string;
+    aiCredit?: number;
+    coin?: number;
+  };
+  creditsAdded?: number;
+  spend_credit?: number;
+  ai_credits_remaining?: number;
+}
+
+export const resolveText = (val: any, fallback = ''): string => {
+  if (val === null || val === undefined) return fallback;
+  if (typeof val === 'string') return val;
+  if (typeof val === 'number') return String(val);
+  if (typeof val === 'boolean') return val ? 'Yes' : 'No';
+  if (typeof val === 'object') {
+    if (val.en || val.bn) return val.en || val.bn;
+    const first = Object.values(val)[0];
+    if (typeof first === 'string' || typeof first === 'number') return String(first);
+    return fallback;
+  }
+  return fallback;
+};
+
+export const getUserPlanCredit = (u: UserItem | null | undefined): string => {
+  if (!u) return '—';
+
+  // Only show plan credit if user has an active subscription/plan
+  if (u.active_subscription) {
+    const subVal =
+      u.active_subscription.subscriptionPlan?.aiCredit ??
+      u.active_subscription.creditsAdded ??
+      (u.active_subscription as any).aiCredit;
+    if (subVal !== undefined && subVal !== null && !isNaN(Number(subVal))) {
+      return Number(subVal).toFixed(2);
+    }
+  }
+
+  // Active plan na thakle '-' dao
+  return '—';
+};
+
+export const getUserRemainingCredit = (u: UserItem | null | undefined): string => {
+  if (!u) return '0.00';
+  const raw = u.remaining_ai_credit ?? u.ai_credit ?? u.aiCredit ?? 0;
+  const num = Number(raw);
+  return isNaN(num) ? '0.00' : num.toFixed(2);
+};
 
 export interface UserItem {
   _id: string;
@@ -38,6 +101,10 @@ export interface UserItem {
   ai_credit?: number;
   aiCredit?: number;
   ai_assigned_credit?: number;
+  remaining_ai_credit?: number;
+  user_type?: 'paid' | 'free' | string;
+  plan?: string;
+  active_subscription?: UserActiveSubscription | null;
   currencyCode?: string;
   languageCode?: string;
   gender?: string;
@@ -63,6 +130,66 @@ export default function SystemUsersPage() {
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
   const [userToDelete, setUserToDelete] = useState<UserItem | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [togglingUserId, setTogglingUserId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (text: string, id: string) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const renderUserTypeBadge = (u: UserItem) => {
+    const isPaid = u.user_type === 'paid' || Boolean(u.active_subscription);
+    const planName = resolveText(u.plan || u.active_subscription?.subscriptionPlan?.name);
+
+    if (isPaid) {
+      return (
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
+            padding: '3px 10px',
+            borderRadius: 20,
+            fontSize: 12,
+            fontWeight: 600,
+            background: 'rgba(99, 102, 241, 0.12)',
+            color: '#4F46E5',
+            border: '1px solid rgba(99, 102, 241, 0.25)',
+          }}
+        >
+          <Crown size={12} color="#4F46E5" />
+          <span>Paid</span>
+          {planName && planName !== 'Paid' && (
+            <span style={{ fontSize: 11, opacity: 0.85, fontWeight: 500 }}>
+              • {planName}
+            </span>
+          )}
+        </span>
+      );
+    }
+
+    return (
+      <span
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4,
+          padding: '3px 10px',
+          borderRadius: 20,
+          fontSize: 12,
+          fontWeight: 500,
+          background: '#F1F5F9',
+          color: '#64748B',
+          border: '1px solid #E2E8F0',
+        }}
+      >
+        <span>Free</span>
+      </span>
+    );
+  };
 
   // Add User Modal State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -173,19 +300,19 @@ export default function SystemUsersPage() {
   const handleOpenEdit = (u: UserItem) => {
     setEditingUser(u);
     setEditForm({
-      name: u.name || '',
+      name: resolveText(u.name, ''),
       email: u.email || '',
       phone: u.phone || '',
       status: (u.status === 'deleted' || u.status === false) ? 'deleted' : 'approved',
       password: '',
-      country: u.country || '',
+      country: resolveText(u.country, ''),
       ai_credit: u.ai_credit ?? u.aiCredit ?? 0,
       ai_assigned_credit: u.ai_assigned_credit ?? 0,
       currencyCode: u.currencyCode || 'USD',
       languageCode: u.languageCode || 'en',
-      gender: u.gender || '',
-      dob: u.dob ? (u.dob.includes('T') ? u.dob.split('T')[0] : u.dob) : '',
-      address: u.address || '',
+      gender: resolveText(u.gender, ''),
+      dob: u.dob ? (String(u.dob).includes('T') ? String(u.dob).split('T')[0] : String(u.dob)) : '',
+      address: resolveText(u.address, ''),
       self_referral_code: u.self_referral_code || '',
       monthly_income: u.monthly_income ?? '',
       monthly_expense: u.monthly_expense ?? '',
@@ -274,8 +401,51 @@ export default function SystemUsersPage() {
     }
   };
 
+  const handleToggleStatus = async (u: UserItem) => {
+    const isCurrentlyDeleted = u.status === 'deleted' || u.status === false;
+    const nextStatus = isCurrentlyDeleted ? 'approved' : 'deleted';
+
+    // Optimistic UI update
+    setUsers((prev) =>
+      prev.map((item) =>
+        item._id === u._id ? { ...item, status: nextStatus } : item
+      )
+    );
+    setTogglingUserId(u._id);
+
+    try {
+      const res = await updateUser({
+        _id: u._id,
+        status: nextStatus,
+      });
+
+      if (res?.success === false || res?.statusCode >= 400) {
+        // Rollback on failure
+        setUsers((prev) =>
+          prev.map((item) =>
+            item._id === u._id ? { ...item, status: isCurrentlyDeleted ? 'deleted' : 'approved' } : item
+          )
+        );
+        showErrorToast(res?.message || res?.errorMessage || 'Failed to update user status.');
+        return;
+      }
+
+      showSuccessAlert(`User status updated to ${nextStatus === 'approved' ? 'Approved' : 'Deleted'}.`);
+    } catch (err: any) {
+      // Rollback on failure
+      setUsers((prev) =>
+        prev.map((item) =>
+          item._id === u._id ? { ...item, status: isCurrentlyDeleted ? 'deleted' : 'approved' } : item
+        )
+      );
+      showErrorToast(err?.message || 'Failed to update user status.');
+    } finally {
+      setTogglingUserId(null);
+    }
+  };
+
   return (
-    <div>
+    <div suppressHydrationWarning>
       {/* Header */}
       <div
         style={{
@@ -346,13 +516,13 @@ export default function SystemUsersPage() {
           <table className="mc-table">
             <thead>
               <tr>
-                <th style={{ width: 40, textAlign: 'center' }}>#</th>
+                <th style={{ width: 44, textAlign: 'center' }}>#</th>
                 <th>User</th>
-                <th>Country</th>
-                <th>AI Remaining Credit</th>
-                <th>Created At</th>
+                <th>User Type</th>
+                <th>Plan Credit</th>
+                <th>Remaining Credit</th>
                 <th>Status</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th style={{ textAlign: 'right', width: 70 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -361,12 +531,12 @@ export default function SystemUsersPage() {
                   rows={6}
                   columns={[
                     { width: 36, align: 'center' },
-                    { width: '200px', hasSubtitle: true },
-                    { width: '100px' },
-                    { width: '130px' },
-                    { width: '100px' },
-                    { width: '80px', isBadge: true },
-                    { width: '90px', align: 'right' },
+                    { width: '220px', hasSubtitle: true },
+                    { width: '130px', isBadge: true },
+                    { width: '100px', isBadge: true },
+                    { width: '100px', isBadge: true },
+                    { width: '100px', isBadge: true },
+                    { width: '50px', align: 'right' },
                   ]}
                 />
               ) : users.length === 0 ? (
@@ -378,7 +548,8 @@ export default function SystemUsersPage() {
               ) : (
                 users.map((u, index) => {
                   const isDeleted = u.status === 'deleted' || u.status === false;
-                  const creditVal = Number(u.ai_credit ?? u.aiCredit ?? 0).toFixed(2);
+                  const planCredit = getUserPlanCredit(u);
+                  const remainingCredit = getUserRemainingCredit(u);
                   return (
                     <tr key={u._id}>
                       <td style={{ textAlign: 'center', fontWeight: 600, color: 'var(--mc-text-muted)', fontSize: 13 }}>
@@ -396,12 +567,13 @@ export default function SystemUsersPage() {
                               }
                             }}
                             style={{
-                              width: 34,
-                              height: 34,
+                              width: 36,
+                              height: 36,
                               borderRadius: '50%',
                               objectFit: 'cover',
                               flexShrink: 0,
                               background: '#F1F5F9',
+                              border: '1px solid var(--mc-border)',
                             }}
                           />
                           <div style={{ minWidth: 0 }}>
@@ -410,14 +582,32 @@ export default function SystemUsersPage() {
                           </div>
                         </div>
                       </td>
-                      <td style={{ fontSize: 13, color: 'var(--mc-text-main)' }}>
-                        {u.country ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                            <Globe size={13} style={{ color: 'var(--mc-text-muted)' }} />
-                            {u.country}
+                      <td>
+                        {renderUserTypeBadge(u)}
+                      </td>
+                      <td>
+                        {planCredit !== '—' ? (
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 5,
+                              fontWeight: 600,
+                              fontSize: 13,
+                              color: '#7C3AED',
+                              background: '#F5F3FF',
+                              border: '1px solid #DDD6FE',
+                              padding: '3px 9px',
+                              borderRadius: 6,
+                            }}
+                          >
+                            <CreditCard size={13} color="#7C3AED" />
+                            {planCredit}
                           </span>
                         ) : (
-                          <span style={{ color: 'var(--mc-text-muted)' }}>—</span>
+                          <span style={{ color: 'var(--mc-text-muted)', fontSize: 13, paddingLeft: 4 }}>
+                            —
+                          </span>
                         )}
                       </td>
                       <td>
@@ -435,38 +625,60 @@ export default function SystemUsersPage() {
                             borderRadius: 6,
                           }}
                         >
-                          <Sparkles size={13} />
-                          {creditVal}
+                          <Sparkles size={13} color="#6366F1" />
+                          {remainingCredit}
                         </span>
-                      </td>
-                      <td style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
-                        {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}
                       </td>
                       <td>
-                        <span
-                          className="mc-badge"
-                          style={{
-                            background: isDeleted ? '#FEE2E2' : '#DCFCE7',
-                            color: isDeleted ? '#B91C1C' : '#15803D',
-                            border: isDeleted ? '1px solid #FECACA' : '1px solid #BBF7D0',
-                            fontWeight: 600,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 5,
-                            fontSize: 11,
-                          }}
-                        >
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={!isDeleted}
+                            onClick={() => handleToggleStatus(u)}
+                            disabled={togglingUserId === u._id}
+                            title={!isDeleted ? 'Status: Approved (click to deactivate)' : 'Status: Deleted (click to approve)'}
+                            style={{
+                              position: 'relative',
+                              width: 38,
+                              height: 22,
+                              borderRadius: 11,
+                              border: 'none',
+                              background: !isDeleted ? '#10B981' : '#EF4444',
+                              cursor: togglingUserId === u._id ? 'not-allowed' : 'pointer',
+                              transition: 'background 0.2s ease',
+                              padding: 2,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              outline: 'none',
+                              boxShadow: !isDeleted ? '0 2px 6px rgba(16, 185, 129, 0.3)' : '0 2px 6px rgba(239, 68, 68, 0.3)',
+                              opacity: togglingUserId === u._id ? 0.6 : 1,
+                            }}
+                          >
+                            <span
+                              style={{
+                                display: 'block',
+                                width: 18,
+                                height: 18,
+                                borderRadius: '50%',
+                                background: '#FFFFFF',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                                transform: !isDeleted ? 'translateX(16px)' : 'translateX(0)',
+                                transition: 'transform 0.2s ease',
+                              }}
+                            />
+                          </button>
                           <span
                             style={{
-                              width: 6,
-                              height: 6,
-                              borderRadius: '50%',
-                              backgroundColor: isDeleted ? '#DC2626' : '#16A34A',
-                              display: 'inline-block',
+                              fontSize: 12,
+                              fontWeight: 600,
+                              color: !isDeleted ? '#15803D' : '#DC2626',
+                              minWidth: 58,
                             }}
-                          />
-                          {isDeleted ? 'Deleted' : 'Approved'}
-                        </span>
+                          >
+                            {!isDeleted ? 'Approved' : 'Deleted'}
+                          </span>
+                        </div>
                       </td>
                       <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                         <button
@@ -479,41 +691,9 @@ export default function SystemUsersPage() {
                             borderRadius: 6,
                             cursor: 'pointer',
                             color: '#2563EB',
-                            marginRight: 6,
                           }}
                         >
                           <Eye size={14} />
-                        </button>
-
-                        <button
-                          onClick={() => handleOpenEdit(u)}
-                          title="Edit User"
-                          style={{
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: '1px solid var(--mc-border)',
-                            borderRadius: 6,
-                            cursor: 'pointer',
-                            color: 'var(--mc-brand-purple)',
-                            marginRight: 6,
-                          }}
-                        >
-                          <Edit size={14} />
-                        </button>
-
-                        <button
-                          onClick={() => setUserToDelete(u)}
-                          title="Delete User"
-                          style={{
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: '1px solid var(--mc-danger-border)',
-                            borderRadius: 6,
-                            cursor: 'pointer',
-                            color: 'var(--mc-danger)',
-                          }}
-                        >
-                          <Trash2 size={14} />
                         </button>
                       </td>
                     </tr>
@@ -536,7 +716,8 @@ export default function SystemUsersPage() {
             <div className="mc-mobile-card-list">
               {users.map((u, index) => {
                 const isDeleted = u.status === 'deleted' || u.status === false;
-                const creditVal = Number(u.ai_credit ?? u.aiCredit ?? 0).toFixed(2);
+                const planCredit = getUserPlanCredit(u);
+                const remainingCredit = getUserRemainingCredit(u);
                 return (
                   <div key={u._id} className="mc-mobile-card">
                     <div className="mc-mobile-card-header">
@@ -566,35 +747,78 @@ export default function SystemUsersPage() {
                           <div className="mc-mobile-card-sub">{u.email}</div>
                         </div>
                       </div>
-                      <span
-                        className="mc-badge"
-                        style={{
-                          background: isDeleted ? '#FEE2E2' : '#DCFCE7',
-                          color: isDeleted ? '#B91C1C' : '#15803D',
-                          border: isDeleted ? '1px solid #FECACA' : '1px solid #BBF7D0',
-                          fontSize: 10,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {isDeleted ? 'Deleted' : 'Approved'}
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={!isDeleted}
+                          onClick={() => handleToggleStatus(u)}
+                          disabled={togglingUserId === u._id}
+                          style={{
+                            position: 'relative',
+                            width: 36,
+                            height: 20,
+                            borderRadius: 10,
+                            border: 'none',
+                            background: !isDeleted ? '#10B981' : '#EF4444',
+                            cursor: togglingUserId === u._id ? 'not-allowed' : 'pointer',
+                            transition: 'background 0.2s ease',
+                            padding: 2,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            outline: 'none',
+                            boxShadow: !isDeleted ? '0 2px 6px rgba(16, 185, 129, 0.3)' : '0 2px 6px rgba(239, 68, 68, 0.3)',
+                            opacity: togglingUserId === u._id ? 0.6 : 1,
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: 'block',
+                              width: 16,
+                              height: 16,
+                              borderRadius: '50%',
+                              background: '#FFFFFF',
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                              transform: !isDeleted ? 'translateX(16px)' : 'translateX(0)',
+                              transition: 'transform 0.2s ease',
+                            }}
+                          />
+                        </button>
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 600,
+                            color: !isDeleted ? '#15803D' : '#DC2626',
+                          }}
+                        >
+                          {!isDeleted ? 'Approved' : 'Deleted'}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="mc-mobile-card-body">
                       <div className="mc-mobile-card-row">
-                        <span className="mc-mobile-card-label">Country:</span>
-                        <span className="mc-mobile-card-value">{u.country || '—'}</span>
+                        <span className="mc-mobile-card-label">User Type:</span>
+                        <span className="mc-mobile-card-value">{renderUserTypeBadge(u)}</span>
                       </div>
                       <div className="mc-mobile-card-row">
-                        <span className="mc-mobile-card-label">AI Remaining Credit:</span>
-                        <span className="mc-mobile-card-value" style={{ fontWeight: 600, color: '#6366F1' }}>
-                          {creditVal}
+                        <span className="mc-mobile-card-label">Plan Credit:</span>
+                        <span className="mc-mobile-card-value" style={{ fontWeight: 600, color: '#7C3AED' }}>
+                          {planCredit !== '—' ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <CreditCard size={12} color="#7C3AED" />
+                              {planCredit}
+                            </span>
+                          ) : (
+                            '—'
+                          )}
                         </span>
                       </div>
                       <div className="mc-mobile-card-row">
-                        <span className="mc-mobile-card-label">Created:</span>
-                        <span className="mc-mobile-card-value">
-                          {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}
+                        <span className="mc-mobile-card-label">Remaining Credit:</span>
+                        <span className="mc-mobile-card-value" style={{ fontWeight: 600, color: '#6366F1', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          <Sparkles size={12} color="#6366F1" />
+                          {remainingCredit}
                         </span>
                       </div>
                     </div>
@@ -605,21 +829,7 @@ export default function SystemUsersPage() {
                         onClick={() => setSelectedUser(u)}
                       >
                         <Eye size={13} color="#2563EB" />
-                        <span>View</span>
-                      </button>
-                      <button
-                        className="mc-mobile-card-btn"
-                        onClick={() => handleOpenEdit(u)}
-                      >
-                        <Edit size={13} color="var(--mc-brand-purple)" />
-                        <span>Edit</span>
-                      </button>
-                      <button
-                        className="mc-mobile-card-btn danger"
-                        onClick={() => setUserToDelete(u)}
-                      >
-                        <Trash2 size={13} color="var(--mc-danger)" />
-                        <span>Delete</span>
+                        <span>View Details</span>
                       </button>
                     </div>
                   </div>
@@ -689,12 +899,12 @@ export default function SystemUsersPage() {
             style={{ maxWidth: 580, width: '92%' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mc-modal-header">
+            <div className="mc-modal-header" style={{ padding: '16px 20px', borderBottom: '1px solid var(--mc-border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div
                   style={{
-                    width: 36,
-                    height: 36,
+                    width: 38,
+                    height: 38,
                     borderRadius: 10,
                     background: '#EEF2FF',
                     color: '#4F46E5',
@@ -709,9 +919,20 @@ export default function SystemUsersPage() {
                   <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
                     User Details
                   </h3>
-                  <span style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
-                    ID: {selectedUser._id}
-                  </span>
+                  <div style={{ fontSize: 12, color: 'var(--mc-text-muted)', display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                    <span>ID:</span>
+                    <span style={{ fontFamily: 'monospace', fontSize: 11.5, background: '#F1F5F9', padding: '1px 6px', borderRadius: 4 }}>
+                      {selectedUser._id}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(selectedUser._id, 'det-uid')}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, display: 'flex', color: copiedId === 'det-uid' ? '#10B981' : '#94A3B8' }}
+                      title="Copy ID"
+                    >
+                      {copiedId === 'det-uid' ? <Check size={12} /> : <Copy size={12} />}
+                    </button>
+                  </div>
                 </div>
               </div>
               <button
@@ -728,7 +949,7 @@ export default function SystemUsersPage() {
               </button>
             </div>
 
-            <div className="mc-modal-body" style={{ maxHeight: '72vh', overflowY: 'auto' }}>
+            <div className="mc-modal-body" style={{ maxHeight: '75vh', overflowY: 'auto', padding: 20 }}>
               {/* Profile summary card */}
               <div
                 style={{
@@ -737,7 +958,7 @@ export default function SystemUsersPage() {
                   gap: 16,
                   padding: 16,
                   background: '#F8FAFC',
-                  borderRadius: 12,
+                  borderRadius: 14,
                   border: '1px solid var(--mc-border)',
                   marginBottom: 16,
                 }}
@@ -752,12 +973,14 @@ export default function SystemUsersPage() {
                     }
                   }}
                   style={{
-                    width: 52,
-                    height: 52,
+                    width: 56,
+                    height: 56,
                     borderRadius: '50%',
                     objectFit: 'cover',
                     flexShrink: 0,
                     background: '#F1F5F9',
+                    border: '2px solid #FFFFFF',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
                   }}
                 />
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -768,36 +991,60 @@ export default function SystemUsersPage() {
                     <span>{selectedUser.email}</span>
                     {selectedUser.phone && <span>• {selectedUser.phone}</span>}
                   </div>
+                  <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {renderUserTypeBadge(selectedUser)}
+                    <span
+                      className="mc-badge"
+                      style={{
+                        background: (selectedUser.status === 'deleted' || selectedUser.status === false) ? '#FEE2E2' : '#DCFCE7',
+                        color: (selectedUser.status === 'deleted' || selectedUser.status === false) ? '#B91C1C' : '#15803D',
+                        border: (selectedUser.status === 'deleted' || selectedUser.status === false) ? '1px solid #FECACA' : '1px solid #BBF7D0',
+                        fontWeight: 600,
+                        padding: '3px 8px',
+                        fontSize: 11,
+                      }}
+                    >
+                      {(selectedUser.status === 'deleted' || selectedUser.status === false) ? 'Deleted' : 'Approved'}
+                    </span>
+                  </div>
                 </div>
-                <span
-                  className="mc-badge"
-                  style={{
-                    background: (selectedUser.status === 'deleted' || selectedUser.status === false) ? '#FEE2E2' : '#DCFCE7',
-                    color: (selectedUser.status === 'deleted' || selectedUser.status === false) ? '#B91C1C' : '#15803D',
-                    border: (selectedUser.status === 'deleted' || selectedUser.status === false) ? '1px solid #FECACA' : '1px solid #BBF7D0',
-                    fontWeight: 600,
-                    padding: '4px 10px',
-                    fontSize: 11,
-                  }}
-                >
-                  {(selectedUser.status === 'deleted' || selectedUser.status === false) ? 'Deleted' : 'Approved'}
-                </span>
               </div>
 
-              {/* Key Metric Highlights */}
+              {/* Key Metric Highlights (4 Cards Grid) */}
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
                   gap: 12,
-                  marginBottom: 18,
+                  marginBottom: 16,
                 }}
               >
+                {/* User Type */}
+                <div
+                  style={{
+                    padding: '12px 14px',
+                    borderRadius: 12,
+                    background: selectedUser.user_type === 'paid' || selectedUser.active_subscription ? '#EEF2FF' : '#F8FAFC',
+                    border: selectedUser.user_type === 'paid' || selectedUser.active_subscription ? '1px solid #C7D2FE' : '1px solid var(--mc-border)',
+                  }}
+                >
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#4F46E5', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+                    <Crown size={13} />
+                    User Type
+                  </div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: '#3730A3', textTransform: 'capitalize' }}>
+                    {selectedUser.user_type === 'paid' || selectedUser.active_subscription ? 'Paid' : 'Free'}
+                  </div>
+                  <div style={{ fontSize: 11, color: '#6366F1', marginTop: 2 }}>
+                    {resolveText(selectedUser.plan || selectedUser.active_subscription?.subscriptionPlan?.name, 'Default Tier')}
+                  </div>
+                </div>
+
                 {/* AI Remaining Credit */}
                 <div
                   style={{
                     padding: '12px 14px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     background: '#F5F3FF',
                     border: '1px solid #DDD6FE',
                   }}
@@ -806,21 +1053,20 @@ export default function SystemUsersPage() {
                     <Sparkles size={13} />
                     AI Remaining Credit
                   </div>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: '#5B21B6' }}>
-                    {Number(selectedUser.ai_credit ?? selectedUser.aiCredit ?? 0).toFixed(2)}
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#5B21B6' }}>
+                    {getUserRemainingCredit(selectedUser)}
                   </div>
-                  {selectedUser.ai_assigned_credit !== undefined && (
-                    <div style={{ fontSize: 11, color: '#7C3AED', marginTop: 2 }}>
-                      Assigned: {Number(selectedUser.ai_assigned_credit).toFixed(2)}
-                    </div>
-                  )}
+                  <div style={{ fontSize: 11, color: '#7C3AED', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span>Plan Credit:</span>
+                    <strong>{getUserPlanCredit(selectedUser)}</strong>
+                  </div>
                 </div>
 
                 {/* Country */}
                 <div
                   style={{
                     padding: '12px 14px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     background: '#F0F9FF',
                     border: '1px solid #BAE6FD',
                   }}
@@ -829,16 +1075,16 @@ export default function SystemUsersPage() {
                     <Globe size={13} />
                     Country
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: '#075985' }}>
-                    {selectedUser.country || 'Not specified'}
+                  <div style={{ fontSize: 15, fontWeight: 700, color: '#075985' }}>
+                    {resolveText(selectedUser.country, 'Not specified')}
                   </div>
                 </div>
 
-                {/* Currency */}
+                {/* Currency & Language */}
                 <div
                   style={{
                     padding: '12px 14px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     background: '#F8FAFC',
                     border: '1px solid var(--mc-border)',
                   }}
@@ -852,6 +1098,72 @@ export default function SystemUsersPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Active Subscription Details Card (if user has active subscription) */}
+              {(selectedUser.active_subscription || selectedUser.user_type === 'paid') && (
+                <div
+                  style={{
+                    background: 'linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%)',
+                    borderRadius: 14,
+                    border: '1px solid #DDD6FE',
+                    padding: '14px 16px',
+                    marginBottom: 16,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, fontSize: 13, color: '#5B21B6' }}>
+                      <CreditCard size={15} color="#6D3DF5" />
+                      <span>Active Subscription Details</span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: '#059669',
+                        background: '#D1FAE5',
+                        padding: '2px 8px',
+                        borderRadius: 12,
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {resolveText(selectedUser.active_subscription?.status, 'Active')}
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10, fontSize: 12 }}>
+                    <div>
+                      <span style={{ color: '#7C3AED' }}>Plan Name: </span>
+                      <strong style={{ color: '#4C1D95' }}>
+                        {resolveText(selectedUser.plan || selectedUser.active_subscription?.subscriptionPlan?.name, 'Pro / Paid')}
+                      </strong>
+                    </div>
+                    {selectedUser.active_subscription?.expiryTime && !isNaN(new Date(selectedUser.active_subscription.expiryTime).getTime()) && (
+                      <div>
+                        <span style={{ color: '#7C3AED' }}>Expiry Date: </span>
+                        <strong style={{ color: '#4C1D95' }}>
+                          {new Date(selectedUser.active_subscription.expiryTime).toLocaleDateString()}
+                        </strong>
+                      </div>
+                    )}
+                    {selectedUser.active_subscription?.creditsAdded !== undefined && (
+                      <div>
+                        <span style={{ color: '#7C3AED' }}>Credits Added: </span>
+                        <strong style={{ color: '#4C1D95' }}>
+                          +{selectedUser.active_subscription.creditsAdded}
+                        </strong>
+                      </div>
+                    )}
+                    {selectedUser.active_subscription?.spend_credit !== undefined && (
+                      <div>
+                        <span style={{ color: '#7C3AED' }}>Credits Spent: </span>
+                        <strong style={{ color: '#DC2626' }}>
+                          -{selectedUser.active_subscription.spend_credit}
+                        </strong>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Detailed Info Grid */}
               <div
@@ -867,14 +1179,24 @@ export default function SystemUsersPage() {
                 <div>
                   <div className="mc-label" style={{ marginBottom: 2 }}>Full Name</div>
                   <div style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>
-                    {selectedUser.name || '—'}
+                    {resolveText(selectedUser.name, '—')}
                   </div>
                 </div>
 
                 <div>
                   <div className="mc-label" style={{ marginBottom: 2 }}>Email Address</div>
-                  <div style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>
-                    {selectedUser.email || '—'}
+                  <div style={{ fontWeight: 600, color: 'var(--mc-text-main)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span>{selectedUser.email || '—'}</span>
+                    {selectedUser.email && (
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(selectedUser.email, 'det-mail')}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, display: 'flex', color: copiedId === 'det-mail' ? '#10B981' : '#94A3B8' }}
+                        title="Copy Email"
+                      >
+                        {copiedId === 'det-mail' ? <Check size={12} /> : <Copy size={12} />}
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -886,9 +1208,9 @@ export default function SystemUsersPage() {
                 </div>
 
                 <div>
-                  <div className="mc-label" style={{ marginBottom: 2 }}>Status</div>
-                  <div style={{ fontWeight: 600, textTransform: 'capitalize' }}>
-                    {selectedUser.status || 'Approved'}
+                  <div className="mc-label" style={{ marginBottom: 2 }}>Country</div>
+                  <div style={{ fontWeight: 500, color: 'var(--mc-text-main)' }}>
+                    {resolveText(selectedUser.country, '—')}
                   </div>
                 </div>
 
@@ -902,21 +1224,21 @@ export default function SystemUsersPage() {
                 <div>
                   <div className="mc-label" style={{ marginBottom: 2 }}>Gender</div>
                   <div style={{ textTransform: 'capitalize', color: 'var(--mc-text-main)' }}>
-                    {selectedUser.gender || '—'}
+                    {resolveText(selectedUser.gender, '—')}
                   </div>
                 </div>
 
                 <div>
                   <div className="mc-label" style={{ marginBottom: 2 }}>Date of Birth</div>
                   <div style={{ color: 'var(--mc-text-main)' }}>
-                    {selectedUser.dob ? new Date(selectedUser.dob).toLocaleDateString() : '—'}
+                    {selectedUser.dob && !isNaN(new Date(selectedUser.dob).getTime()) ? new Date(selectedUser.dob).toLocaleDateString() : '—'}
                   </div>
                 </div>
 
                 <div>
                   <div className="mc-label" style={{ marginBottom: 2 }}>Address</div>
                   <div style={{ color: 'var(--mc-text-main)' }}>
-                    {selectedUser.address || '—'}
+                    {resolveText(selectedUser.address, '—')}
                   </div>
                 </div>
 
@@ -939,15 +1261,15 @@ export default function SystemUsersPage() {
                 </div>
 
                 <div>
-                  <div className="mc-label" style={{ marginBottom: 2 }}>Created At</div>
-                  <div style={{ color: 'var(--mc-text-muted)', fontSize: 12 }}>
+                  <div className="mc-label" style={{ marginBottom: 2 }}>Created At (Registered)</div>
+                  <div style={{ color: 'var(--mc-text-main)', fontSize: 12.5, fontWeight: 500 }}>
                     {selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleString() : '—'}
                   </div>
                 </div>
 
                 <div>
                   <div className="mc-label" style={{ marginBottom: 2 }}>Last Updated</div>
-                  <div style={{ color: 'var(--mc-text-muted)', fontSize: 12 }}>
+                  <div style={{ color: 'var(--mc-text-main)', fontSize: 12.5, fontWeight: 500 }}>
                     {selectedUser.updatedAt ? new Date(selectedUser.updatedAt).toLocaleString() : '—'}
                   </div>
                 </div>

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { getAdminOverview, getStoredAdminUser } from '../../services/portalApi';
 import { get } from '../../../../app/helpers/api';
+import { Shimmer } from '../common/Shimmer';
 
 interface OverviewTabProps {
   onNavigateTab: (tabId: string) => void;
@@ -40,6 +41,247 @@ const MiniBarSparkline: React.FC<{ heights?: number[]; color: string }> = ({ hei
   </div>
 );
 
+
+// Overview Skeleton Component for Loading State
+const OverviewSkeleton: React.FC = () => {
+  return (
+    <div style={{ paddingBottom: 48, color: '#0F172A', fontFamily: 'inherit' }}>
+      {/* 1. Header Welcome Bar Skeleton */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 24,
+          flexWrap: 'wrap',
+          gap: 16,
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%)',
+          borderRadius: 16,
+          padding: '16px 20px',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+        }}
+      >
+        <div>
+          <Shimmer width={210} height={24} style={{ marginBottom: 8 }} />
+          <Shimmer width={260} height={13} />
+        </div>
+        <Shimmer width={140} height={34} borderRadius={8} />
+      </div>
+
+      {/* 2. Top 4 KPI Metric Cards Skeleton */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+          gap: 16,
+          marginBottom: 24,
+        }}
+      >
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              background: '#FFFFFF',
+              borderRadius: 16,
+              padding: '20px',
+              border: '1px solid #E2E8F0',
+              boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <Shimmer width={44} height={44} borderRadius={12} />
+              <div>
+                <Shimmer width={75} height={12} style={{ marginBottom: 8 }} />
+                <Shimmer width={95} height={22} style={{ marginBottom: 6 }} />
+                <Shimmer width={80} height={12} />
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 32 }}>
+              {[30, 45, 60, 50, 75, 90].map((h, j) => (
+                <div
+                  key={j}
+                  style={{
+                    width: 4,
+                    height: `${h}%`,
+                    backgroundColor: '#E2E8F0',
+                    borderRadius: 2,
+                    opacity: 0.5,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 3. Mid Row: Revenue Overview (Left) + Users by Plan (Right) */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+          gap: 20,
+          marginBottom: 24,
+        }}
+        className="mc-overview-mid-grid"
+      >
+        {/* Left Chart Skeleton */}
+        <div
+          style={{
+            background: '#FFFFFF',
+            borderRadius: 16,
+            padding: '22px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+            <div>
+              <Shimmer width={150} height={18} style={{ marginBottom: 8 }} />
+              <Shimmer width={120} height={13} />
+            </div>
+            <Shimmer width={110} height={30} borderRadius={8} />
+          </div>
+          <div style={{ height: 220, display: 'flex', alignItems: 'flex-end', gap: 12, padding: '16px 0' }}>
+            <Shimmer width="100%" height={190} borderRadius={12} />
+          </div>
+        </div>
+
+        {/* Right Donut Skeleton */}
+        <div
+          style={{
+            background: '#FFFFFF',
+            borderRadius: 16,
+            padding: '22px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Shimmer width={120} height={18} style={{ marginBottom: 20 }} />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              flex: 1,
+              flexWrap: 'wrap',
+              gap: 20,
+            }}
+          >
+            <div style={{ position: 'relative', width: 140, height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div
+                style={{
+                  width: 140,
+                  height: 140,
+                  borderRadius: '50%',
+                  border: '14px solid #E2E8F0',
+                  boxSizing: 'border-box',
+                }}
+                className="mc-shimmer"
+              />
+              <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <Shimmer width={40} height={18} />
+                <Shimmer width={55} height={10} />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 140 }}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Shimmer width={8} height={8} borderRadius="50%" />
+                    <Shimmer width={55} height={12} />
+                  </div>
+                  <Shimmer width={40} height={12} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Bottom Row Skeleton: Recent Users + Recent Transactions */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+          gap: 20,
+        }}
+        className="mc-overview-bottom-grid"
+      >
+        {/* Recent Users Skeleton */}
+        <div
+          style={{
+            background: '#FFFFFF',
+            borderRadius: 16,
+            padding: '20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <Shimmer width={110} height={16} />
+            <Shimmer width={60} height={14} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F8FAFC' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <Shimmer width={28} height={28} borderRadius="50%" />
+                  <div>
+                    <Shimmer width={85} height={12} style={{ marginBottom: 4 }} />
+                    <Shimmer width={120} height={10} />
+                  </div>
+                </div>
+                <Shimmer width={48} height={18} borderRadius={6} />
+                <Shimmer width={65} height={12} />
+                <Shimmer width={50} height={18} borderRadius={6} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Transactions Skeleton */}
+        <div
+          style={{
+            background: '#FFFFFF',
+            borderRadius: 16,
+            padding: '20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <Shimmer width={135} height={16} />
+            <Shimmer width={60} height={14} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F8FAFC' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <Shimmer width={28} height={28} borderRadius="50%" />
+                  <Shimmer width={110} height={12} />
+                </div>
+                <Shimmer width={55} height={16} borderRadius={4} />
+                <Shimmer width={50} height={14} />
+                <Shimmer width={60} height={12} />
+                <Shimmer width={50} height={18} borderRadius={6} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -48,6 +290,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
 
   // Dynamic API Telemetry State
   const [dashboardData, setDashboardData] = useState<any>(null);
+  const [subscriptionTransactions, setSubscriptionTransactions] = useState<any[]>([]);
 
   // Dynamic greeting based on current time
   const greeting = useMemo(() => {
@@ -76,19 +319,89 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
     }
 
     try {
-      // 1. Try portalApi getAdminOverview
-      let res: any = null;
-      try {
-        res = await getAdminOverview(period);
-      } catch (e) {
-        // Fallback to axios get
-        res = await get('/dashboards/admin/overview', { period });
+      // 1. Fetch overview data and subscription transactions in parallel
+      const [overviewRes, subRes] = await Promise.allSettled([
+        (async () => {
+          try {
+            return await getAdminOverview(period);
+          } catch {
+            return await get('/dashboards/admin/overview', { period });
+          }
+        })(),
+        get('/google-play/subscription/history', { limit: 5, page: 1 }),
+      ]);
+
+      if (overviewRes.status === 'fulfilled' && overviewRes.value) {
+        const res = overviewRes.value;
+        if (res?.data) {
+          setDashboardData(res.data);
+        } else if (res?.success && res) {
+          setDashboardData(res);
+        }
       }
 
-      if (res?.data) {
-        setDashboardData(res.data);
-      } else if (res?.success && res) {
-        setDashboardData(res);
+      if (subRes.status === 'fulfilled' && subRes.value) {
+        const rawList = Array.isArray(subRes.value?.data)
+          ? subRes.value.data
+          : Array.isArray(subRes.value?.data?.docs)
+          ? subRes.value.data.docs
+          : Array.isArray(subRes.value)
+          ? subRes.value
+          : [];
+
+        if (rawList.length > 0) {
+          const mappedSubs = rawList.map((item: any) => {
+            const userObj = typeof item.user === 'object' && item.user !== null ? item.user : null;
+            const userName = userObj?.name || '';
+            const userEmail = userObj?.email || (typeof item.user === 'string' ? item.user : 'User');
+            const userAvatar = userObj?.image || userObj?.avatar || '';
+
+            // Plan Name resolution
+            const planRaw = item.subscriptionPlan?.name || item.plan || item.basePlanId || 'Subscription';
+            let planName = 'Subscription';
+            if (typeof planRaw === 'string') {
+              planName = planRaw;
+            } else if (typeof planRaw === 'object' && planRaw !== null) {
+              planName = planRaw.en || planRaw.bn || Object.values(planRaw)[0] || 'Subscription';
+            }
+
+            // Amount formatting
+            const amt = item.amount !== undefined && item.amount !== null ? Number(item.amount) : 0;
+            const curr = (item.currency || 'USD').toUpperCase();
+            let formattedAmount = `${curr} ${amt.toLocaleString()}`;
+            if (curr === 'USD') {
+              formattedAmount = `$${amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            } else if (curr === 'BDT') {
+              formattedAmount = `৳${amt.toLocaleString()}`;
+            }
+
+            // Date formatting
+            const dateStr = item.createdAt || item.startTime;
+            let formattedDate = '—';
+            if (dateStr && !isNaN(new Date(dateStr).getTime())) {
+              formattedDate = new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+
+            // Status formatting
+            const rawStatus = (item.status || 'Active').toLowerCase();
+            const displayStatus = rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1);
+
+            return {
+              id: item._id || item.id || Math.random().toString(),
+              name: userName,
+              email: userEmail,
+              avatar: userAvatar,
+              plan: planName,
+              type: planName,
+              typeIcon: 'crown',
+              amount: formattedAmount,
+              date: formattedDate,
+              status: displayStatus,
+            };
+          });
+
+          setSubscriptionTransactions(mappedSubs);
+        }
       }
     } catch (err) {
       console.warn('Dashboard telemetry fetch notice:', err);
@@ -106,49 +419,27 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
   const kpi = dashboardData?.kpi || {
     totalUsers: 0,
     totalUsersGrowth: 0,
-    totalUsersSparkline: [35, 45, 60, 50, 75, 88, 100],
+    totalUsersSparkline: [],
     activeSubscribers: 0,
     activeSubscribersGrowth: 0,
-    activeSubscribersSparkline: [30, 48, 55, 65, 75, 85, 100],
+    activeSubscribersSparkline: [],
     totalRevenue: 0,
     totalRevenueGrowth: 0,
-    totalRevenueSparkline: [25, 40, 50, 65, 75, 90, 100],
+    totalRevenueSparkline: [],
     aiRequests: 0,
     aiRequestsGrowth: 0,
-    aiRequestsSparkline: [30, 42, 58, 62, 78, 88, 100],
+    aiRequestsSparkline: [],
   };
 
   // Dynamic Revenue Datasets
-  const fallbackDatasets = {
-    'Last 6 Months': [
-      { label: 'May', value: 0, formatted: '$0', date: 'May 2026' },
-      { label: 'Jun', value: 0, formatted: '$0', date: 'Jun 2026' },
-      { label: 'Jul', value: 0, formatted: '$0', date: 'Jul 2026' },
-      { label: 'Aug', value: 40000, formatted: '$40,000', date: 'Aug 2026' },
-      { label: 'Sep', value: 40000, formatted: '$40,000', date: 'Sep 2026' },
-      { label: 'Oct', value: 114626.2, formatted: '$114,626.2', date: 'Oct 2026' },
-    ],
-    'Last 3 Months': [
-      { label: 'Aug', value: 40000, formatted: '$40,000', date: 'Aug 2026' },
-      { label: 'Sep', value: 40000, formatted: '$40,000', date: 'Sep 2026' },
-      { label: 'Oct', value: 114626.2, formatted: '$114,626.2', date: 'Oct 2026' },
-    ],
-    'This Year': [
-      { label: 'Jan', value: 0, formatted: '$0', date: 'Jan 2026' },
-      { label: 'Feb', value: 0, formatted: '$0', date: 'Feb 2026' },
-      { label: 'Mar', value: 0, formatted: '$0', date: 'Mar 2026' },
-      { label: 'Apr', value: 0, formatted: '$0', date: 'Apr 2026' },
-      { label: 'May', value: 0, formatted: '$0', date: 'May 2026' },
-      { label: 'Jun', value: 0, formatted: '$0', date: 'Jun 2026' },
-      { label: 'Jul', value: 0, formatted: '$0', date: 'Jul 2026' },
-      { label: 'Aug', value: 40000, formatted: '$40,000', date: 'Aug 2026' },
-      { label: 'Sep', value: 40000, formatted: '$40,000', date: 'Sep 2026' },
-      { label: 'Oct', value: 114626.2, formatted: '$114,626.2', date: 'Oct 2026' },
-    ],
+  const emptyDatasets: Record<string, any[]> = {
+    'Last 6 Months': [],
+    'Last 3 Months': [],
+    'This Year': [],
   };
 
-  const activeDatasets = dashboardData?.revenueOverview?.datasets || fallbackDatasets;
-  const currentRevenueData: any[] = activeDatasets[revenuePeriod] || fallbackDatasets[revenuePeriod] || [];
+  const activeDatasets = dashboardData?.revenueOverview?.datasets || emptyDatasets;
+  const currentRevenueData: any[] = activeDatasets[revenuePeriod] || [];
 
   // SVG dimensions
   const svgWidth = 620;
@@ -227,13 +518,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
   const activeNode = activeNodeIndex !== null ? points[activeNodeIndex] : null;
 
   // Dynamic Donut segments
-  const planList = dashboardData?.usersByPlan?.plans || [
-    { label: 'Free', percentage: '85.0%', rawPercentage: 85.0, count: 17, color: '#38BDF8' },
-    { label: 'Monthly', percentage: '5.0%', rawPercentage: 5.0, count: 1, color: '#818CF8' },
-    { label: 'Quarterly', percentage: '0.0%', rawPercentage: 0.0, count: 0, color: '#34D399' },
-    { label: 'Half-Yearly', percentage: '5.0%', rawPercentage: 5.0, count: 1, color: '#FB923C' },
-    { label: 'Yearly', percentage: '5.0%', rawPercentage: 5.0, count: 1, color: '#F43F5E' },
-  ];
+  const planList = dashboardData?.usersByPlan?.plans || [];
 
   const circumference = 2 * Math.PI * 40;
   let accumulatedDash = 0;
@@ -250,7 +535,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
   });
 
   const recentUsers: any[] = dashboardData?.recentUsers || [];
-  const recentTransactions: any[] = dashboardData?.recentTransactions || [];
+  const recentTransactions: any[] =
+    subscriptionTransactions.length > 0
+      ? subscriptionTransactions
+      : dashboardData?.recentTransactions || [];
 
   // Helper for growth badge
   const renderGrowthBadge = (growth: number) => {
@@ -276,6 +564,46 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
       </div>
     );
   };
+
+  // 1. Until data arrives, show loading skeleton (never show default values upfront)
+  if (loading && !dashboardData) {
+    return <OverviewSkeleton />;
+  }
+
+  // 2. If data is unavailable or request failed
+  if (!dashboardData) {
+    return (
+      <div
+        style={{
+          background: '#FFFFFF',
+          borderRadius: 16,
+          padding: '48px 24px',
+          textAlign: 'center',
+          border: '1px solid #E2E8F0',
+          margin: '24px 0',
+        }}
+      >
+        <p style={{ fontSize: 14, color: '#64748B', marginBottom: 16 }}>
+          Telemetry data is currently unavailable.
+        </p>
+        <button
+          onClick={() => fetchDashboardData(revenuePeriod, true)}
+          style={{
+            background: '#6366F1',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: 8,
+            padding: '8px 18px',
+            fontSize: 13,
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ paddingBottom: 48, color: '#0F172A', fontFamily: 'inherit' }}>
@@ -946,7 +1274,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
               Recent Transactions
             </h2>
             <button
-              onClick={() => onNavigateTab('subscription')}
+              onClick={() => onNavigateTab('subscription/history')}
               style={{
                 background: 'none',
                 border: 'none',
@@ -971,7 +1299,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
               <thead>
                 <tr style={{ borderBottom: '1px solid #F1F5F9', color: '#64748B' }}>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>User</th>
-                  <th style={{ padding: '8px 6px', fontWeight: 600 }}>Type</th>
+                  <th style={{ padding: '8px 6px', fontWeight: 600 }}>Plan</th>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>Amount</th>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>Date</th>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>Status</th>
@@ -987,6 +1315,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                             <img
                               src={tx.avatar}
                               alt=""
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                              }}
                               style={{
                                 width: 28,
                                 height: 28,
@@ -1011,22 +1342,25 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                                 flexShrink: 0,
                               }}
                             >
-                              {(tx.email?.[0] || 'U').toUpperCase()}
+                              {(tx.name?.[0] || tx.email?.[0] || 'U').toUpperCase()}
                             </div>
                           )}
-                          <span style={{ fontWeight: 500, color: '#0F172A', whiteSpace: 'nowrap' }}>
-                            {tx.email}
-                          </span>
+                          <div style={{ minWidth: 0 }}>
+                            {tx.name && (
+                              <div style={{ fontWeight: 600, color: '#0F172A', whiteSpace: 'nowrap', fontSize: 12 }}>
+                                {tx.name}
+                              </div>
+                            )}
+                            <div style={{ fontWeight: tx.name ? 400 : 500, color: tx.name ? '#64748B' : '#0F172A', whiteSpace: 'nowrap', fontSize: tx.name ? 11 : 12 }}>
+                              {tx.email}
+                            </div>
+                          </div>
                         </div>
                       </td>
                       <td style={{ padding: '10px 6px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
-                          {tx.typeIcon === 'crown' ? (
-                            <Crown size={14} color="#D97706" />
-                          ) : (
-                            <Coins size={14} color="#F97316" />
-                          )}
-                          <span style={{ color: '#334155', fontWeight: 500 }}>{tx.type}</span>
+                          <Crown size={14} color="#D97706" />
+                          <span style={{ color: '#334155', fontWeight: 600 }}>{tx.plan || tx.type}</span>
                         </div>
                       </td>
                       <td style={{ padding: '10px 6px', fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap' }}>
@@ -1038,8 +1372,22 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                       <td style={{ padding: '10px 6px' }}>
                         <span
                           style={{
-                            background: '#ECFDF5',
-                            color: '#059669',
+                            background:
+                              tx.status?.toLowerCase() === 'active' || tx.status?.toLowerCase() === 'paid'
+                                ? '#ECFDF5'
+                                : tx.status?.toLowerCase() === 'expired'
+                                ? '#F1F5F9'
+                                : tx.status?.toLowerCase() === 'refunded'
+                                ? '#FEF2F2'
+                                : '#FFFBEB',
+                            color:
+                              tx.status?.toLowerCase() === 'active' || tx.status?.toLowerCase() === 'paid'
+                                ? '#059669'
+                                : tx.status?.toLowerCase() === 'expired'
+                                ? '#64748B'
+                                : tx.status?.toLowerCase() === 'refunded'
+                                ? '#DC2626'
+                                : '#D97706',
                             padding: '3px 8px',
                             borderRadius: 6,
                             fontSize: 11,
@@ -1047,7 +1395,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                             whiteSpace: 'nowrap',
                           }}
                         >
-                          {tx.status || 'Success'}
+                          {tx.status || 'Active'}
                         </span>
                       </td>
                     </tr>

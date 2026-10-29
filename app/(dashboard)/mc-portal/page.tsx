@@ -18,8 +18,8 @@ export default function AdminOverviewPage({ onNavigateTab }: OverviewProps) {
     }
     if (tabId === 'users') {
       router.push('/mc-portal/users');
-    } else if (tabId === 'subscription') {
-      router.push('/mc-portal/subscription');
+    } else if (tabId === 'subscription' || tabId === 'subscription/history') {
+      router.push('/mc-portal/subscription/history');
     } else {
       router.push(`/mc-portal/${tabId}`);
     }

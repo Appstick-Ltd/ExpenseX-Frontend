@@ -957,59 +957,183 @@ export const MarketingTab: React.FC = () => {
 
       {/* CAMPAIGN HISTORY TABLE CARD */}
       <div className="mc-card mc-card-table" style={{ borderRadius: 14 }}>
-        <div className="mc-table-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "var(--mc-text-main)" }}>
-              Push Notification Logs
-            </h3>
-            <p style={{ margin: "2px 0 0 0", fontSize: 12, color: "var(--mc-text-muted)" }}>
-              Stored in <code>push_notification</code> collection · {total} recorded
-            </p>
+        <div
+          className="mc-table-header"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 14,
+            padding: "16px 20px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 10,
+                background: "rgba(109, 61, 245, 0.08)",
+                color: "#6D3DF5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <BellRing size={18} />
+            </div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "var(--mc-text-main, #0F172A)" }}>
+                  Push Notification Logs
+                </h3>
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    padding: "2px 8px",
+                    borderRadius: 999,
+                    background: "#F1F5F9",
+                    color: "#475569",
+                    border: "1px solid #E2E8F0",
+                  }}
+                >
+                  {total} {total === 1 ? "record" : "records"}
+                </span>
+              </div>
+              <p style={{ margin: "2px 0 0 0", fontSize: 12, color: "var(--mc-text-muted, #64748B)" }}>
+                Campaign history and audience delivery activity
+              </p>
+            </div>
           </div>
 
           {/* Filters */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <div style={{ position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+            <div style={{ position: "relative", width: 220, maxWidth: "100%" }}>
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search logs..."
                 className="mc-input"
-                style={{ fontSize: 12, paddingLeft: 28, height: 32 }}
+                style={{
+                  fontSize: 13,
+                  paddingLeft: 34,
+                  paddingRight: search ? 30 : 12,
+                  height: 38,
+                  borderRadius: 8,
+                  border: "1px solid #CBD5E1",
+                  background: "#FFFFFF",
+                }}
               />
-              <Search size={13} style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", color: "var(--mc-text-subtle)" }} />
+              <Search
+                size={15}
+                style={{
+                  position: "absolute",
+                  left: 11,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#94A3B8",
+                  pointerEvents: "none",
+                  zIndex: 2,
+                }}
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  style={{
+                    position: "absolute",
+                    right: 8,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    color: "#94A3B8",
+                    cursor: "pointer",
+                    padding: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 2,
+                  }}
+                  title="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
 
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="mc-input"
-              style={{ fontSize: 12, height: 32 }}
-            >
-              <option value="">All Audiences</option>
-              <option value="all">Broadcast (All)</option>
-              <option value="country">Country</option>
-              <option value="single">Single User</option>
-            </select>
+            <div style={{ position: "relative", width: 170, maxWidth: "100%" }}>
+              <select
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+                className="mc-input"
+                style={{
+                  fontSize: 13,
+                  height: 38,
+                  borderRadius: 8,
+                  border: "1px solid #CBD5E1",
+                  background: "#FFFFFF",
+                  paddingLeft: 12,
+                }}
+              >
+                <option value="">All Audiences</option>
+                <option value="all">Broadcast (All)</option>
+                <option value="country">Country</option>
+                <option value="single">Single User</option>
+              </select>
+            </div>
           </div>
         </div>
 
         {/* TABLE BODY */}
         <div className="mc-table-wrap">
           {loading ? (
-            <div style={{ padding: 16 }}>
+            <div style={{ padding: 20 }}>
               <ShimmerTableRows rows={5} cols={5} />
             </div>
           ) : campaigns.length === 0 ? (
-            <div style={{ padding: 48, textAlign: "center", color: "var(--mc-text-subtle)" }}>
-              <BellRing size={36} style={{ margin: "0 auto 12px auto", opacity: 0.4 }} />
-              <div style={{ fontSize: 14, fontWeight: 600, color: "var(--mc-text-muted)" }}>
-                No push notification records found
+            <div style={{ padding: "56px 20px", textAlign: "center" }}>
+              <div
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 16,
+                  background: "linear-gradient(135deg, rgba(109, 61, 245, 0.08) 0%, rgba(109, 61, 245, 0.02) 100%)",
+                  border: "1px solid rgba(109, 61, 245, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 14px auto",
+                  color: "#6D3DF5",
+                }}
+              >
+                <BellRing size={24} strokeWidth={1.8} />
               </div>
-              <div style={{ fontSize: 12, marginTop: 4 }}>
-                Send your first marketing push campaign above to record delivery.
+              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--mc-text-main, #0F172A)", marginBottom: 4 }}>
+                {search || typeFilter ? "No matching notification records" : "No push notification logs yet"}
               </div>
+              <div style={{ fontSize: 12.5, color: "var(--mc-text-muted, #64748B)", maxWidth: 380, margin: "0 auto", lineHeight: 1.5 }}>
+                {search || typeFilter
+                  ? "Try clearing your search query or audience filter to view more logs."
+                  : "Campaign delivery logs will appear here once you send your first broadcast or targeted message."}
+              </div>
+              {(search || typeFilter) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setTypeFilter("");
+                  }}
+                  className="mc-btn mc-btn-secondary"
+                  style={{ marginTop: 14, height: 32, fontSize: 12, padding: "0 14px" }}
+                >
+                  Clear Filters
+                </button>
+              )}
             </div>
           ) : (
             <table className="mc-table">
@@ -1031,12 +1155,8 @@ export const MarketingTab: React.FC = () => {
                       ? `Country: ${c.country || "All"}`
                       : c.targetUser?.name || c.targetUser?.email || "Single User";
 
-                  const badgeClass =
-                    c.status === "completed"
-                      ? "mc-badge-active"
-                      : c.status === "processing"
-                      ? "mc-badge-purple"
-                      : "mc-badge-tier";
+                  const isCompleted = c.status === "completed";
+                  const isProcessing = c.status === "processing";
 
                   return (
                     <tr key={c._id}>
@@ -1046,7 +1166,7 @@ export const MarketingTab: React.FC = () => {
                         </div>
                         <div
                           style={{
-                            fontSize: 11,
+                            fontSize: 11.5,
                             color: "var(--mc-text-muted)",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
@@ -1059,15 +1179,17 @@ export const MarketingTab: React.FC = () => {
 
                       <td>
                         <span
-                          className="mc-badge"
                           style={{
                             display: "inline-flex",
                             alignItems: "center",
-                            gap: 4,
-                            fontSize: 11,
-                            padding: "3px 8px",
-                            background: c.targetType === "all" ? "#EFF6FF" : c.targetType === "country" ? "#FEF3C7" : "#F3E8FF",
+                            gap: 5,
+                            fontSize: 11.5,
+                            fontWeight: 600,
+                            padding: "3px 9px",
+                            borderRadius: 6,
+                            background: c.targetType === "all" ? "#EFF6FF" : c.targetType === "country" ? "#FEF3C7" : "#F5F3FF",
                             color: c.targetType === "all" ? "#1D4ED8" : c.targetType === "country" ? "#B45309" : "#6D28D9",
+                            border: `1px solid ${c.targetType === "all" ? "#BFDBFE" : c.targetType === "country" ? "#FDE68A" : "#DDD6FE"}`,
                           }}
                         >
                           {c.targetType === "all" ? <Users size={12} /> : c.targetType === "country" ? <Globe size={12} /> : <User size={12} />}
@@ -1076,13 +1198,35 @@ export const MarketingTab: React.FC = () => {
                       </td>
 
                       <td>
-                        <span className={`mc-badge ${badgeClass}`} style={{ fontSize: 11, textTransform: "capitalize" }}>
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 5,
+                            fontSize: 11.5,
+                            fontWeight: 600,
+                            padding: "3px 9px",
+                            borderRadius: 999,
+                            background: isCompleted ? "#ECFDF5" : isProcessing ? "#F3E8FF" : "#FEF3C7",
+                            color: isCompleted ? "#047857" : isProcessing ? "#6D28D9" : "#B45309",
+                            border: `1px solid ${isCompleted ? "#A7F3D0" : isProcessing ? "#DDD6FE" : "#FDE68A"}`,
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: "50%",
+                              background: isCompleted ? "#10B981" : isProcessing ? "#8B5CF6" : "#F59E0B",
+                            }}
+                          />
                           {c.status}
                         </span>
                       </td>
 
                       <td>
-                        <div style={{ fontSize: 11, color: "var(--mc-text-muted)", whiteSpace: "nowrap" }}>
+                        <div style={{ fontSize: 11.5, color: "var(--mc-text-muted)", whiteSpace: "nowrap" }}>
                           {c.createdAt ? new Date(c.createdAt).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" }) : "-"}
                         </div>
                       </td>
@@ -1093,12 +1237,16 @@ export const MarketingTab: React.FC = () => {
                             onClick={() => setCampaignToDelete(c)}
                             title="Delete log"
                             style={{
-                              background: "none",
-                              border: "1px solid var(--mc-border)",
-                              borderRadius: 6,
-                              padding: "4px 6px",
+                              background: "#FFFFFF",
+                              border: "1px solid #FECACA",
+                              borderRadius: 7,
+                              padding: "5px 7px",
                               cursor: "pointer",
-                              color: "var(--mc-danger)",
+                              color: "#EF4444",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              transition: "all 0.15s ease",
                             }}
                           >
                             <Trash2 size={13} />
