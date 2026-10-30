@@ -213,30 +213,10 @@ export const Hero: React.FC = () => {
                 </div>
               </a>
 
-              {/* Secondary Explore Features Button */}
-              <a
-                href="#tour"
-                onClick={(e) => handleScrollTo(e, '#tour')}
-                className="btn-secondary hero-btn-secondary"
-                style={{
-                  padding: '11px 20px',
-                  borderRadius: '12px',
-                  fontSize: '13.5px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span>Explore Features</span>
-                <ChevronRight size={15} />
-              </a>
+
             </div>
 
-            {/* Zero Manual Friction Reassurance Line */}
-            <div className="hero-friction-line">
-              <span className="friction-pulse-dot" />
-              <span>Available Now on Android &amp; iOS • Zero manual typing required</span>
-            </div>
+
           </div>
 
           {/* Right Column: ONE Dominant 3D iPhone 17 Pro Max */}
@@ -312,14 +292,11 @@ export const Hero: React.FC = () => {
                 }}
               />
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>
-                Safe to Spend: $18,500 <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 400 }}>(Demo)</span>
+                Safe to Spend: $18,500
               </span>
             </div>
 
             <HeroPhone3D />
-            <div style={{ position: 'absolute', bottom: '-26px', left: 0, right: 0, textAlign: 'center', fontSize: '11.5px', color: '#94A3B8', pointerEvents: 'none' }}>
-              * Illustrative demo interface • Live Production Preview
-            </div>
           </div>
         </div>
 

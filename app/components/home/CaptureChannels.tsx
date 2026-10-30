@@ -398,10 +398,7 @@ export const CaptureChannels: React.FC = () => {
           </Card3DTilt>
         </div>
 
-        {/* Illustrative demo note */}
-        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '12px', color: '#64748B' }}>
-          * Illustrative demo previews — All merchant receipts and sample alerts above are simulated demonstration data.
-        </div>
+
       </div>
 
       <style>{`

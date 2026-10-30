@@ -82,7 +82,6 @@ export const TOUR_STEPS = [
     tab: '04 Predict',
     headline: "Know what's coming\nbefore it happens.",
     description: 'Forecast upcoming recurring bills, anticipated income, and potential deficit alerts days in advance.',
-    isComingSoon: true,
     type: 'predict',
   },
   {

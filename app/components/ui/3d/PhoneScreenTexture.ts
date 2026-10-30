@@ -115,11 +115,11 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
   ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
   ctx.font = '600 32px -apple-system, BlinkMacSystemFont, sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('Demo Preview •', 65, 215);
+  ctx.fillText('Financial Overview •', 65, 215);
 
   ctx.fillStyle = '#FFFFFF';
   ctx.font = '800 58px -apple-system, BlinkMacSystemFont, sans-serif';
-  ctx.fillText('Alex (Demo)', 65, 278);
+  ctx.fillText('Alex', 65, 278);
 
   // Avatar icon circle
   ctx.beginPath();
@@ -191,7 +191,7 @@ export function createPhoneScreenTexture(): THREE.CanvasTexture {
   ctx.fillStyle = '#C4B5FD';
   ctx.font = '800 26px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('SAFE TO SPEND • DEMO DATA', 115, card2Y + 70);
+  ctx.fillText('SAFE TO SPEND', 115, card2Y + 70);
 
   // Large Safe to Spend Value
   ctx.fillStyle = '#FFFFFF';

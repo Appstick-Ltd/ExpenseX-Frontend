@@ -161,7 +161,6 @@ export const QuickTour: React.FC = () => {
                     />
                   )}
                   <span>{step.tab}</span>
-                  {step.isComingSoon && <span className="badge-coming-soon">DEV</span>}
                 </button>
               );
             })}
@@ -228,7 +227,6 @@ export const QuickTour: React.FC = () => {
                       }}
                     >
                       <span>STEP {currentStep.id} OF 05</span>
-                      {currentStep.isComingSoon && <span className="badge-coming-soon">IN DEVELOPMENT</span>}
                     </div>
 
                     <h3
@@ -793,13 +791,13 @@ export const QuickTour: React.FC = () => {
                           <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)' }}>
                             UPCOMING PAYMENTS
                           </span>
-                          <span className="badge-coming-soon">COMING SOON</span>
+                          <span style={{ fontSize: '11px', fontWeight: 700, color: '#34D399', background: 'rgba(16, 185, 129, 0.14)', padding: '2px 8px', borderRadius: '9999px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>AUTO-SYNC</span>
                         </div>
 
                         {[
-                          { name: 'Netflix Premium', date: 'Sep 12', amount: '$1,200', cat: 'Subscription' },
-                          { name: 'Dot Internet 50Mbps', date: 'Sep 15', amount: '$1,000', cat: 'Utilities' },
-                          { name: 'Apartment Rent', date: 'Sep 20', amount: '$15,000', cat: 'Housing' },
+                          { name: 'Netflix Subscription', date: 'Sep 12', amount: '$15.99', cat: 'Subscription' },
+                          { name: 'Fiber Internet 100Mbps', date: 'Sep 15', amount: '$49.00', cat: 'Utilities' },
+                          { name: 'Apartment Rent', date: 'Sep 20', amount: '$1,250', cat: 'Housing' },
                         ].map((bill) => (
                           <div
                             key={bill.name}

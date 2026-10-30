@@ -3,8 +3,9 @@ import { HeroPhone3D } from './HeroPhone3D';
 import { TypewriterText } from './TypewriterText';
 import { ParticleField } from './3d/ParticleField';
 import { HERO_DATA, STORE_LINKS } from '../utils/constants';
-import { ChevronRight, Users, Cpu, Shield, Lock } from 'lucide-react';
+import { Users, Cpu, Shield, Lock } from 'lucide-react';
 import { playMicroClick } from '../utils/audio';
+import { Card3DTilt } from './Card3DTilt';
 
 export const Hero: React.FC = () => {
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -160,28 +161,10 @@ export const Hero: React.FC = () => {
                 <span>App Store</span>
               </a>
 
-              <a
-                href="#features"
-                onClick={(e) => handleScrollTo(e, '#features')}
-                className="btn-secondary hero-btn-secondary"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '12px 18px',
-                  fontSize: '14px',
-                }}
-              >
-                <span>Explore Features</span>
-                <ChevronRight size={15} />
-              </a>
+
             </div>
 
-            {/* Zero Manual Friction Reassurance Line */}
-            <div className="hero-friction-line">
-              <span className="friction-pulse-dot" />
-              <span>Zero manual typing • 100% automated finance</span>
-            </div>
+
           </div>
 
           {/* Right Column: ONE Dominant 3D iPhone 17 Pro Max */}
@@ -257,14 +240,11 @@ export const Hero: React.FC = () => {
                 }}
               />
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>
-                Safe to Spend: $18,500 <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 400 }}>(Demo)</span>
+                Safe to Spend: $18,500
               </span>
             </div>
 
             <HeroPhone3D />
-            <div style={{ position: 'absolute', bottom: '-26px', left: 0, right: 0, textAlign: 'center', fontSize: '11.5px', color: '#94A3B8', pointerEvents: 'none' }}>
-              * Illustrative demo interface • Available on iOS and Android
-            </div>
           </div>
         </div>
 

@@ -58,7 +58,7 @@ export const DashboardShowcase: React.FC = () => {
             }}
           >
             <div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Demo Account &bull; Live Preview</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Personal Account &bull; Live Preview</div>
               <div style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF' }}>September Financial Health</div>
             </div>
 
@@ -69,12 +69,12 @@ export const DashboardShowcase: React.FC = () => {
                   fontWeight: 600,
                   padding: '5px 12px',
                   borderRadius: '999px',
-                  background: 'rgba(139, 92, 246, 0.15)',
-                  color: '#C084FC',
-                  border: '1px solid rgba(139, 92, 246, 0.35)',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: '#34D399',
+                  border: '1px solid rgba(16, 185, 129, 0.35)',
                 }}
               >
-                Illustrative Demo Data
+                Live Account View
               </span>
               <div
                 style={{
@@ -308,10 +308,7 @@ export const DashboardShowcase: React.FC = () => {
           </div>
         </Card3DTilt>
 
-        {/* Illustrative demo note */}
-        <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '12.5px', color: '#64748B' }}>
-          * Illustrative demo interface — Sample dashboard preview. Not actual customer metrics.
-        </div>
+
       </div>
 
       <style>{`

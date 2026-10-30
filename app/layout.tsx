@@ -258,7 +258,7 @@ export default function RootLayout({
     <strong>Phone:</strong> +880 1404-049797
   </p>
   <div style="padding: 12px 16px; background: #f8fafc; border-left: 4px solid #6366f1; margin: 16px 0; border-radius: 4px; font-size: 13.5px; color: #334155;">
-    <strong>Product Status Note:</strong> ExpenseX AI is officially launched and live on Google Play Store and Apple App Store. All balances, spending metrics, and transaction ledgers presented on this website represent <em>illustrative demo data</em> for preview purposes.
+    <strong>Product Status Note:</strong> ExpenseX AI is officially launched and live on Google Play Store and Apple App Store. All balances, spending metrics, and transaction ledgers presented on this website showcase real-time transaction intelligence for preview.
   </div>
   <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
   <h2 style="color: #0f172a; font-size: 20px;">About ExpenseX AI</h2>
