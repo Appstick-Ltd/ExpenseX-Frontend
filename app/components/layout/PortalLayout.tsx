@@ -61,7 +61,6 @@ interface SubItemDef {
 
 const USERS_SUB_ITEMS: SubItemDef[] = [
   { id: 'system-users', label: 'System Users', icon: UserCheck },
-  { id: 'beta-users', label: 'Beta Early-Bird Users', icon: Sparkles, badge: 'Live' },
   { id: 'rewards', label: 'User Rewards', icon: Gift },
 ];
 
@@ -139,7 +138,6 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const getUsersSubTabFromUrl = (): string => {
     if (typeof window === 'undefined') return 'system-users';
     const path = window.location.pathname;
-    if (path.includes('beta-users') || path.includes('early-bird')) return 'beta-users';
     if (path.includes('rewards')) return 'rewards';
     const match = path.match(/\/(mc-portal|dashboard)\/users\/([^/]+)/);
     if (match && match[2]) return match[2];

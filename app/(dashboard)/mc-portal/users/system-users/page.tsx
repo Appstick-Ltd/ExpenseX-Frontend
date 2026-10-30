@@ -471,7 +471,7 @@ export default function SystemUsersPage() {
                       <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                         <button
                           onClick={() => setSelectedUser(u)}
-                          title="View User Details"
+                          title="View Details"
                           style={{
                             padding: '6px 10px',
                             background: 'transparent',
@@ -479,41 +479,9 @@ export default function SystemUsersPage() {
                             borderRadius: 6,
                             cursor: 'pointer',
                             color: '#2563EB',
-                            marginRight: 6,
                           }}
                         >
                           <Eye size={14} />
-                        </button>
-
-                        <button
-                          onClick={() => handleOpenEdit(u)}
-                          title="Edit User"
-                          style={{
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: '1px solid var(--mc-border)',
-                            borderRadius: 6,
-                            cursor: 'pointer',
-                            color: 'var(--mc-brand-purple)',
-                            marginRight: 6,
-                          }}
-                        >
-                          <Edit size={14} />
-                        </button>
-
-                        <button
-                          onClick={() => setUserToDelete(u)}
-                          title="Delete User"
-                          style={{
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: '1px solid var(--mc-danger-border)',
-                            borderRadius: 6,
-                            cursor: 'pointer',
-                            color: 'var(--mc-danger)',
-                          }}
-                        >
-                          <Trash2 size={14} />
                         </button>
                       </td>
                     </tr>
@@ -606,20 +574,6 @@ export default function SystemUsersPage() {
                       >
                         <Eye size={13} color="#2563EB" />
                         <span>View</span>
-                      </button>
-                      <button
-                        className="mc-mobile-card-btn"
-                        onClick={() => handleOpenEdit(u)}
-                      >
-                        <Edit size={13} color="var(--mc-brand-purple)" />
-                        <span>Edit</span>
-                      </button>
-                      <button
-                        className="mc-mobile-card-btn danger"
-                        onClick={() => setUserToDelete(u)}
-                      >
-                        <Trash2 size={13} color="var(--mc-danger)" />
-                        <span>Delete</span>
                       </button>
                     </div>
                   </div>

@@ -3,7 +3,6 @@ import { usePortalAuth } from '../context/PortalAuthContext';
 import { Logo } from '../../components/Logo';
 import logoImg from '../../assets/logo.png';
 import { OverviewTab } from './tabs/OverviewTab';
-import { BetaUsersTab } from './tabs/BetaUsersTab';
 import { UsersTab } from './tabs/UsersTab';
 import { CategoriesTab } from './tabs/CategoriesTab';
 import { SubscriptionsTab } from './tabs/SubscriptionsTab';
@@ -30,7 +29,7 @@ import {
 } from 'lucide-react';
 
 interface NavItemDef {
-  id: 'overview' | 'beta-users' | 'users' | 'marketing' | 'categories' | 'subscriptions' | 'settings';
+  id: 'overview' | 'users' | 'marketing' | 'categories' | 'subscriptions' | 'settings';
   label: string;
   shortLabel?: string;
   icon: LucideIcon;
@@ -45,7 +44,6 @@ export const PortalLayout: React.FC = () => {
 
   const navItems: NavItemDef[] = [
     { id: 'overview', label: 'Overview & Telemetry', shortLabel: 'Overview', icon: LayoutDashboard },
-    { id: 'beta-users', label: 'Beta Early-Bird Users', shortLabel: 'Early-Bird', icon: Sparkles, badge: 'Live' },
     { id: 'users', label: 'System Users', shortLabel: 'Users', icon: UserCheck },
     { id: 'marketing', label: 'Marketing', shortLabel: 'Marketing', icon: Megaphone, badge: 'New' },
     { id: 'categories', label: 'Categories Dictionary', shortLabel: 'Categories', icon: Layers },
@@ -377,7 +375,6 @@ export const PortalLayout: React.FC = () => {
         {/* CONTENT */}
         <main className="mc-content-body">
           {activeTab === 'overview' && <OverviewTab onNavigateTab={(tab) => handleTabSelect(tab as any)} />}
-          {activeTab === 'beta-users' && <BetaUsersTab />}
           {activeTab === 'users' && <UsersTab />}
           {activeTab === 'marketing' && <MarketingTab />}
           {activeTab === 'categories' && <CategoriesTab />}
@@ -396,18 +393,6 @@ export const PortalLayout: React.FC = () => {
               <LayoutDashboard size={19} />
             </div>
             <span className="mc-bottom-nav-label">Overview</span>
-          </button>
-
-          <button
-            className={`mc-bottom-nav-item ${activeTab === 'beta-users' ? 'active' : ''}`}
-            onClick={() => handleTabSelect('beta-users')}
-            aria-label="Beta Early-Bird Users tab"
-          >
-            <div className="mc-bottom-nav-icon-wrap">
-              <Sparkles size={19} />
-              <span className="mc-bottom-badge-dot" />
-            </div>
-            <span className="mc-bottom-nav-label">Early-Bird</span>
           </button>
 
           <button

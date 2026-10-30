@@ -333,36 +333,7 @@ export const UsersTab: React.FC = () => {
                       {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}
                     </td>
                     <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <button
-                        onClick={() => handleOpenEdit(u)}
-                        title="Edit User"
-                        style={{
-                          padding: '6px 10px',
-                          background: 'transparent',
-                          border: '1px solid var(--mc-border)',
-                          borderRadius: 6,
-                          cursor: 'pointer',
-                          color: 'var(--mc-brand-purple)',
-                          marginRight: 6,
-                        }}
-                      >
-                        <Edit size={14} />
-                      </button>
-
-                      <button
-                        onClick={() => setUserToDelete(u)}
-                        title="Delete User"
-                        style={{
-                          padding: '6px 10px',
-                          background: 'transparent',
-                          border: '1px solid var(--mc-danger-border)',
-                          borderRadius: 6,
-                          cursor: 'pointer',
-                          color: 'var(--mc-danger)',
-                        }}
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                      {/* Read-only user record */}
                     </td>
                   </tr>
                 ))
@@ -416,25 +387,6 @@ export const UsersTab: React.FC = () => {
                         {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mc-mobile-card-actions">
-                    <button
-                      className="mc-mobile-card-btn"
-                      onClick={() => handleOpenEdit(u)}
-                      style={{ color: 'var(--mc-brand-purple)' }}
-                    >
-                      <Edit size={13} />
-                      <span>Edit User</span>
-                    </button>
-
-                    <button
-                      className="mc-mobile-card-btn danger"
-                      onClick={() => setUserToDelete(u)}
-                    >
-                      <Trash2 size={13} />
-                      <span>Delete</span>
-                    </button>
                   </div>
                 </div>
               ))}
