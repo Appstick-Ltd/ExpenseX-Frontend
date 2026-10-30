@@ -58,39 +58,8 @@ export const DashboardShowcase: React.FC = () => {
             }}
           >
             <div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Personal Account &bull; Live Preview</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Personal Account &bull; Financial Overview</div>
               <div style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF' }}>September Financial Health</div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-              <span
-                style={{
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  padding: '5px 12px',
-                  borderRadius: '999px',
-                  background: 'rgba(16, 185, 129, 0.15)',
-                  color: '#34D399',
-                  border: '1px solid rgba(16, 185, 129, 0.35)',
-                }}
-              >
-                Live Account View
-              </span>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  padding: '8px 16px',
-                  borderRadius: '9999px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  fontSize: '13px',
-                }}
-              >
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399' }} />
-                <span>All 4 Channels Synced</span>
-              </div>
             </div>
           </div>
 
@@ -104,7 +73,7 @@ export const DashboardShowcase: React.FC = () => {
               marginBottom: '32px',
             }}
           >
-            {/* Card 1: Safe to Spend Hero */}
+            {/* Card 1: Monthly Budget Runway */}
             <div
               style={{
                 padding: '24px',
@@ -114,13 +83,13 @@ export const DashboardShowcase: React.FC = () => {
               }}
             >
               <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--purple-light)' }}>
-                SAFE TO SPEND TODAY
+                MONTHLY BUDGET RUNWAY
               </div>
               <div style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 900, color: '#FFFFFF', margin: '8px 0' }}>
                 {PHONE_MOCKUP_DATA.safeToSpend}
               </div>
               <div style={{ fontSize: '12px', color: '#34D399', fontWeight: 600 }}>
-                ✓ Calculated after all pending bills & goals
+                ✓ Tracking against active envelope budgets
               </div>
             </div>
 

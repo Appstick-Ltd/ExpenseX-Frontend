@@ -194,53 +194,70 @@ export const FinalCTA: React.FC = () => {
                 </div>
               </a>
 
-              {/* Apple App Store Badge / Action Button */}
-              <a
-                href="https://apps.apple.com/app/expensex-ai/id6742358055"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="store-badge-btn"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '11px 22px',
-                  borderRadius: '14px',
-                  background: '#000000',
-                  border: '1.5px solid rgba(255, 255, 255, 0.22)',
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  boxShadow: '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
-                  transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
-                  userSelect: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.6)';
-                  e.currentTarget.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 255, 255, 0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)';
-                  e.currentTarget.style.boxShadow = '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)';
-                }}
-              >
-                {/* Authentic Apple Icon (Crisp White Vector) */}
-                <svg
-                  width="22"
-                  height="26"
-                  viewBox="0 0 170 170"
-                  fill="#FFFFFF"
-                  style={{ display: 'block', flexShrink: 0 }}
+              {/* Apple App Store Badge with Coming Soon Overlay */}
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <a
+                  href="#tour"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    playMicroClick();
+                  }}
+                  className="store-badge-btn"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '11px 22px',
+                    borderRadius: '14px',
+                    background: '#000000',
+                    border: '1.5px solid rgba(255, 255, 255, 0.22)',
+                    color: '#FFFFFF',
+                    textDecoration: 'none',
+                    cursor: 'default',
+                    opacity: 0.88,
+                    boxShadow: '0 10px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+                    transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
+                    userSelect: 'none',
+                  }}
                 >
-                  <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.7-7.91-12-14.61-5.77-9.02-10.19-19.53-13.26-31.53-3.07-12-4.61-23.2-4.61-33.6 0-14.35 3.65-26.04 10.95-35.08 7.3-9.04 16.35-13.68 27.15-13.91 4.79 0 10.12 1.25 15.99 3.75 5.87 2.5 9.77 3.86 11.69 4.08 2.39-.43 6.64-1.96 12.74-4.58 6.1-2.62 11.59-3.8 16.48-3.56 12.63.63 22.84 4.89 30.63 12.77-10.99 6.63-16.37 15.65-16.14 27.05.23 8.91 3.65 16.34 10.26 22.29 6.61 5.95 14.53 9.4 23.77 10.35-2.07 6.31-4.63 12.73-7.68 19.26zm-32.32-107.12c0 5.66-2.07 11.16-6.21 16.5-4.14 5.34-9.28 8.96-15.42 10.87-.24-.76-.36-1.63-.36-2.61 0-5.65 2.18-11.2 6.54-16.64 4.36-5.44 9.68-8.89 15.97-10.35.32 1.2.48 2.01.48 2.23z" />
-                </svg>
-                <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
-                  <div style={{ fontSize: '10px', color: '#A1A1AA', letterSpacing: '0.04em' }}>Download on the</div>
-                  <div style={{ fontSize: '17px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>App Store</div>
-                </div>
-              </a>
+                  {/* Authentic Apple Icon (Crisp White Vector) */}
+                  <svg
+                    width="22"
+                    height="26"
+                    viewBox="0 0 170 170"
+                    fill="#FFFFFF"
+                    style={{ display: 'block', flexShrink: 0 }}
+                  >
+                    <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.7-7.91-12-14.61-5.77-9.02-10.19-19.53-13.26-31.53-3.07-12-4.61-23.2-4.61-33.6 0-14.35 3.65-26.04 10.95-35.08 7.3-9.04 16.35-13.68 27.15-13.91 4.79 0 10.12 1.25 15.99 3.75 5.87 2.5 9.77 3.86 11.69 4.08 2.39-.43 6.64-1.96 12.74-4.58 6.1-2.62 11.59-3.8 16.48-3.56 12.63.63 22.84 4.89 30.63 12.77-10.99 6.63-16.37 15.65-16.14 27.05.23 8.91 3.65 16.34 10.26 22.29 6.61 5.95 14.53 9.4 23.77 10.35-2.07 6.31-4.63 12.73-7.68 19.26zm-32.32-107.12c0 5.66-2.07 11.16-6.21 16.5-4.14 5.34-9.28 8.96-15.42 10.87-.24-.76-.36-1.63-.36-2.61 0-5.65 2.18-11.2 6.54-16.64 4.36-5.44 9.68-8.89 15.97-10.35.32 1.2.48 2.01.48 2.23z" />
+                  </svg>
+                  <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
+                    <div style={{ fontSize: '10px', color: '#A1A1AA', letterSpacing: '0.04em' }}>Download on the</div>
+                    <div style={{ fontSize: '17px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>App Store</div>
+                  </div>
+                </a>
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-9px',
+                    right: '12px',
+                    background: 'linear-gradient(135deg, #FF5A36 0%, #E11D48 100%)',
+                    color: '#FFFFFF',
+                    fontSize: '7.5px',
+                    fontWeight: 700,
+                    padding: '1.5px 6px',
+                    borderRadius: '999px',
+                    letterSpacing: '0.04em',
+                    boxShadow: '0 2px 6px rgba(255, 90, 54, 0.45)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    textTransform: 'uppercase',
+                    pointerEvents: 'none',
+                    lineHeight: 1.2,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Coming Soon
+                </span>
+              </div>
             </div>
           </div>
 

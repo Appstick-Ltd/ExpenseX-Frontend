@@ -166,7 +166,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                 <li><strong>Account Identifiers:</strong> Name, verified business/personal email, authentication credentials, and beta referral codes.</li>
                 <li><strong>Multi-Modal Receipt Images:</strong> Camera captures and uploaded image files of merchant receipts. Our vision OCR pipeline extracts line items, taxes, currency codes, and merchant metadata.</li>
                 <li><strong>Audio Spoken Notes:</strong> Temporary audio voice logs recorded when utilizing hands-free voice logging. Audio files are converted into structured text and deleted immediately after intent resolution.</li>
-                <li><strong>Financial Transaction Messages:</strong> Text excerpts from incoming bank SMS alerts and digital invoice confirmation emails when authorized by the user. Unrelated private messages are never accessed or stored.</li>
+                <li><strong>Financial Transaction Messages:</strong> Text excerpts from incoming bank SMS alerts (Android) and upcoming digital email receipts (In Development) when explicitly authorized by the user. Unrelated private messages are never accessed or stored.</li>
               </ul>
             </section>
 
@@ -191,7 +191,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                 4. Data Retention Lifecycle &amp; Statutory Compliance
               </h2>
               <p>
-                Continuous financial tracking requires historical records to compute your spending analytics and Safe to Spend margins while your account remains active. However, we uphold strict retention limitations:
+                Continuous financial tracking requires historical records to compute your spending analytics and dynamic envelope budget balances while your account remains active. However, we uphold strict retention limitations:
               </p>
               <ul style={{ paddingLeft: '24px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <li><strong>Active Ledgers:</strong> Transaction records and custom categories are maintained securely while your account is active.</li>

@@ -147,7 +147,7 @@ export const TermsPage: React.FC = () => {
                 2. Scope of Service &amp; Availability
               </h2>
               <p>
-                ExpenseX AI provides an automated software service that categorizes expenditures through machine vision OCR, voice processing, and transaction parsing. We strive for 99.9% uptime; however, services may occasionally undergo scheduled maintenance or cloud infrastructure upgrades.
+                ExpenseX AI provides an automated software service that categorizes expenditures through machine vision OCR, voice processing, and transaction parsing. Services are provided on a commercially reasonable availability basis; services may occasionally undergo scheduled maintenance or cloud infrastructure upgrades.
               </p>
             </section>
 

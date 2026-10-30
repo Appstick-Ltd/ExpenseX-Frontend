@@ -168,17 +168,17 @@ export const PricingPage: React.FC = () => {
                       boxShadow: '0 4px 14px rgba(109, 61, 245, 0.4)',
                     }}
                   >
-                    <Zap size={13} /> CURRENT BETA &bull; 100% FREE
+                    <Zap size={13} /> FREE TIER
                   </div>
 
-                  <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#FFFFFF', marginBottom: '8px' }}>Early-Bird Pioneer</h2>
+                  <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#FFFFFF', marginBottom: '8px' }}>Free Plan</h2>
                   <p style={{ fontSize: '14.5px', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '28px' }}>
-                    Complete autonomous personal expense tracking with full multimodal AI for individual beta users.
+                    Core automated personal expense tracking with multi-modal AI inputs.
                   </p>
 
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '32px', paddingBottom: '24px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
                     <span style={{ fontSize: '52px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em' }}>$0</span>
-                    <span style={{ fontSize: '15px', color: 'var(--text-muted)' }}>/ free forever for beta cohort</span>
+                    <span style={{ fontSize: '15px', color: 'var(--text-muted)' }}>/ free forever</span>
                   </div>
 
                   <button
@@ -194,34 +194,31 @@ export const PricingPage: React.FC = () => {
                       cursor: 'pointer',
                     }}
                   >
-                    Claim Free Beta Access <ArrowRight size={17} />
+                    Get Started Free <ArrowRight size={17} />
                   </button>
 
                   <div style={{ fontSize: '12px', fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '18px' }}>
-                    What&apos;s Included In Beta:
+                    What&apos;s Included:
                   </div>
 
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> Unlimited Vision OCR Receipt Scans
+                      <Check size={18} color="#10B981" /> Instant Vision OCR Receipt Scans
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> Hands-Free Natural Voice Expense Entry
+                      <Check size={18} color="#10B981" /> Natural Voice Expense Entry
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> Automatic Bank SMS &amp; Email Parser
+                      <Check size={18} color="#10B981" /> Automated Bank SMS Parser (Android)
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> Real-Time Safe-to-Spend™ Daily Ceiling
+                      <Check size={18} color="#10B981" /> Dynamic Envelope Budgeting &amp; Limits
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> Dynamic Envelope Budgeting Engine
+                      <Check size={18} color="#10B981" /> Multi-Currency Transaction Ledger
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> Cross-Platform Sync (iOS, Android, Web)
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <Check size={18} color="#10B981" /> 256-Bit Bank-Grade AES Encryption
+                      <Check size={18} color="#10B981" /> Enterprise AES-256 KMS Cloud Encryption
                     </li>
                   </ul>
                 </div>

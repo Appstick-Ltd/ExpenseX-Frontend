@@ -98,7 +98,7 @@ export const SafeToSpend: React.FC = () => {
             <div>
               <div className="section-eyebrow" style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <span className="section-eyebrow-dot" />
-                <span>PREDICTIVE CASHFLOW SIMULATOR</span>
+                <span>PREDICTIVE CASHFLOW SIMULATOR &bull; IN DEVELOPMENT PREVIEW</span>
               </div>
 
               <h2
@@ -122,7 +122,7 @@ export const SafeToSpend: React.FC = () => {
                   maxWidth: '520px',
                 }}
               >
-                Traditional apps show your current bank balance. ExpenseX AI computes your true Safe to Spend by deducting pending bills, scheduled rent, savings goals, and everyday recurring expenses.
+                Traditional apps show only your current bank balance. Coming in Phase 2, ExpenseX AI projects your true Safe to Spend margin by calculating dynamic envelope deductions, pending rent, savings targets, and committed recurring bills.
               </p>
 
               {/* Scenario Preset Selector */}
@@ -413,7 +413,7 @@ export const SafeToSpend: React.FC = () => {
                   maxWidth: '360px',
                 }}
               >
-                Recalculated in real time after every single voice note, receipt, and debit SMS.
+                Interactive preview: dynamic calculation factoring pending bills, savings allocations, and transaction velocity.
               </div>
             </div>
           </div>

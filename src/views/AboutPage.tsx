@@ -107,9 +107,28 @@ export const AboutPage: React.FC = () => {
             </a>
           </motion.div>
 
-          {/* 1 & 3: Team Section (Heading, 1-line intro, and 7-member Grid) */}
-          <div style={{ marginBottom: '48px' }}>
-            <TeamSection titleBadge="OUR CORE PRODUCT TEAM" />
+          {/* Top Intro & Business Story */}
+          <div style={{ marginBottom: '44px' }}>
+            <div className="section-eyebrow" style={{ display: 'inline-flex', marginBottom: '16px' }}>
+              <Layers size={14} style={{ marginRight: '6px' }} />
+              <span>ABOUT EXPENSEX AI &bull; MISSION &amp; ORIGIN</span>
+            </div>
+            <h1
+              style={{
+                fontSize: 'clamp(32px, 5vw, 48px)',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                marginBottom: '16px',
+                letterSpacing: '-0.025em',
+                lineHeight: 1.15,
+              }}
+            >
+              Pioneering Autonomous Intelligence <br />
+              <span className="text-gradient-purple">for Personal Cashflow Clarity.</span>
+            </h1>
+            <p style={{ fontSize: '16.5px', color: 'var(--text-secondary)', maxWidth: '780px', lineHeight: 1.7, margin: 0, textAlign: 'justify' }}>
+              ExpenseX AI was built on a foundational realization: traditional personal finance apps fail not because users lack financial discipline, but because manual bookkeeping creates continuous friction. Engineered by <strong>Appstick</strong>, ExpenseX AI replaces tedious form-filling with multi-modal AI perception—converting everyday spoken voice memos, physical camera receipts, and incoming bank SMS into verified financial intelligence.
+            </p>
           </div>
 
           {/* Product Overview, Target Market & Production Deployment Stage */}
@@ -182,7 +201,7 @@ export const AboutPage: React.FC = () => {
                   <CheckCircle2 size={16} /> Current Stage: Live in Production
                 </div>
                 <p style={{ fontSize: '13.5px', color: 'rgba(226, 232, 240, 0.88)', lineHeight: 1.65, margin: '0 0 14px 0' }}>
-                  ExpenseX AI is <strong>fully publicly launched and actively available</strong> worldwide on both primary mobile app marketplaces:
+                  ExpenseX AI is <strong>live in production</strong> on Google Play for Android, with the iOS release on the Apple App Store currently in review:
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <a
@@ -205,26 +224,24 @@ export const AboutPage: React.FC = () => {
                     <span>Google Play Store (Live)</span>
                     <ArrowUpRight size={14} color="#34D399" />
                   </a>
-                  <a
-                    href="https://apps.apple.com/app/expensex-ai/id6742358055"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <div
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '8px 12px',
                       borderRadius: '8px',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: '#FFFFFF',
+                      background: 'rgba(255, 255, 255, 0.03)',
+                      color: 'rgba(255, 255, 255, 0.75)',
                       fontSize: '12.5px',
                       fontWeight: 600,
-                      textDecoration: 'none',
                     }}
                   >
-                    <span>Apple App Store (Live)</span>
-                    <ArrowUpRight size={14} color="#34D399" />
-                  </a>
+                    <span>Apple App Store</span>
+                    <span style={{ fontSize: '10px', color: '#F59E0B', fontWeight: 700, padding: '2px 8px', background: 'rgba(245, 158, 11, 0.15)', borderRadius: '4px', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                      COMING SOON &bull; IN REVIEW
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -258,7 +275,7 @@ export const AboutPage: React.FC = () => {
                 marginBottom: '16px',
               }}
             >
-              <Building2 size={13} /> ABOUT APPSTICKT
+              <Building2 size={13} /> ABOUT APPSTICK
             </div>
 
             <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', letterSpacing: '-0.02em' }}>
@@ -377,9 +394,10 @@ export const AboutPage: React.FC = () => {
             </div>
           </div>
 
-
-
-
+          {/* 4: Team Section (Heading, 1-line intro, and 7-member Grid) */}
+          <div style={{ marginBottom: '56px' }}>
+            <TeamSection titleBadge="OUR CORE PRODUCT TEAM" />
+          </div>
 
           {/* 6: Bottom Action CTA Banner + Contact */}
           <div

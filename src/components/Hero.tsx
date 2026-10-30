@@ -134,32 +134,59 @@ export const Hero: React.FC = () => {
                 <span>Google Play</span>
               </a>
 
-              <a
-                href={STORE_LINKS.appStore}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playMicroClick()}
-                className="btn-primary hero-btn-primary"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 20px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.87-.9.04-1.99.6-2.64 1.35-.57.65-1.07 1.72-.94 2.76 1.01.08 2.05-.49 2.66-1.24z"/>
-                </svg>
-                <span>App Store</span>
-              </a>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <a
+                  href="#tour"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    playMicroClick();
+                  }}
+                  className="btn-primary hero-btn-primary"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '12px 20px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '12px',
+                    fontWeight: 600,
+                    fontSize: '14px',
+                    color: '#FFFFFF',
+                    textDecoration: 'none',
+                    opacity: 0.88,
+                    cursor: 'default',
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.87-.9.04-1.99.6-2.64 1.35-.57.65-1.07 1.72-.94 2.76 1.01.08 2.05-.49 2.66-1.24z"/>
+                  </svg>
+                  <span>App Store</span>
+                </a>
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-9px',
+                    right: '8px',
+                    background: 'linear-gradient(135deg, #FF5A36 0%, #E11D48 100%)',
+                    color: '#FFFFFF',
+                    fontSize: '7.5px',
+                    fontWeight: 700,
+                    padding: '1.5px 6px',
+                    borderRadius: '999px',
+                    letterSpacing: '0.04em',
+                    boxShadow: '0 2px 6px rgba(255, 90, 54, 0.45)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    textTransform: 'uppercase',
+                    pointerEvents: 'none',
+                    lineHeight: 1.2,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Coming Soon
+                </span>
+              </div>
 
 
             </div>
@@ -240,7 +267,7 @@ export const Hero: React.FC = () => {
                 }}
               />
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>
-                Safe to Spend: $18,500
+                Active Budget: $18,500
               </span>
             </div>
 

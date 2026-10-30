@@ -43,7 +43,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'Is ExpenseX AI available on Android and iOS?',
     answer:
-      'Yes. ExpenseX AI is officially launched and available for download on both the Google Play Store (Android) and Apple App Store (iOS). You can install the application directly from your device\'s app store and begin tracking right away.',
+      'ExpenseX AI is officially launched and live for download on the Google Play Store for Android. The iOS application for iPhone is currently in development and under review for the Apple App Store, and will be released shortly.',
     keywords: 'Android and iOS, Google Play Store, Apple App Store, app availability',
   },
   {

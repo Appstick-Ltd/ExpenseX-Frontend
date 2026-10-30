@@ -23,9 +23,6 @@ export const AskExpenseX: React.FC = () => {
           <div className="section-eyebrow" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
             <span className="section-eyebrow-dot" />
             <span>CONVERSATIONAL FINANCE</span>
-            <span className="badge-coming-soon" style={{ marginLeft: '4px' }}>
-              COMING SOON
-            </span>
           </div>
 
           <h2 className="section-headline">

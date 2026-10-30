@@ -103,7 +103,7 @@ const DEFAULT_BASE_PLANS: BasePlan[] = [
         { en: '500 AI Credits' },
         { en: 'AI SMS Expense Extraction (Android)' },
         { en: 'Smart Expense Categorization' },
-        { en: 'AI Money Assistant' },
+        { en: 'AI Financial Insights & Health Score' },
         { en: 'AI Voice Expense Entry' },
         { en: 'AI Receipt & Invoice OCR' },
         { en: 'AI Spending Insights' },
@@ -133,7 +133,7 @@ const DEFAULT_BASE_PLANS: BasePlan[] = [
         { en: '1500 AI Credits' },
         { en: 'AI SMS Expense Extraction (Android)' },
         { en: 'Smart Expense Categorization' },
-        { en: 'AI Money Assistant' },
+        { en: 'AI Financial Insights & Health Score' },
         { en: 'AI Voice Expense Entry' },
         { en: 'AI Receipt & Invoice OCR' },
         { en: 'AI Spending Insights' },
@@ -163,7 +163,7 @@ const DEFAULT_BASE_PLANS: BasePlan[] = [
         { en: '3000 AI Credits' },
         { en: 'AI SMS Expense Extraction (Android)' },
         { en: 'Smart Expense Categorization' },
-        { en: 'AI Money Assistant' },
+        { en: 'AI Financial Insights & Health Score' },
         { en: 'AI Voice Expense Entry' },
         { en: 'AI Receipt & Invoice OCR' },
         { en: 'AI Spending Insights' },
@@ -192,7 +192,7 @@ const DEFAULT_BASE_PLANS: BasePlan[] = [
         { en: '6000 AI Credits' },
         { en: 'AI SMS Expense Extraction (Android)' },
         { en: 'Smart Expense Categorization' },
-        { en: 'AI Money Assistant' },
+        { en: 'AI Financial Insights & Health Score' },
         { en: 'AI Voice Expense Entry' },
         { en: 'AI Receipt & Invoice OCR' },
         { en: 'AI Spending Insights' },
@@ -617,7 +617,7 @@ export const PricingView: React.FC = () => {
                           marginBottom: '16px',
                         }}
                       >
-                        <Sparkles size={12} /> INCLUDED FOREVER
+                        <Sparkles size={12} /> FREE TIER
                       </div>
 
                       <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF', marginBottom: '6px' }}>Free Plan</h3>
@@ -680,7 +680,7 @@ export const PricingView: React.FC = () => {
                           <Check size={15} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> <span>SMS Transaction Parser (Android)</span>
                         </li>
                         <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: '#E2E8F0', lineHeight: 1.4 }}>
-                          <Check size={15} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> <span>Safe-to-Spend™ Velocity Margin</span>
+                          <Check size={15} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> <span>Dynamic Envelope Budgeting &amp; Limits</span>
                         </li>
                         <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: '#E2E8F0', lineHeight: 1.4 }}>
                           <Check size={15} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> <span>Dynamic Envelope Budgeting</span>
@@ -796,7 +796,7 @@ export const PricingView: React.FC = () => {
                                   color: '#FBBF24',
                                 }}
                               >
-                                <Coins size={12} /> +{planData?.coin} Coins
+                                <Coins size={12} /> +{planData?.coin} Bonus AI Credits
                               </div>
                             )}
                           </div>

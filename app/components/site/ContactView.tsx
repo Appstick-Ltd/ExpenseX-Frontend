@@ -137,18 +137,20 @@ export const ContactView: React.FC = () => {
                     <Mail size={20} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '3px' }}>DIRECT INQUIRY DESKS</div>
-                    <div style={{ fontSize: '14.5px', color: '#FFFFFF', marginBottom: '4px' }}>
-                      <strong style={{ color: 'var(--purple-light)' }}>User &amp; Customer Support:</strong>{' '}
-                      <a href="mailto:support@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>support@expensexai.com</a>
-                    </div>
-                    <div style={{ fontSize: '14.5px', color: '#FFFFFF', marginBottom: '4px' }}>
-                      <strong style={{ color: 'var(--purple-light)' }}>Corporate &amp; Partnerships:</strong>{' '}
-                      <a href="mailto:info@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>info@expensexai.com</a>
-                    </div>
-                    <div style={{ fontSize: '14.5px', color: '#FFFFFF' }}>
-                      <strong style={{ color: 'var(--purple-light)' }}>Privacy &amp; Data Rights:</strong>{' '}
-                      <a href="mailto:privacy@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>privacy@expensexai.com</a>
+                    <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', marginBottom: '8px' }}>DIRECT OFFICIAL EMAIL DESKS</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div style={{ fontSize: '14px', color: '#FFFFFF', padding: '8px 12px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                        <span style={{ color: 'var(--purple-light)', fontWeight: 700, display: 'block', fontSize: '11.5px', textTransform: 'uppercase', marginBottom: '2px' }}>General &amp; Customer Support</span>
+                        <a href="mailto:support@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 700, fontSize: '15px' }}>support@expensexai.com</a>
+                      </div>
+                      <div style={{ fontSize: '14px', color: '#FFFFFF', padding: '8px 12px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                        <span style={{ color: 'var(--purple-light)', fontWeight: 700, display: 'block', fontSize: '11.5px', textTransform: 'uppercase', marginBottom: '2px' }}>Corporate &amp; Partnerships</span>
+                        <a href="mailto:info@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 700, fontSize: '15px' }}>info@expensexai.com</a>
+                      </div>
+                      <div style={{ fontSize: '14px', color: '#FFFFFF', padding: '8px 12px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                        <span style={{ color: 'var(--purple-light)', fontWeight: 700, display: 'block', fontSize: '11.5px', textTransform: 'uppercase', marginBottom: '2px' }}>Privacy &amp; Data Rights Desk</span>
+                        <a href="mailto:privacy@expensexai.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 700, fontSize: '15px' }}>privacy@expensexai.com</a>
+                      </div>
                     </div>
                   </div>
                 </div>

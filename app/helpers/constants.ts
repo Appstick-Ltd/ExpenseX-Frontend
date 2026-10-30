@@ -145,7 +145,7 @@ export const CAPTURE_CHANNELS = [
 ];
 
 export const AI_PIPELINE_STAGES = [
-  { step: '01', name: 'Raw Signals', desc: 'Voice, Receipt, SMS, Email, WhatsApp' },
+  { step: '01', name: 'Raw Signals', desc: 'Voice, Receipt OCR, and Bank SMS' },
   { step: '02', name: 'AI Extraction', desc: 'Tokenize text & structured entities' },
   { step: '03', name: 'Categorize', desc: 'Predict taxonomy across verified core categories' },
   { step: '04', name: 'Recognize', desc: 'Resolve messy merchant descriptors' },
@@ -248,11 +248,11 @@ export const SAVINGS_GOALS_DATA = [
 export const PRIVACY_POINTS = [
   {
     title: 'Explicit Permissions',
-    desc: 'Nothing is tracked without your direct consent. You choose whether SMS, Email, or Voice capture is activated.',
+    desc: 'Nothing is tracked without your direct consent. You choose whether SMS or Voice capture is activated.',
   },
   {
     title: 'Granular Access Control',
-    desc: 'Connect or disconnect your email and bank SMS feeds anytime with a single toggle. Revocable in 1 click.',
+    desc: 'Enable or disable bank SMS detection and sync permissions anytime with a single toggle. Revocable in 1 click.',
   },
   {
     title: 'Zero Ad-Tracking or Selling',
@@ -274,11 +274,11 @@ export const ROADMAP_PHASES = [
       'Voice Natural Language Capture',
       'Receipt Vision OCR Scan',
       'SMS Alert Transaction Parser (Android)',
-      'Safe to Spend Dynamic Margin',
       'Dynamic Envelope Budgeting',
       'Intelligent Categorization',
       'Merchant Resolution Engine',
       'Cross-Channel Duplicate Detection',
+      'Multi-Currency Budget Ledger',
     ],
   },
   {
@@ -287,6 +287,7 @@ export const ROADMAP_PHASES = [
     status: 'IN DEVELOPMENT',
     isLive: false,
     items: [
+      'Safe to Spend Dynamic Margin',
       'Ask ExpenseX Conversational AI',
       'WhatsApp AI Assistant Bot',
       'Email Digital Invoice Sync',

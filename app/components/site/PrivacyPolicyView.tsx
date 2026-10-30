@@ -157,7 +157,7 @@ export const PrivacyPolicyView: React.FC = () => {
                 <li><strong>Receipt Photos &amp; Documents:</strong> Camera captures and uploaded digital images of receipts and invoices. Our vision processing pipeline extracts merchant name, total amount, taxes, currency, and line items.</li>
                 <li><strong>Spoken Audio Logs:</strong> Temporary audio voice logs recorded when utilizing hands-free voice logging. Voice inputs are transcribed into structured financial parameters and discarded immediately after processing.</li>
                 <li><strong>Bank Notification SMS Alerts:</strong> When users grant on-device SMS access permissions on supported mobile devices, our system parses incoming transactional debit/credit notifications. Personal text messages outside banking financial patterns are never inspected or uploaded.</li>
-                <li><strong>Digital Invoices &amp; Email Receipts:</strong> Forwarded or synchronized purchase confirmation emails processed to extract merchant and billing data.</li>
+                <li><strong>Digital Invoices &amp; Email Receipts (In Development):</strong> Planned for Phase 2—forwarded or synchronized purchase confirmation emails will be processed only upon explicit user opt-in when launched.</li>
               </ul>
             </section>
 
@@ -183,7 +183,7 @@ export const PrivacyPolicyView: React.FC = () => {
                 4. Data Retention &amp; Storage Lifecycle
               </h2>
               <p>
-                We do not promise unrealistic &ldquo;zero retention&rdquo; while an account remains active, because continuous financial tracking requires historical records to compute your spending analytics, category breakdowns, and Safe to Spend margins:
+                We do not promise unrealistic &ldquo;zero retention&rdquo; while an account remains active, because continuous financial tracking requires historical records to compute your spending analytics, category breakdowns, and dynamic envelope budget balances:
               </p>
               <ul style={{ paddingLeft: '24px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <li><strong>Active Account Records:</strong> Categorized transactions, balances, custom category rules, and budgets are retained securely while your account remains open and active.</li>
@@ -228,7 +228,7 @@ export const PrivacyPolicyView: React.FC = () => {
                     <li><strong>Personal Identity:</strong> Full name, registered email address, phone number, profile preferences, and login credentials/authentication tokens.</li>
                     <li><strong>Financial Transactions:</strong> All logged income, expenses, custom merchant entries, category histories, payment tags, and personal notes.</li>
                     <li><strong>Captured Receipts &amp; Signals:</strong> All uploaded receipt images, camera captures, vision OCR tokens, parsed bank alert text, and synchronized digital invoice files.</li>
-                    <li><strong>Budgets &amp; AI Intelligence:</strong> Savings goals, Safe to Spend parameters, financial health metrics, and conversational AI prompt history.</li>
+                    <li><strong>Budgets &amp; AI Intelligence:</strong> Savings goals, dynamic envelope budget parameters, financial health metrics, and interaction history.</li>
                   </ul>
                 </div>
 

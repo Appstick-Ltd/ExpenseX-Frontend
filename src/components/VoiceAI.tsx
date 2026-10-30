@@ -28,7 +28,7 @@ const VOICE_SCENARIOS: VoiceScenario[] = [
       amount: '$42.00',
       category: 'Food & Dining',
       date: 'Yesterday, 8:15 PM',
-      confidence: '99.4%',
+      confidence: 'High Confidence Match',
       envelopeEffect: '$362 / $500 budget remaining',
     },
     icon: Utensils,
@@ -42,7 +42,7 @@ const VOICE_SCENARIOS: VoiceScenario[] = [
       amount: '$18.50',
       category: 'Transportation',
       date: 'Today, 9:20 AM',
-      confidence: '99.8%',
+      confidence: 'High Confidence Match',
       envelopeEffect: '$181.50 / $250 budget remaining',
     },
     icon: Car,
@@ -56,7 +56,7 @@ const VOICE_SCENARIOS: VoiceScenario[] = [
       amount: '$78.30',
       category: 'Groceries',
       date: 'Today, 2:45 PM',
-      confidence: '98.9%',
+      confidence: 'High Confidence Match',
       envelopeEffect: '$221.70 / $400 budget remaining',
     },
     icon: ShoppingBag,
@@ -70,8 +70,8 @@ const VOICE_SCENARIOS: VoiceScenario[] = [
       amount: '+$1,250.00',
       category: 'Income / Earnings',
       date: 'Today, 11:00 AM',
-      confidence: '99.9%',
-      envelopeEffect: 'Transferred to Safe-to-Spend cashflow',
+      confidence: 'High Confidence Match',
+      envelopeEffect: 'Transferred to envelope cashflow',
     },
     icon: Briefcase,
   },
@@ -441,12 +441,12 @@ export const VoiceAI: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '14px', fontSize: '12px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Status</span>
-              <span style={{ color: '#34D399', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                <CheckCircle2 size={13} /> Active in Android &amp; iOS Apps
-              </span>
-            </div>
+            {/* <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '14px', fontSize: '12px' }}> */}
+              {/* <span style={{ color: 'var(--text-secondary)' }}>Status</span> */}
+              {/* <span style={{ color: '#34D399', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                <CheckCircle2 size={13} /> Active in Android (Google Play) &bull; iOS In Review
+              </span> */}
+            {/* </div> */}
           </Card3DTilt>
         </div>
       </div>
