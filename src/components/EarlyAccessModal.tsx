@@ -12,7 +12,7 @@ const FEATURES_LIST = [
   { id: 'receipt', label: 'Receipt OCR Scan', icon: '🧾' },
   { id: 'sms', label: 'Bank SMS Detection', icon: '💬' },
   { id: 'voice', label: 'Hands-Free Voice AI', icon: '🎙️' },
-  { id: 'whatsapp', label: 'WhatsApp AI Bot', icon: '🤖' },
+  { id: 'insights', label: 'AI Health Insights', icon: '📊' },
   { id: 'safe_spend', label: 'Safe-to-Spend Limit', icon: '🛡️' },
   { id: 'budgets', label: 'Smart Budget Envelopes', icon: '🎯' },
 ];
@@ -23,7 +23,7 @@ export const EarlyAccessModal: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const [referralCode, setReferralCode] = useState('');
+  const [referralCode, setReferralCode] = useState(() => getStoredReferralCode() || '');
   // Note: referralCode is read from storage, not from a form input
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
     'receipt',
@@ -71,13 +71,11 @@ export const EarlyAccessModal: React.FC = () => {
     }
   };
 
-  closeModalRef.current = closeModal;
+  useEffect(() => {
+    closeModalRef.current = closeModal;
+  });
 
   useEffect(() => {
-    // Check if referral code is in storage or URL
-    const saved = getStoredReferralCode();
-    if (saved) setReferralCode(saved);
-
     const unsubscribe = subscribeToEarlyAccessModal((detail) => {
       if (detail.platform === 'ios') setPlatform('ios');
       else if (detail.platform === 'android') setPlatform('android');
@@ -315,7 +313,7 @@ export const EarlyAccessModal: React.FC = () => {
                     }}
                   >
                     <div className="platform-card-icon-wrap apple">
-                      <img src={appleLogoImg} alt="Apple iOS" className="platform-card-logo" />
+                      <img src={(appleLogoImg as any)?.src || appleLogoImg} alt="Apple iOS" className="platform-card-logo" />
                     </div>
                     <span className="platform-name">Apple iOS</span>
                     {platform === 'ios' && <Check size={13} className="platform-check-icon" />}
@@ -332,7 +330,7 @@ export const EarlyAccessModal: React.FC = () => {
                     }}
                   >
                     <div className="platform-card-icon-wrap play">
-                      <img src={googlePlaySvg} alt="Google Play" className="platform-card-logo" />
+                      <img src={(googlePlaySvg as any)?.src || googlePlaySvg} alt="Google Play" className="platform-card-logo" />
                     </div>
                     <span className="platform-name">Android</span>
                     {platform === 'android' && <Check size={13} className="platform-check-icon" />}

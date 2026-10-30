@@ -1,12 +1,11 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { X, ShieldCheck, ArrowRight, Zap, Check } from 'lucide-react';
+import { X, ShieldCheck } from 'lucide-react';
 import { subscribeToEarlyAccessModal, type EarlyAccessEventDetail } from '../../helpers/modalEvents';
 import { playMicroClick } from '../../helpers/audio';
 import { triggerHaptic } from '../../helpers/haptics';
 import { Logo } from '../common/Logo';
 
-const appleLogoSrc = '/apple-logo.png';
 const googlePlaySrc = '/Google_Play_2022_icon.svg';
 const logoSrc = '/logo.png';
 
@@ -15,7 +14,7 @@ const APP_STORE_URL = 'https://apps.apple.com/app/expensex-ai/id6742358055';
 
 export const EarlyAccessModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [modalData, setModalData] = useState<EarlyAccessEventDetail | null>(null);
+  const [_modalData, setModalData] = useState<EarlyAccessEventDetail | null>(null);
   const closeModalRef = useRef<() => void>(() => {});
 
   const closeModal = () => {
@@ -24,7 +23,9 @@ export const EarlyAccessModal: React.FC = () => {
     document.body.style.overflow = '';
   };
 
-  closeModalRef.current = closeModal;
+  useEffect(() => {
+    closeModalRef.current = closeModal;
+  });
 
   useEffect(() => {
     const unsubscribe = subscribeToEarlyAccessModal((detail) => {

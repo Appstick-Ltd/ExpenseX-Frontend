@@ -12,7 +12,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'What is ExpenseX AI and how does it track expenses automatically?',
     answer:
-      'ExpenseX AI is an autonomous AI expense tracker and personal finance companion. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes your transactions automatically across camera receipt scans (OCR), bank SMS transaction alerts, natural language voice memos, and WhatsApp AI bot integration—delivering 100% automated personal finance.',
+      'ExpenseX AI is an autonomous AI expense tracker and personal finance companion. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes your transactions automatically across camera receipt scans (OCR), bank SMS transaction alerts, and natural language voice memos—delivering 100% automated personal finance.',
     keywords: 'AI expense tracker, automatic finance, receipt scanner',
   },
   {

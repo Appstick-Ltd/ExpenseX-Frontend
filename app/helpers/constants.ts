@@ -130,18 +130,6 @@ export const CAPTURE_CHANNELS = [
       amount: '$520',
     },
   },
-  {
-    id: 'whatsapp',
-    title: 'WhatsApp AI Bot',
-    badge: 'In Development',
-    subtitle: 'Upcoming: Forward paper bills, voice notes, or text casual expenses in WhatsApp',
-    sample: {
-      userMessage: 'Paid $85 for fuel at Shell Station ⛽',
-      botResponse: '✓ Logged: $85 under Transportation',
-      category: 'Transportation',
-      amount: '$85',
-    },
-  },
 ];
 
 export const AI_PIPELINE_STAGES = [
@@ -289,7 +277,6 @@ export const ROADMAP_PHASES = [
     items: [
       'Safe to Spend Dynamic Margin',
       'Ask ExpenseX Conversational AI',
-      'WhatsApp AI Assistant Bot',
       'Email Digital Invoice Sync',
       'Dynamic Financial Health Index',
       'Daily AI Morning Briefing',

@@ -168,7 +168,7 @@ export default function RootLayout({
   <h2 style="color: #0f172a; font-size: 20px;">Feature Availability Status</h2>
   <ul style="padding-left: 20px;">
     <li><strong>Available Now (Live in Production):</strong> Multi-Modal Vision OCR Receipt Capture, Voice Expense Entry, Bank SMS Transaction Parsing (Android), Dynamic Envelope Budgeting, Safe-to-Spend Computation, Smart Categorization, Deduplication Engine.</li>
-    <li><strong>In Development:</strong> WhatsApp AI Assistant Bot, Email Invoice Sync, Conversational AI Money Assistant.</li>
+    <li><strong>In Development:</strong> Email Invoice Sync, Conversational AI Money Assistant.</li>
     <li><strong>Coming Soon:</strong> 30-Day Predictive Cashflow Forecasting, Autonomous Financial Wrapped.</li>
   </ul>
   <h2 style="color: #0f172a; font-size: 20px;">Enterprise Security &amp; Cloud Privacy</h2>

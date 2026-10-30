@@ -132,18 +132,6 @@ export const CAPTURE_CHANNELS = [
       amount: '$520',
     },
   },
-  {
-    id: 'whatsapp',
-    title: 'WhatsApp AI Bot',
-    badge: 'Chatbot Sync',
-    subtitle: 'Forward paper bills, voice notes, or text casual expenses in WhatsApp',
-    sample: {
-      userMessage: 'Paid $85 for fuel at Shell Station ⛽',
-      botResponse: '✓ Logged: $85 under Fuel & Transport',
-      category: 'Fuel & Transport',
-      amount: '$85',
-    },
-  },
 ];
 
 export const AI_PIPELINE_STAGES = [

@@ -1,5 +1,6 @@
 'use client';
-import { Camera, MessageSquare, Mail, MessageCircle, Sparkles, Check } from 'lucide-react';
+import React from 'react';
+import { Camera, MessageSquare, Mail, Sparkles, Check } from 'lucide-react';
 import { Card3DTilt } from '../ui/Card3DTilt';
 const receiptOcrSrc = '/receipt_ai_ocr.jpg';
 
@@ -78,10 +79,7 @@ export const CaptureChannels: React.FC = () => {
                 <Camera size={22} />
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>Receipt Scan</h3>
-                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', letterSpacing: '0.04em' }}>LIVE • AI OCR</span>
-              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Receipt Scan</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
                 Snap paper bills, grocery slips, or restaurant invoices. Multi-modal vision extracts merchant, amount, tax, and date accurately.
               </p>
@@ -183,10 +181,7 @@ export const CaptureChannels: React.FC = () => {
                 <MessageSquare size={22} />
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>SMS Detection</h3>
-                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(52, 211, 153, 0.15)', color: '#34D399', border: '1px solid rgba(52, 211, 153, 0.3)', letterSpacing: '0.04em' }}>LIVE • ANDROID</span>
-              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>SMS Detection</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
                 Automated detection of bank &amp; debit alert SMS with user consent. Distinguishes transaction amount from available balance.
               </p>
@@ -257,10 +252,7 @@ export const CaptureChannels: React.FC = () => {
                 <Mail size={22} />
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>Email Invoices</h3>
-                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(255, 90, 54, 0.15)', color: 'var(--coral-accent)', border: '1px solid rgba(255, 90, 54, 0.3)', letterSpacing: '0.04em' }}>IN DEVELOPMENT</span>
-              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Email Invoices</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
                 Forwarded digital receipts from rides, subscriptions, delivery, and online commerce parsed securely.
               </p>
@@ -299,101 +291,6 @@ export const CaptureChannels: React.FC = () => {
             <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#FF9A7B', fontWeight: 600 }}>
               <Check size={14} />
               <span>Read-only invoice parsing</span>
-            </div>
-          </Card3DTilt>
-
-          {/* Card 4: WhatsApp AI Bot */}
-          <Card3DTilt
-            className="glass-card capture-card"
-            style={{
-              padding: '28px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              borderRadius: '20px',
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '12px',
-                  background: 'rgba(37, 211, 102, 0.15)',
-                  border: '1px solid rgba(37, 211, 102, 0.35)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '20px',
-                  color: '#25D366',
-                }}
-              >
-                <MessageCircle size={22} />
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>WhatsApp AI Bot</h3>
-                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(255, 90, 54, 0.15)', color: 'var(--coral-accent)', border: '1px solid rgba(255, 90, 54, 0.3)', letterSpacing: '0.04em' }}>IN DEVELOPMENT</span>
-              </div>
-              <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Upcoming feature: Forward paper bills, drop voice notes, or text casual expenses directly in WhatsApp without opening the app.
-              </p>
-
-              {/* WhatsApp Chat Simulation Mock */}
-              <div
-                style={{
-                  background: 'rgba(5, 7, 13, 0.85)',
-                  borderRadius: '12px',
-                  padding: '12px',
-                  border: '1px solid rgba(37, 211, 102, 0.25)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                }}
-              >
-                {/* User Message (Right) */}
-                <div
-                  style={{
-                    alignSelf: 'flex-end',
-                    background: 'rgba(37, 211, 102, 0.2)',
-                    border: '1px solid rgba(37, 211, 102, 0.35)',
-                    borderRadius: '10px 10px 2px 10px',
-                    padding: '6px 10px',
-                    maxWidth: '88%',
-                  }}
-                >
-                  <div style={{ fontSize: '11px', color: '#E2E8F0', lineHeight: 1.3 }}>
-                    Paid $85 for fuel at Shell Station ⛽
-                  </div>
-                  <div style={{ fontSize: '9px', color: '#86EFAC', textAlign: 'right', marginTop: '2px' }}>
-                    2:45 PM • ✓✓
-                  </div>
-                </div>
-
-                {/* Bot Response (Left) */}
-                <div
-                  style={{
-                    alignSelf: 'flex-start',
-                    background: 'rgba(109, 61, 245, 0.25)',
-                    border: '1px solid rgba(139, 92, 246, 0.35)',
-                    borderRadius: '10px 10px 10px 2px',
-                    padding: '6px 10px',
-                    maxWidth: '92%',
-                  }}
-                >
-                  <div style={{ fontSize: '11px', color: '#A78BFA', fontWeight: 700, marginBottom: '2px' }}>
-                    ✓ Logged: Fuel & Transport
-                  </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>
-                    $85 recorded. Budget remaining: $345
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#25D366', fontWeight: 600 }}>
-              <Sparkles size={14} />
-              <span>Roadmap Capability</span>
             </div>
           </Card3DTilt>
         </div>
