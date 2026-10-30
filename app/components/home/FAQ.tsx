@@ -11,34 +11,64 @@ interface FAQItem {
 
 const FAQ_ITEMS: FAQItem[] = [
   {
-    question: 'What is ExpenseX AI and how does it track expenses automatically?',
+    question: 'What is ExpenseX AI?',
     answer:
-      'ExpenseX AI is an autonomous personal finance platform and expense companion developed by Appstick. Unlike traditional manual budget apps, ExpenseX AI captures and categorizes transactions across camera receipt scans, bank SMS transaction alerts, natural language voice memos, and digital email invoices—eliminating manual typing friction.',
-    keywords: 'AI expense tracker, automatic finance, receipt scanner',
+      'ExpenseX AI is an intelligent personal finance platform developed by Appstick. It eliminates manual expense logging by using AI perception across voice memos, camera receipt scans, and bank alert SMS to automatically organize your spending into structured financial intelligence.',
+    keywords: 'What is ExpenseX, personal finance assistant, AI money management',
   },
   {
-    question: 'How does ExpenseX AI compare to traditional manual expense trackers?',
+    question: 'How does AI expense tracking work?',
     answer:
-      'Manual expense tracker apps require you to type every single merchant name, amount, date, and category, leading to tracker fatigue within weeks. ExpenseX AI operates on autopilot: our neural vision and NLP engine automatically extracts merchant data, taxes, currencies, and line items from receipts, audio, and messages, eliminating tedious manual typing.',
-    keywords: 'Best expense tracker app, manual vs automatic, AI OCR',
+      'Instead of typing transaction forms by hand, ExpenseX captures raw financial signals from your everyday activities—such as spoken voice notes ("Spent $42 on dinner"), photographed physical receipts, or bank debit SMS alerts. Our neural pipeline extracts the merchant, amount, category, and date, normalizes the data, detects duplicates, and records the verified entry directly into your budget ledger.',
+    keywords: 'How AI expense tracking works, automatic expense tracker, NLP extraction',
   },
   {
-    question: 'How does the Safe-to-Spend algorithm work?',
+    question: 'Can I add expenses using my voice?',
     answer:
-      'Safe-to-Spend is a predictive financial health metric calculated by ExpenseX AI. It projects your recurring subscription bills, active savings goal commitments, and typical spending velocity to give you a single, clear daily and weekly spending ceiling so you never overdraft or fall short of your savings.',
-    keywords: 'Safe to spend, smart budgets, financial health score',
+      'Yes! Voice-based expense logging is one of ExpenseX AI\'s core capabilities. You simply speak naturally in conversational sentences like "I spent $18 on an Uber to downtown". The system transcribes the speech, extracts the relevant financial parameters, and creates a categorized expense entry in seconds without manual typing. Spoken audio is processed in ephemeral memory and discarded immediately.',
+    keywords: 'Voice expense tracking, speak expenses, speech to expense, audio logging',
   },
   {
-    question: 'Is my financial data secure and private with ExpenseX AI?',
+    question: 'How does receipt scanning work?',
     answer:
-      'Security is our highest priority. All data in transit and at rest is protected with enterprise AES-256 encryption via Google Cloud Key Management Service (KMS). Multi-modal extraction occurs in isolated enterprise cloud environments under strict confidentiality guarantees: we never sell your data, never broker transaction history to advertisers, and your personal financial information is never used to train public foundation models.',
-    keywords: 'Enterprise cloud security, data privacy, AES-256 encryption',
+      'ExpenseX uses multi-modal AI vision OCR. Just snap a photo of any grocery slip, restaurant bill, or payment invoice. The system extracts the merchant name, total amount, taxes, currency, and line items, cross-verifies the arithmetic, and auto-assigns it to the correct budget envelope.',
+    keywords: 'Receipt scanner, bill scanner, invoice OCR, camera expense capture',
   },
   {
-    question: 'Which platforms and operating systems are supported?',
+    question: 'How does SMS transaction detection work?',
     answer:
-      'ExpenseX AI is supported across Android mobile devices and all modern desktop web browsers. Your financial insights, budgets, and categorized transactions synchronize securely across all your authorized devices.',
-    keywords: 'Android expense tracker, web budget dashboard, personal finance app',
+      'On Android devices, with your explicit user consent, ExpenseX detects incoming bank debit and transaction alert SMS messages in the background. The engine accurately distinguishes between purchase amounts and available account balances, and categorizes the transaction immediately. ExpenseX is not a default SMS handler and strictly requests permissions for financial tracking.',
+    keywords: 'SMS expense detection, bank alert parser, Android SMS money management',
+  },
+  {
+    question: 'Is ExpenseX AI available on Android and iOS?',
+    answer:
+      'Yes. ExpenseX AI is officially launched and available for download on both the Google Play Store (Android) and Apple App Store (iOS). You can install the application directly from your device\'s app store and begin tracking right away.',
+    keywords: 'Android and iOS, Google Play Store, Apple App Store, app availability',
+  },
+  {
+    question: 'Is ExpenseX AI free to use?',
+    answer:
+      'Yes, ExpenseX AI offers a generous free tier that lets you track income and expenses, set dynamic envelope budgets, and experience automated tracking. For high-volume AI usage, expanded multi-modal OCR credits, and deep pattern analysis, flexible monthly, quarterly, half-yearly, and annual subscription plans are available.',
+    keywords: 'Free expense tracker, pricing, free plan, subscription',
+  },
+  {
+    question: 'What are the premium subscription benefits?',
+    answer:
+      'Premium subscriptions unlock expanded AI credits for receipt OCR scans and voice entries, advanced spending trend analysis, personalized financial recommendations, multiple wallets and currency accounts, and priority processing on our cloud neural pipeline.',
+    keywords: 'Premium subscription, benefits, AI credits, Pro features',
+  },
+  {
+    question: 'How is my financial information protected?',
+    answer:
+      'Security and data privacy are foundational at ExpenseX AI. All data in transit and at rest is protected with enterprise AES-256 KMS cloud encryption on Google Cloud. Your data is isolated in secure VPC environments, never sold, never shared with third-party advertising brokers, and never used to train public foundation models.',
+    keywords: 'Data security, AES-256 encryption, Google Cloud KMS, privacy policy',
+  },
+  {
+    question: 'Can I delete my account and financial data?',
+    answer:
+      'Yes, absolutely. Under our data autonomy principles, you have complete control over your records. You can export your financial history to CSV/JSON at any time, or request complete account and data deletion directly from your app settings, which permanently wipes all records from our systems.',
+    keywords: 'Delete account, data export, data autonomy, privacy rights',
   },
 ];
 

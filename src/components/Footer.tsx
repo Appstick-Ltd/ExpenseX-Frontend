@@ -6,10 +6,11 @@ import { playMicroClick } from '../utils/audio';
 export const Footer: React.FC = () => {
   const platformLinks = [
     { label: 'Home', href: '/', targetId: 'home' },
+    { label: 'Voice AI', href: '/', targetId: 'voice-ai' },
     { label: 'How It Works', href: '/', targetId: 'tour' },
     { label: 'Capture Channels', href: '/', targetId: 'features' },
     { label: 'AI Financial Engine', href: '/', targetId: 'ai-engine' },
-    { label: 'Product & Stage', href: '/', targetId: 'product-stage' },
+    { label: 'Roadmap', href: '/', targetId: 'roadmap' },
     { label: 'Frequently Asked Questions', href: '/', targetId: 'faq' },
   ];
 

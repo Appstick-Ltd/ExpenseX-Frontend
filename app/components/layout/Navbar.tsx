@@ -181,7 +181,7 @@ export const Navbar: React.FC = () => {
     e.preventDefault();
     playMicroClick();
 
-    // 1. Anchor link (e.g. #home, #tour, #features, #product-stage, #faq)
+    // 1. Anchor link (e.g. #home, #tour, #features, #roadmap, #faq)
     if (href.startsWith('#')) {
       if (pathname !== '/') {
         // Navigate cleanly to homepage without adding '#' to the URL

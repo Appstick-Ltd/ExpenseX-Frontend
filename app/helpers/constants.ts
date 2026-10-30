@@ -5,11 +5,17 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '#home' },
+  { label: 'Voice AI', href: '#voice-ai' },
   { label: 'How It Works', href: '#tour' },
   { label: 'Features', href: '#features' },
-  { label: 'Product & Stage', href: '#product-stage' },
+  { label: 'Roadmap', href: '#roadmap' },
   { label: 'FAQ', href: '#faq' },
 ];
+
+export const STORE_LINKS = {
+  playStore: 'https://play.google.com/store/apps/details?id=com.expensexai.app',
+  appStore: 'https://apps.apple.com/app/expensex-ai/id6742358055',
+};
 
 export const HERO_DATA = {
   eyebrow: 'Meet Your AI Money Assistant',
@@ -20,14 +26,14 @@ export const HERO_DATA = {
     'Speak: "Spent $42 on dinner"',
     'Snap receipts with instant AI OCR',
     'Auto-parse bank transaction SMS',
-    'Extract digital purchase emails',
+    'Categorize expenses automatically',
     'Understand where your money goes',
   ],
   descriptionPrimary: 'Track, understand, and control your money with AI.',
-  descriptionSecondary: 'ExpenseX uses AI to automatically turn your voice, receipts, SMS, and emails into structured financial intelligence.',
-  ctaPrimary: 'Get ExpenseX AI',
-  ctaSecondary: 'Take a Tour',
-  availability: 'Available on Android & Web',
+  descriptionSecondary: 'ExpenseX AI automatically turns your natural voice memos, receipt scans, and bank SMS into structured financial intelligence without tedious manual typing.',
+  ctaPrimary: 'Download App',
+  ctaSecondary: 'Explore Features',
+  availability: 'Available on Google Play & App Store',
 };
 
 export const PHONE_MOCKUP_DATA = {

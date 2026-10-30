@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { captureReferralCodeFromUrl } from '../helpers/referral';
 import { Hero } from '../components/home/Hero';
+import { VoiceAI } from '../components/home/VoiceAI';
 import { QuickTour } from '../components/home/QuickTour';
 import { CaptureChannels } from '../components/home/CaptureChannels';
 import { AIEngine } from '../components/home/AIEngine';
@@ -14,7 +15,6 @@ import { SavingsGoals } from '../components/home/SavingsGoals';
 import { Roadmap } from '../components/home/Roadmap';
 import { Privacy } from '../components/home/Privacy';
 import { FAQ } from '../components/home/FAQ';
-import { ProductStage } from '../components/home/ProductStage';
 import { FinalCTA } from '../components/home/FinalCTA';
 
 export default function PageClient() {
@@ -28,7 +28,10 @@ export default function PageClient() {
       {/* 1. Uncluttered Hero with 3D Phone & Studio Light */}
       <Hero />
 
-      {/* 2. Interactive Quick Tour (5 Steps) */}
+      {/* 2. Dedicated Voice AI Showcase */}
+      <VoiceAI />
+
+      {/* 3. Interactive Quick Tour (5 Steps) */}
       <QuickTour />
 
       {/* 3. Multi-channel Capture (Receipt, SMS, Email, Manual) */}
@@ -61,13 +64,10 @@ export default function PageClient() {
       {/* 12. Privacy, Permissions & Data Autonomy */}
       <Privacy />
 
-      {/* 13. Our Business, Current Stage & Leadership Team */}
-      <ProductStage />
-
-      {/* 14. High-Authority SEO Knowledge Base & FAQs */}
+      {/* 13. High-Authority SEO Knowledge Base & FAQs */}
       <FAQ />
 
-      {/* 15. Cinematic Final Call to Action */}
+      {/* 14. Cinematic Final Call to Action */}
       <FinalCTA />
     </>
   );

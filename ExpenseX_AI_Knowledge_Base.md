@@ -516,7 +516,7 @@ When answering:
    Tonmay Sen is a Software Engineer at Appstick with 4 years of production-level experience in mobile application development. At ExpenseX AI, he builds and maintains the Android and iOS applications, turning product requirements into stable, user-ready mobile experiences.
 5. **Dani Gain — Software Engineer (Backend)** (3 years)  
    Dani Gain is a Backend Software Engineer at Appstick with 3 years of production-level experience in server-side development. At ExpenseX AI, he builds and maintains the backend services and APIs that power the app's data and AI-assisted features.
-6. **Sk Shiam Ali — Software Engineer (Website Frontend)** (3 years)  
+6. **Sk Shiam Ali — Software Engineer (Frontend)** (3 years)  
    Sk Shiam Ali is a Frontend Software Engineer at Appstick with 3 years of production-level experience in web development. At ExpenseX AI, he builds and maintains the product website, focusing on responsive, fast and accessible interfaces.
 7. **Asif Uddin — UI/UX Designer** (2.5 years)  
    Asif Uddin is a UI/UX Designer at Appstick with 2.5 years of production-level experience in interface and experience design. At ExpenseX AI, he designs the app and website interfaces, keeping financial workflows simple, clear and easy to use.

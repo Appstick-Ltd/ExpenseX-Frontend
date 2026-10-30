@@ -3,6 +3,7 @@ import { captureReferralCodeFromUrl } from './utils/referral';
 import { PortalRouter } from './portal/PortalRouter';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { VoiceAI } from './components/VoiceAI';
 import { CursorGlow } from './components/CursorGlow';
 import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { MobileQuickDock } from './components/MobileQuickDock';
@@ -103,7 +104,10 @@ export const App: React.FC = () => {
           {/* 1. Uncluttered Hero with 3D Phone & Studio Light */}
           <Hero />
 
-          {/* 2. Interactive Quick Tour (5 Steps) */}
+          {/* 2. Dedicated Voice AI Showcase */}
+          <VoiceAI />
+
+          {/* 3. Interactive Quick Tour (5 Steps) */}
           <QuickTour />
 
           {/* 3. Multi-channel Capture (Receipt, SMS, Email, Manual) */}

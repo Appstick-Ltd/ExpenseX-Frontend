@@ -78,9 +78,12 @@ export const CaptureChannels: React.FC = () => {
                 <Camera size={22} />
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Receipt Scan</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>Receipt Scan</h3>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', letterSpacing: '0.04em' }}>LIVE • AI OCR</span>
+              </div>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Snap a photo of grocery slips, dining bills, or handwritten tokens. AI vision digitizes line items instantly.
+                Snap paper bills, grocery slips, or restaurant invoices. Multi-modal vision extracts merchant, amount, tax, and date accurately.
               </p>
 
               {/* Receipt Visualizer with scan line & real AI OCR image */}
@@ -180,9 +183,12 @@ export const CaptureChannels: React.FC = () => {
                 <MessageSquare size={22} />
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>SMS Auto-Read</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>SMS Detection</h3>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(52, 211, 153, 0.15)', color: '#34D399', border: '1px solid rgba(52, 211, 153, 0.3)', letterSpacing: '0.04em' }}>LIVE • ANDROID</span>
+              </div>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Bank & debit SMS alerts parsed in background on device. Zero data ever leaves your device unencrypted.
+                Automated detection of bank &amp; debit alert SMS with user consent. Distinguishes transaction amount from available balance.
               </p>
 
               {/* SMS Bubble Mockup */}
@@ -218,7 +224,7 @@ export const CaptureChannels: React.FC = () => {
 
             <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#34D399', fontWeight: 600 }}>
               <Check size={14} />
-              <span>Encrypted Cloud Intelligence</span>
+              <span>Permission-based on Android</span>
             </div>
           </Card3DTilt>
 
@@ -251,9 +257,12 @@ export const CaptureChannels: React.FC = () => {
                 <Mail size={22} />
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Email Detection</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0 }}>Email Invoices</h3>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: 'rgba(255, 90, 54, 0.15)', color: 'var(--coral-accent)', border: '1px solid rgba(255, 90, 54, 0.3)', letterSpacing: '0.04em' }}>IN DEVELOPMENT</span>
+              </div>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
-                Securely parses order confirmations from Uber, Amazon, DoorDash, and airlines.
+                Forwarded digital receipts from rides, subscriptions, delivery, and online commerce parsed securely.
               </p>
 
               {/* Email Mock */}

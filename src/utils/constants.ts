@@ -3,8 +3,14 @@ export interface NavItem {
   href: string;
 }
 
+export const STORE_LINKS = {
+  playStore: 'https://play.google.com/store/apps/details?id=com.expensexai.app',
+  appStore: 'https://apps.apple.com/app/expensex-ai/id6742358055',
+};
+
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '#home' },
+  { label: 'Voice AI', href: '#voice-ai' },
   { label: 'How It Works', href: '#tour' },
   { label: 'Features', href: '#features' },
   { label: 'AI Engine', href: '#ai-engine' },
@@ -27,8 +33,8 @@ export const HERO_DATA = {
   ],
   descriptionPrimary: 'Track, understand, and control your money with AI.',
   descriptionSecondary: 'ExpenseX uses AI to automatically turn your voice, receipts, SMS, and emails into structured financial intelligence.',
-  ctaPrimary: 'Get Early Access',
-  ctaSecondary: 'Take a Tour',
+  ctaPrimary: 'Download Now',
+  ctaSecondary: 'Explore Features',
   availability: 'Available on iOS and Android',
 };
 
@@ -264,18 +270,18 @@ export const PRIVACY_POINTS = [
 export const ROADMAP_PHASES = [
   {
     phase: 'PHASE 1',
-    title: 'Core Capture Foundation',
-    status: 'AVAILABLE NOW (PRIVATE BETA)',
+    title: 'Core Capture & Budgeting Foundation',
+    status: 'AVAILABLE NOW (PRODUCTION)',
     isLive: true,
     items: [
       'Voice Natural Language Capture',
       'Receipt Vision OCR Scan',
-      'SMS Alert Transaction Parser',
-      'Email Digital Invoice Sync',
+      'SMS Alert Transaction Parser (Android)',
+      'Safe to Spend Dynamic Margin',
+      'Dynamic Envelope Budgeting',
       'Intelligent Categorization',
       'Merchant Resolution Engine',
       'Cross-Channel Duplicate Detection',
-      'Confirmation & Review Queue',
     ],
   },
   {

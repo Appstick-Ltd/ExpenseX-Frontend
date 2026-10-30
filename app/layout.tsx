@@ -5,21 +5,21 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { ToasterProvider } from './components/common/ToasterProvider';
 
 export const metadata: Metadata = {
-  title: 'ExpenseX AI — Your AI Money Assistant | Track Expenses Without Typing',
+  title: 'ExpenseX AI – AI-Powered Personal Finance & Expense Tracker',
   description:
-    'Your money should explain itself. ExpenseX is your AI Money Assistant that automatically tracks expenses from voice, receipts, SMS, and email without manual typing.',
+    'Track expenses smarter with ExpenseX AI. Manage income, scan receipts, record expenses with your voice, monitor budgets, and gain AI-powered financial insights.',
   keywords: [
-    'expense',
-    'expenses',
-    'expense tracker',
     'AI expense tracker',
+    'Personal finance assistant',
+    'Smart expense tracker',
+    'Voice expense tracking',
+    'AI money management',
+    'Receipt scanner',
+    'Budget planner',
+    'Income and expense manager',
+    'expense tracker app',
     'automatic expense tracker',
-    'best expense tracker',
-    'smart expense tracker',
-    'free expense tracker app',
     'daily expense manager',
-    'personal expense tracker',
-    'expense manager app',
     'ExpenseX',
     'ExpenseX AI',
   ],
@@ -33,15 +33,15 @@ export const metadata: Metadata = {
     url: 'https://expensexai.com/',
     siteName: 'ExpenseX AI',
     locale: 'en_US',
-    title: 'ExpenseX AI — Your AI Money Assistant',
+    title: 'ExpenseX AI – AI-Powered Personal Finance & Expense Tracker',
     description:
-      'Your money should explain itself. ExpenseX uses AI to track your expenses from voice, receipts, SMS, and email without manual typing.',
+      'Track expenses smarter with ExpenseX AI. Manage income, scan receipts, record expenses with your voice, monitor budgets, and gain AI-powered financial insights.',
     images: [
       {
         url: 'https://expensexai.com/logo-512.png',
         width: 512,
         height: 512,
-        alt: 'ExpenseX AI Logo — Your AI Money Assistant',
+        alt: 'ExpenseX AI – AI-Powered Personal Finance & Expense Tracker',
       },
     ],
   },
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@ExpenseX_AI',
     creator: '@ExpenseX_AI',
-    title: 'ExpenseX AI — Your AI Money Assistant',
+    title: 'ExpenseX AI – AI-Powered Personal Finance & Expense Tracker',
     description:
-      'Your money should explain itself. ExpenseX uses AI to track your expenses from voice, receipts, SMS, and email without manual typing.',
+      'Track expenses smarter with ExpenseX AI. Manage income, scan receipts, record expenses with your voice, monitor budgets, and gain AI-powered financial insights.',
     images: ['https://expensexai.com/logo-512.png'],
   },
   icons: {
@@ -87,7 +87,7 @@ const jsonLdSoftwareApp = {
   ],
   applicationCategory: 'FinanceApplication',
   applicationSubCategory: 'Expense Tracker, Budgeting, Personal Finance',
-  operatingSystem: 'Android, Web',
+  operatingSystem: 'Android, iOS',
   softwareVersion: '2.4.0',
   description:
     'Your money should explain itself. ExpenseX AI is your AI Money Assistant. It eliminates manual expense logging via natural voice capture, receipt vision OCR, bank SMS auto-parsing, and digital email invoices.',
@@ -205,7 +205,7 @@ const jsonLdFaq = {
       name: 'Which platforms and operating systems are supported?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'ExpenseX AI is designed for iOS, Android, and modern desktop web browsers. Categorized transactions and budgets synchronize across all authorized devices in the beta cohort.',
+        text: 'ExpenseX AI is officially available for download on the Google Play Store (Android) and Apple App Store (iOS). Your financial insights, budgets, and categorized transactions synchronize securely across your authorized mobile devices.',
       },
     },
   ],
@@ -258,11 +258,11 @@ export default function RootLayout({
     <strong>Phone:</strong> +880 1404-049797
   </p>
   <div style="padding: 12px 16px; background: #f8fafc; border-left: 4px solid #6366f1; margin: 16px 0; border-radius: 4px; font-size: 13.5px; color: #334155;">
-    <strong>Product Status Note:</strong> ExpenseX AI is currently live in production across Android and Web. All balances, spending metrics, and transaction ledgers presented on this website represent <em>illustrative demo data</em> for preview purposes.
+    <strong>Product Status Note:</strong> ExpenseX AI is officially launched and live on Google Play Store and Apple App Store. All balances, spending metrics, and transaction ledgers presented on this website represent <em>illustrative demo data</em> for preview purposes.
   </div>
   <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
   <h2 style="color: #0f172a; font-size: 20px;">About ExpenseX AI</h2>
-  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across Android and Web platforms.</p>
+  <p>ExpenseX AI is an AI-powered personal finance platform developed and operated by Appstick to eliminate manual expense logging. The platform uses multi-modal machine intelligence to automatically capture, organize, and analyze spending across Android and iOS devices.</p>
   <h2 style="color: #0f172a; font-size: 20px;">Feature Availability Status</h2>
   <ul style="padding-left: 20px;">
     <li><strong>Available Now (Live in Production):</strong> Multi-Modal Vision OCR Receipt Capture, Voice Expense Entry, Bank SMS Transaction Parsing (Android), Dynamic Envelope Budgeting, Safe-to-Spend Computation, Smart Categorization, Deduplication Engine.</li>
