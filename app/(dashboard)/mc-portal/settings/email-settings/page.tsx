@@ -194,6 +194,8 @@ export default function AdminEmailSettingsPage() {
               padding: 6,
               borderRadius: 10,
               border: '1px solid var(--mc-border)',
+              overflowX: 'auto',
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             {PROVIDER_TABS.map((tab) => {
@@ -208,6 +210,8 @@ export default function AdminEmailSettingsPage() {
                   onClick={() => setActiveTab(tab.id)}
                   style={{
                     flex: 1,
+                    minWidth: 'fit-content',
+                    whiteSpace: 'nowrap',
                     padding: '10px 16px',
                     borderRadius: 8,
                     border: 'none',
@@ -244,7 +248,7 @@ export default function AdminEmailSettingsPage() {
             })}
           </div>
 
-          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+          <div className="mc-card-divider" />
 
           {/* TAB 1: GMAIL */}
           {activeTab === 'gmail' && (
@@ -585,7 +589,7 @@ export default function AdminEmailSettingsPage() {
             </div>
           )}
 
-          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+          <div className="mc-card-divider" />
 
           {/* Submit Bar */}
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>

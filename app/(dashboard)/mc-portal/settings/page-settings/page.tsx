@@ -259,7 +259,7 @@ export default function AdminPageSettingsPage() {
       </div>
 
       {/* Main 2-Column Responsive Layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1fr) 3fr', gap: '20px' }}>
+      <div className="mc-page-settings-grid">
         {/* Left Column: Pages List */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--mc-text-subtle)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '0 4px' }}>
@@ -273,88 +273,152 @@ export default function AdminPageSettingsPage() {
               <Shimmer height="56px" borderRadius="10px" />
             </div>
           ) : (
-            pages.map((item) => {
-              const isSelected = selectedSlug === item.slug;
-              const PageIcon = SLUG_ICONS[item.slug] || FileText;
-              const displayTitle =
-                (item.content?.title && typeof item.content.title === 'object'
-                  ? (item.content.title as Record<string, string>).en
-                  : typeof item.content?.title === 'string'
-                  ? item.content.title
-                  : null) || formatSlugTitle(item.slug);
+            <>
+              {/* Desktop Full Vertical List */}
+              <div className="mc-desktop-only" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {pages.map((item) => {
+                  const isSelected = selectedSlug === item.slug;
+                  const PageIcon = SLUG_ICONS[item.slug] || FileText;
+                  const displayTitle =
+                    (item.content?.title && typeof item.content.title === 'object'
+                      ? (item.content.title as Record<string, string>).en
+                      : typeof item.content?.title === 'string'
+                      ? item.content.title
+                      : null) || formatSlugTitle(item.slug);
 
-              return (
-                <button
-                  key={item._id || item.slug}
-                  type="button"
-                  onClick={() => handleSelectPage(item)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 12,
-                    padding: '14px 16px',
-                    borderRadius: 10,
-                    border: isSelected ? '1px solid var(--mc-brand-purple)' : '1px solid var(--mc-border)',
-                    background: isSelected ? 'rgba(109,61,245,0.06)' : '#FFFFFF',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    boxShadow: isSelected ? '0 4px 12px rgba(109,61,245,0.08)' : 'none',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-                    <div
+                  return (
+                    <button
+                      key={item._id || item.slug}
+                      type="button"
+                      onClick={() => handleSelectPage(item)}
                       style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: 8,
-                        background: isSelected ? 'var(--mc-brand-purple)' : '#F1F5F9',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        color: isSelected ? '#FFFFFF' : '#64748B',
-                        flexShrink: 0,
+                        justifyContent: 'space-between',
+                        gap: 12,
+                        padding: '14px 16px',
+                        borderRadius: 10,
+                        border: isSelected ? '1px solid var(--mc-brand-purple)' : '1px solid var(--mc-border)',
+                        background: isSelected ? 'rgba(109,61,245,0.06)' : '#FFFFFF',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                        boxShadow: isSelected ? '0 4px 12px rgba(109,61,245,0.08)' : 'none',
+                        width: '100%',
                       }}
                     >
-                      <PageIcon size={16} />
-                    </div>
-                    <div style={{ minWidth: 0 }}>
-                      <div
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                        <div
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 8,
+                            background: isSelected ? 'var(--mc-brand-purple)' : '#F1F5F9',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: isSelected ? '#FFFFFF' : '#64748B',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <PageIcon size={16} />
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div
+                            style={{
+                              fontWeight: 600,
+                              fontSize: 13,
+                              color: isSelected ? 'var(--mc-brand-purple)' : 'var(--mc-text-main)',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {displayTitle}
+                          </div>
+                          <div style={{ fontSize: 11, color: 'var(--mc-text-subtle)', fontFamily: 'monospace' }}>
+                            /{item.slug}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Status Indicator Pill */}
+                      <span
                         style={{
+                          fontSize: 10,
                           fontWeight: 600,
-                          fontSize: 13,
-                          color: isSelected ? 'var(--mc-brand-purple)' : 'var(--mc-text-main)',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
+                          padding: '3px 7px',
+                          borderRadius: 12,
+                          background: item.status !== false ? '#DCFCE7' : '#F1F5F9',
+                          color: item.status !== false ? '#15803D' : '#64748B',
+                          flexShrink: 0,
                         }}
                       >
-                        {displayTitle}
-                      </div>
-                      <div style={{ fontSize: 11, color: 'var(--mc-text-subtle)', fontFamily: 'monospace' }}>
-                        /{item.slug}
-                      </div>
-                    </div>
-                  </div>
+                        {item.status !== false ? 'Active' : 'Draft'}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
 
-                  {/* Status Indicator Pill */}
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 600,
-                      padding: '3px 7px',
-                      borderRadius: 12,
-                      background: item.status !== false ? '#DCFCE7' : '#F1F5F9',
-                      color: item.status !== false ? '#15803D' : '#64748B',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {item.status !== false ? 'Active' : 'Draft'}
-                  </span>
-                </button>
-              );
-            })
+              {/* Mobile Horizontal Scroll Chips */}
+              <div
+                className="mc-mobile-only"
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  overflowX: 'auto',
+                  paddingBottom: 4,
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {pages.map((item) => {
+                  const isSelected = selectedSlug === item.slug;
+                  const PageIcon = SLUG_ICONS[item.slug] || FileText;
+                  const displayTitle =
+                    (item.content?.title && typeof item.content.title === 'object'
+                      ? (item.content.title as Record<string, string>).en
+                      : typeof item.content?.title === 'string'
+                      ? item.content.title
+                      : null) || formatSlugTitle(item.slug);
+
+                  return (
+                    <button
+                      key={item._id || item.slug}
+                      type="button"
+                      onClick={() => handleSelectPage(item)}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '8px 14px',
+                        borderRadius: 20,
+                        border: isSelected ? '1px solid var(--mc-brand-purple)' : '1px solid var(--mc-border)',
+                        background: isSelected ? 'var(--mc-brand-purple)' : '#FFFFFF',
+                        color: isSelected ? '#FFFFFF' : 'var(--mc-text-main)',
+                        whiteSpace: 'nowrap',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        boxShadow: isSelected ? '0 2px 8px rgba(109,61,245,0.25)' : 'none',
+                      }}
+                    >
+                      <PageIcon size={14} />
+                      <span>{displayTitle}</span>
+                      <span
+                        style={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: '50%',
+                          background: item.status !== false ? (isSelected ? '#86EFAC' : '#16A34A') : '#CBD5E1',
+                        }}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </>
           )}
         </div>
 

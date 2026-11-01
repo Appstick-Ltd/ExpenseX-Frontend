@@ -328,14 +328,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
       </div>
 
       {/* 2. Top 4 KPI Metric Cards */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-          gap: 16,
-          marginBottom: 24,
-        }}
-      >
+      <div className="mc-overview-kpi-grid">
         {/* Total Users */}
         <div
           style={{
@@ -642,6 +635,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                       style={{ cursor: 'pointer', transition: 'all 0.2s' }}
                       onMouseEnter={() => setHoveredNode(idx)}
                       onMouseLeave={() => setHoveredNode(null)}
+                      onClick={() => setHoveredNode(idx === hoveredNode ? null : idx)}
+                      onTouchStart={() => setHoveredNode(idx)}
                     />
                   </g>
                 );
@@ -826,7 +821,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
             </button>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          {/* Desktop Table View */}
+          <div className="mc-desktop-only" style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 12 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F1F5F9', color: '#64748B' }}>
@@ -927,6 +923,89 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile Native Card View (< 768px) */}
+          <div className="mc-mobile-only">
+            {recentUsers.length === 0 ? (
+              <div style={{ padding: '24px 12px', textAlign: 'center', color: '#94A3B8', fontSize: 13 }}>
+                {loading ? 'Loading users...' : 'No users found'}
+              </div>
+            ) : (
+              <div className="mc-mobile-card-list" style={{ padding: 0 }}>
+                {recentUsers.map((u: any) => (
+                  <div key={u.id} className="mc-mobile-card">
+                    <div className="mc-mobile-card-header">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                        {u.avatar ? (
+                          <img
+                            src={u.avatar}
+                            alt=""
+                            style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              width: 34,
+                              height: 34,
+                              borderRadius: '50%',
+                              background: '#EEF2FF',
+                              color: '#6366F1',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              flexShrink: 0,
+                            }}
+                          >
+                            {u.initials || 'U'}
+                          </div>
+                        )}
+                        <div style={{ minWidth: 0 }}>
+                          <div className="mc-mobile-card-title">{u.name}</div>
+                          <div className="mc-mobile-card-sub">{u.email}</div>
+                        </div>
+                      </div>
+                      <span
+                        style={{
+                          background: u.status === 'Active' ? '#ECFDF5' : '#FEF2F2',
+                          color: u.status === 'Active' ? '#059669' : '#DC2626',
+                          padding: '3px 8px',
+                          borderRadius: 6,
+                          fontSize: 10,
+                          fontWeight: 700,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {u.status || 'Active'}
+                      </span>
+                    </div>
+                    <div className="mc-mobile-card-body">
+                      <div className="mc-mobile-card-row">
+                        <span className="mc-mobile-card-label">Plan:</span>
+                        <span
+                          style={{
+                            background: u.planBg || '#F1F5F9',
+                            color: u.planColor || '#64748B',
+                            padding: '2px 8px',
+                            borderRadius: 6,
+                            fontSize: 11,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {u.plan || 'Free'}
+                        </span>
+                      </div>
+                      <div className="mc-mobile-card-row">
+                        <span className="mc-mobile-card-label">Joined:</span>
+                        <span className="mc-mobile-card-value">{u.joinedAt}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Column 2: Recent Transactions Table */}
@@ -966,7 +1045,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
             </button>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          {/* Desktop Table View */}
+          <div className="mc-desktop-only" style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 12 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F1F5F9', color: '#64748B' }}>
@@ -1061,6 +1141,82 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Native Card View (< 768px) */}
+          <div className="mc-mobile-only">
+            {recentTransactions.length === 0 ? (
+              <div style={{ padding: '24px 12px', textAlign: 'center', color: '#94A3B8', fontSize: 13 }}>
+                {loading ? 'Loading transactions...' : 'No transactions found'}
+              </div>
+            ) : (
+              <div className="mc-mobile-card-list" style={{ padding: 0 }}>
+                {recentTransactions.map((tx: any) => (
+                  <div key={tx.id} className="mc-mobile-card">
+                    <div className="mc-mobile-card-header">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                        {tx.avatar ? (
+                          <img
+                            src={tx.avatar}
+                            alt=""
+                            style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              width: 34,
+                              height: 34,
+                              borderRadius: '50%',
+                              background: '#F1F5F9',
+                              color: '#475569',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              flexShrink: 0,
+                            }}
+                          >
+                            {(tx.email?.[0] || 'U').toUpperCase()}
+                          </div>
+                        )}
+                        <div style={{ minWidth: 0 }}>
+                          <div className="mc-mobile-card-title">{tx.email}</div>
+                          <div className="mc-mobile-card-sub" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            {tx.typeIcon === 'crown' ? <Crown size={12} color="#D97706" /> : <Coins size={12} color="#F97316" />}
+                            <span>{tx.type}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span style={{ fontWeight: 700, fontSize: 14, color: '#0F172A', flexShrink: 0 }}>
+                        {tx.amount}
+                      </span>
+                    </div>
+                    <div className="mc-mobile-card-body">
+                      <div className="mc-mobile-card-row">
+                        <span className="mc-mobile-card-label">Date:</span>
+                        <span className="mc-mobile-card-value">{tx.date}</span>
+                      </div>
+                      <div className="mc-mobile-card-row">
+                        <span className="mc-mobile-card-label">Status:</span>
+                        <span
+                          style={{
+                            background: '#ECFDF5',
+                            color: '#059669',
+                            padding: '2px 8px',
+                            borderRadius: 6,
+                            fontSize: 10,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {tx.status || 'Success'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

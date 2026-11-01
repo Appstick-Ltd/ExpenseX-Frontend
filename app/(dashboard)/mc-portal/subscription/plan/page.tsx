@@ -906,12 +906,12 @@ export default function SubscriptionPlanPage() {
 
                   {/* Details */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
-                    {plan.amount !== undefined && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                        <span style={{ color: 'var(--mc-text-subtle)' }}>Amount</span>
-                        <span style={{ fontWeight: 700, color: 'var(--mc-text-main)' }}>${plan.amount} {plan.currency || ''}</span>
-                      </div>
-                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
+                      <span style={{ color: 'var(--mc-text-subtle)' }}>Product ID</span>
+                      <span style={{ fontWeight: 600, color: 'var(--mc-text-main)', background: '#F1F5F9', padding: '2px 8px', borderRadius: 6, fontFamily: 'monospace' }}>
+                        {plan.productId || '—'}
+                      </span>
+                    </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
                       <span style={{ color: 'var(--mc-text-subtle)' }}>AI Credit</span>
                       <span style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>{plan.aiCredit ?? '—'}</span>

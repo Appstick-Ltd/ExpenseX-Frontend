@@ -97,7 +97,7 @@ const DEFAULT_BASE_PLANS: BasePlan[] = [
       name: { en: 'Starter Monthly', bn: 'স্টার্টার মাসিক' },
       productId: 'monthly',
       aiCredit: 500,
-      coin: 50,
+      coin: 100,
       isPopular: false,
       facilities: [
         { en: '500 AI Credits' },

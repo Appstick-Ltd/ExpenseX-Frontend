@@ -286,7 +286,7 @@ export default function AdminGeneralSettingsPage() {
             </div>
           </div>
 
-          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+          <div className="mc-card-divider" />
 
           {/* Application & Contact Details */}
           <div>
@@ -389,7 +389,7 @@ export default function AdminGeneralSettingsPage() {
             </div>
           </div>
 
-          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+          <div className="mc-card-divider" />
 
           {/* Currency, Limits & Integrations */}
           <div>
@@ -495,7 +495,7 @@ export default function AdminGeneralSettingsPage() {
             </div>
           </div>
 
-          <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+          <div className="mc-card-divider" />
 
           {/* Submit Bar */}
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>

@@ -367,7 +367,31 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
   const TabIcon = currentTabDef.icon;
   const userInitial = (user?.name || user?.email || 'A')[0].toUpperCase();
 
-  const isMoreActive = activeTab === 'settings' || activeTab === 'subscription' || activeTab === 'marketing' || isDrawerOpen;
+  const isMoreActive = activeTab === 'services' || activeTab === 'subscription' || activeTab === 'marketing' || isDrawerOpen;
+
+  const getMobilePillLabel = () => {
+    if (activeTab === 'settings') {
+      const found = SETTINGS_SUB_ITEMS.find((s) => s.id === activeSubTab);
+      return found ? `${currentTabDef.shortLabel} · ${found.label}` : currentTabDef.shortLabel;
+    }
+    if (activeTab === 'users') {
+      const found = USERS_SUB_ITEMS.find((s) => s.id === activeUsersSubTab);
+      return found ? `${currentTabDef.shortLabel} · ${found.label}` : currentTabDef.shortLabel;
+    }
+    if (activeTab === 'subscription') {
+      const found = SUBSCRIPTION_SUB_ITEMS.find((s) => s.id === activeSubscriptionSubTab);
+      return found ? `${currentTabDef.shortLabel} · ${found.label}` : currentTabDef.shortLabel;
+    }
+    if (activeTab === 'services') {
+      const found = SERVICES_SUB_ITEMS.find((s) => s.id === activeServicesSubTab);
+      return found ? `${currentTabDef.shortLabel} · ${found.label}` : currentTabDef.shortLabel;
+    }
+    if (activeTab === 'marketing') {
+      const found = MARKETING_SUB_ITEMS.find((s) => s.id === activeMarketingSubTab);
+      return found ? `${currentTabDef.shortLabel} · ${found.label}` : currentTabDef.shortLabel;
+    }
+    return currentTabDef.shortLabel || currentTabDef.label;
+  };
 
   return (
     <div className="mc-shell">
@@ -1173,7 +1197,7 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({ children, initialTab
               <img src={logoSrc} alt="ExpenseX" width={22} height={18} style={{ objectFit: 'contain' }} />
               <div className="mc-mobile-tab-pill">
                 <TabIcon size={13} color="var(--mc-brand-purple)" />
-                <span>{currentTabDef.shortLabel || currentTabDef.label}</span>
+                <span>{getMobilePillLabel()}</span>
               </div>
             </div>
           </div>

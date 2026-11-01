@@ -300,7 +300,7 @@ export default function PushNotificationPage() {
       </div>
 
       {/* COMPOSER + LIVE PREVIEW GRID */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: 24, alignItems: "start" }}>
+      <div className="mc-composer-grid">
         {/* COMPOSER CARD */}
         <div className="mc-card" style={{ padding: 24, borderRadius: 14 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, borderBottom: "1px solid var(--mc-border)", paddingBottom: 14 }}>
@@ -948,83 +948,153 @@ export default function PushNotificationPage() {
               </div>
             </div>
           ) : (
-            <table className="mc-table">
-              <thead>
-                <tr>
-                  <th>Notification</th>
-                  <th>Audience</th>
-                  <th>Status</th>
-                  <th>Sent At</th>
-                  <th style={{ textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {campaigns.map((c) => {
-                  const targetLabel =
-                    c.targetType === "all"
-                      ? "All Users"
-                      : c.targetType === "country"
-                      ? `Country: ${c.country || "All"}`
-                      : c.targetUser?.name || c.targetUser?.email || "Single User";
+            <>
+              {/* Desktop Table View */}
+              <div className="mc-desktop-only">
+                <table className="mc-table">
+                  <thead>
+                    <tr>
+                      <th>Notification</th>
+                      <th>Audience</th>
+                      <th>Status</th>
+                      <th>Sent At</th>
+                      <th style={{ textAlign: "right" }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {campaigns.map((c) => {
+                      const targetLabel =
+                        c.targetType === "all"
+                          ? "All Users"
+                          : c.targetType === "country"
+                          ? `Country: ${c.country || "All"}`
+                          : c.targetUser?.name || c.targetUser?.email || "Single User";
 
-                  const badgeClass =
-                    c.status === "completed"
-                      ? "mc-badge-active"
-                      : c.status === "processing"
-                      ? "mc-badge-purple"
-                      : "mc-badge-tier";
+                      const badgeClass =
+                        c.status === "completed"
+                          ? "mc-badge-active"
+                          : c.status === "processing"
+                          ? "mc-badge-purple"
+                          : "mc-badge-tier";
 
-                  return (
-                    <tr key={c._id}>
-                      <td style={{ maxWidth: 280 }}>
-                        <div style={{ fontWeight: 600, color: "var(--mc-text-main)", fontSize: 13, marginBottom: 2 }}>
-                          {c.title}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: 11,
-                            color: "var(--mc-text-muted)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {c.message}
-                        </div>
-                      </td>
+                      return (
+                        <tr key={c._id}>
+                          <td style={{ maxWidth: 280 }}>
+                            <div style={{ fontWeight: 600, color: "var(--mc-text-main)", fontSize: 13, marginBottom: 2 }}>
+                              {c.title}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: 11,
+                                color: "var(--mc-text-muted)",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              {c.message}
+                            </div>
+                          </td>
 
-                      <td>
-                        <span
-                          className="mc-badge"
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 4,
-                            fontSize: 11,
-                            padding: "3px 8px",
-                            background: c.targetType === "all" ? "#EFF6FF" : c.targetType === "country" ? "#FEF3C7" : "#F3E8FF",
-                            color: c.targetType === "all" ? "#1D4ED8" : c.targetType === "country" ? "#B45309" : "#6D28D9",
-                          }}
-                        >
-                          {c.targetType === "all" ? <Users size={12} /> : c.targetType === "country" ? <Globe size={12} /> : <User size={12} />}
-                          <span>{targetLabel}</span>
-                        </span>
-                      </td>
+                          <td>
+                            <span
+                              className="mc-badge"
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 4,
+                                fontSize: 11,
+                                padding: "3px 8px",
+                                background: c.targetType === "all" ? "#EFF6FF" : c.targetType === "country" ? "#FEF3C7" : "#F3E8FF",
+                                color: c.targetType === "all" ? "#1D4ED8" : c.targetType === "country" ? "#B45309" : "#6D28D9",
+                              }}
+                            >
+                              {c.targetType === "all" ? <Users size={12} /> : c.targetType === "country" ? <Globe size={12} /> : <User size={12} />}
+                              <span>{targetLabel}</span>
+                            </span>
+                          </td>
 
-                      <td>
-                        <span className={`mc-badge ${badgeClass}`} style={{ fontSize: 11, textTransform: "capitalize" }}>
-                          {c.status}
-                        </span>
-                      </td>
+                          <td>
+                            <span className={`mc-badge ${badgeClass}`} style={{ fontSize: 11, textTransform: "capitalize" }}>
+                              {c.status}
+                            </span>
+                          </td>
 
-                      <td>
-                        <div style={{ fontSize: 11, color: "var(--mc-text-muted)", whiteSpace: "nowrap" }}>
-                          {c.createdAt ? new Date(c.createdAt).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" }) : "-"}
-                        </div>
-                      </td>
+                          <td>
+                            <div style={{ fontSize: 11, color: "var(--mc-text-muted)", whiteSpace: "nowrap" }}>
+                              {c.createdAt ? new Date(c.createdAt).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" }) : "-"}
+                            </div>
+                          </td>
 
-                      <td style={{ textAlign: "right" }}>
-                        <div style={{ display: "flex", justifyContent: "flex-end", gap: 6 }}>
+                          <td style={{ textAlign: "right" }}>
+                            <div style={{ display: "flex", justifyContent: "flex-end", gap: 6 }}>
+                              <button
+                                onClick={() => handleDeleteCampaign(c)}
+                                title="Delete log"
+                                style={{
+                                  background: "none",
+                                  border: "1px solid var(--mc-border)",
+                                  borderRadius: 6,
+                                  padding: "4px 6px",
+                                  cursor: "pointer",
+                                  color: "var(--mc-danger)",
+                                }}
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Native Card View (< 768px) */}
+              <div className="mc-mobile-only">
+                <div className="mc-mobile-card-list" style={{ padding: 12 }}>
+                  {campaigns.map((c) => {
+                    const targetLabel =
+                      c.targetType === "all"
+                        ? "All Users"
+                        : c.targetType === "country"
+                        ? `Country: ${c.country || "All"}`
+                        : c.targetUser?.name || c.targetUser?.email || "Single User";
+
+                    const badgeClass =
+                      c.status === "completed"
+                        ? "mc-badge-active"
+                        : c.status === "processing"
+                        ? "mc-badge-purple"
+                        : "mc-badge-tier";
+
+                    return (
+                      <div key={c._id} className="mc-mobile-card">
+                        <div className="mc-mobile-card-header">
+                          <div style={{ minWidth: 0 }}>
+                            <div className="mc-mobile-card-title">{c.title}</div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
+                              <span
+                                className="mc-badge"
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 4,
+                                  fontSize: 10,
+                                  padding: "2px 6px",
+                                  background: c.targetType === "all" ? "#EFF6FF" : c.targetType === "country" ? "#FEF3C7" : "#F3E8FF",
+                                  color: c.targetType === "all" ? "#1D4ED8" : c.targetType === "country" ? "#B45309" : "#6D28D9",
+                                }}
+                              >
+                                {c.targetType === "all" ? <Users size={11} /> : c.targetType === "country" ? <Globe size={11} /> : <User size={11} />}
+                                <span>{targetLabel}</span>
+                              </span>
+                              <span className={`mc-badge ${badgeClass}`} style={{ fontSize: 10, textTransform: "capitalize" }}>
+                                {c.status}
+                              </span>
+                            </div>
+                          </div>
                           <button
                             onClick={() => handleDeleteCampaign(c)}
                             title="Delete log"
@@ -1032,20 +1102,33 @@ export default function PushNotificationPage() {
                               background: "none",
                               border: "1px solid var(--mc-border)",
                               borderRadius: 6,
-                              padding: "4px 6px",
+                              padding: "6px",
                               cursor: "pointer",
                               color: "var(--mc-danger)",
+                              flexShrink: 0,
                             }}
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={14} />
                           </button>
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+
+                        <div className="mc-mobile-card-body">
+                          <div style={{ fontSize: 12, color: "var(--mc-text-muted)", lineHeight: 1.4 }}>
+                            {c.message}
+                          </div>
+                          <div className="mc-mobile-card-row" style={{ marginTop: 4 }}>
+                            <span className="mc-mobile-card-label">Sent At:</span>
+                            <span className="mc-mobile-card-value">
+                              {c.createdAt ? new Date(c.createdAt).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" }) : "-"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
           )}
         </div>
 

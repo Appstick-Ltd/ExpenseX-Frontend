@@ -466,9 +466,9 @@ export default function AdminFaqPage() {
           </div>
         </div>
 
-        <div style={{ height: '1px', background: '#F1F5F9', margin: '0 -28px' }} />
+        <div className="mc-card-divider" />
 
-        {/* Table / Empty State */}
+        {/* Table / Mobile Cards / Empty State */}
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <Shimmer height="40px" borderRadius="6px" />
@@ -502,25 +502,109 @@ export default function AdminFaqPage() {
             </p>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto', margin: '0 -28px', borderRadius: 0 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ background: '#F8FAFC', borderBottom: '1px solid var(--mc-border)' }}>
-                  <th style={{ padding: '14px 28px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', width: '35%' }}>
-                    Question
-                  </th>
-                  <th style={{ padding: '14px 20px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', width: '38%' }}>
-                    Answer Preview
-                  </th>
-                  <th style={{ padding: '14px 16px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', width: '12%' }}>
-                    Languages
-                  </th>
-                  <th style={{ padding: '14px 28px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', textAlign: 'right', width: 140 }}>
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+          <>
+            {/* Desktop Table View */}
+            <div className="mc-desktop-only">
+              <div className="mc-card-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ background: '#F8FAFC', borderBottom: '1px solid var(--mc-border)' }}>
+                      <th style={{ padding: '14px 28px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', width: '35%' }}>
+                        Question
+                      </th>
+                      <th style={{ padding: '14px 20px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', width: '38%' }}>
+                        Answer Preview
+                      </th>
+                      <th style={{ padding: '14px 16px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', width: '12%' }}>
+                        Languages
+                      </th>
+                      <th style={{ padding: '14px 28px', fontSize: 12, fontWeight: 600, color: 'var(--mc-text-muted)', textAlign: 'right', width: 140 }}>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {faqs.map((item) => {
+                      const langs = getItemLangs(item);
+                      const isSpecificLang = tableLang !== 'all';
+                      const displayQ = getLocalizedText(item.question, isSpecificLang ? tableLang : 'en');
+                      const displayA = getLocalizedText(item.answer, isSpecificLang ? tableLang : 'en');
+                      const secondaryQ = !isSpecificLang && typeof item.question === 'object' && item.question?.bn ? item.question.bn : null;
+
+                      return (
+                        <tr key={item._id} style={{ borderBottom: '1px solid var(--mc-border-light)' }}>
+                          {/* Question */}
+                          <td style={{ padding: '16px 28px', fontWeight: 600, color: 'var(--mc-text-main)', fontSize: 14 }}>
+                            <div>{displayQ || <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>No question available</span>}</div>
+                            {secondaryQ && (
+                              <div style={{ marginTop: 4, fontSize: 12, color: 'var(--mc-text-muted)', fontWeight: 400, display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <span style={{ fontSize: 10, background: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>
+                                  BN
+                                </span>
+                                <span>{secondaryQ}</span>
+                              </div>
+                            )}
+                          </td>
+
+                          {/* Answer Preview */}
+                          <td style={{ padding: '16px 20px', color: 'var(--mc-text-muted)', fontSize: 13, lineHeight: '1.5' }}>
+                            {displayA?.length > 130 ? `${displayA.slice(0, 130)}...` : displayA || (
+                              <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>No answer provided</span>
+                            )}
+                          </td>
+
+                          {/* Languages Badge List */}
+                          <td style={{ padding: '16px 16px' }}>
+                            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                              {langs.map((l) => (
+                                <span
+                                  key={l}
+                                  style={{
+                                    fontSize: 10,
+                                    fontWeight: 700,
+                                    textTransform: 'uppercase',
+                                    padding: '2px 6px',
+                                    borderRadius: 4,
+                                    background: l === 'en' ? '#EFF6FF' : l === 'bn' ? '#F0FDF4' : '#F1F5F9',
+                                    color: l === 'en' ? '#2563EB' : l === 'bn' ? '#16A34A' : '#475569',
+                                    border: l === 'en' ? '1px solid #BFDBFE' : l === 'bn' ? '1px solid #BBF7D0' : '1px solid #E2E8F0',
+                                  }}
+                                >
+                                  {l}
+                                </span>
+                              ))}
+                            </div>
+                          </td>
+
+                          {/* Actions */}
+                          <td style={{ padding: '16px 28px', textAlign: 'right' }}>
+                            <div style={{ display: 'inline-flex', gap: 6 }}>
+                              <Button variant="secondary" size="sm" icon={<Edit size={13} />} onClick={() => openEditModal(item)}>
+                                Edit
+                              </Button>
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                icon={<Trash2 size={13} />}
+                                loading={deletingId === item._id}
+                                disabled={deletingId === item._id}
+                                onClick={() => handleDelete(item._id)}
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Card List View */}
+            <div className="mc-mobile-only">
+              <div className="mc-mobile-card-list" style={{ padding: '4px 0' }}>
                 {faqs.map((item) => {
                   const langs = getItemLangs(item);
                   const isSpecificLang = tableLang !== 'all';
@@ -529,30 +613,20 @@ export default function AdminFaqPage() {
                   const secondaryQ = !isSpecificLang && typeof item.question === 'object' && item.question?.bn ? item.question.bn : null;
 
                   return (
-                    <tr key={item._id} style={{ borderBottom: '1px solid var(--mc-border-light)' }}>
-                      {/* Question */}
-                      <td style={{ padding: '16px 28px', fontWeight: 600, color: 'var(--mc-text-main)', fontSize: 14 }}>
-                        <div>{displayQ || <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>No question available</span>}</div>
-                        {secondaryQ && (
-                          <div style={{ marginTop: 4, fontSize: 12, color: 'var(--mc-text-muted)', fontWeight: 400, display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <span style={{ fontSize: 10, background: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>
-                              BN
-                            </span>
-                            <span>{secondaryQ}</span>
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Answer Preview */}
-                      <td style={{ padding: '16px 20px', color: 'var(--mc-text-muted)', fontSize: 13, lineHeight: '1.5' }}>
-                        {displayA?.length > 130 ? `${displayA.slice(0, 130)}...` : displayA || (
-                          <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>No answer provided</span>
-                        )}
-                      </td>
-
-                      {/* Languages Badge List */}
-                      <td style={{ padding: '16px 16px' }}>
-                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                    <div key={item._id} className="mc-mobile-card">
+                      <div className="mc-mobile-card-header">
+                        <div style={{ flex: 1, minWidth: 0, paddingRight: 8 }}>
+                          <div className="mc-mobile-card-title">{displayQ || 'No question available'}</div>
+                          {secondaryQ && (
+                            <div style={{ marginTop: 4, fontSize: 12, color: 'var(--mc-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <span style={{ fontSize: 10, background: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>
+                                BN
+                              </span>
+                              <span>{secondaryQ}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ display: 'flex', gap: 4, flexShrink: 0, flexWrap: 'wrap' }}>
                           {langs.map((l) => (
                             <span
                               key={l}
@@ -560,7 +634,7 @@ export default function AdminFaqPage() {
                                 fontSize: 10,
                                 fontWeight: 700,
                                 textTransform: 'uppercase',
-                                padding: '2px 6px',
+                                padding: '2px 5px',
                                 borderRadius: 4,
                                 background: l === 'en' ? '#EFF6FF' : l === 'bn' ? '#F0FDF4' : '#F1F5F9',
                                 color: l === 'en' ? '#2563EB' : l === 'bn' ? '#16A34A' : '#475569',
@@ -571,32 +645,35 @@ export default function AdminFaqPage() {
                             </span>
                           ))}
                         </div>
-                      </td>
+                      </div>
 
-                      {/* Actions */}
-                      <td style={{ padding: '16px 28px', textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: 6 }}>
-                          <Button variant="secondary" size="sm" icon={<Edit size={13} />} onClick={() => openEditModal(item)}>
-                            Edit
-                          </Button>
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            icon={<Trash2 size={13} />}
-                            loading={deletingId === item._id}
-                            disabled={deletingId === item._id}
-                            onClick={() => handleDelete(item._id)}
-                          >
-                            Delete
-                          </Button>
+                      <div className="mc-mobile-card-body">
+                        <div style={{ color: 'var(--mc-text-muted)', fontSize: 13, lineHeight: '1.5' }}>
+                          {displayA || <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>No answer provided</span>}
                         </div>
-                      </td>
-                    </tr>
+                      </div>
+
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, paddingTop: 4 }}>
+                        <Button variant="secondary" size="sm" icon={<Edit size={13} />} onClick={() => openEditModal(item)}>
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          icon={<Trash2 size={13} />}
+                          loading={deletingId === item._id}
+                          disabled={deletingId === item._id}
+                          onClick={() => handleDelete(item._id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
 

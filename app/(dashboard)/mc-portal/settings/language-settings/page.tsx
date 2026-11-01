@@ -818,35 +818,319 @@ export default function AdminLanguageSettingsPage() {
               </button>
             </div>
           ) : (
-            <table
-              style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                textAlign: 'left',
-                fontSize: 13,
-              }}
-            >
-              <thead>
-                <tr
+            <>
+              {/* Desktop Table View */}
+              <div className="mc-desktop-only">
+                <table
                   style={{
-                    background: '#F8FAFC',
-                    borderBottom: '1px solid #E2E8F0',
-                    color: 'var(--mc-text-muted)',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    textAlign: 'left',
+                    fontSize: 13,
                   }}
                 >
-                  <th style={{ padding: '14px 20px' }}>Language</th>
-                  <th style={{ padding: '14px 16px' }}>Code</th>
-                  <th style={{ padding: '14px 16px' }}>Direction</th>
-                  <th style={{ padding: '14px 16px' }}>Default</th>
-                  <th style={{ padding: '14px 16px' }}>Status</th>
-                  <th style={{ padding: '14px 20px', textAlign: 'right' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+                  <thead>
+                    <tr
+                      style={{
+                        background: '#F8FAFC',
+                        borderBottom: '1px solid #E2E8F0',
+                        color: 'var(--mc-text-muted)',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      <th style={{ padding: '14px 20px' }}>Language</th>
+                      <th style={{ padding: '14px 16px' }}>Code</th>
+                      <th style={{ padding: '14px 16px' }}>Direction</th>
+                      <th style={{ padding: '14px 16px' }}>Default</th>
+                      <th style={{ padding: '14px 16px' }}>Status</th>
+                      <th style={{ padding: '14px 20px', textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredLanguages.map((item) => {
+                      const isActive = getIsActive(item);
+                      const isDefault = Boolean(item.isDefault || item.default);
+                      const isRtl = Boolean(item.rtl);
+                      const isBusy = actionId === item._id;
+
+                      return (
+                        <tr
+                          key={item._id}
+                          style={{
+                            borderBottom: '1px solid #F1F5F9',
+                            transition: 'background 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#FBFBFF';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
+                          {/* Name & Flag */}
+                          <td style={{ padding: '14px 20px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                              <span
+                                style={{
+                                  fontSize: 22,
+                                  lineHeight: 1,
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: 6,
+                                  background: '#F1F5F9',
+                                }}
+                              >
+                                {item.flag || '🌐'}
+                              </span>
+                              <div>
+                                <div style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>
+                                  {item.name || item.title || 'Language'}
+                                </div>
+                                <div style={{ fontSize: 11, color: 'var(--mc-text-muted)', marginTop: 2 }}>
+                                  ID: {item._id}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Code */}
+                          <td style={{ padding: '14px 16px' }}>
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                padding: '3px 8px',
+                                borderRadius: 6,
+                                background: '#F1F5F9',
+                                color: '#334155',
+                                fontWeight: 700,
+                                fontFamily: 'monospace',
+                                fontSize: 12,
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              {item.code}
+                            </span>
+                          </td>
+
+                          {/* Direction (LTR / RTL) */}
+                          <td style={{ padding: '14px 16px' }}>
+                            {isRtl ? (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 4,
+                                  padding: '3px 8px',
+                                  borderRadius: 6,
+                                  background: 'rgba(109, 61, 245, 0.08)',
+                                  color: 'var(--mc-brand-purple)',
+                                  fontWeight: 600,
+                                  fontSize: 11.5,
+                                }}
+                              >
+                                <ArrowRightLeft size={12} />
+                                <span>RTL</span>
+                              </span>
+                            ) : (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 4,
+                                  padding: '3px 8px',
+                                  borderRadius: 6,
+                                  background: '#F1F5F9',
+                                  color: 'var(--mc-text-muted)',
+                                  fontWeight: 600,
+                                  fontSize: 11.5,
+                                }}
+                              >
+                                <span>LTR</span>
+                              </span>
+                            )}
+                          </td>
+
+                          {/* Default Switch Button */}
+                          <td style={{ padding: '14px 16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={isDefault}
+                                onClick={() => handleToggleDefault(item)}
+                                disabled={isBusy}
+                                title={isDefault ? 'Default language (Active)' : 'Click to set as default'}
+                                style={{
+                                  position: 'relative',
+                                  width: 44,
+                                  height: 24,
+                                  borderRadius: 12,
+                                  border: 'none',
+                                  background: isDefault ? 'var(--mc-brand-purple)' : '#CBD5E1',
+                                  cursor: isBusy ? 'not-allowed' : 'pointer',
+                                  transition: 'background 0.2s ease',
+                                  padding: 2,
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  boxShadow: isDefault ? '0 2px 6px rgba(109, 61, 245, 0.3)' : 'none',
+                                  opacity: isBusy ? 0.6 : 1,
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    display: 'block',
+                                    width: 20,
+                                    height: 20,
+                                    borderRadius: '50%',
+                                    background: '#FFFFFF',
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                                    transform: isDefault ? 'translateX(20px)' : 'translateX(0)',
+                                    transition: 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                  }}
+                                />
+                              </button>
+                              {isDefault && (
+                                <span
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 3,
+                                    fontSize: 11.5,
+                                    fontWeight: 700,
+                                    color: 'var(--mc-brand-purple)',
+                                  }}
+                                >
+                                  <Star size={11} fill="currentColor" />
+                                  <span>Default</span>
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* Status Toggle */}
+                          <td style={{ padding: '14px 16px' }}>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleStatus(item)}
+                              disabled={isBusy || isDefault}
+                              title={isDefault ? 'Default language cannot be disabled' : 'Click to toggle status'}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                padding: '4px 10px',
+                                borderRadius: 12,
+                                border: 'none',
+                                background: isActive ? '#DCFCE7' : '#F1F5F9',
+                                color: isActive ? '#15803D' : '#64748B',
+                                fontWeight: 600,
+                                fontSize: 12,
+                                cursor: isDefault ? 'not-allowed' : 'pointer',
+                                opacity: isBusy ? 0.6 : 1,
+                                transition: 'all 0.15s ease',
+                              }}
+                            >
+                              <span
+                                style={{
+                                width: 6,
+                                height: 6,
+                                borderRadius: '50%',
+                                background: isActive ? '#16A34A' : '#94A3B8',
+                              }}
+                            />
+                            <span>{isActive ? 'Active' : 'Inactive'}</span>
+                          </button>
+                        </td>
+
+                        {/* Actions */}
+                        <td style={{ padding: '14px 20px', textAlign: 'right' }}>
+                          <div
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 6,
+                            }}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEdit(item)}
+                              title="Edit language"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 32,
+                                height: 32,
+                                borderRadius: 6,
+                                border: '1px solid var(--mc-border)',
+                                background: '#FFFFFF',
+                                color: 'var(--mc-text-main)',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = 'var(--mc-brand-purple)';
+                                e.currentTarget.style.color = 'var(--mc-brand-purple)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = 'var(--mc-border)';
+                                e.currentTarget.style.color = 'var(--mc-text-main)';
+                              }}
+                            >
+                              <Edit size={14} />
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(item)}
+                              disabled={isBusy || isDefault}
+                              title={isDefault ? 'Default language cannot be deleted' : 'Delete language'}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 32,
+                                height: 32,
+                                borderRadius: 6,
+                                border: '1px solid var(--mc-border)',
+                                background: '#FFFFFF',
+                                color: isDefault ? '#CBD5E1' : '#EF4444',
+                                cursor: isDefault ? 'not-allowed' : 'pointer',
+                                transition: 'all 0.15s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!isDefault) {
+                                  e.currentTarget.style.borderColor = '#EF4444';
+                                  e.currentTarget.style.background = '#FEF2F2';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!isDefault) {
+                                  e.currentTarget.style.borderColor = 'var(--mc-border)';
+                                  e.currentTarget.style.background = '#FFFFFF';
+                                }
+                              }}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card List View */}
+            <div className="mc-mobile-only">
+              <div className="mc-mobile-card-list">
                 {filteredLanguages.map((item) => {
                   const isActive = getIsActive(item);
                   const isDefault = Boolean(item.isDefault || item.default);
@@ -854,153 +1138,77 @@ export default function AdminLanguageSettingsPage() {
                   const isBusy = actionId === item._id;
 
                   return (
-                    <tr
-                      key={item._id}
-                      style={{
-                        borderBottom: '1px solid #F1F5F9',
-                        transition: 'background 0.15s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = '#FBFBFF';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                      }}
-                    >
-                      {/* Name & Flag */}
-                      <td style={{ padding: '14px 20px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div key={item._id} className="mc-mobile-card">
+                      {/* Header */}
+                      <div className="mc-mobile-card-header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                           <span
                             style={{
-                              fontSize: 22,
+                              fontSize: 24,
                               lineHeight: 1,
                               display: 'inline-flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              width: 32,
-                              height: 32,
-                              borderRadius: 6,
+                              width: 36,
+                              height: 36,
+                              borderRadius: 8,
                               background: '#F1F5F9',
                             }}
                           >
                             {item.flag || '🌐'}
                           </span>
                           <div>
-                            <div style={{ fontWeight: 600, color: 'var(--mc-text-main)' }}>
-                              {item.name || item.title || 'Language'}
-                            </div>
-                            <div style={{ fontSize: 11, color: 'var(--mc-text-muted)', marginTop: 2 }}>
-                              ID: {item._id}
+                            <div className="mc-mobile-card-title">{item.name || item.title || 'Language'}</div>
+                            <div className="mc-mobile-card-sub">
+                              Code: <strong style={{ fontFamily: 'monospace' }}>{item.code}</strong>
                             </div>
                           </div>
                         </div>
-                      </td>
 
-                      {/* Code */}
-                      <td style={{ padding: '14px 16px' }}>
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            padding: '3px 8px',
-                            borderRadius: 6,
-                            background: '#F1F5F9',
-                            color: '#334155',
-                            fontWeight: 700,
-                            fontFamily: 'monospace',
-                            fontSize: 12,
-                            textTransform: 'uppercase',
-                          }}
-                        >
-                          {item.code}
-                        </span>
-                      </td>
-
-                      {/* Direction (LTR / RTL) */}
-                      <td style={{ padding: '14px 16px' }}>
-                        {isRtl ? (
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 4,
-                              padding: '3px 8px',
-                              borderRadius: 6,
-                              background: 'rgba(109, 61, 245, 0.08)',
-                              color: 'var(--mc-brand-purple)',
-                              fontWeight: 600,
-                              fontSize: 11.5,
-                            }}
-                          >
-                            <ArrowRightLeft size={12} />
-                            <span>RTL</span>
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 4,
-                              padding: '3px 8px',
-                              borderRadius: 6,
-                              background: '#F1F5F9',
-                              color: 'var(--mc-text-muted)',
-                              fontWeight: 600,
-                              fontSize: 11.5,
-                            }}
-                          >
-                            <span>LTR</span>
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Default Switch Button */}
-                      <td style={{ padding: '14px 16px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={isDefault}
-                            onClick={() => handleToggleDefault(item)}
-                            disabled={isBusy}
-                            title={isDefault ? 'Default language (Active)' : 'Click to set as default'}
-                            style={{
-                              position: 'relative',
-                              width: 44,
-                              height: 24,
-                              borderRadius: 12,
-                              border: 'none',
-                              background: isDefault ? 'var(--mc-brand-purple)' : '#CBD5E1',
-                              cursor: isBusy ? 'not-allowed' : 'pointer',
-                              transition: 'background 0.2s ease',
-                              padding: 2,
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              boxShadow: isDefault ? '0 2px 6px rgba(109, 61, 245, 0.3)' : 'none',
-                              opacity: isBusy ? 0.6 : 1,
-                            }}
-                          >
+                        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                          {isRtl ? (
                             <span
                               style={{
-                                display: 'block',
-                                width: 20,
-                                height: 20,
-                                borderRadius: '50%',
-                                background: '#FFFFFF',
-                                boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
-                                transform: isDefault ? 'translateX(20px)' : 'translateX(0)',
-                                transition: 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 3,
+                                padding: '2px 7px',
+                                borderRadius: 6,
+                                background: 'rgba(109, 61, 245, 0.08)',
+                                color: 'var(--mc-brand-purple)',
+                                fontWeight: 700,
+                                fontSize: 11,
                               }}
-                            />
-                          </button>
+                            >
+                              <ArrowRightLeft size={11} />
+                              <span>RTL</span>
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                padding: '2px 7px',
+                                borderRadius: 6,
+                                background: '#F1F5F9',
+                                color: 'var(--mc-text-muted)',
+                                fontWeight: 600,
+                                fontSize: 11,
+                              }}
+                            >
+                              LTR
+                            </span>
+                          )}
                           {isDefault && (
                             <span
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: 3,
-                                fontSize: 11.5,
+                                padding: '2px 7px',
+                                borderRadius: 6,
+                                background: '#FEF3C7',
+                                color: '#D97706',
                                 fontWeight: 700,
-                                color: 'var(--mc-brand-purple)',
+                                fontSize: 11,
                               }}
                             >
                               <Star size={11} fill="currentColor" />
@@ -1008,123 +1216,135 @@ export default function AdminLanguageSettingsPage() {
                             </span>
                           )}
                         </div>
-                      </td>
+                      </div>
 
-                      {/* Status Toggle */}
-                      <td style={{ padding: '14px 16px' }}>
-                        <button
-                          type="button"
-                          onClick={() => handleToggleStatus(item)}
-                          disabled={isBusy || isDefault}
-                          title={isDefault ? 'Default language cannot be disabled' : 'Click to toggle status'}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 6,
-                            padding: '4px 10px',
-                            borderRadius: 12,
-                            border: 'none',
-                            background: isActive ? '#DCFCE7' : '#F1F5F9',
-                            color: isActive ? '#15803D' : '#64748B',
-                            fontWeight: 600,
-                            fontSize: 12,
-                            cursor: isDefault ? 'not-allowed' : 'pointer',
-                            opacity: isBusy ? 0.6 : 1,
-                            transition: 'all 0.15s ease',
-                          }}
-                        >
-                          <span
-                            style={{
-                              width: 6,
-                              height: 6,
-                              borderRadius: '50%',
-                              background: isActive ? '#16A34A' : '#94A3B8',
-                            }}
-                          />
-                          <span>{isActive ? 'Active' : 'Inactive'}</span>
-                        </button>
-                      </td>
-
-                      {/* Actions */}
-                      <td style={{ padding: '14px 20px', textAlign: 'right' }}>
-                        <div
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 6,
-                          }}
-                        >
+                      {/* Body Details */}
+                      <div className="mc-mobile-card-body">
+                        {/* Default Switch */}
+                        <div className="mc-mobile-card-row">
+                          <span className="mc-mobile-card-label">Default Language:</span>
                           <button
                             type="button"
-                            onClick={() => handleOpenEdit(item)}
-                            title="Edit language"
+                            role="switch"
+                            aria-checked={isDefault}
+                            onClick={() => handleToggleDefault(item)}
+                            disabled={isBusy}
                             style={{
+                              position: 'relative',
+                              width: 42,
+                              height: 22,
+                              borderRadius: 11,
+                              border: 'none',
+                              background: isDefault ? 'var(--mc-brand-purple)' : '#CBD5E1',
+                              cursor: isBusy ? 'not-allowed' : 'pointer',
+                              padding: 2,
                               display: 'inline-flex',
                               alignItems: 'center',
-                              justifyContent: 'center',
-                              width: 32,
-                              height: 32,
-                              borderRadius: 6,
-                              border: '1px solid var(--mc-border)',
-                              background: '#FFFFFF',
-                              color: 'var(--mc-text-main)',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease',
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.borderColor = 'var(--mc-brand-purple)';
-                              e.currentTarget.style.color = 'var(--mc-brand-purple)';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.borderColor = 'var(--mc-border)';
-                              e.currentTarget.style.color = 'var(--mc-text-main)';
+                              opacity: isBusy ? 0.6 : 1,
                             }}
                           >
-                            <Edit size={14} />
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(item)}
-                            disabled={isBusy || isDefault}
-                            title={isDefault ? 'Default language cannot be deleted' : 'Delete language'}
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: 32,
-                              height: 32,
-                              borderRadius: 6,
-                              border: '1px solid var(--mc-border)',
-                              background: '#FFFFFF',
-                              color: isDefault ? '#CBD5E1' : '#EF4444',
-                              cursor: isDefault ? 'not-allowed' : 'pointer',
-                              transition: 'all 0.15s ease',
-                            }}
-                            onMouseEnter={(e) => {
-                              if (!isDefault) {
-                                e.currentTarget.style.borderColor = '#EF4444';
-                                e.currentTarget.style.background = '#FEF2F2';
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (!isDefault) {
-                                e.currentTarget.style.borderColor = 'var(--mc-border)';
-                                e.currentTarget.style.background = '#FFFFFF';
-                              }
-                            }}
-                          >
-                            <Trash2 size={14} />
+                            <span
+                              style={{
+                                display: 'block',
+                                width: 18,
+                                height: 18,
+                                borderRadius: '50%',
+                                background: '#FFFFFF',
+                                transform: isDefault ? 'translateX(20px)' : 'translateX(0)',
+                                transition: 'transform 0.2s',
+                              }}
+                            />
                           </button>
                         </div>
-                      </td>
-                    </tr>
+
+                        {/* Status Switch */}
+                        <div className="mc-mobile-card-row">
+                          <span className="mc-mobile-card-label">Status:</span>
+                          <button
+                            type="button"
+                            onClick={() => handleToggleStatus(item)}
+                            disabled={isBusy || isDefault}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 6,
+                              padding: '3px 9px',
+                              borderRadius: 10,
+                              border: 'none',
+                              background: isActive ? '#DCFCE7' : '#F1F5F9',
+                              color: isActive ? '#15803D' : '#64748B',
+                              fontWeight: 600,
+                              fontSize: 11.5,
+                              cursor: isDefault ? 'not-allowed' : 'pointer',
+                              opacity: isBusy ? 0.6 : 1,
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: 6,
+                                height: 6,
+                                borderRadius: '50%',
+                                background: isActive ? '#16A34A' : '#94A3B8',
+                              }}
+                            />
+                            <span>{isActive ? 'Active' : 'Inactive'}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Card Actions */}
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, paddingTop: 4 }}>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEdit(item)}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 6,
+                            padding: '6px 14px',
+                            borderRadius: 8,
+                            border: '1px solid var(--mc-border)',
+                            background: '#FFFFFF',
+                            color: 'var(--mc-text-main)',
+                            fontSize: 12,
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <Edit size={13} />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(item)}
+                          disabled={isBusy || isDefault}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 6,
+                            padding: '6px 14px',
+                            borderRadius: 8,
+                            border: '1px solid #FECACA',
+                            background: '#FEF2F2',
+                            color: isDefault ? '#94A3B8' : '#EF4444',
+                            fontSize: 12,
+                            fontWeight: 600,
+                            cursor: isDefault ? 'not-allowed' : 'pointer',
+                            opacity: isDefault ? 0.5 : 1,
+                          }}
+                        >
+                          <Trash2 size={13} />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </div>
                   );
                 })}
-              </tbody>
-            </table>
-          )}
-        </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
       </div>
 
       {/* =========================================================================
