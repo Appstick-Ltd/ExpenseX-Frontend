@@ -6,7 +6,6 @@ import {
   Wallet,
   Zap,
   ChevronDown,
-  Coins,
   RefreshCw,
   TrendingUp,
   TrendingDown,
