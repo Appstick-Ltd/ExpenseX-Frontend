@@ -1375,7 +1375,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
               <thead>
                 <tr style={{ borderBottom: '1px solid #F1F5F9', color: '#64748B' }}>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>User</th>
-                  <th style={{ padding: '8px 6px', fontWeight: 600 }}>Type</th>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>Amount</th>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>Date</th>
                   <th style={{ padding: '8px 6px', fontWeight: 600 }}>Status</th>
@@ -1423,16 +1422,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                           </span>
                         </div>
                       </td>
-                      <td style={{ padding: '10px 6px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
-                          {tx.typeIcon === 'crown' ? (
-                            <Crown size={14} color="#D97706" />
-                          ) : (
-                            <Coins size={14} color="#F97316" />
-                          )}
-                          <span style={{ color: '#334155', fontWeight: 500 }}>{tx.type}</span>
-                        </div>
-                      </td>
                       <td style={{ padding: '10px 6px', fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap' }}>
                         {tx.amount}
                       </td>
@@ -1458,7 +1447,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} style={{ padding: '24px 6px', textAlign: 'center', color: '#94A3B8' }}>
+                    <td colSpan={4} style={{ padding: '24px 6px', textAlign: 'center', color: '#94A3B8' }}>
                       {loading ? 'Loading transactions...' : 'No transactions found'}
                     </td>
                   </tr>
@@ -1506,10 +1495,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                         )}
                         <div style={{ minWidth: 0 }}>
                           <div className="mc-mobile-card-title">{tx.email}</div>
-                          <div className="mc-mobile-card-sub" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            {tx.typeIcon === 'crown' ? <Crown size={12} color="#D97706" /> : <Coins size={12} color="#F97316" />}
-                            <span>{tx.type}</span>
-                          </div>
                         </div>
                       </div>
                       <span style={{ fontWeight: 700, fontSize: 14, color: '#0F172A', flexShrink: 0 }}>
