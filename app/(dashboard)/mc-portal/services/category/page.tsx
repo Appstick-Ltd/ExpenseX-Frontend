@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   getCategories,
   createCategory,
@@ -44,12 +44,11 @@ const getErrorMessage = (err: any, fallback: string): string => {
 };
 
 export default function CategoryPage() {
-  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [allCategories, setAllCategories] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [total, setTotal] = useState(0);
 
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -78,35 +77,42 @@ export default function CategoryPage() {
     setLoading(true);
     try {
       const res = await getCategories({
-        page,
-        limit,
-        pagination: 'true',
+        limit: 500,
+        pagination: 'false',
       });
 
       const parsed = extractListFromResponse<CategoryItem>(res);
-      setCategories(parsed.items || []);
-      setTotal(parsed.total || 0);
+      setAllCategories(parsed.items || []);
     } catch (err: any) {
       console.error('Failed to load categories:', err);
       showErrorToast(getErrorMessage(err, 'Failed to load categories.'));
     } finally {
       setLoading(false);
     }
-  }, [page, limit]);
+  }, []);
 
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
 
-  // Client search filtering
-  const filteredCategories = categories.filter((cat) => {
-    if (!search.trim()) return true;
+  // Client search filtering across all categories
+  const allFiltered = useMemo(() => {
+    if (!search.trim()) return allCategories;
     const q = search.trim().toLowerCase();
-    const nameMatch = cat.name?.toLowerCase().includes(q);
-    const descEn = typeof cat.description === 'object' ? cat.description?.en?.toLowerCase() : '';
-    const descBn = typeof cat.description === 'object' ? cat.description?.bn?.toLowerCase() : '';
-    return nameMatch || descEn?.includes(q) || descBn?.includes(q);
-  });
+    return allCategories.filter((cat) => {
+      const nameMatch = (cat.name || '').toLowerCase().includes(q);
+      const descEn = typeof cat.description === 'object' ? (cat.description?.en || '').toLowerCase() : '';
+      const descBn = typeof cat.description === 'object' ? (cat.description?.bn || '').toLowerCase() : '';
+      return nameMatch || descEn.includes(q) || descBn.includes(q);
+    });
+  }, [allCategories, search]);
+
+  const total = allFiltered.length;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  const filteredCategories = useMemo(() => {
+    const start = (page - 1) * limit;
+    return allFiltered.slice(start, start + limit);
+  }, [allFiltered, page, limit]);
 
   // Image Upload Handler
   const handleUploadImage = async (file: File, type: 'add' | 'edit') => {
@@ -276,10 +282,24 @@ export default function CategoryPage() {
         }}
       >
         <div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 4px 0', color: 'var(--mc-text-main)' }}>
-            Category
-          </h1>
-          <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <h1 style={{ fontSize: 20, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
+              Category
+            </h1>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--mc-brand-purple)',
+                background: 'rgba(109, 61, 245, 0.1)',
+                padding: '2px 8px',
+                borderRadius: 12,
+              }}
+            >
+              {allCategories.length} Total
+            </span>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--mc-text-muted)', margin: '4px 0 0 0' }}>
             Configure and organize expense transaction categories
           </p>
         </div>
@@ -508,27 +528,61 @@ export default function CategoryPage() {
         <div className="mc-table-footer">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: 12 }}>
             <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
-              Showing {categories.length > 0 ? (page - 1) * limit + 1 : 0} to{' '}
+              Showing {filteredCategories.length > 0 ? (page - 1) * limit + 1 : 0} to{' '}
               {Math.min(page * limit, total)} of {total} categories
             </div>
-            <div style={{ display: 'flex', gap: 6 }}>
-              <button
-                className="mc-page-btn"
-                disabled={page <= 1 || loading}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-              >
-                <ChevronLeft size={14} />
-                <span>Prev</span>
-              </button>
-              <span style={{ padding: '6px 10px', fontWeight: 600 }}>Page {page}</span>
-              <button
-                className="mc-page-btn"
-                disabled={categories.length < limit || loading}
-                onClick={() => setPage((p) => p + 1)}
-              >
-                <span>Next</span>
-                <ChevronRight size={14} />
-              </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>Per Page:</span>
+                <select
+                  value={limit}
+                  onChange={(e) => {
+                    setLimit(Number(e.target.value));
+                    setPage(1);
+                  }}
+                  style={{
+                    height: 32,
+                    padding: '0 8px',
+                    borderRadius: 6,
+                    border: '1px solid var(--mc-border)',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    outline: 'none',
+                    background: '#FFFFFF',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <button
+                  className="mc-page-btn"
+                  disabled={page <= 1 || loading}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                >
+                  <ChevronLeft size={14} />
+                  <span>Prev</span>
+                </button>
+                <span style={{ padding: '6px 12px', fontWeight: 700, fontSize: 12, color: 'var(--mc-brand-purple)', background: '#F1F5F9', borderRadius: 6 }}>
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  className="mc-page-btn"
+                  disabled={page >= totalPages || loading}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                >
+                  <span>Next</span>
+                  <ChevronRight size={14} />
+                </button>
+              </div>
             </div>
           </div>
         </div>

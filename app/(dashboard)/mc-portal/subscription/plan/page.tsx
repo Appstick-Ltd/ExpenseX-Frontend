@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   getSubscriptionPlans,
   createSubscriptionPlan,
@@ -79,7 +79,7 @@ export default function SubscriptionPlanPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
 
   // Modals state
@@ -177,46 +177,54 @@ export default function SubscriptionPlanPage() {
     fetchActiveLanguages();
   }, []);
 
-  // Fetch Plans from GET /subscriptions/plan
+  // Fetch Plans from GET /subscriptions/plan (Load all for instant client-side filtering)
   const fetchPlans = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getSubscriptionPlans({
-        page,
-        limit,
-        pagination: 'true',
+        limit: 200,
+        pagination: 'false',
       });
 
       const parsed = extractListFromResponse<SubscriptionPlanItem>(res);
-      setPlans(parsed.items || []);
-      setTotal(parsed.total || 0);
+      const items = parsed.items || [];
+      setPlans(items);
+      setTotal(items.length);
     } catch (err: any) {
       console.error('Failed to load subscription plans:', err);
       showErrorToast(getErrorMessage(err, 'Failed to load subscription plans.'));
     } finally {
       setLoading(false);
     }
-  }, [page, limit]);
+  }, []);
 
   useEffect(() => {
     fetchPlans();
   }, [fetchPlans]);
 
   // Client search filtering
-  const filteredPlans = plans.filter((plan) => {
-    if (!search.trim()) return true;
+  const filteredPlans = useMemo(() => {
+    if (!search.trim()) return plans;
     const q = search.trim().toLowerCase();
-    const names =
-      typeof plan.name === 'string'
-        ? [(plan.name as any).toLowerCase()]
-        : Object.values(plan.name || {}).map((n) => String(n || '').toLowerCase());
-    const nameMatch = names.some((n) => n.includes(q));
-    const productIdMatch = (plan.productId || '').toLowerCase().includes(q);
-    return nameMatch || productIdMatch;
-  });
+    return plans.filter((plan) => {
+      const names =
+        typeof plan.name === 'string'
+          ? [(plan.name as any).toLowerCase()]
+          : Object.values(plan.name || {}).map((n) => String(n || '').toLowerCase());
+      const nameMatch = names.some((n) => n.includes(q));
+      const productIdMatch = (plan.productId || '').toLowerCase().includes(q);
+      return nameMatch || productIdMatch;
+    });
+  }, [plans, search]);
 
-  // Pagination
-  const totalPages = Math.max(1, Math.ceil(total / limit));
+  // Pagination calculation
+  const totalPages = Math.max(1, Math.ceil(filteredPlans.length / limit));
+
+  // Client-side paginated items
+  const paginatedPlans = useMemo(() => {
+    const start = (page - 1) * limit;
+    return filteredPlans.slice(start, start + limit);
+  }, [filteredPlans, page, limit]);
 
   // Create Plan (POST /subscriptions/plan)
   const handleCreatePlan = async (e: React.FormEvent) => {
@@ -547,11 +555,25 @@ export default function SubscriptionPlanPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
-            Subscription Plans
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--mc-text-main)' }}>
+              Subscription Plans
+            </h2>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                padding: '2px 8px',
+                borderRadius: 20,
+                background: 'rgba(124, 58, 237, 0.1)',
+                color: 'var(--mc-brand-purple)',
+              }}
+            >
+              {plans.length} Total
+            </span>
+          </div>
           <p style={{ fontSize: 13, color: 'var(--mc-text-subtle)', margin: '4px 0 0' }}>
-            Manage subscription plans for your users
+            Manage pricing tiers, AI credits, and duration options
           </p>
         </div>
         <button
@@ -585,7 +607,10 @@ export default function SubscriptionPlanPage() {
           type="text"
           placeholder="Search plans..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           style={{
             border: 'none',
             outline: 'none',
@@ -658,7 +683,7 @@ export default function SubscriptionPlanPage() {
                     </td>
                   </tr>
                 ) : (
-                  filteredPlans.map((plan, idx) => {
+                  paginatedPlans.map((plan, idx) => {
                     const defLang = activeLanguages.find((l) => l.isDefault)?.code || 'en';
                     const planName =
                       typeof plan.name === 'string'
@@ -835,7 +860,7 @@ export default function SubscriptionPlanPage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {filteredPlans.map((plan) => {
+            {paginatedPlans.map((plan) => {
               const defLang = activeLanguages.find((l) => l.isDefault)?.code || 'en';
               const planName =
                 typeof plan.name === 'string'
@@ -976,54 +1001,111 @@ export default function SubscriptionPlanPage() {
         )}
       </div>
 
-      {/* Pagination */}
-      {!loading && total > limit && (
+      {/* Pagination Footer */}
+      {!loading && (
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 12,
             padding: '12px 16px',
             background: '#FFFFFF',
-            borderRadius: 10,
+            borderRadius: 12,
             border: '1px solid var(--mc-border)',
+            boxShadow: 'var(--mc-shadow-sm)',
           }}
         >
-          <span style={{ fontSize: 12, color: 'var(--mc-text-subtle)' }}>
-            Showing {(page - 1) * limit + 1}–{Math.min(page * limit, total)} of {total}
-          </span>
-          <div style={{ display: 'flex', gap: 6 }}>
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page <= 1}
-              style={{
-                padding: '6px 10px',
-                borderRadius: 6,
-                border: '1px solid var(--mc-border)',
-                background: page <= 1 ? '#F8FAFC' : '#FFFFFF',
-                cursor: page <= 1 ? 'not-allowed' : 'pointer',
-                opacity: page <= 1 ? 0.5 : 1,
-              }}
-            >
-              <ChevronLeft size={14} />
-            </button>
-            <span style={{ padding: '6px 12px', fontSize: 13, fontWeight: 600, color: 'var(--mc-text-main)' }}>
-              {page} / {totalPages}
-            </span>
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page >= totalPages}
-              style={{
-                padding: '6px 10px',
-                borderRadius: 6,
-                border: '1px solid var(--mc-border)',
-                background: page >= totalPages ? '#F8FAFC' : '#FFFFFF',
-                cursor: page >= totalPages ? 'not-allowed' : 'pointer',
-                opacity: page >= totalPages ? 0.5 : 1,
-              }}
-            >
-              <ChevronRight size={14} />
-            </button>
+          <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
+            Showing {filteredPlans.length > 0 ? (page - 1) * limit + 1 : 0} to{' '}
+            {Math.min(page * limit, filteredPlans.length)} of {filteredPlans.length} plans
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>Per Page:</span>
+              <select
+                value={limit}
+                onChange={(e) => {
+                  setLimit(Number(e.target.value));
+                  setPage(1);
+                }}
+                style={{
+                  height: 32,
+                  padding: '0 8px',
+                  borderRadius: 6,
+                  border: '1px solid var(--mc-border)',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  outline: 'none',
+                  background: '#FFFFFF',
+                  cursor: 'pointer',
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              <button
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  padding: '6px 12px',
+                  borderRadius: 6,
+                  border: '1px solid var(--mc-border)',
+                  background: page <= 1 ? '#F8FAFC' : '#FFFFFF',
+                  cursor: page <= 1 ? 'not-allowed' : 'pointer',
+                  opacity: page <= 1 ? 0.5 : 1,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--mc-text-main)',
+                }}
+              >
+                <ChevronLeft size={14} />
+                <span>Prev</span>
+              </button>
+              <span
+                style={{
+                  padding: '6px 12px',
+                  fontWeight: 700,
+                  fontSize: 12,
+                  color: 'var(--mc-brand-purple)',
+                  background: '#F1F5F9',
+                  borderRadius: 6,
+                }}
+              >
+                Page {page} of {totalPages}
+              </span>
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  padding: '6px 12px',
+                  borderRadius: 6,
+                  border: '1px solid var(--mc-border)',
+                  background: page >= totalPages ? '#F8FAFC' : '#FFFFFF',
+                  cursor: page >= totalPages ? 'not-allowed' : 'pointer',
+                  opacity: page >= totalPages ? 0.5 : 1,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--mc-text-main)',
+                }}
+              >
+                <span>Next</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
           </div>
         </div>
       )}

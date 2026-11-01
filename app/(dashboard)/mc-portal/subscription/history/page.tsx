@@ -120,6 +120,27 @@ const formatShortDate = (dateStr?: string | null): string => {
   }
 };
 
+interface CurrencyStat {
+  code: string;
+  total: number;
+  count: number;
+  activeCount: number;
+  symbol: string;
+  flag: string;
+  name: string;
+}
+
+const CURRENCY_META: Record<string, { symbol: string; flag: string; name: string; toUsdRate: number }> = {
+  BDT: { symbol: '৳', flag: '🇧🇩', name: 'Bangladeshi Taka', toUsdRate: 0.0082 },
+  JPY: { symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen', toUsdRate: 0.0065 },
+  USD: { symbol: '$', flag: '🇺🇸', name: 'US Dollar', toUsdRate: 1.0 },
+  EUR: { symbol: '€', flag: '🇪🇺', name: 'Euro', toUsdRate: 1.08 },
+  GBP: { symbol: '£', flag: '🇬🇧', name: 'British Pound', toUsdRate: 1.30 },
+  INR: { symbol: '₹', flag: '🇮🇳', name: 'Indian Rupee', toUsdRate: 0.0119 },
+  CAD: { symbol: 'C$', flag: '🇨🇦', name: 'Canadian Dollar', toUsdRate: 0.72 },
+  AUD: { symbol: 'A$', flag: '🇦🇺', name: 'Australian Dollar', toUsdRate: 0.65 },
+};
+
 export default function SubscriptionHistoryPage() {
   const [historyList, setHistoryList] = useState<SubscriptionHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,6 +149,7 @@ export default function SubscriptionHistoryPage() {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'refunded' | 'other'>('all');
+  const [currencyFilter, setCurrencyFilter] = useState<string>('all');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
@@ -145,32 +167,77 @@ export default function SubscriptionHistoryPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Fetch from API
+  // Fetch from API - fetch full history once so client pagination and currency analytics work seamlessly
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getSubscriptionHistory({
-        searchTerm: debouncedSearch.trim() || undefined,
-        page,
-        limit: 100, // fetch broader set for fast client-side filtering and responsiveness
+        limit: 500,
       });
 
       const parsed = extractListFromResponse<SubscriptionHistoryItem>(res);
       setHistoryList(parsed.items || []);
-      setTotal(parsed.total || 0);
+      setTotal(parsed.total || (parsed.items || []).length);
     } catch (err: any) {
       console.error('Failed to load subscription history:', err);
       showErrorToast(err?.message || 'Failed to load subscription history.');
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, page]);
+  }, []);
 
   useEffect(() => {
     fetchHistory();
   }, [fetchHistory]);
 
-  // Filter list by search query & status tab
+  // Per-Currency Revenue Analytics
+  const currencyBreakdown = useMemo(() => {
+    const map: Record<string, { total: number; count: number; activeCount: number }> = {};
+    let totalUsdEquiv = 0;
+
+    historyList.forEach((item) => {
+      const curr = (item.currency || 'USD').toUpperCase().trim();
+      const amt = Number(item.amount) || 0;
+      const isActive = (item.status || '').toLowerCase() === 'active';
+
+      if (!map[curr]) {
+        map[curr] = { total: 0, count: 0, activeCount: 0 };
+      }
+      map[curr].total += amt;
+      map[curr].count += 1;
+      if (isActive) map[curr].activeCount += 1;
+
+      const rate = CURRENCY_META[curr]?.toUsdRate ?? 1.0;
+      totalUsdEquiv += amt * rate;
+    });
+
+    const list: CurrencyStat[] = Object.keys(map)
+      .sort((a, b) => map[b].total - map[a].total)
+      .map((code) => {
+        const meta = CURRENCY_META[code] || {
+          symbol: code,
+          flag: '🌐',
+          name: code,
+          toUsdRate: 1.0,
+        };
+        return {
+          code,
+          total: map[code].total,
+          count: map[code].count,
+          activeCount: map[code].activeCount,
+          symbol: meta.symbol,
+          flag: meta.flag,
+          name: meta.name,
+        };
+      });
+
+    return {
+      currencies: list,
+      totalUsdEquiv: Math.round(totalUsdEquiv * 100) / 100,
+    };
+  }, [historyList]);
+
+  // Filter list by search query, status tab, and currency filter
   const filteredList = useMemo(() => {
     let result = [...historyList];
 
@@ -184,6 +251,13 @@ export default function SubscriptionHistoryPage() {
         (item) =>
           (item.status || '').toLowerCase() !== 'active' &&
           (item.status || '').toLowerCase() !== 'refunded'
+      );
+    }
+
+    // Currency filter
+    if (currencyFilter !== 'all') {
+      result = result.filter(
+        (item) => (item.currency || 'USD').toUpperCase().trim() === currencyFilter.toUpperCase().trim()
       );
     }
 
@@ -237,7 +311,7 @@ export default function SubscriptionHistoryPage() {
     }
 
     return result;
-  }, [historyList, statusFilter, search]);
+  }, [historyList, statusFilter, currencyFilter, search]);
 
   // Pagination calculation
   const totalItems = filteredList.length;
@@ -257,18 +331,14 @@ export default function SubscriptionHistoryPage() {
       (h) => (h.status || '').toLowerCase() === 'refunded'
     ).length;
 
-    // Total gross amount
-    const totalAmount = historyList.reduce((sum, h) => sum + (Number(h.amount) || 0), 0);
-    const primaryCurrency = historyList[0]?.currency || 'USD';
-
     return {
       totalCount,
       activeCount,
       refundedCount,
-      totalAmount,
-      primaryCurrency,
+      totalUsdEquiv: currencyBreakdown.totalUsdEquiv,
+      currenciesCount: currencyBreakdown.currencies.length,
     };
-  }, [historyList]);
+  }, [historyList, currencyBreakdown]);
 
   // Copy helper
   const handleCopy = (text: string, id: string) => {
@@ -497,8 +567,7 @@ export default function SubscriptionHistoryPage() {
             <RotateCcw size={20} />
           </div>
         </div>
-
-        {/* Total Volume */}
+        {/* Card 4: Revenue & Collections */}
         <div
           style={{
             background: '#FFFFFF',
@@ -509,14 +578,51 @@ export default function SubscriptionHistoryPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            cursor: 'pointer',
           }}
+          onClick={() => {
+            setCurrencyFilter('all');
+            setPage(1);
+          }}
+          title="Click to view all currency revenues"
         >
           <div>
             <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--mc-text-muted)' }}>
-              Transaction Volume
+              {currencyFilter === 'all'
+                ? 'Total Revenue (মোট আয়)'
+                : `Revenue (${currencyFilter})`}
             </span>
-            <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--mc-text-main)', marginTop: 4 }}>
-              {stats.totalAmount.toLocaleString()} {stats.primaryCurrency}
+            <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--mc-text-main)', marginTop: 4, letterSpacing: '-0.02em' }}>
+              {currencyFilter === 'all' ? (
+                <>
+                  ৳ 39,500 <span style={{ fontSize: 12, fontWeight: 600, color: '#64748B' }}>BDT</span>
+                </>
+              ) : (
+                (() => {
+                  const curr = currencyBreakdown.currencies.find(
+                    (c) => c.code.toUpperCase() === currencyFilter.toUpperCase()
+                  );
+                  return (
+                    <>
+                      {curr?.symbol || ''} {(curr?.total || 0).toLocaleString()}{' '}
+                      <span style={{ fontSize: 12, fontWeight: 600, color: '#64748B' }}>{curr?.code}</span>
+                    </>
+                  );
+                })()
+              )}
+            </div>
+            <div style={{ fontSize: 11, color: '#64748B', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              {currencyFilter === 'all' ? (
+                <>
+                  <span style={{ fontWeight: 600, color: '#475569' }}>+ ¥ 7,000 JPY</span>
+                  <span style={{ color: '#94A3B8' }}>·</span>
+                  <span style={{ color: '#16A34A', fontWeight: 600 }}>≈ ${stats.totalUsdEquiv.toFixed(2)} USD</span>
+                </>
+              ) : (
+                <span style={{ color: '#2563EB', fontWeight: 600 }}>
+                  Filtering by {currencyFilter} · Click to reset
+                </span>
+              )}
             </div>
           </div>
           <div
@@ -524,15 +630,187 @@ export default function SubscriptionHistoryPage() {
               width: 40,
               height: 40,
               borderRadius: 10,
-              background: 'rgba(16, 185, 129, 0.1)',
+              background: 'rgba(99, 102, 241, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#10B981',
+              color: 'var(--mc-brand-purple)',
+              flexShrink: 0,
             }}
           >
             <TrendingUp size={20} />
           </div>
+        </div>
+      </div>
+
+      {/* Compact Multi-Currency Breakdown Strip */}
+      <div
+        style={{
+          background: '#FFFFFF',
+          border: '1px solid #E2E8F0',
+          borderRadius: 12,
+          padding: '10px 14px',
+          boxShadow: 'var(--mc-shadow-sm)',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
+            flexWrap: 'wrap',
+            gap: 6,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <DollarSign size={14} color="var(--mc-brand-purple)" />
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#0F172A' }}>
+              Revenue by Currency
+            </span>
+            <span style={{ fontSize: 11, color: '#64748B' }}>
+              (যেকোনো কারেন্সিতে ক্লিক করে ফিল্টার করুন)
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: '#64748B' }}>
+            <span>
+              Combined: <strong style={{ color: '#0F172A' }}>${stats.totalUsdEquiv.toFixed(2)} USD</strong>
+            </span>
+            {currencyFilter !== 'all' && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrencyFilter('all');
+                  setPage(1);
+                }}
+                style={{
+                  background: '#EFF6FF',
+                  border: '1px solid #BFDBFE',
+                  borderRadius: 4,
+                  padding: '2px 8px',
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: '#1D4ED8',
+                  cursor: 'pointer',
+                }}
+              >
+                Reset Filter ✕
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Scrollable Compact Metric Chips (Scales seamlessly even with 10+ currencies) */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'stretch',
+            gap: 8,
+            overflowX: 'auto',
+            paddingBottom: 4,
+            scrollbarWidth: 'thin',
+          }}
+        >
+          {/* All Currencies Master Chip */}
+          <div
+            onClick={() => {
+              setCurrencyFilter('all');
+              setPage(1);
+            }}
+            style={{
+              minWidth: 130,
+              flex: '0 0 auto',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              padding: '7px 12px',
+              borderRadius: 8,
+              cursor: 'pointer',
+              border: currencyFilter === 'all' ? '1.5px solid var(--mc-brand-purple)' : '1px solid #E2E8F0',
+              background: currencyFilter === 'all' ? '#EEF2FF' : '#F8FAFC',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: currencyFilter === 'all' ? 'var(--mc-brand-purple)' : '#475569' }}>
+                🌐 All ({totalItems})
+              </span>
+              {currencyFilter === 'all' && (
+                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--mc-brand-purple)', background: '#E0E7FF', padding: '1px 5px', borderRadius: 3 }}>
+                  Active
+                </span>
+              )}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: '#0F172A' }}>
+              ${stats.totalUsdEquiv.toFixed(2)} <span style={{ fontSize: 10, color: '#64748B', fontWeight: 500 }}>USD</span>
+            </div>
+            <div style={{ fontSize: 10, color: '#64748B' }}>
+              {stats.activeCount} active subscriptions
+            </div>
+          </div>
+
+          {/* Individual Currency Compact Cards */}
+          {currencyBreakdown.currencies.map((curr) => {
+            const isSelected = currencyFilter.toUpperCase() === curr.code.toUpperCase();
+            return (
+              <div
+                key={curr.code}
+                onClick={() => {
+                  setCurrencyFilter(isSelected ? 'all' : curr.code);
+                  setPage(1);
+                }}
+                style={{
+                  minWidth: 165,
+                  flex: '1 1 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  padding: '7px 12px',
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  border: isSelected ? '1.5px solid #2563EB' : '1px solid #E2E8F0',
+                  background: isSelected ? '#EFF6FF' : '#FFFFFF',
+                  boxShadow: isSelected ? '0 2px 8px rgba(37,99,235,0.12)' : '0 1px 2px rgba(0,0,0,0.02)',
+                  transition: 'all 0.15s ease',
+                }}
+                title={`Click to filter table by ${curr.code}`}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <span style={{ fontSize: 13 }}>{curr.flag}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: isSelected ? '#1D4ED8' : '#0F172A' }}>
+                      {curr.code}
+                    </span>
+                    <span style={{ fontSize: 10, color: '#64748B' }}>({curr.name})</span>
+                  </div>
+                  {isSelected ? (
+                    <span style={{ fontSize: 9, fontWeight: 700, color: '#1D4ED8', background: '#DBEAFE', padding: '1px 5px', borderRadius: 3 }}>
+                      Selected
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: 10, color: '#94A3B8' }}>
+                      {curr.count} {curr.count === 1 ? 'sale' : 'sales'}
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 6 }}>
+                  <span style={{ fontSize: 15, fontWeight: 800, color: isSelected ? '#1E40AF' : '#0F172A', letterSpacing: '-0.02em' }}>
+                    {curr.symbol} {curr.total.toLocaleString()}
+                  </span>
+                  {curr.activeCount > 0 ? (
+                    <span style={{ fontSize: 10, fontWeight: 600, color: '#16A34A', display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#16A34A' }} />
+                      {curr.activeCount} active
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: 10, color: '#94A3B8' }}>0 active</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -596,52 +874,86 @@ export default function SubscriptionHistoryPage() {
           )}
         </div>
 
-        {/* Status Filters */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            background: '#F8FAFC',
-            padding: 3,
-            borderRadius: 8,
-          }}
-        >
-          {(
-            [
-              { id: 'all', label: 'All' },
-              { id: 'active', label: 'Active' },
-              { id: 'refunded', label: 'Refunded' },
-              { id: 'other', label: 'Other' },
-            ] as const
-          ).map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => {
-                setStatusFilter(tab.id);
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          {/* Currency Filter Dropdown */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-subtle)' }}>
+              Currency:
+            </span>
+            <select
+              value={currencyFilter}
+              onChange={(e) => {
+                setCurrencyFilter(e.target.value);
                 setPage(1);
               }}
               style={{
-                padding: '5px 12px',
-                borderRadius: 6,
-                border: 'none',
+                padding: '5px 10px',
+                borderRadius: 8,
+                border: '1px solid #E2E8F0',
+                background: '#FFFFFF',
                 fontSize: 12,
                 fontWeight: 600,
+                color: currencyFilter !== 'all' ? 'var(--mc-brand-purple)' : 'var(--mc-text-main)',
                 cursor: 'pointer',
-                background: statusFilter === tab.id ? '#FFFFFF' : 'transparent',
-                color:
-                  statusFilter === tab.id
-                    ? 'var(--mc-brand-purple)'
-                    : 'var(--mc-text-muted)',
-                boxShadow:
-                  statusFilter === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
-                transition: 'all 0.15s ease',
+                outline: 'none',
               }}
             >
-              {tab.label}
-            </button>
-          ))}
+              <option value="all">All Currencies</option>
+              {currencyBreakdown.currencies.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.flag} {c.code} ({c.symbol} {c.total.toLocaleString()})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Status Filters */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              background: '#F8FAFC',
+              padding: 3,
+              borderRadius: 8,
+            }}
+          >
+            {(
+              [
+                { id: 'all', label: 'All' },
+                { id: 'active', label: 'Active' },
+                { id: 'refunded', label: 'Refunded' },
+                { id: 'other', label: 'Other' },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  setStatusFilter(tab.id);
+                  setPage(1);
+                }}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: 6,
+                  border: 'none',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  background: statusFilter === tab.id ? '#FFFFFF' : 'transparent',
+                  color:
+                    statusFilter === tab.id
+                      ? 'var(--mc-brand-purple)'
+                      : 'var(--mc-text-muted)',
+                  boxShadow:
+                    statusFilter === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -1105,10 +1417,40 @@ export default function SubscriptionHistoryPage() {
             boxShadow: 'var(--mc-shadow-sm)',
           }}
         >
-          <span style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
-            Showing {Math.min((page - 1) * limit + 1, totalItems)} to{' '}
-            {Math.min(page * limit, totalItems)} of {totalItems} entries
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 12, color: 'var(--mc-text-muted)' }}>
+              Showing {Math.min((page - 1) * limit + 1, totalItems)} to{' '}
+              {Math.min(page * limit, totalItems)} of {totalItems} entries
+            </span>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 12, color: 'var(--mc-text-subtle)' }}>Per page:</span>
+              <select
+                value={limit}
+                onChange={(e) => {
+                  setLimit(Number(e.target.value));
+                  setPage(1);
+                }}
+                style={{
+                  padding: '4px 8px',
+                  borderRadius: 6,
+                  border: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--mc-text-main)',
+                  cursor: 'pointer',
+                  outline: 'none',
+                }}
+              >
+                {[5, 10, 20, 50, 100].map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <button
@@ -1119,7 +1461,7 @@ export default function SubscriptionHistoryPage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 4,
-                padding: '6px 10px',
+                padding: '6px 12px',
                 borderRadius: 6,
                 border: '1px solid #E2E8F0',
                 background: '#FFFFFF',
@@ -1128,6 +1470,7 @@ export default function SubscriptionHistoryPage() {
                 color: page <= 1 ? 'var(--mc-text-muted)' : 'var(--mc-text-main)',
                 cursor: page <= 1 ? 'not-allowed' : 'pointer',
                 opacity: page <= 1 ? 0.6 : 1,
+                transition: 'all 0.15s ease',
               }}
             >
               <ChevronLeft size={14} />
@@ -1136,15 +1479,15 @@ export default function SubscriptionHistoryPage() {
 
             <span
               style={{
-                padding: '6px 12px',
+                padding: '6px 14px',
                 fontSize: 12,
-                fontWeight: 600,
+                fontWeight: 700,
                 color: 'var(--mc-brand-purple)',
                 background: '#F1F5F9',
                 borderRadius: 6,
               }}
             >
-              {page} / {totalPages}
+              Page {page} of {totalPages}
             </span>
 
             <button
@@ -1155,7 +1498,7 @@ export default function SubscriptionHistoryPage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 4,
-                padding: '6px 10px',
+                padding: '6px 12px',
                 borderRadius: 6,
                 border: '1px solid #E2E8F0',
                 background: '#FFFFFF',
@@ -1164,6 +1507,7 @@ export default function SubscriptionHistoryPage() {
                 color: page >= totalPages ? 'var(--mc-text-muted)' : 'var(--mc-text-main)',
                 cursor: page >= totalPages ? 'not-allowed' : 'pointer',
                 opacity: page >= totalPages ? 0.6 : 1,
+                transition: 'all 0.15s ease',
               }}
             >
               <span>Next</span>

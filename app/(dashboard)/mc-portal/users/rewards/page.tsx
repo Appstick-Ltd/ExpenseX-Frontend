@@ -49,58 +49,27 @@ const DEFAULT_AVATAR =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366F1'/%3E%3Cstop offset='100%25' stop-color='%238B5CF6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='80' height='80' rx='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='31' r='14' fill='%23FFFFFF' opacity='0.9'/%3E%3Cpath d='M16 68c0-13.255 10.745-24 24-24s24 10.745 24 24' fill='%23FFFFFF' opacity='0.9'/%3E%3C/svg%3E";
 
 export default function AdminRewardsPage() {
-  const [rewards, setRewards] = useState<UserRewardItem[]>([]);
+  const [allRewards, setAllRewards] = useState<UserRewardItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Filters & Pagination
   const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'rewarded' | 'rejected'>('all');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
 
   // Modal & Clipboard
   const [selectedReward, setSelectedReward] = useState<UserRewardItem | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // Sync debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-      setPage(1);
-    }, 350);
-    return () => clearTimeout(timer);
-  }, [search]);
-
   const fetchRewards = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const params: Record<string, any> = {
-        page,
-        limit,
-      };
-
-      if (debouncedSearch.trim()) {
-        params.search = debouncedSearch.trim();
-      }
-
-      if (statusFilter !== 'all') {
-        params.status = statusFilter;
-      }
-
-      const res = await getUserRewards(params);
+      const res = await getUserRewards({ limit: 500 });
       const parsed = extractListFromResponse<UserRewardItem>(res);
-      setRewards(parsed.items || []);
-      setTotal(parsed.total || 0);
-      if (parsed.totalPages) {
-        setTotalPages(parsed.totalPages);
-      } else {
-        setTotalPages(Math.max(1, Math.ceil((parsed.total || 0) / limit)));
-      }
+      setAllRewards(parsed.items || []);
     } catch (err: any) {
       console.error('Error fetching rewards list:', err);
       const msg = err?.message || 'Failed to fetch rewards list';
@@ -109,11 +78,38 @@ export default function AdminRewardsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, debouncedSearch, statusFilter]);
+  }, []);
 
   useEffect(() => {
     fetchRewards();
   }, [fetchRewards]);
+
+  // Client-side filtering
+  const filteredRewards = useMemo(() => {
+    let list = [...allRewards];
+    if (statusFilter !== 'all') {
+      list = list.filter((r) => (r.status || '').toLowerCase() === statusFilter.toLowerCase());
+    }
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter((r) => {
+        const uName = (r.user?.name || '').toLowerCase();
+        const uEmail = (r.user?.email || '').toLowerCase();
+        const refName = (r.referrer?.name || '').toLowerCase();
+        const refEmail = (r.referrer?.email || '').toLowerCase();
+        const code = (r.referral_code || '').toLowerCase();
+        return uName.includes(q) || uEmail.includes(q) || refName.includes(q) || refEmail.includes(q) || code.includes(q);
+      });
+    }
+    return list;
+  }, [allRewards, statusFilter, search]);
+
+  const total = filteredRewards.length;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  const rewards = useMemo(() => {
+    const start = (page - 1) * limit;
+    return filteredRewards.slice(start, start + limit);
+  }, [filteredRewards, page, limit]);
 
   const handleCopy = (text: string, id: string) => {
     if (!text) return;
@@ -125,9 +121,9 @@ export default function AdminRewardsPage() {
   };
 
   const exportToCSV = () => {
-    if (rewards.length === 0) return;
+    if (filteredRewards.length === 0) return;
     const headers = ['ID', 'User Name', 'User Email', 'Referrer Name', 'Referrer Email', 'Referral Code', 'Coin Amount', 'Status', 'Date'];
-    const rows = rewards.map((r) => [
+    const rows = filteredRewards.map((r) => [
       `"${r._id}"`,
       `"${r.user?.name || 'N/A'}"`,
       `"${r.user?.email || 'N/A'}"`,
@@ -149,13 +145,13 @@ export default function AdminRewardsPage() {
     document.body.removeChild(link);
   };
 
-  // Quick stats computed from current list or totals
+  // Quick stats computed from complete dataset
   const stats = useMemo(() => {
-    const totalCoins = rewards.reduce((sum, r) => sum + (Number(r.coin) || 0), 0);
-    const rewardedCount = rewards.filter((r) => r.status === 'rewarded').length;
-    const pendingCount = rewards.filter((r) => r.status === 'pending').length;
-    return { totalCoins, rewardedCount, pendingCount };
-  }, [rewards]);
+    const totalCoins = allRewards.reduce((sum, r) => sum + (Number(r.coin) || 0), 0);
+    const rewardedCount = allRewards.filter((r) => (r.status || '').toLowerCase() === 'rewarded').length;
+    const pendingCount = allRewards.filter((r) => (r.status || '').toLowerCase() === 'pending').length;
+    return { totalCoins, rewardedCount, pendingCount, totalCount: allRewards.length };
+  }, [allRewards]);
 
   const renderStatusBadge = (status?: string) => {
     const s = (status || 'pending').toLowerCase();
@@ -838,6 +834,7 @@ export default function AdminRewardsPage() {
               <option value={10}>10 per page</option>
               <option value={20}>20 per page</option>
               <option value={50}>50 per page</option>
+              <option value={100}>100 per page</option>
             </select>
           </div>
 
@@ -853,16 +850,17 @@ export default function AdminRewardsPage() {
                 color: page <= 1 ? 'var(--mc-text-muted)' : 'var(--mc-text-main)',
                 cursor: page <= 1 ? 'not-allowed' : 'pointer',
                 fontSize: 12,
+                fontWeight: 600,
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 4,
               }}
             >
               <ChevronLeft size={14} />
-              <span>Previous</span>
+              <span>Prev</span>
             </button>
 
-            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--mc-text-main)', padding: '0 6px' }}>
+            <span style={{ padding: '6px 12px', fontWeight: 700, fontSize: 12, color: 'var(--mc-brand-purple)', background: '#F1F5F9', borderRadius: 6 }}>
               Page {page} of {Math.max(1, totalPages)}
             </span>
 
@@ -877,6 +875,7 @@ export default function AdminRewardsPage() {
                 color: page >= totalPages ? 'var(--mc-text-muted)' : 'var(--mc-text-main)',
                 cursor: page >= totalPages ? 'not-allowed' : 'pointer',
                 fontSize: 12,
+                fontWeight: 600,
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 4,

@@ -22,9 +22,9 @@ interface PortalAuthContextType {
 const PortalAuthContext = createContext<PortalAuthContextType | undefined>(undefined);
 
 export const PortalAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setTokenState] = useState<string | null>(() => getAdminToken());
-  const [user, setUserState] = useState<any | null>(() => getStoredAdminUser());
-  const [isLoading, setIsLoading] = useState<boolean>(() => !!getAdminToken());
+  const [token, setTokenState] = useState<string | null>(null);
+  const [user, setUserState] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshProfile = useCallback(async () => {
     const currentToken = getAdminToken();
@@ -66,12 +66,16 @@ export const PortalAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, []);
 
   useEffect(() => {
-    if (token) {
+    const t = getAdminToken();
+    const u = getStoredAdminUser();
+    if (t) {
+      setTokenState(t);
+      if (u) setUserState(u);
       refreshProfile();
     } else {
       setIsLoading(false);
     }
-  }, [refreshProfile, token]);
+  }, [refreshProfile]);
 
   const login = async (identifier: string, pass: string) => {
     setIsLoading(true);

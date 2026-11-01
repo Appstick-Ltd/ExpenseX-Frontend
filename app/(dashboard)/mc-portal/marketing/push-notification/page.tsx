@@ -55,7 +55,7 @@ export default function PushNotificationPage() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
 
   // Composer Form State
@@ -1139,6 +1139,8 @@ export default function PushNotificationPage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 12,
               padding: "12px 18px",
               borderTop: "1px solid var(--mc-border)",
               fontSize: 12,
@@ -1146,31 +1148,72 @@ export default function PushNotificationPage() {
             }}
           >
             <div>
-              Showing {campaigns.length} of {total} records
+              Showing {total > 0 ? (page - 1) * limit + 1 : 0} to{" "}
+              {Math.min(page * limit, total)} of {total} records
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <button
-                disabled={page <= 1}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="mc-btn mc-btn-secondary"
-                style={{ padding: "4px 10px", fontSize: 12 }}
-              >
-                <ChevronLeft size={14} />
-              </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ fontSize: 12, color: "var(--mc-text-muted)" }}>Per Page:</span>
+                <select
+                  value={limit}
+                  onChange={(e) => {
+                    setLimit(Number(e.target.value));
+                    setPage(1);
+                  }}
+                  style={{
+                    height: 30,
+                    padding: "0 8px",
+                    borderRadius: 6,
+                    border: "1px solid var(--mc-border)",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    outline: "none",
+                    background: "#FFFFFF",
+                    cursor: "pointer",
+                  }}
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
 
-              <span>
-                Page {page} of {totalPages}
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  className="mc-btn mc-btn-secondary"
+                  style={{ padding: "5px 10px", fontSize: 12, display: "inline-flex", alignItems: "center", gap: 4 }}
+                >
+                  <ChevronLeft size={14} />
+                  <span>Prev</span>
+                </button>
 
-              <button
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                className="mc-btn mc-btn-secondary"
-                style={{ padding: "4px 10px", fontSize: 12 }}
-              >
-                <ChevronRight size={14} />
-              </button>
+                <span
+                  style={{
+                    padding: "4px 10px",
+                    fontWeight: 700,
+                    fontSize: 12,
+                    color: "var(--mc-brand-purple)",
+                    background: "#F1F5F9",
+                    borderRadius: 6,
+                  }}
+                >
+                  Page {page} of {totalPages}
+                </span>
+
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  className="mc-btn mc-btn-secondary"
+                  style={{ padding: "5px 10px", fontSize: 12, display: "inline-flex", alignItems: "center", gap: 4 }}
+                >
+                  <span>Next</span>
+                  <ChevronRight size={14} />
+                </button>
+              </div>
             </div>
           </div>
         )}

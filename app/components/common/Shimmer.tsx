@@ -21,6 +21,7 @@ export const Shimmer = ({
 }: ShimmerProps) => {
   return (
     <div
+      suppressHydrationWarning
       className={`mc-shimmer ${className}`}
       style={{
         width,
@@ -93,7 +94,7 @@ export const ShimmerTableRows = ({
   return (
     <>
       {Array.from({ length: rows }).map((_, rIdx) => (
-        <tr key={rIdx} className="mc-skeleton-tr">
+        <tr key={rIdx} className="mc-skeleton-tr" suppressHydrationWarning>
           {columns.map((col, cIdx) => {
             const def: ColumnDef =
               typeof col === 'string' || typeof col === 'number'
@@ -105,7 +106,7 @@ export const ShimmerTableRows = ({
             };
 
             return (
-              <td key={cIdx} style={alignStyle}>
+              <td key={cIdx} style={alignStyle} suppressHydrationWarning>
                 {def.hasSubtitle ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     <Shimmer width={def.width || '65%'} height={14} />

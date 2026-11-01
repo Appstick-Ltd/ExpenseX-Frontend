@@ -293,7 +293,7 @@ function enrichUserWithSubscription(u: UserItem, activeSubMap: Map<string, any>)
 }
 
 export default function SystemUsersPage() {
-  const [users, setUsers] = useState<UserItem[]>([]);
+  const [allUsers, setAllUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Filter States
@@ -307,8 +307,7 @@ export default function SystemUsersPage() {
 
   // Pagination States
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(15);
-  const [total, setTotal] = useState(0);
+  const [limit, setLimit] = useState(10);
 
   // Statistics State
   const [stats, setStats] = useState<UserStats>({
@@ -362,7 +361,7 @@ export default function SystemUsersPage() {
     setLoading(true);
     try {
       const [resUsers, activeSubMap] = await Promise.all([
-        getUsers({ limit: 500, search: search.trim() || undefined }),
+        getUsers({ limit: 500 }),
         fetchActiveSubscriptionsMap(),
       ]);
 
@@ -395,104 +394,114 @@ export default function SystemUsersPage() {
         countries,
       });
 
-      // Filter on the complete dataset
-      let filtered = [...enrichedAll];
-
-      // 1. Status Filter
-      if (statusFilter === 'approved') {
-        filtered = filtered.filter((u) => u.status !== 'deleted' && u.status !== false);
-      } else if (statusFilter === 'deleted') {
-        filtered = filtered.filter((u) => u.status === 'deleted' || u.status === false);
-      }
-
-      // 2. Plan Filter: pro vs free
-      if (planFilter === 'pro') {
-        filtered = filtered.filter((u) => Boolean(u.isPro || u.activeSubscription));
-      } else if (planFilter === 'free') {
-        filtered = filtered.filter((u) => !u.isPro && !u.activeSubscription);
-      }
-
-      // 3. Country Filter
-      if (countryFilter !== 'all') {
-        filtered = filtered.filter(
-          (u) => (u.country || '').toLowerCase() === countryFilter.toLowerCase(),
-        );
-      }
-
-      // 4. Credit Range Filter
-      if (creditFilter === 'high') {
-        filtered = filtered.filter((u) => Number(u.ai_credit ?? u.aiCredit ?? 0) >= 100);
-      } else if (creditFilter === 'low') {
-        filtered = filtered.filter((u) => {
-          const c = Number(u.ai_credit ?? u.aiCredit ?? 0);
-          return c > 0 && c < 20;
-        });
-      } else if (creditFilter === 'zero') {
-        filtered = filtered.filter((u) => Number(u.ai_credit ?? u.aiCredit ?? 0) <= 0);
-      }
-
-      // 5. Date Range Filter
-      if (dateFilter === '7d') {
-        const d = new Date();
-        d.setDate(d.getDate() - 7);
-        filtered = filtered.filter((u) => u.createdAt && new Date(u.createdAt) >= d);
-      } else if (dateFilter === '30d') {
-        const d = new Date();
-        d.setDate(d.getDate() - 30);
-        filtered = filtered.filter((u) => u.createdAt && new Date(u.createdAt) >= d);
-      } else if (dateFilter === '1y') {
-        const d = new Date();
-        d.setFullYear(d.getFullYear() - 1);
-        filtered = filtered.filter((u) => u.createdAt && new Date(u.createdAt) >= d);
-      }
-
-      // 6. Search Filter
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
-        filtered = filtered.filter(
-          (u) =>
-            (u.name || '').toLowerCase().includes(q) ||
-            (u.email || '').toLowerCase().includes(q) ||
-            (u.phone || '').toLowerCase().includes(q) ||
-            (u.country || '').toLowerCase().includes(q) ||
-            (u.self_referral_code || '').toLowerCase().includes(q),
-        );
-      }
-
-      // 7. Sort
-      filtered.sort((a, b) => {
-        if (sortBy === 'oldest') {
-          return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
-        }
-        if (sortBy === 'credit_high') {
-          return Number(b.ai_credit ?? b.aiCredit ?? 0) - Number(a.ai_credit ?? a.aiCredit ?? 0);
-        }
-        if (sortBy === 'credit_low') {
-          return Number(a.ai_credit ?? a.aiCredit ?? 0) - Number(b.ai_credit ?? b.aiCredit ?? 0);
-        }
-        if (sortBy === 'name_asc') {
-          return (a.name || '').localeCompare(b.name || '');
-        }
-        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
-      });
-
-      // Update total to match filtered list count
-      setTotal(filtered.length);
-
-      // 8. Pagination Slice
-      const start = (page - 1) * limit;
-      const paginated = filtered.slice(start, start + limit);
-      setUsers(paginated);
+      setAllUsers(enrichedAll);
     } catch (err) {
       console.error('Failed to fetch and filter system users:', err);
     } finally {
       setLoading(false);
     }
-  }, [search, statusFilter, planFilter, countryFilter, creditFilter, dateFilter, sortBy, page, limit]);
+  }, []);
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  // Filter on the complete dataset via useMemo (instant, zero network lag)
+  const filteredUsers = useMemo(() => {
+    let filtered = [...allUsers];
+
+    // 1. Status Filter
+    if (statusFilter === 'approved') {
+      filtered = filtered.filter((u) => u.status !== 'deleted' && u.status !== false);
+    } else if (statusFilter === 'deleted') {
+      filtered = filtered.filter((u) => u.status === 'deleted' || u.status === false);
+    }
+
+    // 2. Plan Filter: pro vs free
+    if (planFilter === 'pro') {
+      filtered = filtered.filter((u) => Boolean(u.isPro || u.activeSubscription));
+    } else if (planFilter === 'free') {
+      filtered = filtered.filter((u) => !u.isPro && !u.activeSubscription);
+    }
+
+    // 3. Country Filter
+    if (countryFilter !== 'all') {
+      filtered = filtered.filter(
+        (u) => (u.country || '').toLowerCase() === countryFilter.toLowerCase(),
+      );
+    }
+
+    // 4. Credit Range Filter
+    if (creditFilter === 'high') {
+      filtered = filtered.filter((u) => Number(u.ai_credit ?? u.aiCredit ?? 0) >= 100);
+    } else if (creditFilter === 'low') {
+      filtered = filtered.filter((u) => {
+        const c = Number(u.ai_credit ?? u.aiCredit ?? 0);
+        return c > 0 && c < 20;
+      });
+    } else if (creditFilter === 'zero') {
+      filtered = filtered.filter((u) => Number(u.ai_credit ?? u.aiCredit ?? 0) <= 0);
+    }
+
+    // 5. Date Range Filter
+    if (dateFilter === '7d') {
+      const d = new Date();
+      d.setDate(d.getDate() - 7);
+      filtered = filtered.filter((u) => u.createdAt && new Date(u.createdAt) >= d);
+    } else if (dateFilter === '30d') {
+      const d = new Date();
+      d.setDate(d.getDate() - 30);
+      filtered = filtered.filter((u) => u.createdAt && new Date(u.createdAt) >= d);
+    } else if (dateFilter === '1y') {
+      const d = new Date();
+      d.setFullYear(d.getFullYear() - 1);
+      filtered = filtered.filter((u) => u.createdAt && new Date(u.createdAt) >= d);
+    }
+
+    // 6. Search Filter
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      filtered = filtered.filter(
+        (u) =>
+          (u.name || '').toLowerCase().includes(q) ||
+          (u.email || '').toLowerCase().includes(q) ||
+          (u.phone || '').toLowerCase().includes(q) ||
+          (u.country || '').toLowerCase().includes(q) ||
+          (u.self_referral_code || '').toLowerCase().includes(q),
+      );
+    }
+
+    // 7. Sort
+    filtered.sort((a, b) => {
+      if (sortBy === 'oldest') {
+        return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+      }
+      if (sortBy === 'credit_high') {
+        return Number(b.ai_credit ?? b.aiCredit ?? 0) - Number(a.ai_credit ?? a.aiCredit ?? 0);
+      }
+      if (sortBy === 'credit_low') {
+        return Number(a.ai_credit ?? a.aiCredit ?? 0) - Number(b.ai_credit ?? b.aiCredit ?? 0);
+      }
+      if (sortBy === 'name_asc') {
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+    });
+
+    return filtered;
+  }, [allUsers, statusFilter, planFilter, countryFilter, creditFilter, dateFilter, search, sortBy]);
+
+  const total = filteredUsers.length;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  // Client-side pagination slice
+  const paginatedUsers = useMemo(() => {
+    const start = (page - 1) * limit;
+    return filteredUsers.slice(start, start + limit);
+  }, [filteredUsers, page, limit]);
+
+  // Alias for render
+  const users = paginatedUsers;
 
   // Debounced search on typing
   useEffect(() => {
@@ -1599,7 +1608,7 @@ export default function SystemUsersPage() {
             }}
           >
             <div style={{ fontSize: 13, color: 'var(--mc-text-muted)' }}>
-              Showing {users.length > 0 ? (page - 1) * limit + 1 : 0} to{' '}
+              Showing {filteredUsers.length > 0 ? (page - 1) * limit + 1 : 0} to{' '}
               {Math.min(page * limit, total)} of {total} users
             </div>
 
@@ -1618,14 +1627,16 @@ export default function SystemUsersPage() {
                     borderRadius: 6,
                     border: '1px solid var(--mc-border)',
                     fontSize: 12,
+                    fontWeight: 600,
                     outline: 'none',
                     background: '#FFFFFF',
+                    cursor: 'pointer',
                   }}
                 >
                   <option value={10}>10</option>
-                  <option value={15}>15</option>
-                  <option value={30}>30</option>
+                  <option value={20}>20</option>
                   <option value={50}>50</option>
+                  <option value={100}>100</option>
                 </select>
               </div>
 
@@ -1639,11 +1650,13 @@ export default function SystemUsersPage() {
                   <ChevronLeft size={14} />
                   <span>Prev</span>
                 </button>
-                <span style={{ padding: '6px 10px', fontWeight: 600, fontSize: 13 }}>Page {page}</span>
+                <span style={{ padding: '6px 12px', fontWeight: 700, fontSize: 12, color: 'var(--mc-brand-purple)', background: '#F1F5F9', borderRadius: 6 }}>
+                  Page {page} of {totalPages}
+                </span>
                 <button
                   className="mc-page-btn"
-                  disabled={users.length < limit || loading}
-                  onClick={() => setPage((p) => p + 1)}
+                  disabled={page >= totalPages || loading}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
                 >
                   <span>Next</span>
