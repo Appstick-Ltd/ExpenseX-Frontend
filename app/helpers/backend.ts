@@ -21,30 +21,37 @@ export {
 /* ==========================================================================
    1. Auth & Admin Session
    ========================================================================== */
-export const postLogin = (data: any) => post('/auth/login', data);
+export const postLogin = (data: any) => {
+  const payload = { ...data };
+  if (payload.email && !payload.identifier) {
+    payload.identifier = payload.email;
+    delete payload.email;
+  }
+  return post('/auth/login', payload);
+};
 
 export const adminLogin = async (identifierOrData: any, pass?: string) => {
-  const body =
+  const identifier =
     typeof identifierOrData === 'string'
-      ? { identifier: identifierOrData, password: pass }
-      : identifierOrData;
+      ? identifierOrData
+      : identifierOrData?.identifier || identifierOrData?.email;
+  const password =
+    typeof identifierOrData === 'string' ? pass : identifierOrData?.password;
 
-  let res: any;
-  try {
-    res = await post('/auth/login', body);
-  } catch (err: any) {
-    const msg = (err?.message || '').toLowerCase();
-    if (
-      msg.includes('email is required') ||
-      msg.includes("unrecognized key(s) in object: 'identifier'")
-    ) {
-      res = await post('/auth/login', {
-        email: body.identifier || body.email,
-        password: body.password,
-      });
-    } else {
-      throw err;
-    }
+  const body = {
+    identifier: identifier ? String(identifier).trim() : '',
+    password: password ?? '',
+  };
+
+  const res: any = await post('/auth/login', body);
+
+  if (res?.success === false || (res?.statusCode && res.statusCode >= 400)) {
+    const errorMsg =
+      res?.errorMessage ||
+      res?.errorDetails?.issues?.[0]?.message ||
+      res?.message ||
+      'Invalid credentials or unauthorized access.';
+    throw new Error(errorMsg);
   }
 
   const token =
@@ -54,6 +61,14 @@ export const adminLogin = async (identifierOrData: any, pass?: string) => {
     res?.accessToken ||
     res?.token;
   const user = res?.data?.user || res?.data?.userData || res?.data;
+
+  if (!token) {
+    throw new Error(
+      res?.errorMessage ||
+      res?.message ||
+      'Authentication succeeded but no access token was returned.'
+    );
+  }
 
   if (token) setAdminToken(token, user);
   return res;

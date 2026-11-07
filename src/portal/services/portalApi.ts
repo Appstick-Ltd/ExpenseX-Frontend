@@ -185,9 +185,15 @@ export async function adminLogin(identifier: string, password: string): Promise<
 
   const user = res?.data?.user || res?.data || (res as any)?.user;
 
-  if (token) {
-    setAdminToken(token, user);
+  if (!token) {
+    throw new Error(
+      res?.errorMessage ||
+      res?.message ||
+      'Authentication succeeded but no access token was returned.'
+    );
   }
+
+  setAdminToken(token, user);
 
   return res;
 }
