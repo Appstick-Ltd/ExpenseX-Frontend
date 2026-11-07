@@ -13,8 +13,8 @@ export interface LoginProps {
 export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   const router = useRouter();
   const { login } = usePortalAuth();
-  const [identifier, setIdentifier] = useState('admin@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -114,7 +114,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
               <input
                 type="text"
                 className="mc-input with-left-icon"
-                placeholder="admin@gmail.com"
+                placeholder=""
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 autoComplete="username"
