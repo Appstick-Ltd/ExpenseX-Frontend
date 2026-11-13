@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Lock, CheckCircle2, FileText, Database, KeyRound, Building2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, CheckCircle2, FileText, Database, KeyRound, Building2, Trash2, Scale, ExternalLink } from 'lucide-react';
 import { playMicroClick } from '../../helpers/audio';
 
 export const PrivacyPolicyView: React.FC = () => {
@@ -274,6 +274,40 @@ export const PrivacyPolicyView: React.FC = () => {
                   <strong>Data Privacy Desk:</strong> <a href="mailto:privacy@expensexai.com" style={{ color: 'var(--purple-light)' }}>privacy@expensexai.com</a>
                 </div>
                 <div style={{ marginTop: '4px' }}><strong>Direct Telephone / WhatsApp:</strong> +880 1404-049797</div>
+              </div>
+            </section>
+
+            <hr style={{ border: 0, borderTop: '1px solid #e2e8f0', margin: '24px 0', opacity: 0.2 }} />
+
+            <section>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Scale size={20} color="var(--purple-light)" />
+                9. Terms of Use (EULA)
+              </h2>
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-medium)', borderRadius: '16px', padding: '24px' }}>
+                <p style={{ margin: '0 0 12px 0', lineHeight: 1.7 }}>
+                  By using ExpenseX on Apple devices, you agree to Apple&apos;s Standard End User License Agreement (EULA).
+                  Please review the terms and conditions using the link below:
+                </p>
+                <p style={{ margin: 0, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                  <strong>Terms of Use (EULA):</strong>
+                  <a
+                    href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: 'var(--purple-light)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      textDecoration: 'underline',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Apple Standard End User License Agreement
+                    <ExternalLink size={14} style={{ display: 'inline', verticalAlign: 'middle' }} />
+                  </a>
+                </p>
               </div>
             </section>
           </div>
