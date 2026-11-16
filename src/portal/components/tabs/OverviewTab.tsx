@@ -40,13 +40,24 @@ const MiniBarSparkline: React.FC<{ heights?: number[]; color: string }> = ({ hei
   </div>
 );
 
+const GLOBAL_CURRENCY_META: Record<string, { symbol: string; flag: string; name: string; toUsdRate: number }> = {
+  BDT: { symbol: '৳', flag: '🇧🇩', name: 'Bangladeshi Taka', toUsdRate: 0.0082 },
+  INR: { symbol: '₹', flag: '🇮🇳', name: 'Indian Rupee', toUsdRate: 0.0119 },
+  USD: { symbol: '$', flag: '🇺🇸', name: 'US Dollar', toUsdRate: 1.0 },
+  EUR: { symbol: '€', flag: '🇪🇺', name: 'Euro', toUsdRate: 1.08 },
+  GBP: { symbol: '£', flag: '🇬🇧', name: 'British Pound', toUsdRate: 1.30 },
+  JPY: { symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen', toUsdRate: 0.0065 },
+  CAD: { symbol: 'C$', flag: '🇨🇦', name: 'Canadian Dollar', toUsdRate: 0.72 },
+  AUD: { symbol: 'A$', flag: '🇦🇺', name: 'Australian Dollar', toUsdRate: 0.65 },
+};
+
 export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [revenuePeriod, setRevenuePeriod] = useState<'Last 6 Months' | 'Last 3 Months' | 'This Year'>('Last 6 Months');
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
-  const [revCurrency, setRevCurrency] = useState<string>('BDT');
+  const [revCurrency, setRevCurrency] = useState<string>('ALL');
   const [rawSubs, setRawSubs] = useState<any[]>([]);
 
   // Dynamic API Telemetry State
@@ -276,30 +287,27 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
   const currencyData = useMemo(() => {
     const map: Record<string, { total: number; count: number; symbol: string; flag: string; name: string }> = {
       BDT: { total: 0, count: 0, symbol: '৳', flag: '🇧🇩', name: 'Bangladeshi Taka' },
-      JPY: { total: 0, count: 0, symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen' },
+      INR: { total: 0, count: 0, symbol: '₹', flag: '🇮🇳', name: 'Indian Rupee' },
       USD: { total: 0, count: 0, symbol: '$', flag: '🇺🇸', name: 'US Dollar' },
+      JPY: { total: 0, count: 0, symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen' },
     };
     let totalUsdEquiv = 0;
-
-    const CURRENCY_TO_USD: Record<string, number> = {
-      USD: 1.0,
-      BDT: 0.0082,
-      JPY: 0.0065,
-      EUR: 1.08,
-      GBP: 1.30,
-      INR: 0.0119,
-    };
 
     rawSubs.forEach((item: any) => {
       const amt = Number(item.amount) || 0;
       const curr = (item.currency || 'USD').toUpperCase().trim();
+      const meta = GLOBAL_CURRENCY_META[curr] || {
+        symbol: curr,
+        flag: '🌐',
+        name: curr,
+        toUsdRate: 1.0,
+      };
       if (!map[curr]) {
-        map[curr] = { total: 0, count: 0, symbol: curr, flag: '🌐', name: curr };
+        map[curr] = { total: 0, count: 0, symbol: meta.symbol, flag: meta.flag, name: meta.name };
       }
       map[curr].total += amt;
       map[curr].count += 1;
-      const rate = CURRENCY_TO_USD[curr] ?? 1.0;
-      totalUsdEquiv += amt * rate;
+      totalUsdEquiv += amt * meta.toUsdRate;
     });
 
     return {
@@ -307,6 +315,21 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
       totalUsdEquiv: Math.round(totalUsdEquiv * 100) / 100,
     };
   }, [rawSubs]);
+
+  // Dynamic Available Currencies for Filter & Dropdowns
+  const availableCurrencies = useMemo(() => {
+    const active = Object.keys(currencyData.map).filter((c) => currencyData.map[c].total > 0);
+    const defaults = ['ALL', 'BDT', 'INR', 'USD', 'JPY'];
+    const merged = Array.from(new Set(['ALL', ...active, ...defaults]));
+    return merged.map((code) => {
+      if (code === 'ALL') return { code: 'ALL', label: '🌐 USD (All)' };
+      const meta = GLOBAL_CURRENCY_META[code] || currencyData.map[code];
+      return {
+        code,
+        label: `${meta?.flag || '🌐'} ${code}`,
+      };
+    });
+  }, [currencyData]);
 
   // Dynamic Revenue Datasets based on selected currency
   const revenueChartData = useMemo(() => {
@@ -316,20 +339,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
 
     const monthlyMap: Record<number, number> = {};
 
-    const CURRENCY_TO_USD: Record<string, number> = {
-      USD: 1.0,
-      BDT: 0.0082,
-      JPY: 0.0065,
-    };
-
     rawSubs.forEach((item: any) => {
       const amt = Number(item.amount) || 0;
       if (amt <= 0) return;
       const curr = (item.currency || 'USD').toUpperCase().trim();
+      const rate = GLOBAL_CURRENCY_META[curr]?.toUsdRate ?? 1.0;
 
       let valToAdd = 0;
       if (revCurrency === 'ALL') {
-        const rate = CURRENCY_TO_USD[curr] ?? 1.0;
         valToAdd = amt * rate;
       } else if (curr === revCurrency) {
         valToAdd = amt;
@@ -344,8 +361,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
       }
     });
 
-
-    const sym = revCurrency === 'ALL' || revCurrency === 'USD' ? '$' : revCurrency === 'BDT' ? '৳ ' : revCurrency === 'JPY' ? '¥ ' : `${revCurrency} `;
+    const sym = revCurrency === 'ALL' || revCurrency === 'USD'
+      ? '$'
+      : (GLOBAL_CURRENCY_META[revCurrency]?.symbol ? `${GLOBAL_CURRENCY_META[revCurrency].symbol} ` : `${revCurrency} `);
 
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const allMonths = monthNames.map((name, idx) => {
@@ -690,10 +708,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                     outline: 'none',
                   }}
                 >
-                  <option value="BDT">🇧🇩 BDT</option>
-                  <option value="ALL">🌐 USD (All)</option>
-                  <option value="JPY">🇯🇵 JPY</option>
-                  <option value="USD">🇺🇸 USD</option>
+                  {availableCurrencies.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -801,12 +820,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                 <h2 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: '#0F172A' }}>
                   Revenue Overview
                 </h2>
-                <div style={{ display: 'flex', gap: 3 }}>
-                  {(['BDT', 'ALL', 'JPY'] as const).map((c) => (
+                <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+                  {availableCurrencies.slice(0, 5).map((c) => (
                     <button
-                      key={c}
+                      key={c.code}
                       type="button"
-                      onClick={() => setRevCurrency(c)}
+                      onClick={() => setRevCurrency(c.code)}
                       style={{
                         padding: '2px 7px',
                         borderRadius: 4,
@@ -814,12 +833,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
                         fontSize: 10,
                         fontWeight: 700,
                         cursor: 'pointer',
-                        background: revCurrency === c ? '#6366F1' : '#F1F5F9',
-                        color: revCurrency === c ? '#FFFFFF' : '#64748B',
+                        background: revCurrency === c.code ? '#6366F1' : '#F1F5F9',
+                        color: revCurrency === c.code ? '#FFFFFF' : '#64748B',
                         transition: 'all 0.15s ease',
                       }}
                     >
-                      {c === 'ALL' ? '🌐 USD' : c === 'BDT' ? '🇧🇩 BDT' : '🇯🇵 JPY'}
+                      {c.label}
                     </button>
                   ))}
                 </div>
