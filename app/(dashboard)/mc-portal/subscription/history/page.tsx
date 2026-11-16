@@ -594,9 +594,23 @@ export default function SubscriptionHistoryPage() {
             </span>
             <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--mc-text-main)', marginTop: 4, letterSpacing: '-0.02em' }}>
               {currencyFilter === 'all' ? (
-                <>
-                  ৳ 39,500 <span style={{ fontSize: 12, fontWeight: 600, color: '#64748B' }}>BDT</span>
-                </>
+                (() => {
+                  const topCurr = currencyBreakdown.currencies.find((c) => c.total > 0) || currencyBreakdown.currencies[0];
+                  if (!topCurr || topCurr.total === 0) {
+                    return (
+                      <>
+                        ${stats.totalUsdEquiv.toFixed(2)}{' '}
+                        <span style={{ fontSize: 12, fontWeight: 600, color: '#64748B' }}>USD</span>
+                      </>
+                    );
+                  }
+                  return (
+                    <>
+                      {topCurr.symbol} {topCurr.total.toLocaleString()}{' '}
+                      <span style={{ fontSize: 12, fontWeight: 600, color: '#64748B' }}>{topCurr.code}</span>
+                    </>
+                  );
+                })()
               ) : (
                 (() => {
                   const curr = currencyBreakdown.currencies.find(
@@ -613,11 +627,23 @@ export default function SubscriptionHistoryPage() {
             </div>
             <div style={{ fontSize: 11, color: '#64748B', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
               {currencyFilter === 'all' ? (
-                <>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>+ ¥ 7,000 JPY</span>
-                  <span style={{ color: '#94A3B8' }}>·</span>
-                  <span style={{ color: '#16A34A', fontWeight: 600 }}>≈ ${stats.totalUsdEquiv.toFixed(2)} USD</span>
-                </>
+                (() => {
+                  const topCurr = currencyBreakdown.currencies.find((c) => c.total > 0) || currencyBreakdown.currencies[0];
+                  const otherCurrs = currencyBreakdown.currencies.filter(
+                    (c) => c.code !== topCurr?.code && c.total > 0
+                  );
+                  return (
+                    <>
+                      {otherCurrs.map((c) => (
+                        <span key={c.code} style={{ fontWeight: 600, color: '#475569' }}>
+                          + {c.symbol} {c.total.toLocaleString()} {c.code}
+                        </span>
+                      ))}
+                      {otherCurrs.length > 0 && <span style={{ color: '#94A3B8' }}>·</span>}
+                      <span style={{ color: '#16A34A', fontWeight: 600 }}>≈ ${stats.totalUsdEquiv.toFixed(2)} USD</span>
+                    </>
+                  );
+                })()
               ) : (
                 <span style={{ color: '#2563EB', fontWeight: 600 }}>
                   Filtering by {currencyFilter} · Click to reset
