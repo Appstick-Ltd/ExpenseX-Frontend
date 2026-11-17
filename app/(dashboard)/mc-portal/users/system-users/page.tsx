@@ -58,6 +58,9 @@ export interface UserItem {
   ai_credit?: number;
   aiCredit?: number;
   ai_assigned_credit?: number;
+  subscriptionRemaining?: number;
+  subscriptionSpent?: number;
+  subscriptionTotal?: number;
   currencyCode?: string;
   languageCode?: string;
   gender?: string;
@@ -1359,6 +1362,11 @@ export default function SystemUsersPage() {
                           <Sparkles size={13} />
                           {creditVal.toFixed(2)}
                         </div>
+                        {u.subscriptionSpent !== undefined && u.subscriptionSpent > 0 && (
+                          <div style={{ fontSize: 10.5, color: 'var(--mc-text-muted)', marginTop: 2, fontWeight: 500 }}>
+                            Used: {u.subscriptionSpent}
+                          </div>
+                        )}
                       </td>
 
                       {/* Joined At */}
@@ -1860,6 +1868,11 @@ export default function SystemUsersPage() {
                   <div style={{ fontSize: 20, fontWeight: 700, color: '#5B21B6' }}>
                     {Number(selectedUser.ai_credit ?? selectedUser.aiCredit ?? 0).toFixed(2)}
                   </div>
+                  {selectedUser.subscriptionSpent !== undefined && selectedUser.subscriptionSpent > 0 && (
+                    <div style={{ fontSize: 11, color: '#7C3AED', marginTop: 2 }}>
+                      Spent: {selectedUser.subscriptionSpent} {selectedUser.subscriptionTotal ? `/ ${selectedUser.subscriptionTotal}` : ''}
+                    </div>
+                  )}
                   {selectedUser.ai_assigned_credit !== undefined && (
                     <div style={{ fontSize: 11, color: '#7C3AED', marginTop: 2 }}>
                       Assigned: {Number(selectedUser.ai_assigned_credit).toFixed(2)}
