@@ -13,7 +13,7 @@ import {
   Shield,
   CreditCard,
 } from 'lucide-react';
-import { getAdminOverview, getStoredAdminUser, getSubscriptionHistory } from '../../services/portalApi';
+import { getAdminOverview, getStoredAdminUser, getSubscriptionHistory, getUsers } from '../../services/portalApi';
 import { get } from '../../../../app/helpers/api';
 import { useRouter } from 'next/navigation';
 
@@ -41,8 +41,8 @@ const MiniBarSparkline: React.FC<{ heights?: number[]; color: string }> = ({ hei
 );
 
 const GLOBAL_CURRENCY_META: Record<string, { symbol: string; flag: string; name: string; toUsdRate: number }> = {
-  BDT: { symbol: '৳', flag: '🇧🇩', name: 'Bangladeshi Taka', toUsdRate: 0.0082 },
-  INR: { symbol: '₹', flag: '🇮🇳', name: 'Indian Rupee', toUsdRate: 0.0119 },
+  BDT: { symbol: '৳', flag: '🇧🇩', name: 'Bangladeshi Taka', toUsdRate: 0.0081 },
+  INR: { symbol: '₹', flag: '🇮🇳', name: 'Indian Rupee', toUsdRate: 0.0107 }, // Google Finance live rate (1 USD ≈ 93.5 INR -> 550 INR ≈ $5.89 USD)
   USD: { symbol: '$', flag: '🇺🇸', name: 'US Dollar', toUsdRate: 1.0 },
   EUR: { symbol: '€', flag: '🇪🇺', name: 'Euro', toUsdRate: 1.08 },
   GBP: { symbol: '£', flag: '🇬🇧', name: 'British Pound', toUsdRate: 1.30 },
@@ -90,16 +90,30 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
     }
 
     try {
-      // 1. Fetch admin overview & subscription history in parallel
-      const [resOverview, resHistory] = await Promise.allSettled([
+      // 1. Fetch admin overview, subscription history & total registered users in parallel
+      const [resOverview, resHistory, resUsers] = await Promise.allSettled([
         getAdminOverview(period).catch(() => get('/dashboards/admin/overview', { period })),
         getSubscriptionHistory({ limit: 300 }).catch(() => ({ data: [] })),
+        getUsers({ limit: 1 }).catch(() => null),
       ]);
 
       let overviewData: any = null;
       if (resOverview.status === 'fulfilled') {
         const val: any = resOverview.value;
         overviewData = val?.data || (val?.success ? val : null);
+      }
+
+      // Sync total registered users with User Management page count
+      if (resUsers?.status === 'fulfilled' && resUsers.value) {
+        const uVal: any = resUsers.value;
+        const totalRegistered = uVal?.data?.meta?.total ?? uVal?.meta?.total;
+        if (totalRegistered && overviewData) {
+          if (!overviewData.kpi) overviewData.kpi = {};
+          overviewData.kpi.totalUsers = totalRegistered;
+          if (overviewData.usersByPlan) {
+            overviewData.usersByPlan.totalUsers = totalRegistered;
+          }
+        }
       }
 
       let subItems: any[] = [];
@@ -116,14 +130,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
       }
       setRawSubs(subItems);
 
-      // 2. Genuine Multi-Currency to USD Calculation
+      // 2. Genuine Multi-Currency to USD Calculation (Google Finance live benchmarks)
       const CURRENCY_TO_USD: Record<string, number> = {
         USD: 1.0,
-        BDT: 0.0082,  // 122 BDT = $1 USD (5600 BDT = ~$45.92)
-        JPY: 0.0065,  // 154 JPY = $1 USD (7000 JPY = ~$45.50)
+        BDT: 0.0081,
+        JPY: 0.0065,
         EUR: 1.08,
         GBP: 1.30,
-        INR: 0.0119,
+        INR: 0.0107, // Google Finance: 1 USD ≈ 93.5 INR -> 550 INR ≈ $5.89 USD
       };
 
       const now = new Date();
